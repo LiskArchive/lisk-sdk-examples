@@ -1,0 +1,17 @@
+{
+  "name": "test-app",
+  "version": "1.0.0",
+  "description": "### Installation of Lisk Framework",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@liskhq/lisk-cryptography": "2.1.0-alpha.1",
+    "@liskhq/lisk-transactions": "2.1.0-alpha.9",
+    "lisk-elements": "^2.0.0",
+    "lisk-sdk": "^2.0.0-alpha.5"
+  }
+}
