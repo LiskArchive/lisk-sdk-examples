@@ -10,8 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@liskhq/lisk-cryptography": "2.1.0-alpha.1",
-    "@liskhq/lisk-transactions": "2.1.0-alpha.9",
+    "@liskhq/lisk-transactions": "2.1.0-alpha.11",
     "lisk-elements": "^2.0.0",
-    "lisk-sdk": "^2.0.0-alpha.5"
+    "lisk-sdk": "^2.0.0-alpha.6"
   }
 }
