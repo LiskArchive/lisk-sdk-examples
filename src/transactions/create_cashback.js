@@ -1,9 +1,11 @@
+const { validateTransferAmount } = require('@liskhq/lisk-validator');
 const { getAddressFromPublicKey } = require('@liskhq/lisk-cryptography');
-const { 	
+const {
 	BYTESIZES,
     constants,
 	TransferTransaction,
-	utils 
+	utils,
+	BaseTransaction
 } = require('@liskhq/lisk-transactions');
 
 const validateInputs = ({
@@ -12,7 +14,7 @@ const validateInputs = ({
 	recipientPublicKey,
 	data,
 }) => {
-	if (!utils.validateTransferAmount(amount)) {
+	if (!validateTransferAmount(amount)) {
 		throw new Error('Amount must be a valid number in string format.');
 	}
 
@@ -56,28 +58,31 @@ module.exports = (inputs) => {
 	const {
 		data,
 		amount,
+		recipientId,
 		recipientPublicKey,
+		senderPublicKey,
 		passphrase,
 		secondPassphrase,
 	} = inputs;
 
 	const recipientIdFromPublicKey = recipientPublicKey
-		? utils.getAddressFromPublicKey(recipientPublicKey)
+		? getAddressFromPublicKey(recipientPublicKey)
 		: undefined;
-	const recipientId = inputs.recipientId
-		? inputs.recipientId
-		: recipientIdFromPublicKey;
 
-	const transaction = {
-		// TODO: This is not exposed by default..
-		...utils.createBaseTransaction(inputs),
+	inputs.recipientId = recipientIdFromPublicKey
+		? recipientIdFromPublicKey
+		: inputs.recipientId;
+
+	const transaction = new BaseTransaction({
 		asset: data ? { data } : {},
 		amount,
 		fee: constants.TRANSFER_FEE.toString(),
 		recipientId,
-		recipientPublicKey,
+		senderPublicKey,
 		type: 9,
-	};
+		timestamp: 0,
+		secondPassphrase,
+	});
 
 	if (!passphrase) {
 		return transaction;
