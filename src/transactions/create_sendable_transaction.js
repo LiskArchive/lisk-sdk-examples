@@ -1,17 +1,15 @@
-const { validateTransferAmount } = require('@liskhq/lisk-validator');
+const { validateTransferAmount, validateAddress, validatePublicKey } = require('@liskhq/lisk-validator');
 const { getAddressFromPublicKey } = require('@liskhq/lisk-cryptography');
 const {
 	BYTESIZES,
-    constants,
 	TransferTransaction,
-	utils,
-	BaseTransaction
 } = require('@liskhq/lisk-transactions');
 
 const validateInputs = ({
 	amount,
 	recipientId,
-	recipientPublicKey,
+    recipientPublicKey,
+    senderPublicKey,
 	data,
 }) => {
 	if (!validateTransferAmount(amount)) {
@@ -25,11 +23,15 @@ const validateInputs = ({
 	}
 
 	if (typeof recipientId !== 'undefined') {
-		utils.validateAddress(recipientId);
+		validateAddress(recipientId);
+	}
+
+	if (typeof senderPublicKey !== 'undefined') {
+		validatePublicKey(senderPublicKey);
 	}
 
 	if (typeof recipientPublicKey !== 'undefined') {
-		utils.validatePublicKey(recipientPublicKey);
+		validatePublicKey(recipientPublicKey);
 	}
 
 	if (
@@ -58,13 +60,17 @@ module.exports = (inputs) => {
 	const {
 		data,
 		amount,
+		fee,
+		type,
 		recipientId,
 		recipientPublicKey,
 		senderPublicKey,
 		passphrase,
 		secondPassphrase,
+		timestamp,
 	} = inputs;
 
+	inputs.timestamp = inputs.timestamp || 0;
 	const recipientIdFromPublicKey = recipientPublicKey
 		? getAddressFromPublicKey(recipientPublicKey)
 		: undefined;
@@ -73,32 +79,36 @@ module.exports = (inputs) => {
 		? recipientIdFromPublicKey
 		: inputs.recipientId;
 
-	const transaction = new BaseTransaction({
-		asset: data ? { data } : {},
-		amount,
-		fee: constants.TRANSFER_FEE.toString(),
-		recipientId,
-		senderPublicKey,
-		type: 9,
-		timestamp: 0,
-		secondPassphrase,
-	});
 
 	if (!passphrase) {
-		return transaction;
+		throw "Cannot sign a transaction without a passphrase. Specify your passphrase as in the input object (and optional second passphrase)";
 	}
 
-	const transactionWithSenderInfo = {
-		...transaction,
-		recipientId,
-		senderId: transaction.senderId,
-		senderPublicKey: transaction.senderPublicKey,
-	};
-
 	const transferTransaction = new TransferTransaction(
-		transactionWithSenderInfo,
+		{
+			asset: data ? { data } : {},
+			amount,
+			fee,
+			recipientId,
+			senderPublicKey,
+			type,
+			timestamp,
+		}
     );
     transferTransaction.sign(passphrase, secondPassphrase);
 
-	return transferTransaction.toJSON();
+	return asJSON(skipUndefined(transferTransaction.toJSON()));
 };
+
+function asJSON (transaction) {
+	return JSON.stringify(transaction);
+}
+
+function skipUndefined (transaction) {
+	return Object.keys(transaction).reduce((transactionWithValues, property) => {
+		if (transaction[property] !== undefined) {
+			transactionWithValues[property] = transaction[property];
+		}
+		return transactionWithValues;
+	}, {});
+}
