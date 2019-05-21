@@ -19,6 +19,18 @@ const HELLO_TRANSACTION_TYPE = 10;
 
 class CashbackTransaction extends BaseTransaction {
 
+	constructor(rawTransaction) {
+		super(rawTransaction);
+		const tx = (typeof rawTransaction === 'object' && rawTransaction !== null
+			? rawTransaction
+			: {});
+		this.asset = (tx.asset || {});
+	}
+
+	assetToJSON() {
+		return this.asset;
+	}
+
 	//Client + Server
 	applyAsset(store) {
 		const sender = store.account.get(this.senderId);
