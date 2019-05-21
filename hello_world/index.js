@@ -1,10 +1,9 @@
-const { Application } = require('lisk-sdk');
-const genesisBlockDevnet = require('./genesis_block_devnet.json');
-const CashbackTransaction = require('./transactions/cashback_transaction');
+const { Application, genesisBlockDevnet } = require('lisk-sdk');
+const HelloTransaction = require('./hello_transaction');
 
 const app = new Application(genesisBlockDevnet, {
 	app: {
-		label: 'my-app',
+		label: 'hello-world-app',
 		minVersion: '0.0.0',
 		version: '0.0.0',
 		protocolVersion: '0.0',
@@ -425,7 +424,7 @@ const app = new Application(genesisBlockDevnet, {
 	}
 });
 
-app.registerTransaction(9, CashbackTransaction);
+app.registerTransaction(10, HelloTransaction);
 
 app
 	.run()
