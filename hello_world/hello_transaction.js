@@ -39,10 +39,11 @@ class CashbackTransaction extends BaseTransaction {
 		// 	hello: this.asset.hello,
 		// };
 		console.log(`Setting sender.asset: ${sender.asset} to transaction.asset ${this.asset}`)
-		sender.asset = {
-			hello: this.asset.hello,
-		};
-		store.account.set(sender.address, sender);
+		// sender.asset = {
+		// 	hello: this.asset.hello,
+		// };
+		const newObj = { ...sender, asset: { hello: this.asset.hello } };
+		store.account.set(sender.address, newObj);
 		return [];
 	}
 
