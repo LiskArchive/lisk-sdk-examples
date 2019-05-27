@@ -29,7 +29,6 @@ It shows how to store an additional information about accounts using the `asset`
 
 Invoked as part of the `apply` step of the BaseTransaction and block processing.  
 ```
-	//Client + Server
 	applyAsset(store) {
 		const sender = store.account.get(this.senderId);
 		const newObj = { ...sender, asset: { hello: this.asset.hello } };
@@ -41,7 +40,6 @@ Invoked as part of the `apply` step of the BaseTransaction and block processing.
 Inverse of `applyAsset`. Undoes the changes made in applyAsset step - removes the "hello" property from the account's asset field.
 
 ```
-	// Client + Server
 	undoAsset(store) {
 		const sender = store.account.get(this.senderId);
 		const oldObj = { ...sender, asset: null };
@@ -52,7 +50,6 @@ Inverse of `applyAsset`. Undoes the changes made in applyAsset step - removes th
 #### validateAsset
 Validation of the value of the "hello" property, defined by the HelloWorld transaction signer. The implementation below checks, that the value of the "hello" property needs to be a string, no longer than 64 characters. 
 ```
-	// Client + Server
 	validateAsset() {
 		const errors = [];
 		if (!this.asset.hello || typeof this.asset.hello !== 'string' || this.asset.hello.length > 64) {
@@ -74,8 +71,6 @@ Validation of the value of the "hello" property, defined by the HelloWorld trans
 Prepares the necessary data for the `apply` and `undo` step.
 The "hello" property will be added only to sender's account, therefore it's the only resource needed in the `appluAsset` and `undoAsset` steps. 
 ```
-#### prepare
-	// Server
 	async prepare(store) {
 		await store.account.cache([
 			{
@@ -83,8 +78,5 @@ The "hello" property will be added only to sender's account, therefore it's the 
 			},
 		]);
 	}
-
 }
-
-module.exports = HelloTransaction;
 ```
