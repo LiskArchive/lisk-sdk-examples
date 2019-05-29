@@ -1,8 +1,8 @@
 {
-  "name": "lisk-sdk-examples-cashback",
+  "name": "hello_world",
   "version": "1.0.0",
-  "description": "Implements a cashback functionality",
-  "main": "./src/index.js",
+  "description": "Hello World application of Alpha SDK",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
