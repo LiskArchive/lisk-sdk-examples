@@ -2,52 +2,28 @@ const {
 	BaseTransaction,
 	TransactionError,
 } = require('@liskhq/lisk-transactions');
-// const { validator } = require('@liskhq/lisk-validator');
 
+class HelloTransaction extends BaseTransaction {
 
-const HELLO_TRANSACTION_TYPE = 10;
-
-// const assetFormatSchema = {
-// 	type: 'object',
-// 	properties: {
-// 		hello: {
-// 			type: 'string',
-// 			maxLength: 64,
-// 		},
-// 	},
-// };
-
-class CashbackTransaction extends BaseTransaction {
-
-	constructor(rawTransaction) {
-		super(rawTransaction);
-		const tx = (typeof rawTransaction === 'object' && rawTransaction !== null
-			? rawTransaction
-			: {});
-		this.asset = (tx.asset || {});
+	static get TYPE () {
+		return 10;
 	}
 
-	assetToJSON() {
-		return this.asset;
+	constructor (rawTransaction) {
+		super(rawTransaction);
 	}
 
 	//Client + Server
 	applyAsset(store) {
 		const sender = store.account.get(this.senderId);
-		// ToDo: Open up a bug about asset = null by default instead of {}
-		// sender.asset = {
-		// 	hello: this.asset.hello,
-		// };
-		console.log(`Setting sender.asset: ${sender.asset} to transaction.asset ${this.asset}`)
-		// sender.asset = {
-		// 	hello: this.asset.hello,
-		// };
+
 		const newObj = { ...sender, asset: { hello: this.asset.hello } };
+
 		store.account.set(sender.address, newObj);
 		return [];
 	}
 
-	//Client + Server
+	// Client + Server
 	undoAsset(store) {
 		const sender = store.account.get(this.senderId);
 		sender.asset = null;
@@ -55,28 +31,9 @@ class CashbackTransaction extends BaseTransaction {
 		return [];
 	}
 
-	//Client + Server
-	assetToBytes() {
-		const assetAsBuffer = Buffer.from(this.asset.hello);
-		// console.log(assetAsBuffer);
-		return assetAsBuffer;
-	}
-
-	//Client + Server
+	// Client + Server
 	validateAsset() {
 		const errors = [];
-
-		if (this.type !== HELLO_TRANSACTION_TYPE) {
-			errors.push(
-				new TransactionError(
-					'Invalid type',
-					this.id,
-					'.type',
-					this.type,
-					HELLO_TRANSACTION_TYPE,
-				),
-			);
-		}
 
 		// Consider advanced way of validating assets with validator
 		// validator.validate(assetFormatSchema, this.asset);
@@ -95,7 +52,7 @@ class CashbackTransaction extends BaseTransaction {
 		return errors;
 	}
 
-	//Server
+	// Server
 	async prepare(store) {
 		await store.account.cache([
 			{
@@ -106,4 +63,4 @@ class CashbackTransaction extends BaseTransaction {
 
 }
 
-module.exports = CashbackTransaction;
+module.exports = HelloTransaction;
