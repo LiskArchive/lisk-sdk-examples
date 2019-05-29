@@ -1,36 +1,15 @@
-# Lisk Test-App
+# Lisk SDK examples
 
-This is a test app using lisk-sdk@alpha implementing a custom transaction.
+Example applications using Alpha SDK.
 
-## Usage
 
-Install dependencies: 
+### [Hello World](./hello_world/README.md)
+A hello world application of Alpha SDK. Guides through the basic flow of using Alpha SDK. By creating a new custom transaction with no practical use case, you can get an idea of why and how to implement the required methods of the custom transaction interface.
 
-```
-npm i --registry https://npm.lisk.io
-```
 
-Start node:
+## [Cashback](./cashback/README.md)
 
-```
-node ./src/index | npx bunyan -o short
-```
+The example of a simple but valid use-case - cashback. On top of the regular balance transfer, the example implements the cashback functionality. 
 
-Post a custom transaction to `/api/transactions`:
-
-Example:
-```
-{   
-    "type":9,
-    "id":"13311755314561666527",
-    "amount":"100000000000000",
-    "timestamp":93891325,
-    "senderPublicKey":"d1ba3238c3fb14c811634ec4723f9c0095dcbf8117104695584ab95f940e393f",
-    "senderId":"750765602177534752L",
-    "recipientId":"10881167371402274308L",
-    "fee":"100000000",
-    "signature":"946a2b75886c94e5ce4df30a7654b0a33f8a11f2007632421820b258a5186d55407ea989b41e12a179409271fd40144415f0b2e1e0792f4f9784a2f6c4131001",
-    "signatures":[],
-    "asset":{}
-}
-```
+### Interacting with a network
+In the [scripts](./scripts) directory you can find implementation of the creating, signing and sending custom transactions to the network. 
