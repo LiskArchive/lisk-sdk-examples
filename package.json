@@ -1,7 +1,7 @@
 {
   "name": "lisk-sdk-examples",
   "version": "1.0.0",
-  "description": "### Installation of Lisk Framework",
+  "description": "Example applications built using Lisk SDK",
   "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
