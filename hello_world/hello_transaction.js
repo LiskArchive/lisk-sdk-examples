@@ -1,7 +1,7 @@
 const {
 	BaseTransaction,
 	TransactionError,
-} = require('@liskhq/lisk-transactions');
+} = require('lisk-sdk');
 
 class HelloTransaction extends BaseTransaction {
 
