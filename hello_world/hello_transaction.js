@@ -9,21 +9,21 @@ class HelloTransaction extends BaseTransaction {
 		return 10;
 	}
 
-	constructor (rawTransaction) {
-		super(rawTransaction);
-	}
-
-	//Client + Server
 	applyAsset(store) {
 		const sender = store.account.get(this.senderId);
-
+		if (sender.asset && sender.asset.hello) {
+			return [new TransactionError(
+				'You cannot send a hello transaction multiple times',
+				this.id,
+				'.asset.hello',
+				this.amount.toString(),
+			)];
+		}
 		const newObj = { ...sender, asset: { hello: this.asset.hello } };
-
 		store.account.set(sender.address, newObj);
 		return [];
 	}
 
-	// Client + Server
 	undoAsset(store) {
 		const sender = store.account.get(this.senderId);
 		sender.asset = null;
@@ -31,10 +31,8 @@ class HelloTransaction extends BaseTransaction {
 		return [];
 	}
 
-	// Client + Server
 	validateAsset() {
 		const errors = [];
-
 		// Consider advanced way of validating assets with validator
 		// validator.validate(assetFormatSchema, this.asset);
 		if (!this.asset.hello || typeof this.asset.hello !== 'string' || this.asset.hello.length > 64) {
@@ -48,10 +46,8 @@ class HelloTransaction extends BaseTransaction {
 				)
 			);
 		}
-
 		return errors;
 	}
-
 	// Server
 	async prepare(store) {
 		await store.account.cache([
