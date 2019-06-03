@@ -3,7 +3,7 @@ const CashbackTransaction = require('./transactions/cashback_transaction');
 
 const app = new Application(genesisBlockDevnet, configDevnet);
 
-app.registerTransaction(11, CashbackTransaction);
+app.registerTransaction(CashbackTransaction.TYPE, CashbackTransaction);
 
 app
 	.run()

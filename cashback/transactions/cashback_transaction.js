@@ -6,7 +6,9 @@ const {
 
 class CashbackTransaction extends TransferTransaction {
 
-	static TYPE = 11;
+	static get TYPE () {
+		return 11;
+	}
 
 	applyAsset(store) {
 		super.applyAsset(store);
