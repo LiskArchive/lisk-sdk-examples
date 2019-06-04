@@ -27,7 +27,7 @@ class CashbackTransaction extends TransferTransaction {
 	}
 
 	undoAsset(store) {
-		super.applyAsset(store);
+		super.undoAsset(store);
 
 		const sender = store.account.get(this.senderId);
 		const updatedSenderBalanceAfterBonus = new BigNum(sender.balance).sub(
