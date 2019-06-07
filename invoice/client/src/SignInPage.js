@@ -5,6 +5,7 @@ import {
   Card, CardHeader, CardBody,
 } from 'reactstrap';
 import { Row, Col } from 'react-flexbox-grid';
+import { Link } from 'react-router-dom';
 
 function SignInPage() {
   return (
@@ -18,7 +19,9 @@ function SignInPage() {
                 <Label for="passphrase">Passphrase</Label>
                 <Input type="password" name="passphrase" id="passphrase" placeholder="Enter your 12 word Lisk passphrase" />
               </FormGroup>
-              <Button color="primary" size="lg" block>Sign In</Button>
+              <Link to='/invoices'>
+                <Button color="primary" size="lg" block>Sign In</Button>
+              </Link>
             </Form>
           </CardBody>
         </Card>
