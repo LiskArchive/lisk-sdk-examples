@@ -1,6 +1,6 @@
 import React from 'react';
-import { 
-  Button, 
+import {
+  Button,
   Form, FormGroup, Label, Input,
   Card, CardHeader, CardBody,
 } from 'reactstrap';
@@ -28,4 +28,3 @@ function SignInPage() {
 }
 
 export default SignInPage;
-

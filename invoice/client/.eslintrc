@@ -1,0 +1,22 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb-base",
+    "plugin:react/recommended",
+  ],
+  "plugins": [
+    "import",
+  ],
+  "globals": {
+    "describe": true,
+    "it": true,
+  },
+  "env": {
+    "browser": true,
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}

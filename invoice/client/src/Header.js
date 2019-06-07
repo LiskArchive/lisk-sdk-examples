@@ -1,5 +1,7 @@
 import React from 'react';
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
+import {
+  Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
+} from 'reactstrap';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -7,18 +9,18 @@ export default class Header extends React.Component {
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
-      collapsed: true
+      collapsed: true,
     };
   }
 
   toggleNavbar() {
     this.setState({
-      collapsed: !this.state.collapsed
+      collapsed: !this.state.collapsed,
     });
   }
 
   render() {
-  return (
+    return (
     <Navbar color="faded" light>
       <NavbarBrand href="#/" className="mr-auto">Invoice PoC</NavbarBrand>
       <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
@@ -30,6 +32,6 @@ export default class Header extends React.Component {
         </Nav>
       </Collapse>
     </Navbar>
-  );
+    );
   }
 }

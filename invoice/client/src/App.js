@@ -1,7 +1,7 @@
 import React from 'react';
+import { Grid, Row, Col } from 'react-flexbox-grid';
 import SignInPage from './SignInPage';
 import Header from './Header';
-import { Grid, Row, Col } from 'react-flexbox-grid';
 import './App.css';
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
       <Header />
       <div className="App">
         <Grid fluid>
-          <Row  center="xs">
+          <Row center="xs">
             <Col xs={12} md={8} lg={6}>
               <SignInPage />
             </Col>
