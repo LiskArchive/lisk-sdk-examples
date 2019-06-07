@@ -1,5 +1,5 @@
 const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
-const CashbackTransaction = require('./transactions/cashback_transaction');
+const CashbackTransaction = require('./cashback_transaction');
 
 const app = new Application(genesisBlockDevnet, configDevnet);
 
