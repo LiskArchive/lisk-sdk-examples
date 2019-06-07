@@ -1,23 +1,27 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
 import SignInPage from './SignInPage';
+import InvoicesPage from './InvoicesPage';
 import Header from './Header';
 import './App.css';
 
 function App() {
   return (
-    <React.Fragment>
+    <Router>
       <Header />
       <div className="App">
         <Grid fluid>
           <Row center="xs">
             <Col xs={12} md={8} lg={6}>
-              <SignInPage />
+                <Route path="/" exact component={SignInPage} />
+                <Route path="/invoices" component={InvoicesPage} />
             </Col>
           </Row>
         </Grid>
       </div>
-    </React.Fragment>
+    </Router>
   );
 }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
 } from 'reactstrap';
+import { NavLink as RRNavLink } from 'react-router-dom';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -22,12 +23,12 @@ export default class Header extends React.Component {
   render() {
     return (
     <Navbar color="faded" light>
-      <NavbarBrand href="#/" className="mr-auto">Invoice PoC</NavbarBrand>
+      <NavbarBrand tag={RRNavLink} to="/" className="mr-auto">Invoice PoC</NavbarBrand>
       <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
       <Collapse isOpen={!this.state.collapsed} navbar>
         <Nav navbar>
           <NavItem>
-            <NavLink href="#/my-invoices">My Invoices</NavLink>
+            <NavLink tag={RRNavLink} to="/invoices">My Invoices</NavLink>
           </NavItem>
         </Nav>
       </Collapse>
