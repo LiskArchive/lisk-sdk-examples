@@ -17,7 +17,18 @@
     "eslint": "eslint ./"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "airbnb-base",
+      "plugin:react/recommended"
+    ],
+    "env": {
+      "browser": true
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
   },
   "browserslist": {
     "production": [
