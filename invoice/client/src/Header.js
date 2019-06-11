@@ -22,7 +22,7 @@ export default class Header extends React.Component {
 
   render() {
     return (
-    <Navbar color="faded" light>
+    <Navbar color="faded" light expand="md">
       <NavbarBrand tag={RRNavLink} to="/" className="mr-auto">Invoice PoC</NavbarBrand>
       <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
       <Collapse isOpen={!this.state.collapsed} navbar>

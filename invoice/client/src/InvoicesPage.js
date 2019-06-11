@@ -13,7 +13,7 @@ function InvoicesPage() {
         <Card>
           <CardHeader>
             <Row between="xs">
-              <h3>Invoices</h3>
+              <h3>My Invoices</h3>
               <Link to='/send-invoice'>
                 <Button color='primary' >Send new Invoice</Button>
               </Link>
