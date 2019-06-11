@@ -58,7 +58,7 @@ class InvoiceTransaction extends BaseTransaction {
 
 		// Save invoice count and IDs
 		updatedSender.asset.invoiceCount = updatedSender.asset.invoiceCount === null ? 0 : updatedSender.asset.invoiceCount++;
-		updatedSender.asset.sentInvoices = updatedSender.asset.sentInvoices === null ? [this.id] : [...updatedSender.asset.sentInvoices, this.id];
+		updatedSender.asset.invoicesSent = updatedSender.asset.invoicesSent === null ? [this.id] : [...updatedSender.asset.invoicesSent, this.id];
 		store.account.set(sender.address, updatedSender);
 		return [];
 	}
@@ -69,8 +69,8 @@ class InvoiceTransaction extends BaseTransaction {
 
 		// Rollback invoice count and IDs
 		originalSender.asset.invoiceCount = originalSender.asset.invoiceCount === 0 ? null : originalSender.asset.invoiceCount--;
-		originalSender.asset.sentInvoices = originalSender.asset.sentInvoices.splice(
-			originalSender.asset.sentInvoices.indexOf(this.id),
+		originalSender.asset.invoicesSent = originalSender.asset.invoicesSent.splice(
+			originalSender.asset.invoicesSent.indexOf(this.id),
 			1,
 		);
 		store.account.set(sender.address, originalSender);
