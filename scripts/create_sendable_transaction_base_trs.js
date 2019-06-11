@@ -8,8 +8,8 @@ const {
 
 const validateRequiredInputs = ({
 	recipientId,
-    recipientPublicKey,
-    senderPublicKey,
+	recipientPublicKey,
+	senderPublicKey,
 	type,
 }) => {
 
@@ -95,9 +95,9 @@ module.exports = (Transaction, inputs) => {
 			type,
 			timestamp,
 		}
-    );
+	);
 
-    transaction.sign(passphrase, secondPassphrase);
+	transaction.sign(passphrase, secondPassphrase);
 
 	// console.log('transferTransaction.signature', transferTransaction.signature, 'baseTransaction.signature', baseTransaction.signature);
 	// console.log('transferTransaction.amount', transferTransaction.amount, 'baseTransaction.amount', baseTransaction.amount);

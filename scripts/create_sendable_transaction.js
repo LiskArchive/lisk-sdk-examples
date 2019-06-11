@@ -8,8 +8,8 @@ const {
 const validateInputs = ({
 	amount,
 	recipientId,
-    recipientPublicKey,
-    senderPublicKey,
+	recipientPublicKey,
+	senderPublicKey,
 	data,
 }) => {
 	if (!validateTransferAmount(amount)) {
@@ -94,8 +94,8 @@ module.exports = (inputs) => {
 			type,
 			timestamp,
 		}
-    );
-    transferTransaction.sign(passphrase, secondPassphrase);
+	);
+	transferTransaction.sign(passphrase, secondPassphrase);
 
 	return asJSON(skipUndefined(transferTransaction.toJSON()));
 };

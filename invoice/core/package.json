@@ -1,5 +1,5 @@
 {
-  "name": "Invoice",
+  "name": "invoice",
   "version": "1.0.0",
   "description": "Blockchain invoicing system created using Alpha SDK",
   "main": "index.js",

@@ -8,9 +8,9 @@ app.registerTransaction(13, InvoiceTransaction);
 app.registerTransaction(14, PaymentTransaction);
 
 app
-    .run()
-    .then(() => app.logger.info('App started...'))
-    .catch(error => {
-        console.error('Faced error in application', error);
-        process.exit(1);
-    });
+	.run()
+	.then(() => app.logger.info('App started...'))
+	.catch(error => {
+		console.error('Faced error in application', error);
+		process.exit(1);
+	});
