@@ -19,7 +19,7 @@ function SignInPage() {
                 <Label for="passphrase">Passphrase</Label>
                 <Input type="password" name="passphrase" id="passphrase" placeholder="Enter your 12 word Lisk passphrase" />
               </FormGroup>
-              <Link to='/invoices'>
+              <Link to="/invoices">
                 <Button color="primary" size="lg" block>Sign In</Button>
               </Link>
             </Form>

@@ -31,12 +31,12 @@ function SendInvoicePage() {
               </FormGroup>
               <Row between="xs">
                 <Col xs={5}>
-                  <Link to='/invoices'>
+                  <Link to="/invoices">
                     <Button block>Cancel</Button>
                   </Link>
                 </Col>
                 <Col xs={5}>
-                  <Link to='/invoices'>
+                  <Link to="/invoices">
                     <Button color="primary" block>Send</Button>
                   </Link>
                 </Col>

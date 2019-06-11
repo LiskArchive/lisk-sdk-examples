@@ -14,8 +14,8 @@ function InvoicesPage() {
           <CardHeader>
             <Row between="xs">
               <h3>My Invoices</h3>
-              <Link to='/send-invoice'>
-                <Button color='primary' >Send new Invoice</Button>
+              <Link to="/send-invoice">
+                <Button color="primary" >Send new Invoice</Button>
               </Link>
             </Row>
           </CardHeader>
