@@ -66,7 +66,13 @@ function InvoicesPage({ location }) {
                       <td>{date}</td>
                       <td>{details}</td>
                       <td>{amount}</td>
-                      <td>{paidStatus ? 'Paid' : 'Not paid'}</td>
+                      <td>{paidStatus ?
+                        'Paid' :
+                        <Link to={`/pay-invoice?address=${address}&amount=${amount}`}>
+                          <Button>Pay</Button>
+                        </Link>
+                        }
+                      </td>
                     </tr>
                   ))}
               </tbody>

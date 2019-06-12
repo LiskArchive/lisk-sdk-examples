@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import SignInPage from './SignInPage';
 import InvoicesPage from './InvoicesPage';
 import SendInvoicePage from './SendInvoicePage';
+import PayInvoicePage from './PayInvoicePage';
 import Header from './Header';
 import './App.css';
 
@@ -19,6 +20,7 @@ function App() {
               <Route path="/" exact component={SignInPage} />
               <Route path="/invoices" component={InvoicesPage} />
               <Route path="/send-invoice" component={SendInvoicePage} />
+              <Route path="/pay-invoice" component={PayInvoicePage} />
             </Col>
           </Row>
         </Grid>
