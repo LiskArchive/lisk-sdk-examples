@@ -4,8 +4,10 @@ import {
   Form, FormGroup, Label, Input, FormFeedback,
   Card, CardHeader, CardBody,
 } from 'reactstrap';
-import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
+import { Row, Col } from 'react-flexbox-grid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
 function SendInvoicePage() {
   const inputs = {
@@ -47,16 +49,47 @@ function SendInvoicePage() {
     });
   };
 
+  const isFormValid = () => (
+    !Object.values(state.inputs).find(({ error }) => error)
+  );
+
   const onSendClick = () => {
     setState({
-      isSent: true,
+      sentStatus: {
+        pending: true,
+        header: 'Sending...',
+        icon: faCircleNotch,
+      },
     });
+    setTimeout(() => {
+      if (isFormValid()) {
+        setState({
+          sentStatus: {
+            sucess: true,
+            header: 'Invoice Success',
+            icon: faCheck,
+            message: 'Your invoice was sucesfully sent and will be processed by the blockchanin soon.',
+          },
+        });
+      } else {
+        setState({
+          sentStatus: {
+            sucess: false,
+            header: 'Invoice Failed',
+            icon: faTimes,
+            message: 'Sending invoice failed. Please try again.',
+          },
+        });
+      }
+    }, 1000);
   };
+
+  const { sentStatus } = state;
 
   return (
     <Row start="xs">
       <Col xs={12}>
-        {!state.isSent ?
+        {!sentStatus ?
           <Card>
             <CardHeader>
               <h3>Send Invoice</h3>
@@ -91,11 +124,15 @@ function SendInvoicePage() {
           </Card> :
           <Row center="xs">
             <Col>
-              <h3>Invoice Success</h3>
-              <p> Your invoice was sucessfully sent </p>
-              <Link to="/invoices">
-                <Button color="primary" block>Go to My Invoices</Button>
-              </Link>
+              <h1>{sentStatus.header}</h1>
+              <FontAwesomeIcon icon={sentStatus.icon} spin={sentStatus.pending} size="6x" />
+              <p>{sentStatus.message}</p>
+              { sentStatus.pending ?
+                null :
+                <Link to="/invoices">
+                  <Button color="primary" block>Go to My Invoices</Button>
+                </Link>
+              }
             </Col>
           </Row>
         }
