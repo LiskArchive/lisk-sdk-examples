@@ -9,7 +9,7 @@ const CashbackTransaction = require('../server/cashback_transaction');
 let c = createSendableTransaction(CashbackTransaction, {
 	type: 9,
 	data: null,
-	amount: `${10 ** 8}`,
+	amount: `${20 ** 8}`,
 	fee: `${10 ** 7}`,
 	recipientId: '10881167371402274308L', //delegate genesis_100
 	recipientPublicKey: 'addb0e15a44b0fdc6ff291be28d8c98f5551d0cd9218d749e30ddb87c6e31ca9',
