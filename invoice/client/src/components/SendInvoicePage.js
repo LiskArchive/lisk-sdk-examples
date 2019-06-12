@@ -129,7 +129,7 @@ function SendInvoicePage() {
               <p>{sentStatus.message}</p>
               { sentStatus.pending ?
                 null :
-                <Link to="/invoices">
+                <Link to="/invoices?showData">
                   <Button color="primary" block>Go to My Invoices</Button>
                 </Link>
               }

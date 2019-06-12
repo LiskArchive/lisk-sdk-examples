@@ -8,6 +8,7 @@
     "@fortawesome/react-fontawesome": "=0.1.4",
     "@liskhq/lisk-passphrase": "=2.0.0",
     "bootstrap": "=4.3.1",
+    "prop-types": "=15.7.2",
     "react": "=16.8.6",
     "react-dom": "=16.8.6",
     "react-flexbox-grid": "=2.1.2",
