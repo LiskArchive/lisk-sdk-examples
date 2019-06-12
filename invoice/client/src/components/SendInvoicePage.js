@@ -7,7 +7,6 @@ import {
 import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
 
-
 function SendInvoicePage() {
   const inputs = {
     address: {
@@ -32,6 +31,7 @@ function SendInvoicePage() {
       };
       return accumulator;
     }, {}),
+    isSent: false,
   });
 
   const onInputChange = (inputName, event) => {
@@ -47,43 +47,58 @@ function SendInvoicePage() {
     });
   };
 
+  const onSendClick = () => {
+    setState({
+      isSent: true,
+    });
+  };
+
   return (
     <Row start="xs">
       <Col xs={12}>
-        <Card>
-          <CardHeader>
-            <h3>Send Invoice</h3>
-          </CardHeader>
-          <CardBody>
-            <Form>
-              {Object.entries(inputs).map(([key, { label }]) => (
-                <FormGroup key={key}>
-                  <Label for={key}>{label}</Label>
-                  <Input
-                    type="text"
-                    id={key}
-                    value={state.inputs[key].value}
-                    invalid={state.inputs[key].error !== ''}
-                    onChange={event => onInputChange(key, event)}
-                  />
-                  <FormFeedback>{state.inputs[key].error}</FormFeedback>
-                </FormGroup>
+        {!state.isSent ?
+          <Card>
+            <CardHeader>
+              <h3>Send Invoice</h3>
+            </CardHeader>
+            <CardBody>
+              <Form>
+                {Object.entries(inputs).map(([key, { label }]) => (
+                  <FormGroup key={key}>
+                    <Label for={key}>{label}</Label>
+                    <Input
+                      type="text"
+                      id={key}
+                      value={state.inputs[key].value}
+                      invalid={state.inputs[key].error !== ''}
+                      onChange={event => onInputChange(key, event)}
+                    />
+                    <FormFeedback>{state.inputs[key].error}</FormFeedback>
+                  </FormGroup>
               ))}
-              <Row between="xs">
-                <Col xs={5}>
-                  <Link to="/invoices">
-                    <Button block>Cancel</Button>
-                  </Link>
-                </Col>
-                <Col xs={5}>
-                  <Link to="/invoices">
-                    <Button color="primary" block>Send</Button>
-                  </Link>
-                </Col>
-              </Row>
-            </Form>
-          </CardBody>
-        </Card>
+                <Row between="xs">
+                  <Col xs={5}>
+                    <Link to="/invoices">
+                      <Button block>Cancel</Button>
+                    </Link>
+                  </Col>
+                  <Col xs={5}>
+                    <Button color="primary" onClick={onSendClick} block>Send</Button>
+                  </Col>
+                </Row>
+              </Form>
+            </CardBody>
+          </Card> :
+          <Row center="xs">
+            <Col>
+              <h3>Invoice Success</h3>
+              <p> Your invoice was sucessfully sent </p>
+              <Link to="/invoices">
+                <Button color="primary" block>Go to My Invoices</Button>
+              </Link>
+            </Col>
+          </Row>
+        }
       </Col>
     </Row>
   );
