@@ -2,6 +2,7 @@ import {
   Button,
   Form, FormGroup, Label, Input, FormFeedback,
   Card, CardHeader, CardBody,
+  Spinner,
 } from 'reactstrap';
 import { Row, Col } from 'react-flexbox-grid';
 import { validation } from '@liskhq/lisk-passphrase';
@@ -14,10 +15,12 @@ import { useStateValue } from '../state';
 function SignInPage({ history }) {
   const [, dispatch] = useStateValue();
 
-  const [{ passphrase, error }, setState] = React.useState({
+  const [state, setState] = React.useState({
     passphrase: '',
     error: '',
   });
+
+  const { passphrase, error, loading } = state;
 
   const onPasshraseChange = (evt) => {
     const { value } = evt.target;
@@ -25,14 +28,23 @@ function SignInPage({ history }) {
     setState({
       passphrase: value,
       error: errors[0] ? errors[0].message : '',
+      loading: false,
     });
   };
 
   const onSignInClick = () => {
+    setState({
+      ...state,
+      loading: true,
+    });
     getAccount({ passphrase }).then((account) => {
       dispatch({
         type: 'accountSignedIn',
         account,
+      });
+      setState({
+        ...state,
+        loading: false,
       });
       history.push('/invoices');
     });
@@ -58,7 +70,9 @@ function SignInPage({ history }) {
                 />
                 <FormFeedback>{error}</FormFeedback>
               </FormGroup>
-              <Button color="primary" size="lg" block onClick={onSignInClick}>Sign In</Button>
+              <Button color="primary" size="lg" block onClick={onSignInClick} disabled={loading}>
+                {loading ? <Spinner color="light" size="sm" /> : 'Sign In'}
+              </Button>
             </Form>
           </CardBody>
         </Card>
