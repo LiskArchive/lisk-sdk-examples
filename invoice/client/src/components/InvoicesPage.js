@@ -7,25 +7,31 @@ import {
 } from 'reactstrap';
 import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
+import { getTransactions } from '../utils';
 
 function InvoicesPage({ location }) {
-  // TODO this is mock data hack, to be removed when backend is ready
-  const transactions = location.search.indexOf('showData') !== -1 ?
-    [{
-      id: '12349126192841249861',
-      address: '21438701249701294l',
-      date: new Date().toLocaleDateString('en-US'),
-      details: 'Implementation of login page',
-      amount: 50,
-      paidStatus: false,
-    }, {
-      id: '21498124612498612',
-      address: '21438701249701294l',
-      date: new Date().toLocaleDateString('en-US'),
-      details: 'Implementation of home page',
-      amount: 140,
-      paidStatus: true,
-    }] : [];
+  const [state, setState] = React.useState({
+    transactions: [],
+  });
+
+  React.useEffect(() => {
+    // TODO this is mock data hack, to be removed when backend is ready
+    if (location.search.indexOf('showData') !== -1 &&
+        state.transactions.length === 0 && !state.loading) {
+      setState({
+        ...state,
+        loading: true,
+      });
+      getTransactions().then((transactions) => {
+        setState({
+          transactions,
+          loading: false,
+        });
+      });
+    }
+  });
+
+  const { transactions, loading } = state;
 
   return (
     <Row start="xs">
@@ -66,7 +72,10 @@ function InvoicesPage({ location }) {
                 </tbody>
               </Table> :
               <CardText>
-              There are no invoices yet. Start by sending a new invoice.
+                { loading ?
+                  'Loading transactions...' :
+                  'There are no invoices yet. Start by sending a new invoice.'
+                }
               </CardText>
             }
           </CardBody>
