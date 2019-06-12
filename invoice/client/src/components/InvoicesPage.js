@@ -1,12 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import {
   Button,
   Card, CardHeader, CardBody, CardText,
   Table,
 } from 'reactstrap';
-import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
+import { Row, Col } from 'react-flexbox-grid';
+import PropTypes from 'prop-types';
+import React from 'react';
+
 import { getTransactions } from '../utils';
 
 function InvoicesPage({ location }) {
@@ -45,20 +46,19 @@ function InvoicesPage({ location }) {
               </Link>
             </Row>
           </CardHeader>
-          <CardBody>
-            {transactions.length ?
-              <Table>
-                <thead>
-                  <tr>
-                    <th>Sender/Recepient</th>
-                    <th>Date</th>
-                    <th>Details</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.map(({
+          {transactions.length ?
+            <Table>
+              <thead>
+                <tr>
+                  <th>Sender/Recepient</th>
+                  <th>Date</th>
+                  <th>Details</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactions.map(({
                    id, address, date, details, amount, paidStatus,
                   }) => (
                     <tr key={id}>
@@ -69,16 +69,17 @@ function InvoicesPage({ location }) {
                       <td>{paidStatus ? 'Paid' : 'Not paid'}</td>
                     </tr>
                   ))}
-                </tbody>
-              </Table> :
+              </tbody>
+            </Table> :
+            <CardBody>
               <CardText>
                 { loading ?
                   'Loading transactions...' :
                   'There are no invoices yet. Start by sending a new invoice.'
                 }
               </CardText>
+            </CardBody>
             }
-          </CardBody>
         </Card>
       </Col>
     </Row>

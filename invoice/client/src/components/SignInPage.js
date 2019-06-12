@@ -26,7 +26,7 @@ function SignInPage() {
 
   return (
     <Row start="xs">
-      <Col xs={12}>
+      <Col xs={12} mdOffset={1} md={10} lgOffset={2} lg={8}>
         <Card>
           <CardHeader><h3>Sign In</h3></CardHeader>
           <CardBody>

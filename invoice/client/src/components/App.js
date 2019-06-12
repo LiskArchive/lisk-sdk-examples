@@ -15,7 +15,7 @@ function App() {
       <div className="App">
         <Grid fluid>
           <Row center="xs">
-            <Col xs={12} md={8} lg={6}>
+            <Col xs={12} md={10} lg={8}>
               <Route path="/" exact component={SignInPage} />
               <Route path="/invoices" component={InvoicesPage} />
               <Route path="/send-invoice" component={SendInvoicePage} />
