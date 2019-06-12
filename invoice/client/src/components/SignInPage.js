@@ -1,19 +1,23 @@
-import React from 'react';
 import {
   Button,
   Form, FormGroup, Label, Input, FormFeedback,
   Card, CardHeader, CardBody,
 } from 'reactstrap';
 import { Row, Col } from 'react-flexbox-grid';
-import { Link } from 'react-router-dom';
 import { validation } from '@liskhq/lisk-passphrase';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-function SignInPage() {
-  const [state, setState] = React.useState({
+import { getAccount } from '../utils';
+import { useStateValue } from '../state';
+
+function SignInPage({ history }) {
+  const [, dispatch] = useStateValue();
+
+  const [{ passphrase, error }, setState] = React.useState({
     passphrase: '',
     error: '',
   });
-  const { passphrase, error } = state;
 
   const onPasshraseChange = (evt) => {
     const { value } = evt.target;
@@ -21,6 +25,16 @@ function SignInPage() {
     setState({
       passphrase: value,
       error: errors[0] ? errors[0].message : '',
+    });
+  };
+
+  const onSignInClick = () => {
+    getAccount({ passphrase }).then((account) => {
+      dispatch({
+        type: 'accountSignedIn',
+        account,
+      });
+      history.push('/invoices');
     });
   };
 
@@ -44,9 +58,7 @@ function SignInPage() {
                 />
                 <FormFeedback>{error}</FormFeedback>
               </FormGroup>
-              <Link to="/invoices">
-                <Button color="primary" size="lg" block>Sign In</Button>
-              </Link>
+              <Button color="primary" size="lg" block onClick={onSignInClick}>Sign In</Button>
             </Form>
           </CardBody>
         </Card>
@@ -54,5 +66,17 @@ function SignInPage() {
     </Row>
   );
 }
+
+SignInPage.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }),
+};
+
+SignInPage.defaultProps = {
+  history: {
+    push: () => {},
+  },
+};
 
 export default SignInPage;
