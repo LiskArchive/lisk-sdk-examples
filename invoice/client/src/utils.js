@@ -1,3 +1,5 @@
+import { getAddressAndPublicKeyFromPassphrase } from '@liskhq/lisk-cryptography';
+
 export const getTransactions = () => new Promise((resolve) => {
   // TODO this is mock data hack, to be removed when backend is ready
   setTimeout(() => {
@@ -23,7 +25,7 @@ export const getAccount = ({ passphrase }) => new Promise((resolve) => {
   // TODO this is mock data hack, to be removed when backend is ready
   setTimeout(() => {
     resolve({
-      address: '1240981724097124L',
+      ...getAddressAndPublicKeyFromPassphrase(passphrase),
       balance: 0,
       passphrase,
     });
