@@ -3,36 +3,34 @@ import {
   Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
 } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
+import { useStateValue } from '../state';
 
-export default class Header extends React.Component {
-  constructor(props) {
-    super(props);
+export default function Header() {
+  const [{ account }] = useStateValue();
+  const [{ collapsed }, setState] = React.useState({
+    collapsed: true,
+  });
 
-    this.toggleNavbar = this.toggleNavbar.bind(this);
-    this.state = {
-      collapsed: true,
-    };
-  }
-
-  toggleNavbar() {
-    this.setState({
-      collapsed: !this.state.collapsed,
+  const toggleNavbar = () => {
+    setState({
+      collapsed: !collapsed,
     });
-  }
+  };
 
-  render() {
-    return (
-      <Navbar color="faded" light expand="md">
-        <NavbarBrand tag={RRNavLink} to="/" className="mr-auto">Invoice PoC</NavbarBrand>
-        <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-        <Collapse isOpen={!this.state.collapsed} navbar>
+  return (
+    <Navbar color="faded" light expand="md">
+      <NavbarBrand tag={RRNavLink} to="/" className="mr-auto">Invoice PoC</NavbarBrand>
+      <NavbarToggler onClick={toggleNavbar} className="mr-2" />
+      { account ?
+        <Collapse isOpen={!collapsed} navbar>
           <Nav navbar>
             <NavItem>
               <NavLink tag={RRNavLink} to="/invoices">My Invoices</NavLink>
             </NavItem>
           </Nav>
-        </Collapse>
-      </Navbar>
-    );
-  }
+        </Collapse> :
+        null
+      }
+    </Navbar>
+  );
 }
