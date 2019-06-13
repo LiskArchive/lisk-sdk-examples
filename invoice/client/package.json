@@ -1,6 +1,7 @@
 {
   "name": "invoice",
   "version": "0.1.0",
+  "author": "Vít Stanislav <vit@lightcurve.io> (https://lightcurve.io/team/vit-stanislav)",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "=1.2.19",
