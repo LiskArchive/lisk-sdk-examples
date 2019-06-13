@@ -14,7 +14,6 @@ class HelloTransaction extends BaseTransaction {
         const sender = store.account.get(this.senderId);
         const newObj = { ...sender, asset: { hello: this.asset.hello } };
         store.account.set(sender.address, newObj);
-        return [];
         if (sender.asset && sender.asset.hello) {
             errors.push(
                 new TransactionError(
@@ -40,8 +39,6 @@ class HelloTransaction extends BaseTransaction {
 
 	validateAsset() {
 		const errors = [];
-		// Consider advanced way of validating assets with validator
-		// validator.validate(assetFormatSchema, this.asset);
 		if (!this.asset.hello || typeof this.asset.hello !== 'string' || this.asset.hello.length > 64) {
 			errors.push(
 				new TransactionError(
