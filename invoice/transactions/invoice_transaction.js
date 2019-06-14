@@ -27,7 +27,7 @@ class InvoiceTransaction extends BaseTransaction {
 				)
 			);
 		}
-		if (!this.asset.requestedAmount || typeof this.asset.requestedAmount !== 'number') {
+		if (!this.asset.requestedAmount || typeof this.asset.requestedAmount !== 'string') {
 			errors.push(
 				new TransactionError(
 					'Invalid "asset.requestedAmount" defined on transaction',
@@ -54,21 +54,25 @@ class InvoiceTransaction extends BaseTransaction {
 
 	applyAsset(store) {
 		const sender = store.account.get(this.senderId);
-		const updatedSender = { ...sender, };
+
+		// Using JSON.stringify/parse to recursively clones the object
+		const updatedSender = JSON.parse(JSON.stringify(sender));
 
 		// Save invoice count and IDs
-		updatedSender.asset.invoiceCount = updatedSender.asset.invoiceCount === null ? 0 : updatedSender.asset.invoiceCount++;
-		updatedSender.asset.invoicesSent = updatedSender.asset.invoicesSent === null ? [this.id] : [...updatedSender.asset.invoicesSent, this.id];
+		updatedSender.asset.invoiceCount = updatedSender.asset.invoiceCount === undefined ? 0 : updatedSender.asset.invoiceCount++;
+		updatedSender.asset.invoicesSent = updatedSender.asset.invoicesSent === undefined ? [this.id] : [...updatedSender.asset.invoicesSent, this.id];
 		store.account.set(sender.address, updatedSender);
 		return [];
 	}
 
 	undoAsset(store) {
 		const sender = store.account.get(this.senderId);
-		const originalSender = { ...sender, };
+
+		// Using JSON.stringify/parse to recursively clones the object
+		const originalSender = JSON.parse(JSON.stringify(sender));
 
 		// Rollback invoice count and IDs
-		originalSender.asset.invoiceCount = originalSender.asset.invoiceCount === 0 ? null : originalSender.asset.invoiceCount--;
+		originalSender.asset.invoiceCount = originalSender.asset.invoiceCount === 0 ? undefined : originalSender.asset.invoiceCount--;
 		originalSender.asset.invoicesSent = originalSender.asset.invoicesSent.splice(
 			originalSender.asset.invoicesSent.indexOf(this.id),
 			1,
