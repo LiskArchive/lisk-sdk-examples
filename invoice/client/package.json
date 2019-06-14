@@ -56,7 +56,7 @@
       "max-depth": ["error", 3],
       "max-nested-callbacks": ["error", 3],
       "max-statements": ["error", 10],
-      "max-lines": ["error", 200]
+      "max-lines": ["error", 150]
     },
     "settings": {
       "react": {
