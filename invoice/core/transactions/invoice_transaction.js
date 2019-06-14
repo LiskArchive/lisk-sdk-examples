@@ -59,7 +59,7 @@ class InvoiceTransaction extends BaseTransaction {
 		const updatedSender = JSON.parse(JSON.stringify(sender));
 
 		// Save invoice count and IDs
-		updatedSender.asset.invoiceCount = updatedSender.asset.invoiceCount === undefined ? 0 : updatedSender.asset.invoiceCount++;
+		updatedSender.asset.invoiceCount = updatedSender.asset.invoiceCount === undefined ? 1 : updatedSender.asset.invoiceCount++;
 		updatedSender.asset.invoicesSent = updatedSender.asset.invoicesSent === undefined ? [this.id] : [...updatedSender.asset.invoicesSent, this.id];
 		store.account.set(sender.address, updatedSender);
 		return [];
@@ -72,7 +72,7 @@ class InvoiceTransaction extends BaseTransaction {
 		const originalSender = JSON.parse(JSON.stringify(sender));
 
 		// Rollback invoice count and IDs
-		originalSender.asset.invoiceCount = originalSender.asset.invoiceCount === 0 ? undefined : originalSender.asset.invoiceCount--;
+		originalSender.asset.invoiceCount = originalSender.asset.invoiceCount === 1 ? undefined : originalSender.asset.invoiceCount--;
 		originalSender.asset.invoicesSent = originalSender.asset.invoicesSent.splice(
 			originalSender.asset.invoicesSent.indexOf(this.id),
 			1,

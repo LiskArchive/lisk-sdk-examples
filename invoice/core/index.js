@@ -1,4 +1,4 @@
-const { Application, genesisBlockDevnet, configDevnet} = require('lisk-sdk');
+const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
 const InvoiceTransaction = require('./transactions/invoice_transaction');
 const PaymentTransaction = require('./transactions/payment_transaction');
 
