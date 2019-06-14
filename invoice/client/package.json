@@ -1,0 +1,85 @@
+{
+  "name": "invoice",
+  "version": "0.1.0",
+  "author": "Vít Stanislav <vit@lightcurve.io> (https://lightcurve.io/team/vit-stanislav)",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "=1.2.19",
+    "@fortawesome/free-solid-svg-icons": "=5.9.0",
+    "@fortawesome/react-fontawesome": "=0.1.4",
+    "@liskhq/lisk-cryptography": "=2.0.0",
+    "@liskhq/lisk-passphrase": "=2.0.0",
+    "bootstrap": "=4.3.1",
+    "prop-types": "=15.7.2",
+    "react": "=16.8.6",
+    "react-dom": "=16.8.6",
+    "react-flexbox-grid": "=2.1.2",
+    "react-router-dom": "=5.0.0",
+    "react-scripts": "3.0.1",
+    "reactstrap": "=8.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eslint": "eslint ./"
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb",
+      "plugin:react/recommended"
+    ],
+    "env": {
+      "browser": true
+    },
+    "rules": {
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
+        }
+      ],
+      "jsx-a11y/anchor-is-valid": [
+        "error",
+        {
+          "components": [
+            "Link"
+          ],
+          "specialLink": [
+            "to"
+          ]
+        }
+      ],
+      "complexity": ["error", 5],
+      "max-depth": ["error", 3],
+      "max-nested-callbacks": ["error", 3],
+      "max-statements": ["error", 10],
+      "max-lines": ["error", 150]
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "=5.3.0",
+    "eslint-config-airbnb": "=16.1.0",
+    "eslint-plugin-import": "=2.17.2",
+    "eslint-plugin-react": "=7.12.4"
+  }
+}
