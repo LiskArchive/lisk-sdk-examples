@@ -1,16 +1,13 @@
-import {
-  Button,
-  Form, FormGroup, Label, Input, FormFeedback,
-  Card, CardHeader, CardBody,
-} from 'reactstrap';
+import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { Row, Col } from 'react-flexbox-grid';
 import { faCheck, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
-import PropTypes from 'prop-types';
 import React from 'react';
 
-function PayInvoicePage({ location }) {
+import TransactionForm from './TransactionForm';
+
+function PayInvoicePage() {
   const inputs = {
     address: {
       label: 'Client address',
@@ -26,35 +23,13 @@ function PayInvoicePage({ location }) {
     },
   };
 
-  const [state, setState] = React.useState({
-    inputs: Object.keys(inputs).reduce((accumulator, key) => {
-      accumulator[key] = { // eslint-disable-line no-param-reassign
-        value: new URLSearchParams(location.search).get(key) || '',
-        error: '',
-      };
-      return accumulator;
-    }, {}),
-    isSent: false,
-  });
+  const [state, setState] = React.useState({ });
 
-  const onInputChange = (inputName, event) => {
-    const { value } = event.target;
-    setState({
-      inputs: {
-        ...state.inputs,
-        [inputName]: {
-          value,
-          error: inputs[inputName].isValid(value) ? '' : 'Invalid value',
-        },
-      },
-    });
-  };
-
-  const isFormValid = () => (
-    !Object.values(state.inputs).find(({ error }) => error)
+  const isFormValid = inputsData => (
+    !Object.values(inputsData).find(({ error }) => error)
   );
 
-  const onPayClick = () => {
+  const onPayClick = (inputsData) => {
     setState({
       sentStatus: {
         pending: true,
@@ -63,7 +38,7 @@ function PayInvoicePage({ location }) {
       },
     });
     setTimeout(() => {
-      if (isFormValid()) {
+      if (isFormValid(inputsData)) {
         setState({
           sentStatus: {
             sucess: true,
@@ -91,38 +66,7 @@ function PayInvoicePage({ location }) {
     <Row start="xs">
       <Col xs={12} mdOffset={1} md={10} lgOffset={2} lg={8}>
         {!sentStatus ?
-          <Card>
-            <CardHeader>
-              <h3>Pay Invoice</h3>
-            </CardHeader>
-            <CardBody>
-              <Form>
-                {Object.entries(inputs).map(([key, { label }]) => (
-                  <FormGroup key={key}>
-                    <Label for={key}>{label}</Label>
-                    <Input
-                      type="text"
-                      id={key}
-                      value={state.inputs[key].value}
-                      invalid={state.inputs[key].error !== ''}
-                      onChange={event => onInputChange(key, event)}
-                    />
-                    <FormFeedback>{state.inputs[key].error}</FormFeedback>
-                  </FormGroup>
-              ))}
-                <Row between="xs">
-                  <Col xs={5}>
-                    <Link to="/invoices?showData">
-                      <Button block>Cancel</Button>
-                    </Link>
-                  </Col>
-                  <Col xs={5}>
-                    <Button color="primary" onClick={onPayClick} block>Pay</Button>
-                  </Col>
-                </Row>
-              </Form>
-            </CardBody>
-          </Card> :
+          <TransactionForm title="Pay Invoice" inputs={inputs} callback={onPayClick} submitButtonLabel="Pay" /> :
           <Row center="xs">
             <Col>
               <h1>{sentStatus.header}</h1>
@@ -141,17 +85,5 @@ function PayInvoicePage({ location }) {
     </Row>
   );
 }
-
-PayInvoicePage.propTypes = {
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-  }),
-};
-
-PayInvoicePage.defaultProps = {
-  location: {
-    pathname: '',
-  },
-};
 
 export default PayInvoicePage;
