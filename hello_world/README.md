@@ -1,8 +1,7 @@
 ### Hello World
-Welcome to the step-by-step guide of creating the Hello World application with Lisk Alpha SDK.
 
 The purpose of Hello World application is rather to explain the flow of using Alpha SDK Custom Transaction implementations. 
-The implementation is saving the string value of the "hello" transaction's asset property to the asset property of the sender's account.
+The implementation is saving the string value of the "hello" transaction's asset property to the asset property of the sender's account. [A step by step tutorial of how to re-create this example can be found here.](https://github.com/LiskHQ/lisk-docs/blob/master/start/tutorials/hello-world.md)
 
 If the account of an address "16313739661670634666L" is able to afford for a HelloWorld transaction (fee is set to 1 LSK by default), the new "hello" property appears into this account's asset field.
 Hello World transaction implements only the required functions from the BaseTransaction abstract interface.
