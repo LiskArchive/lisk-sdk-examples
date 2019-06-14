@@ -1,11 +1,9 @@
-import { Button } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
 import { Row, Col } from 'react-flexbox-grid';
 import { faCheck, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 
 import TransactionForm from './TransactionForm';
+import TransactionResult from './TransactionResult';
 
 function PayInvoicePage() {
   const inputs = {
@@ -67,19 +65,7 @@ function PayInvoicePage() {
       <Col xs={12} mdOffset={1} md={10} lgOffset={2} lg={8}>
         {!sentStatus ?
           <TransactionForm title="Pay Invoice" inputs={inputs} callback={onPayClick} submitButtonLabel="Pay" /> :
-          <Row center="xs">
-            <Col>
-              <h1>{sentStatus.header}</h1>
-              <FontAwesomeIcon icon={sentStatus.icon} spin={sentStatus.pending} size="6x" />
-              <p>{sentStatus.message}</p>
-              { sentStatus.pending ?
-                null :
-                <Link to="/invoices?showData">
-                  <Button color="primary" block>Go to My Invoices</Button>
-                </Link>
-              }
-            </Col>
-          </Row>
+          <TransactionResult {...sentStatus} />
         }
       </Col>
     </Row>
