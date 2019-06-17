@@ -1,6 +1,8 @@
 const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
 const CashbackTransaction = require('./cashback_transaction');
 
+configDevnet.app.label = 'Cashback-blockchain-application';
+
 const app = new Application(genesisBlockDevnet, configDevnet);
 
 app.registerTransaction(CashbackTransaction.TYPE, CashbackTransaction);
