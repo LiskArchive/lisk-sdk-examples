@@ -20,3 +20,4 @@ let h = createSendableTransaction(HelloTransaction, {
 });
 
 console.log(h);
+process.exit(1);

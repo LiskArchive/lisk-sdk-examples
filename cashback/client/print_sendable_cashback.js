@@ -29,3 +29,4 @@ let c = createSendableTransaction(CashbackTransaction, {
 
 
 console.log(c);
+process.exit(1);
