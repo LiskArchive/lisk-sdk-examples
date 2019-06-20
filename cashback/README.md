@@ -2,7 +2,7 @@
 
 This is a simple use-case application created using lisk-sdk@alpha.
 
-Casback application extends the Transfer Transaction of SDK by adding an additional "cashback" feature - with every balance transfer, 10% of transferred amount goes back to the sender's account.
+Casback application extends the Transfer Transaction of SDK by adding an additional "cashback" feature - with every balance transfer. 10% of transferred amount goes back to the sender's account increasing the total tokens' supply in the network.
 
 ## Usage
 
