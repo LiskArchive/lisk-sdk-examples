@@ -1,5 +1,5 @@
 const createSendableTransaction = require('./create_sendable_transaction_base_trs');
-const CashbackTransaction = require('../server/cashback_transaction');
+const CashbackTransaction = require('../cashback_transaction');
 
 /**
  *  To directly send the printed transaction:
@@ -10,7 +10,7 @@ const CashbackTransaction = require('../server/cashback_transaction');
 const getTimestamp = () => {
 	const epochTime = "2016-05-24T17:00:00.000Z" //default epoch time
 	// check config file or curl localhost:4000/api/node/constants to verify your epoc time
-	const millisSinceEpoc = Date.now() - Date.parse(epochTime); 
+	const millisSinceEpoc = Date.now() - Date.parse(epochTime);
 	const inSeconds = ((millisSinceEpoc) / 1000).toFixed(0);
 	return  parseInt(inSeconds);
 }
