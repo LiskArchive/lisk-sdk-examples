@@ -1,9 +1,11 @@
 const { Application, genesisBlockDevnet, configDevnet} = require('lisk-sdk');
 const HelloTransaction = require('./hello_transaction');
 
+configDevnet.app.label = 'HelloWorld-blockchain-application';
+
 const app = new Application(genesisBlockDevnet, configDevnet);
 
-app.registerTransaction(10, HelloTransaction);
+app.registerTransaction(HelloTransaction.TYPE, HelloTransaction);
 
 app
 	.run()
