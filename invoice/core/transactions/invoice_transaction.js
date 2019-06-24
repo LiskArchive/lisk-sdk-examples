@@ -34,7 +34,7 @@ class InvoiceTransaction extends BaseTransaction {
 					this.id,
 					'.asset.requestedAmount',
 					this.asset.requestedAmount,
-					'A number value',
+					'A string value',
 				)
 			);
 		}
@@ -79,6 +79,12 @@ class InvoiceTransaction extends BaseTransaction {
 		);
 		store.account.set(sender.address, originalSender);
 		return [];
+	}
+
+	toJSON() {
+		const transaction = super.toJSON();
+		Object.keys(transaction).forEach(key => transaction[key] === undefined && delete transaction[key])
+		return transaction;
 	}
 
 }
