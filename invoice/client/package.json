@@ -7,6 +7,7 @@
     "@fortawesome/fontawesome-svg-core": "=1.2.19",
     "@fortawesome/free-solid-svg-icons": "=5.9.0",
     "@fortawesome/react-fontawesome": "=0.1.4",
+    "@liskhq/lisk-client": "=2.0.0",
     "@liskhq/lisk-cryptography": "=2.0.0",
     "@liskhq/lisk-passphrase": "=2.0.0",
     "bootstrap": "=4.3.1",
@@ -52,11 +53,26 @@
           ]
         }
       ],
-      "complexity": ["error", 5],
-      "max-depth": ["error", 3],
-      "max-nested-callbacks": ["error", 3],
-      "max-statements": ["error", 10],
-      "max-lines": ["error", 150]
+      "complexity": [
+        "error",
+        6
+      ],
+      "max-depth": [
+        "error",
+        3
+      ],
+      "max-nested-callbacks": [
+        "error",
+        3
+      ],
+      "max-statements": [
+        "error",
+        10
+      ],
+      "max-lines": [
+        "error",
+        150
+      ]
     },
     "settings": {
       "react": {

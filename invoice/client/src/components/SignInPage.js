@@ -13,10 +13,10 @@ import { getAccount } from '../utils';
 import { useStateValue } from '../state';
 
 function SignInPage({ history }) {
-  const [, dispatch] = useStateValue();
+  const [{ account }, dispatch] = useStateValue();
 
   const [state, setState] = React.useState({
-    passphrase: '',
+    passphrase: localStorage.getItem('passphrase') || '',
     error: '',
   });
 
@@ -37,10 +37,10 @@ function SignInPage({ history }) {
       ...state,
       loading: true,
     });
-    getAccount({ passphrase }).then((account) => {
+    getAccount({ passphrase }).then((response) => {
       dispatch({
         type: 'accountSignedIn',
-        account,
+        account: response,
       });
       setState({
         ...state,
@@ -49,6 +49,11 @@ function SignInPage({ history }) {
       history.push('/invoices');
     });
   };
+
+  // Automatic login for ease of development
+  if (localStorage.getItem('passphrase') && !loading && !account) {
+    onSignInClick();
+  }
 
   return (
     <Row start="xs">

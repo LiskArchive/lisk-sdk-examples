@@ -1,33 +1,35 @@
 import { getAddressAndPublicKeyFromPassphrase } from '@liskhq/lisk-cryptography';
+import { APIClient } from '@liskhq/lisk-client';
 
-export const getTransactions = () => new Promise((resolve) => {
-  // TODO this is mock data hack, to be removed when backend is ready
-  setTimeout(() => {
-    resolve([{
-      id: '12349126192841249861',
-      address: '21438701249701294l',
-      date: new Date().toLocaleDateString('en-US'),
-      details: 'Implementation of login page',
-      amount: 50,
-      paidStatus: false,
-    }, {
-      id: '21498124612498612',
-      address: '21438701249701294l',
-      date: new Date().toLocaleDateString('en-US'),
-      details: 'Implementation of home page',
-      amount: 140,
-      paidStatus: true,
-    }]);
-  }, 1000);
-});
+import config from './config.json';
 
-export const getAccount = ({ passphrase }) => new Promise((resolve) => {
-  // TODO this is mock data hack, to be removed when backend is ready
-  setTimeout(() => {
-    resolve({
-      ...getAddressAndPublicKeyFromPassphrase(passphrase),
-      balance: 0,
-      passphrase,
-    });
-  }, 1000);
+
+const getApiClient = () => (
+  new APIClient([config.serverUrl], { nethash: config.nethash })
+);
+
+export const getTransactions = ({ address }) => (
+  getApiClient().transactions.get({ senderIdOrRecipientId: address })
+);
+
+export const getAccount = ({ passphrase }) => new Promise((resolve, reject) => {
+  const { publicKey, address } = getAddressAndPublicKeyFromPassphrase(passphrase);
+  getApiClient().accounts.get({ address }).then((response) => {
+    if (response.data.length > 0) {
+      resolve({
+        ...response.data[0],
+        publicKey,
+        passphrase,
+      });
+    } else {
+      // when the account has no transactions yet (therefore is not saved on the blockchain)
+      // this endpoint returns { success: false }
+      resolve({
+        passphrase,
+        address,
+        publicKey,
+        balance: 0,
+      });
+    }
+  }).catch(reject);
 });
