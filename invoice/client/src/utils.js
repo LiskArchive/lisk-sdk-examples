@@ -1,6 +1,7 @@
+import * as transactions from '@liskhq/lisk-transactions';
 import { getAddressAndPublicKeyFromPassphrase } from '@liskhq/lisk-cryptography';
+import { InvoiceTransaction } from 'lisk-bills-transactions';
 import { APIClient } from '@liskhq/lisk-client';
-
 import config from './config.json';
 
 
@@ -33,3 +34,23 @@ export const getAccount = ({ passphrase }) => new Promise((resolve, reject) => {
     }
   }).catch(reject);
 });
+
+export const sendInvoice = ({
+  client, requestedAmount, description,
+}, passphrase) => {
+  let invoiceTx = new InvoiceTransaction({
+    type: InvoiceTransaction.TYPE,
+    asset: {
+      client,
+      requestedAmount: transactions.utils.convertLSKToBeddows(requestedAmount),
+      description,
+    },
+    fee: transactions.utils.convertLSKToBeddows('10'),
+    senderPublicKey: getAddressAndPublicKeyFromPassphrase(passphrase).publicKey,
+    recipientId: client,
+    timestamp: 0,
+  });
+
+  invoiceTx = invoiceTx.sign(passphrase);
+  return getApiClient().transactions.broadcast(invoiceTx);
+};
