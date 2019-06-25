@@ -1,9 +1,23 @@
-import * as transactions from '@liskhq/lisk-transactions';
-import { getAddressAndPublicKeyFromPassphrase } from '@liskhq/lisk-cryptography';
-import { InvoiceTransaction } from 'lisk-bills-transactions';
 import { APIClient } from '@liskhq/lisk-client';
+import { InvoiceTransaction } from 'lisk-bills-transactions';
+import { getAddressAndPublicKeyFromPassphrase } from '@liskhq/lisk-cryptography';
+import * as constants from '@liskhq/lisk-constants';
+import moment from 'moment';
+import * as transactions from '@liskhq/lisk-transactions';
+
 import config from './config.json';
 
+export const dateToLiskEpochTimestamp = date => (
+  (new Date(date).getTime() / 1000) - constants.EPOCH_TIME_SECONDS
+);
+
+export const liskEpochTimestampToDate = timestamp => (
+  new Date((timestamp + constants.EPOCH_TIME_SECONDS) * 1000)
+);
+
+export const formatTimestamp = timestamp => (
+  moment(liskEpochTimestampToDate(timestamp)).fromNow()
+);
 
 const getApiClient = () => (
   new APIClient([config.serverUrl], { nethash: config.nethash })
@@ -48,7 +62,7 @@ export const sendInvoice = ({
     fee: transactions.utils.convertLSKToBeddows('10'),
     senderPublicKey: getAddressAndPublicKeyFromPassphrase(passphrase).publicKey,
     recipientId: client,
-    timestamp: 0,
+    timestamp: dateToLiskEpochTimestamp(new Date()),
   });
 
   invoiceTx = invoiceTx.sign(passphrase);

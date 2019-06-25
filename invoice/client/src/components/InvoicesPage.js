@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col } from 'react-flexbox-grid';
 import React from 'react';
 
-import { getTransactions } from '../utils';
+import { formatTimestamp, getTransactions } from '../utils';
 import { useStateValue } from '../state';
 
 function InvoicesPage() {
@@ -62,7 +62,7 @@ function InvoicesPage() {
                   }) => (
                     <tr key={id}>
                       <td>{senderId === account.address ? recipientId : senderId}</td>
-                      <td>{timestamp}</td>
+                      <td>{formatTimestamp(timestamp).toString()}</td>
                       <td>{details}</td>
                       <td>{amount}</td>
                       <td>{paidStatus ?
