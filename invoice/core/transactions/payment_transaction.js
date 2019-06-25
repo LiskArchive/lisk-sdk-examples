@@ -7,14 +7,7 @@ class PaymentTransaction extends TransferTransaction {
 	}
 
 	async prepare(store) {
-		await store.account.cache([
-			{
-				address: this.senderId,
-			},
-			{
-				address: this.recipientId,
-			},
-		]);
+		super.prepare(store)
 		await store.transaction.cache([
 			{
 				id: this.asset.data,
@@ -30,7 +23,7 @@ class PaymentTransaction extends TransferTransaction {
 		); // Find related invoice in transactions for invoiceID
 
 		if (transaction) {
-			if (this.amount < transaction.asset.requestedAmount) {
+			if (this.amount.lt(transaction.asset.requestedAmount)) {
 				errors.push(
 					new TransactionError(
 						'Paid amount is lower than amount stated on invoice',
@@ -58,7 +51,7 @@ class PaymentTransaction extends TransferTransaction {
 
 	undoAsset(store) {
 		// No rollback needed as there is only validation happening in applyAsset
-		// Higher level function will rollback the attempted payment (send back LSK tokens)
+		// Higher level function will rollback the attempted payment (send back tokens)
 		super.undoAsset(store); 
 	
 		return [];

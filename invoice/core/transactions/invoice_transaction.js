@@ -34,7 +34,7 @@ class InvoiceTransaction extends BaseTransaction {
 					this.id,
 					'.asset.requestedAmount',
 					this.asset.requestedAmount,
-					'A number value',
+					'A string value',
 				)
 			);
 		}
