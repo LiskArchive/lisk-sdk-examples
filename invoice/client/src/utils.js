@@ -2,6 +2,7 @@ import { APIClient } from '@liskhq/lisk-client';
 import { InvoiceTransaction } from 'lisk-bills-transactions';
 import { getAddressAndPublicKeyFromPassphrase } from '@liskhq/lisk-cryptography';
 import * as constants from '@liskhq/lisk-constants';
+import formatCurrency from 'format-currency';
 import moment from 'moment';
 import * as transactions from '@liskhq/lisk-transactions';
 
@@ -17,6 +18,13 @@ export const liskEpochTimestampToDate = timestamp => (
 
 export const formatTimestamp = timestamp => (
   moment(liskEpochTimestampToDate(timestamp)).fromNow()
+);
+
+export const formatAmount = amount => (
+  formatCurrency(
+    transactions.utils.convertBeddowsToLSK(amount),
+    { format: '%v %c', code: config.token, maxFraction: 8 },
+  )
 );
 
 const getApiClient = () => (
