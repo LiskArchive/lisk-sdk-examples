@@ -1,12 +1,21 @@
 import { Row, Col } from 'react-flexbox-grid';
 import { faCheck, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 import React from 'react';
 
+import { sendPayment } from '../utils';
+import { useStateValue } from '../state';
 import TransactionForm from './TransactionForm';
 import TransactionResult from './TransactionResult';
 
-function PayInvoicePage() {
+function PayInvoicePage({ location }) {
+  const [{ account: { passphrase } }] = useStateValue();
+
   const inputs = {
+    invoiceID: {
+      label: 'Invoice ID',
+      isValid: () => true,
+    },
     address: {
       label: 'Client address',
       isValid: value => value.match(/^[1-9]\d{0,19}L$/),
@@ -15,17 +24,9 @@ function PayInvoicePage() {
       label: 'Amount',
       isValid: value => value.match(/^\d+(\.\d{1,8})?$/),
     },
-    description: {
-      label: 'Description',
-      isValid: () => true,
-    },
   };
 
   const [state, setState] = React.useState({ });
-
-  const isFormValid = inputsData => (
-    !Object.values(inputsData).find(({ error }) => error)
-  );
 
   const onPayClick = (inputsData) => {
     setState({
@@ -35,27 +36,29 @@ function PayInvoicePage() {
         icon: faCircleNotch,
       },
     });
-    setTimeout(() => {
-      if (isFormValid(inputsData)) {
-        setState({
-          sentStatus: {
-            sucess: true,
-            header: 'Payment Success',
-            icon: faCheck,
-            message: 'Your payment was sucesfully sent and will be processed by the blockchanin soon.',
-          },
-        });
-      } else {
-        setState({
-          sentStatus: {
-            sucess: false,
-            header: 'Payment Failed',
-            icon: faTimes,
-            message: 'Sending paiment failed. Please try again.',
-          },
-        });
-      }
-    }, 1000);
+    sendPayment({
+      invoiceID: inputsData.invoiceID.value,
+      amount: inputsData.amount.value,
+      recipientId: inputsData.address.value,
+    }, passphrase).then(() => {
+      setState({
+        sentStatus: {
+          sucess: true,
+          header: 'Payment Success',
+          icon: faCheck,
+          message: 'Your payment was sucesfully sent and will be processed by the blockchanin soon.',
+        },
+      });
+    }).catch(() => {
+      setState({
+        sentStatus: {
+          sucess: false,
+          header: 'Payment Failed',
+          icon: faTimes,
+          message: 'Sending paiment failed. Please try again.',
+        },
+      });
+    });
   };
 
   const { sentStatus } = state;
@@ -64,12 +67,30 @@ function PayInvoicePage() {
     <Row start="xs">
       <Col xs={12} mdOffset={1} md={10} lgOffset={2} lg={8}>
         {!sentStatus ?
-          <TransactionForm title="Pay Invoice" inputs={inputs} callback={onPayClick} submitButtonLabel="Pay" /> :
+          <TransactionForm
+            title="Pay Invoice"
+            inputs={inputs}
+            callback={onPayClick}
+            submitButtonLabel="Pay"
+            location={location}
+          /> :
           <TransactionResult {...sentStatus} />
         }
       </Col>
     </Row>
   );
 }
+
+PayInvoicePage.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }),
+};
+
+PayInvoicePage.defaultProps = {
+  location: {
+    pathname: '',
+  },
+};
 
 export default PayInvoicePage;

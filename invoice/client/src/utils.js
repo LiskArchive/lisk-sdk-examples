@@ -1,5 +1,8 @@
 import { APIClient } from '@liskhq/lisk-client';
-import { InvoiceTransaction } from 'lisk-bills-transactions';
+import {
+  InvoiceTransaction,
+  PaymentTransaction,
+} from 'lisk-bills-transactions';
 import { getAddressAndPublicKeyFromPassphrase } from '@liskhq/lisk-cryptography';
 import * as constants from '@liskhq/lisk-constants';
 import formatCurrency from 'format-currency';
@@ -71,7 +74,7 @@ export const sendInvoice = ({
       requestedAmount: transactions.utils.convertLSKToBeddows(requestedAmount),
       description,
     },
-    fee: transactions.utils.convertLSKToBeddows('10'),
+    fee: transactions.utils.convertLSKToBeddows('1'),
     senderPublicKey: getAddressAndPublicKeyFromPassphrase(passphrase).publicKey,
     recipientId: client,
     timestamp: dateToLiskEpochTimestamp(new Date()),
@@ -79,4 +82,23 @@ export const sendInvoice = ({
 
   invoiceTx = invoiceTx.sign(passphrase);
   return getApiClient().transactions.broadcast(invoiceTx);
+};
+
+export const sendPayment = ({
+  recipientId, amount, invoiceID,
+}, passphrase) => {
+  let paymentTx = new PaymentTransaction({
+    type: PaymentTransaction.TYPE,
+    asset: {
+      data: invoiceID,
+    },
+    fee: transactions.utils.convertLSKToBeddows('0.1'),
+    amount: transactions.utils.convertLSKToBeddows(amount),
+    recipientId,
+    senderPublicKey: getAddressAndPublicKeyFromPassphrase(passphrase).publicKey,
+    timestamp: dateToLiskEpochTimestamp(new Date()),
+  });
+
+  paymentTx = paymentTx.sign(passphrase);
+  return getApiClient().transactions.broadcast(paymentTx);
 };

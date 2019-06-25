@@ -36,6 +36,11 @@ function TransactionForm({
 
   const onSubmitClick = () => callback(state.inputs);
 
+  const isFormValid = () => (
+    !Object.values(inputs).find(({ error }) => error)
+  );
+
+
   return (
     <Card>
       <CardHeader>
@@ -63,7 +68,13 @@ function TransactionForm({
               </Link>
             </Col>
             <Col xs={5}>
-              <Button color="primary" onClick={onSubmitClick} block>{submitButtonLabel}</Button>
+              <Button
+                color="primary"
+                disabled={!isFormValid()}
+                onClick={onSubmitClick}
+                block
+              >{submitButtonLabel}
+              </Button>
             </Col>
           </Row>
         </Form>

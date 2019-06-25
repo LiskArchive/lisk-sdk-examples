@@ -68,7 +68,7 @@ function InvoicesPage() {
                       <td>{formatAmount(requestedAmount)}</td>
                       <td>{paidStatus ?
                         'Paid' :
-                        <Link to={`/pay-invoice?address=${senderId}&amount=${amount}`}>
+                        <Link to={`/pay-invoice?address=${senderId}&amount=${requestedAmount}&invoiceID=${id}&description=${description}`}>
                           <Button>Pay</Button>
                         </Link>
                         }
