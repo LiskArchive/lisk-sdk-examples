@@ -9,7 +9,7 @@ const getApiClient = () => (
 );
 
 export const getTransactions = ({ address }) => (
-  getApiClient().transactions.get({ senderIdOrRecipientId: address })
+  getApiClient().transactions.get({ senderIdOrRecipientId: address, sort: 'timestamp:desc' })
 );
 
 export const getAccount = ({ passphrase }) => new Promise((resolve, reject) => {
