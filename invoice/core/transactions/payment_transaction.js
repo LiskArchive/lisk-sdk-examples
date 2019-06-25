@@ -51,16 +51,10 @@ class PaymentTransaction extends TransferTransaction {
 
 	undoAsset(store) {
 		// No rollback needed as there is only validation happening in applyAsset
-		// Higher level function will rollback the attempted payment (send back LSK tokens)
+		// Higher level function will rollback the attempted payment (send back tokens)
 		super.undoAsset(store); 
 	
 		return [];
-	}
-
-	toJSON() {
-		const transaction = super.toJSON();
-		Object.keys(transaction).forEach(key => transaction[key] === undefined && delete transaction[key])
-		return transaction;
 	}
 
 }

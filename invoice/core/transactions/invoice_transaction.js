@@ -81,12 +81,6 @@ class InvoiceTransaction extends BaseTransaction {
 		return [];
 	}
 
-	toJSON() {
-		const transaction = super.toJSON();
-		Object.keys(transaction).forEach(key => transaction[key] === undefined && delete transaction[key])
-		return transaction;
-	}
-
 }
 
 module.exports = InvoiceTransaction;
