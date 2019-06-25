@@ -1,0 +1,27 @@
+{
+  "name": "lisk-bills-transactions",
+	"version": "1.0.0",
+	"description": "Custom transactions for Lisk Bills Proof of Concept",
+	"author": "Lisk Foundation <admin@lisk.io>, lightcurve GmbH <admin@lightcurve.io>",
+	"license": "GPL-3.0",
+	"keywords": [
+		"lisk",
+		"blockchain"
+	],
+	"homepage": "https://github.com/LiskHQ/lisk-sdk-examples#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/LiskHQ/lisk-sdk-examples.git"
+	},
+	"bugs": {
+		"url": "https://github.com/LiskHQ/lisk-sdk-examples/issues"
+	},
+	"engines": {
+		"node": ">=10",
+		"npm": ">=6"
+	},
+	"main": "index.js",
+  "dependencies": {
+    "lisk-sdk": "2.1.0-alpha.1"
+  }
+}
