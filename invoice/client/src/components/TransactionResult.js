@@ -16,7 +16,7 @@ function TransactionResult({
         <p>{message}</p>
         { pending ?
           null :
-          <Link to="/invoices?showData">
+          <Link to="/invoices">
             <Button color="primary" size="lg" block>Go to My Invoices</Button>
           </Link>
         }

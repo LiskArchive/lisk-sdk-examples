@@ -5,6 +5,11 @@ export default (state, action) => {
         ...state,
         account: action.account,
       };
+    case 'accountSignedOut':
+      return {
+        ...state,
+        account: null,
+      };
     default:
       return state;
   }

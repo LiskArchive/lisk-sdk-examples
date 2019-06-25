@@ -1,17 +1,23 @@
-import React from 'react';
 import {
   Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
 } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
-import { useStateValue } from '../state';
+import React from 'react';
+
+import { formatAmount } from '../utils';
 import { name } from '../config.json';
+import { useStateValue } from '../state';
 import logo from '../assets/logo.svg';
 
 export default function Header() {
-  const [{ account }] = useStateValue();
+  const [{ account }, dispatch] = useStateValue();
   const [{ collapsed }, setState] = React.useState({
     collapsed: true,
   });
+
+  const logout = () => {
+    dispatch({ type: 'accountSignedOut' });
+  };
 
   const toggleNavbar = () => {
     setState({
@@ -26,13 +32,17 @@ export default function Header() {
       </NavbarBrand>
       <NavbarToggler onClick={toggleNavbar} className="mr-2" />
       { account ?
-        <Collapse isOpen={!collapsed} navbar>
-          <Nav navbar>
-            <NavItem>
-              <NavLink tag={RRNavLink} to="/invoices">My Invoices</NavLink>
-            </NavItem>
-          </Nav>
-        </Collapse> :
+        <React.Fragment>
+          <Collapse isOpen={!collapsed} navbar>
+            <Nav navbar>
+              <NavItem>
+                <NavLink tag={RRNavLink} to="/invoices">My Invoices</NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+          <span> Balance: {formatAmount(account.balance)} </span>
+          <NavLink tag={RRNavLink} to="/" onClick={logout} >Logout</NavLink>
+        </React.Fragment> :
         null
       }
     </Navbar>
