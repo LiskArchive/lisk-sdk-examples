@@ -5,6 +5,7 @@ import {
 import { NavLink as RRNavLink } from 'react-router-dom';
 import { useStateValue } from '../state';
 import { name } from '../config.json';
+import logo from '../assets/logo.svg';
 
 export default function Header() {
   const [{ account }] = useStateValue();
@@ -20,7 +21,9 @@ export default function Header() {
 
   return (
     <Navbar color="faded" light expand="md">
-      <NavbarBrand tag={RRNavLink} to="/" className="mr-auto">{name}</NavbarBrand>
+      <NavbarBrand tag={RRNavLink} to="/" className="mr-auto">
+        <img src={logo} alt={name} style={{ width: 140 }} />
+      </NavbarBrand>
       <NavbarToggler onClick={toggleNavbar} className="mr-2" />
       { account ?
         <Collapse isOpen={!collapsed} navbar>
