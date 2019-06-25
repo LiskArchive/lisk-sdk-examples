@@ -32,7 +32,11 @@ const getApiClient = () => (
 );
 
 export const getTransactions = ({ address }) => (
-  getApiClient().transactions.get({ senderIdOrRecipientId: address, sort: 'timestamp:desc' })
+  getApiClient().transactions.get({
+    senderIdOrRecipientId: address,
+    sort: 'timestamp:desc',
+    type: InvoiceTransaction.TYPE,
+  })
 );
 
 export const getAccount = ({ passphrase }) => new Promise((resolve, reject) => {

@@ -51,20 +51,21 @@ function InvoicesPage() {
                 <tr>
                   <th>Sender/Recepient</th>
                   <th>Date</th>
-                  <th>Details</th>
+                  <th>Description</th>
                   <th>Amount</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {transactions.map(({
-                   id, senderId, recipientId, timestamp, details, amount, paidStatus,
+                   id, senderId, recipientId, timestamp, paidStatus,
+                   asset: { description, requestedAmount },
                   }) => (
                     <tr key={id}>
                       <td>{senderId === account.address ? recipientId : senderId}</td>
                       <td>{formatTimestamp(timestamp).toString()}</td>
-                      <td>{details}</td>
-                      <td>{formatAmount(amount)}</td>
+                      <td>{description}</td>
+                      <td>{formatAmount(requestedAmount)}</td>
                       <td>{paidStatus ?
                         'Paid' :
                         <Link to={`/pay-invoice?address=${senderId}&amount=${amount}`}>
