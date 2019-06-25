@@ -12,7 +12,7 @@ import * as transactions from '@liskhq/lisk-transactions';
 import config from './config.json';
 
 export const dateToLiskEpochTimestamp = date => (
-  (new Date(date).getTime() / 1000) - constants.EPOCH_TIME_SECONDS
+  Math.floor(new Date(date).getTime() / 1000) - constants.EPOCH_TIME_SECONDS
 );
 
 export const liskEpochTimestampToDate = timestamp => (
@@ -80,8 +80,8 @@ export const sendInvoice = ({
     timestamp: dateToLiskEpochTimestamp(new Date()),
   });
 
-  invoiceTx = invoiceTx.sign(passphrase);
-  return getApiClient().transactions.broadcast(invoiceTx);
+  invoiceTx.sign(passphrase);
+  return getApiClient().transactions.broadcast(invoiceTx.toJSON());
 };
 
 export const sendPayment = ({
@@ -99,6 +99,6 @@ export const sendPayment = ({
     timestamp: dateToLiskEpochTimestamp(new Date()),
   });
 
-  paymentTx = paymentTx.sign(passphrase);
-  return getApiClient().transactions.broadcast(paymentTx);
+  paymentTx.sign(passphrase);
+  return getApiClient().transactions.broadcast(paymentTx.toJSON());
 };
