@@ -4,7 +4,7 @@ import {
 import { NavLink as RRNavLink } from 'react-router-dom';
 import React from 'react';
 
-import { formatAmount } from '../utils';
+import { formatAmount } from '../utils/formatters';
 import { name } from '../config.json';
 import { useStateValue } from '../state';
 import logo from '../assets/logo.svg';

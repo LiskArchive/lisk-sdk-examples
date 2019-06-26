@@ -3,7 +3,7 @@ import { faCheck, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-ico
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { sendPayment } from '../utils';
+import { sendPayment } from '../utils/api';
 import { useStateValue } from '../state';
 import TransactionForm from './TransactionForm';
 import TransactionResult from './TransactionResult';

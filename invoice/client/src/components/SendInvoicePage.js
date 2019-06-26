@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import * as transactions from '@liskhq/lisk-transactions';
 
-import { sendInvoice } from '../utils';
+import { sendInvoice } from '../utils/api';
 import { useStateValue } from '../state';
 import TransactionForm from './TransactionForm';
 import TransactionResult from './TransactionResult';

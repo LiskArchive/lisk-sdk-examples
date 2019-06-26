@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useStateValue } from './state';
-import { getAccount } from './utils';
+import { getAccount } from './utils/api';
 
 export function useApi(apiUtil, params) {
   const [data, setData] = useState([]);

@@ -7,7 +7,8 @@ import { Link } from 'react-router-dom';
 import { Row, Col } from 'react-flexbox-grid';
 import React from 'react';
 
-import { formatAmount, formatTimestamp, getTransactions } from '../utils';
+import { formatAmount, formatTimestamp } from '../utils/formatters';
+import { getTransactions } from '../utils/api';
 import { useStateValue } from '../state';
 import { useApi } from '../hooks';
 
