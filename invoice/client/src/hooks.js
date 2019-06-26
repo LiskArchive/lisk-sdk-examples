@@ -43,15 +43,16 @@ export function usePassphraseToSignIn(history) {
   async function signIn(passphrase) {
     setLoading(true);
     const [err, response] = await to(getAccount({ passphrase }));
+    setLoading(false);
     if (!error) {
       dispatch({
-        type: 'accountSignedIn',
+        type: 'accountUpdated',
         account: response,
       });
-      setLoading(false);
-      history.push('/invoices');
+      if (history.location.pathname === '/') {
+        history.push('/invoices');
+      }
     } else {
-      setLoading(false);
       setError(`Error when fetching account information from ${config.serverUrl}: ${err}`);
     }
     timeout = setTimeout(signIn.bind(null, passphrase), BLOCK_TIME);

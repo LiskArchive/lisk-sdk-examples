@@ -1,6 +1,6 @@
 export default (state, action) => {
   switch (action.type) {
-    case 'accountSignedIn':
+    case 'accountUpdated':
       return {
         ...state,
         account: action.account,
