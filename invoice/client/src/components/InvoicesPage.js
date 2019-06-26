@@ -9,29 +9,12 @@ import React from 'react';
 
 import { formatAmount, formatTimestamp, getTransactions } from '../utils';
 import { useStateValue } from '../state';
+import { useApi } from '../hooks';
 
 function InvoicesPage() {
-  const [{ account }] = useStateValue();
-  const [state, setState] = React.useState({
-    transactions: [],
-  });
+  const [{ account: { address } }] = useStateValue();
 
-  React.useEffect(() => {
-    if (state.transactions.length === 0 && !state.loading) {
-      setState({
-        ...state,
-        loading: true,
-      });
-      getTransactions({ address: account.address }).then(({ data }) => {
-        setState({
-          transactions: data,
-          loading: false,
-        });
-      });
-    }
-  });
-
-  const { transactions, loading } = state;
+  const [transactions, loading] = useApi(getTransactions, { address });
 
   return (
     <Row start="xs">
@@ -62,7 +45,7 @@ function InvoicesPage() {
                    asset: { description, requestedAmount },
                   }) => (
                     <tr key={id}>
-                      <td>{senderId === account.address ? recipientId : senderId}</td>
+                      <td>{senderId === address ? recipientId : senderId}</td>
                       <td>{formatTimestamp(timestamp).toString()}</td>
                       <td>{description}</td>
                       <td>{formatAmount(requestedAmount)}</td>
