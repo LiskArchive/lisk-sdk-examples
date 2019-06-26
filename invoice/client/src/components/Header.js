@@ -30,10 +30,10 @@ export default function Header() {
       <NavbarBrand tag={RRNavLink} to="/" className="mr-auto">
         <img src={logo} alt={name} style={{ width: 140 }} />
       </NavbarBrand>
-      <NavbarToggler onClick={toggleNavbar} className="mr-2" />
       { account
         ? (
           <React.Fragment>
+            <NavbarToggler onClick={toggleNavbar} className="mr-2" />
             <Collapse isOpen={!collapsed} navbar>
               <Nav navbar>
                 <NavItem>
