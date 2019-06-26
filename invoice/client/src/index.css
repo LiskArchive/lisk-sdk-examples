@@ -17,3 +17,8 @@ pre {
   margin-bottom: 0;
   text-align: left;
 }
+
+table tr th:last-child,
+table tr td:last-child {
+  text-align: right;
+}

@@ -20,7 +20,7 @@ function App() {
         <div className="App">
           <Grid fluid>
             <Row center="xs">
-              <Col xs={12} md={10} lg={8}>
+              <Col xs={12} lg={10}>
                 <Route path="/" exact component={SignInPage} />
                 <PrivateRoute path="/invoices" component={InvoicesPage} />
                 <PrivateRoute path="/send-invoice" component={SendInvoicePage} />

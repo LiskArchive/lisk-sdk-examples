@@ -1,5 +1,6 @@
 import {
   Alert,
+  Badge,
   Button,
   Card, CardBody, CardHeader,
   Table,
@@ -7,9 +8,10 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { Row, Col } from 'react-flexbox-grid';
-import { faFileInvoice, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { faFileInvoice, faCircleNotch, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { utils } from '@liskhq/lisk-transactions';
 import React from 'react';
+
 
 import { formatAmount, formatTimestamp } from '../utils/formatters';
 import { useInvoices } from '../hooks';
@@ -49,12 +51,16 @@ function InvoicesPage() {
                    asset: { description, requestedAmount },
                   }) => (
                     <tr key={id}>
-                      <td>{senderId === address ? recipientId : senderId}</td>
+                      <td>
+                        <FontAwesomeIcon icon={senderId === address ? faArrowLeft : faArrowRight} />
+                        &nbsp;
+                        {senderId === address ? recipientId : senderId}
+                      </td>
                       <td>{formatTimestamp(timestamp).toString()}</td>
                       <td>{description}</td>
                       <td>{formatAmount(requestedAmount)}</td>
                       <td>{paidStatus ?
-                        'Paid' :
+                        <Badge color="success">Paid</Badge> :
                         <Link to={`/pay-invoice?address=${senderId}&amount=${utils.convertBeddowsToLSK(requestedAmount)}&invoiceID=${id}&description=${description}`}>
                           <Button>Pay</Button>
                         </Link>
