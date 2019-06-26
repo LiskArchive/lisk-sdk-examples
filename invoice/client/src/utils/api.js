@@ -42,7 +42,7 @@ export const getInvoices = ({ address }) => new Promise(async (resolve, reject) 
 
 export const getAccount = ({ passphrase }) => new Promise(async (resolve, reject) => {
   const { publicKey, address } = getAddressAndPublicKeyFromPassphrase(passphrase);
-  const [response, error] = await to(getApiClient().accounts.get({ address }));
+  const [error, response] = await to(getApiClient().accounts.get({ address }));
   if (!error) {
     if (response.data.length > 0) {
       resolve({
