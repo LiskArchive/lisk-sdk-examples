@@ -8,17 +8,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { Row, Col } from 'react-flexbox-grid';
 import { faFileInvoice, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { utils } from '@liskhq/lisk-transactions';
 import React from 'react';
 
 import { formatAmount, formatTimestamp } from '../utils/formatters';
-import { getTransactions } from '../utils/api';
+import { getInvoices } from '../utils/api';
 import { useApi } from '../hooks';
 import { useStateValue } from '../state';
 
 function InvoicesPage() {
   const [{ account: { address } }] = useStateValue();
 
-  const [transactions, loading, error] = useApi(getTransactions, { address });
+  const [transactions, loading, error] = useApi(getInvoices, { address });
 
   return (
     <Row start="xs">
@@ -55,7 +56,7 @@ function InvoicesPage() {
                       <td>{formatAmount(requestedAmount)}</td>
                       <td>{paidStatus ?
                         'Paid' :
-                        <Link to={`/pay-invoice?address=${senderId}&amount=${requestedAmount}&invoiceID=${id}&description=${description}`}>
+                        <Link to={`/pay-invoice?address=${senderId}&amount=${utils.convertBeddowsToLSK(requestedAmount)}&invoiceID=${id}&description=${description}`}>
                           <Button>Pay</Button>
                         </Link>
                         }

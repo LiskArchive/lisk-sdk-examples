@@ -4,6 +4,7 @@ import {
   PaymentTransaction,
 } from 'lisk-bills-transactions';
 import { getAddressAndPublicKeyFromPassphrase } from '@liskhq/lisk-cryptography';
+import { to } from 'await-to-js';
 import * as transactions from '@liskhq/lisk-transactions';
 
 import { dateToLiskEpochTimestamp } from './formatters';
@@ -13,13 +14,31 @@ const getApiClient = () => (
   new APIClient([config.serverUrl], { nethash: config.nethash })
 );
 
-export const getTransactions = ({ address }) => (
-  getApiClient().transactions.get({
+export const getInvoices = ({ address }) => new Promise(async (resolve, reject) => {
+  const [invoicesError, invoicesResponse] = await to(getApiClient().transactions.get({
     senderIdOrRecipientId: address,
     sort: 'timestamp:desc',
     type: InvoiceTransaction.TYPE,
-  })
-);
+  }));
+  if (invoicesError) reject(invoicesError);
+
+  const [paymentsError, paymentsResponse] = await to(getApiClient().transactions.get({
+    senderIdOrRecipientId: address,
+    sort: 'timestamp:desc',
+    type: PaymentTransaction.TYPE,
+  }));
+  if (paymentsError) reject(paymentsError);
+
+  const invoices = {
+    ...invoicesResponse,
+    data: invoicesResponse.data.map(invoiceTx => ({
+      ...invoiceTx,
+      paidStatus: paymentsResponse.data.find(paymentTx => paymentTx.asset.data === invoiceTx.id),
+    })),
+  };
+
+  resolve(invoices);
+});
 
 export const getAccount = ({ passphrase }) => new Promise((resolve, reject) => {
   const { publicKey, address } = getAddressAndPublicKeyFromPassphrase(passphrase);
