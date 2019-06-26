@@ -67,15 +67,17 @@ function PayInvoicePage({ location }) {
   return (
     <Row start="xs">
       <Col xs={12} mdOffset={1} md={10} lgOffset={2} lg={8}>
-        {!sentStatus ?
-          <TransactionForm
-            title="Pay Invoice"
-            inputs={inputs}
-            callback={onPayClick}
-            submitButtonLabel="Pay"
-            location={location}
-          /> :
-          <TransactionResult {...sentStatus} />
+        {!sentStatus
+          ? (
+            <TransactionForm
+              title="Pay Invoice"
+              inputs={inputs}
+              callback={onPayClick}
+              submitButtonLabel="Pay"
+              location={location}
+            />
+          )
+          : <TransactionResult {...sentStatus} />
         }
       </Col>
     </Row>

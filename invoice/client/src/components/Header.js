@@ -31,20 +31,35 @@ export default function Header() {
         <img src={logo} alt={name} style={{ width: 140 }} />
       </NavbarBrand>
       <NavbarToggler onClick={toggleNavbar} className="mr-2" />
-      { account ?
-        <React.Fragment>
-          <Collapse isOpen={!collapsed} navbar>
-            <Nav navbar>
-              <NavItem>
-                <NavLink tag={RRNavLink} to="/invoices">My Invoices</NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse>
-          <span> Address: <strong>{account.address} </strong>&nbsp; </span>
-          <span> Balance: <strong>{formatAmount(account.balance)}</strong></span>
-          <NavLink tag={RRNavLink} to="/" onClick={logout} >Logout</NavLink>
-        </React.Fragment> :
-        null
+      { account
+        ? (
+          <React.Fragment>
+            <Collapse isOpen={!collapsed} navbar>
+              <Nav navbar>
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/invoices">My Invoices</NavLink>
+                </NavItem>
+              </Nav>
+            </Collapse>
+            <span>
+              {' '}
+Address:
+              <strong>
+                {account.address}
+                {' '}
+              </strong>
+&nbsp;
+              {' '}
+            </span>
+            <span>
+              {' '}
+Balance:
+              <strong>{formatAmount(account.balance)}</strong>
+            </span>
+            <NavLink tag={RRNavLink} to="/" onClick={logout}>Logout</NavLink>
+          </React.Fragment>
+        )
+        : null
       }
     </Navbar>
   );

@@ -66,9 +66,9 @@ function SendInvoicePage({ location }) {
   return (
     <Row start="xs">
       <Col xs={12} mdOffset={1} md={10} lgOffset={2} lg={8}>
-        {!sentStatus ?
-          <TransactionForm title="Send Invoice" inputs={inputs} callback={onSendClick} submitButtonLabel="Send" location={location} /> :
-          <TransactionResult {...sentStatus} />
+        {!sentStatus
+          ? <TransactionForm title="Send Invoice" inputs={inputs} callback={onSendClick} submitButtonLabel="Send" location={location} />
+          : <TransactionResult {...sentStatus} />
         }
       </Col>
     </Row>

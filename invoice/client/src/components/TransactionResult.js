@@ -18,11 +18,13 @@ function TransactionResult({
         <Alert color={success ? 'success' : 'danger'}>
           <pre>{message}</pre>
         </Alert>
-        { pending ?
-          null :
-          <Link to="/invoices">
-            <Button color="primary" size="lg" block>Go to My Invoices</Button>
-          </Link>
+        { pending
+          ? null
+          : (
+            <Link to="/invoices">
+              <Button color="primary" size="lg" block>Go to My Invoices</Button>
+            </Link>
+          )
         }
       </Col>
     </Row>

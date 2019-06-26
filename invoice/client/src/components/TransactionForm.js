@@ -60,7 +60,7 @@ function TransactionForm({
               />
               <FormFeedback>{state.inputs[key].error}</FormFeedback>
             </FormGroup>
-              ))}
+          ))}
           <Row between="xs">
             <Col xs={5}>
               <Link to="/invoices?showData">
@@ -73,7 +73,8 @@ function TransactionForm({
                 disabled={!isFormValid()}
                 onClick={onSubmitClick}
                 block
-              >{submitButtonLabel}
+              >
+                {submitButtonLabel}
               </Button>
             </Col>
           </Row>
