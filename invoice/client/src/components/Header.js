@@ -40,7 +40,8 @@ export default function Header() {
               </NavItem>
             </Nav>
           </Collapse>
-          <span> Balance: {formatAmount(account.balance)} </span>
+          <span> Address: <strong>{account.address} </strong>&nbsp; </span>
+          <span> Balance: <strong>{formatAmount(account.balance)}</strong></span>
           <NavLink tag={RRNavLink} to="/" onClick={logout} >Logout</NavLink>
         </React.Fragment> :
         null
