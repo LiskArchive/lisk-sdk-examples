@@ -43,19 +43,19 @@ function SendInvoicePage({ location }) {
     }, passphrase).then(() => {
       setState({
         sentStatus: {
-          sucess: true,
+          success: true,
           header: 'Invoice Success',
           icon: faCheck,
           message: 'Your invoice was sucesfully sent and will be processed by the blockchanin soon.',
         },
       });
-    }).catch(() => {
+    }).catch((err) => {
       setState({
         sentStatus: {
-          sucess: false,
+          success: false,
           header: 'Invoice Failed',
           icon: faTimes,
-          message: 'Sending invoice failed. Please try again.',
+          message: `${err}${err.errors && err.errors.map ? `:\n ${err.errors.map(({ message }) => message).join('\n ')}` : ''}`,
         },
       });
     });

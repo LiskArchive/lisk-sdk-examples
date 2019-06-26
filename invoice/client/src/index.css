@@ -14,4 +14,6 @@ code {
 
 pre {
   white-space: pre-wrap;
+  margin-bottom: 0;
+  text-align: left;
 }
