@@ -26,7 +26,7 @@ function SignInPage({ history }) {
     });
   };
 
-  const [loading, signIn] = usePassphraseToSignIn(history);
+  const [loading, serverError, signIn] = usePassphraseToSignIn(history);
 
   const onSignInClick = () => {
     signIn(passphrase);
@@ -47,10 +47,10 @@ function SignInPage({ history }) {
                   id="passphrase"
                   placeholder="Enter 12 word BIP 39 passphrase"
                   value={passphrase}
-                  invalid={error !== ''}
+                  invalid={(error || serverError) !== ''}
                   onChange={onPasshraseChange}
                 />
-                <FormFeedback>{error}</FormFeedback>
+                <FormFeedback>{error || serverError}</FormFeedback>
               </FormGroup>
               <Button color="primary" size="lg" block onClick={onSignInClick} disabled={loading}>
                 {loading ? <Spinner color="light" size="sm" /> : 'Sign In'}

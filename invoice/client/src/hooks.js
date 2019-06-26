@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useStateValue } from './state';
+
 import { getAccount } from './utils/api';
+import { useStateValue } from './state';
+import config from './config.json';
 
 export function useApi(apiUtil, params) {
   const [data, setData] = useState([]);
@@ -19,6 +21,8 @@ export function useApi(apiUtil, params) {
 export function usePassphraseToSignIn(history) {
   const [{ account }, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
   async function signIn(passphrase) {
     setLoading(true);
     getAccount({ passphrase }).then((response) => {
@@ -28,6 +32,9 @@ export function usePassphraseToSignIn(history) {
       });
       setLoading(false);
       history.push('/invoices');
+    }).catch((response) => {
+      setLoading(false);
+      setError(`Error when fetching account information from ${config.serverUrl}: ${response}`);
     });
   }
   useEffect(() => {
@@ -35,5 +42,5 @@ export function usePassphraseToSignIn(history) {
       signIn(localStorage.getItem('passphrase'));
     }
   }, []);
-  return [loading, signIn];
+  return [loading, error, signIn];
 }
