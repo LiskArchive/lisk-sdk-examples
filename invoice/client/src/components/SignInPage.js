@@ -9,18 +9,13 @@ import { validation } from '@liskhq/lisk-passphrase';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { getAccount } from '../utils';
-import { useStateValue } from '../state';
+import { usePassphraseToSignIn } from '../hooks';
 
 function SignInPage({ history }) {
-  const [{ account }, dispatch] = useStateValue();
-
-  const [state, setState] = React.useState({
-    passphrase: localStorage.getItem('passphrase') || '',
+  const [{ passphrase, error }, setState] = React.useState({
+    passphrase: '',
     error: '',
   });
-
-  const { passphrase, error, loading } = state;
 
   const onPasshraseChange = (evt) => {
     const { value } = evt.target;
@@ -28,32 +23,14 @@ function SignInPage({ history }) {
     setState({
       passphrase: value,
       error: errors[0] ? errors[0].message : '',
-      loading: false,
     });
   };
+
+  const [loading, signIn] = usePassphraseToSignIn(history);
 
   const onSignInClick = () => {
-    setState({
-      ...state,
-      loading: true,
-    });
-    getAccount({ passphrase }).then((response) => {
-      dispatch({
-        type: 'accountSignedIn',
-        account: response,
-      });
-      setState({
-        ...state,
-        loading: false,
-      });
-      history.push('/invoices');
-    });
+    signIn(passphrase);
   };
-
-  // Automatic login for ease of development
-  if (localStorage.getItem('passphrase') && !loading && !account) {
-    onSignInClick();
-  }
 
   return (
     <Row start="xs">
