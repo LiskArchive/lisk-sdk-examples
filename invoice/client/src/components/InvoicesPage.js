@@ -3,14 +3,16 @@ import {
   Card, CardHeader, CardBody, CardText,
   Table,
 } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { Row, Col } from 'react-flexbox-grid';
+import { faFileInvoice, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 
 import { formatAmount, formatTimestamp } from '../utils/formatters';
 import { getTransactions } from '../utils/api';
-import { useStateValue } from '../state';
 import { useApi } from '../hooks';
+import { useStateValue } from '../state';
 
 function InvoicesPage() {
   const [{ account: { address } }] = useStateValue();
@@ -24,7 +26,7 @@ function InvoicesPage() {
           <CardHeader>
             <Row between="xs">
               <h3>My Invoices</h3>
-              <Link to="/send-invoice">
+              <Link to="/send-invoice?address=16313739661670634666L&amount=1&description=Work">
                 <Button color="primary" >Send new Invoice</Button>
               </Link>
             </Row>
@@ -63,10 +65,17 @@ function InvoicesPage() {
             </Table> :
             <CardBody>
               <CardText>
-                { loading ?
-                  'Loading transactions...' :
-                  'There are no invoices yet. Start by sending a new invoice.'
-                }
+                <Row center="xs">
+                  <Col>
+                    <p>
+                      <FontAwesomeIcon icon={loading ? faCircleNotch : faFileInvoice} spin={loading} size="6x" />
+                    </p>
+                    { loading ?
+                        '' :
+                        <p>There are no invoices yet. Start by sending a new invoice.</p>
+                    }
+                  </Col>
+                </Row>
               </CardText>
             </CardBody>
             }
