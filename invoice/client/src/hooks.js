@@ -34,17 +34,18 @@ export function usePassphraseToSignIn(history) {
 
   async function signIn(passphrase) {
     setLoading(true);
-    getAccount({ passphrase }).then((response) => {
+    const [response, err] = await to(getAccount({ passphrase }));
+    if (!error) {
       dispatch({
         type: 'accountSignedIn',
         account: response,
       });
       setLoading(false);
       history.push('/invoices');
-    }).catch((response) => {
+    } else {
       setLoading(false);
-      setError(`Error when fetching account information from ${config.serverUrl}: ${response}`);
-    });
+      setError(`Error when fetching account information from ${config.serverUrl}: ${err}`);
+    }
   }
   useEffect(() => {
     if (localStorage.getItem('passphrase') && account !== null) {

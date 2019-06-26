@@ -40,9 +40,10 @@ export const getInvoices = ({ address }) => new Promise(async (resolve, reject) 
   resolve(invoices);
 });
 
-export const getAccount = ({ passphrase }) => new Promise((resolve, reject) => {
+export const getAccount = ({ passphrase }) => new Promise(async (resolve, reject) => {
   const { publicKey, address } = getAddressAndPublicKeyFromPassphrase(passphrase);
-  getApiClient().accounts.get({ address }).then((response) => {
+  const [response, error] = await to(getApiClient().accounts.get({ address }));
+  if (!error) {
     if (response.data.length > 0) {
       resolve({
         ...response.data[0],
@@ -50,8 +51,8 @@ export const getAccount = ({ passphrase }) => new Promise((resolve, reject) => {
         passphrase,
       });
     } else {
-      // when the account has no transactions yet (therefore is not saved on the blockchain)
-      // this endpoint returns { success: false }
+    // when the account has no transactions yet (therefore is not saved on the blockchain)
+    // this endpoint returns { success: false }
       resolve({
         passphrase,
         address,
@@ -59,7 +60,9 @@ export const getAccount = ({ passphrase }) => new Promise((resolve, reject) => {
         balance: 0,
       });
     }
-  }).catch(reject);
+  } else {
+    reject(error);
+  }
 });
 
 export const sendInvoice = ({
