@@ -20,6 +20,8 @@ export function useApi(apiUtil, params) {
   }
   useEffect(() => {
     fetchUrl();
+  // This is meant to happen only on component mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return [data, loading, error];
 }
@@ -47,6 +49,8 @@ export function usePassphraseToSignIn(history) {
     if (localStorage.getItem('passphrase') && account !== null) {
       signIn(localStorage.getItem('passphrase'));
     }
+  // This is meant to happen only on component mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return [loading, error, signIn];
 }
