@@ -29,7 +29,7 @@ function InvoicesPage() {
           <CardHeader>
             <Row between="xs">
               <h3>My Invoices</h3>
-              <Link to="/send-invoice?address=16313739661670634666L&amount=1&description=Work">
+              <Link to="/send-invoice">
                 <Button color="primary" >Send new Invoice</Button>
               </Link>
             </Row>
