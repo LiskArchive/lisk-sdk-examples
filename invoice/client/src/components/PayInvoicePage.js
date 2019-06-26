@@ -18,7 +18,7 @@ function PayInvoicePage({ location }) {
       isValid: () => true,
     },
     address: {
-      label: 'Client address',
+      label: 'Invoice creator address',
       isValid: value => value.match(/^[1-9]\d{0,19}L$/),
     },
     amount: {

@@ -2,7 +2,6 @@ import { Row, Col } from 'react-flexbox-grid';
 import { faCheck, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import React from 'react';
-import * as transactions from '@liskhq/lisk-transactions';
 
 import { formatServerError } from '../utils/formatters';
 import { sendInvoice } from '../utils/api';
@@ -15,7 +14,7 @@ function SendInvoicePage({ location }) {
   const inputs = {
     address: {
       label: 'Client address',
-      isValid: transactions.utils.validateAddress,
+      isValid: value => value.match(/^[1-9]\d{0,19}L$/),
     },
     amount: {
       label: 'Amount',
