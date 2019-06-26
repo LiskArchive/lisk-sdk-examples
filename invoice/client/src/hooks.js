@@ -38,6 +38,7 @@ export function usePassphraseToSignIn(history) {
   const [{ account }, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  let timeout;
 
   async function signIn(passphrase) {
     setLoading(true);
@@ -53,11 +54,15 @@ export function usePassphraseToSignIn(history) {
       setLoading(false);
       setError(`Error when fetching account information from ${config.serverUrl}: ${err}`);
     }
+    timeout = setTimeout(signIn.bind(null, passphrase), BLOCK_TIME);
   }
   useEffect(() => {
     if (localStorage.getItem('passphrase') && account !== null) {
       signIn(localStorage.getItem('passphrase'));
     }
+    return function cleanup() {
+      clearTimeout(timeout);
+    };
   // This is meant to happen only on component mount
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
