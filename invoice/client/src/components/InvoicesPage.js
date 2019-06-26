@@ -1,6 +1,7 @@
 import {
+  Alert,
   Button,
-  Card, CardHeader, CardBody, CardText,
+  Card, CardBody, CardHeader,
   Table,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,7 +18,7 @@ import { useStateValue } from '../state';
 function InvoicesPage() {
   const [{ account: { address } }] = useStateValue();
 
-  const [transactions, loading] = useApi(getTransactions, { address });
+  const [transactions, loading, error] = useApi(getTransactions, { address });
 
   return (
     <Row start="xs">
@@ -64,19 +65,24 @@ function InvoicesPage() {
               </tbody>
             </Table> :
             <CardBody>
-              <CardText>
+              { error ?
+                <Alert color="danger">
+                  <pre>
+                    {error}
+                  </pre>
+                </Alert> :
                 <Row center="xs">
                   <Col>
                     <p>
                       <FontAwesomeIcon icon={loading ? faCircleNotch : faFileInvoice} spin={loading} size="6x" />
                     </p>
-                    { loading ?
-                        '' :
-                        <p>There are no invoices yet. Start by sending a new invoice.</p>
-                    }
+                    { !loading ?
+                      <p>There are no invoices yet. Start by sending a new invoice.</p> :
+                        null
+                      }
                   </Col>
                 </Row>
-              </CardText>
+                }
             </CardBody>
             }
         </Card>

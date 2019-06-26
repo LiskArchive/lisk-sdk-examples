@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import to from 'await-to-js';
 
 import { getAccount } from './utils/api';
 import { useStateValue } from './state';
@@ -6,16 +7,21 @@ import config from './config.json';
 
 export function useApi(apiUtil, params) {
   const [data, setData] = useState([]);
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   async function fetchUrl() {
-    const response = await apiUtil(params);
-    setData(response.data);
+    const [err, response] = await to(apiUtil(params));
     setLoading(false);
+    if (err) {
+      setError(`${err}:\n ${err.errors ? err.errors.map(({ message }) => message).join('\n ') : ''}`);
+    } else {
+      setData(response.data);
+    }
   }
   useEffect(() => {
     fetchUrl();
   }, []);
-  return [data, loading];
+  return [data, loading, error];
 }
 
 export function usePassphraseToSignIn(history) {
