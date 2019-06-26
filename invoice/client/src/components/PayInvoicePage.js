@@ -3,6 +3,7 @@ import { faCheck, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-ico
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import { formatServerError } from '../utils/formatters';
 import { sendPayment } from '../utils/api';
 import { useStateValue } from '../state';
 import TransactionForm from './TransactionForm';
@@ -49,13 +50,13 @@ function PayInvoicePage({ location }) {
           message: 'Your payment was sucesfully sent and will be processed by the blockchanin soon.',
         },
       });
-    }).catch((err) => {
+    }).catch((error) => {
       setState({
         sentStatus: {
           success: false,
           header: 'Payment Failed',
           icon: faTimes,
-          message: `${err}${err.errors && err.errors.map ? `:\n ${err.errors.map(({ message }) => message).join('\n ')}` : ''}`,
+          message: formatServerError(error),
         },
       });
     });

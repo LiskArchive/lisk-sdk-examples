@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import * as transactions from '@liskhq/lisk-transactions';
 
+import { formatServerError } from '../utils/formatters';
 import { sendInvoice } from '../utils/api';
 import { useStateValue } from '../state';
 import TransactionForm from './TransactionForm';
@@ -49,13 +50,13 @@ function SendInvoicePage({ location }) {
           message: 'Your invoice was sucesfully sent and will be processed by the blockchanin soon.',
         },
       });
-    }).catch((err) => {
+    }).catch((error) => {
       setState({
         sentStatus: {
           success: false,
           header: 'Invoice Failed',
           icon: faTimes,
-          message: `${err}${err.errors && err.errors.map ? `:\n ${err.errors.map(({ message }) => message).join('\n ')}` : ''}`,
+          message: formatServerError(error),
         },
       });
     });

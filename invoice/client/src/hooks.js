@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import to from 'await-to-js';
 
+import { formatServerError } from './utils/formatters';
 import { getAccount } from './utils/api';
 import { useStateValue } from './state';
 import config from './config.json';
@@ -13,7 +14,7 @@ export function useApi(apiUtil, params) {
     const [err, response] = await to(apiUtil(params));
     setLoading(false);
     if (err) {
-      setError(`${err}:\n ${err.errors ? err.errors.map(({ message }) => message).join('\n ') : ''}`);
+      setError(formatServerError(err));
     } else {
       setData(response.data);
     }

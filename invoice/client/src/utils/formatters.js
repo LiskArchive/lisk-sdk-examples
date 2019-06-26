@@ -24,3 +24,6 @@ export const formatAmount = amount => (
   )
 );
 
+export const formatServerError = err => (
+  `${err}${err.errors && err.errors.map ? `:\n ${err.errors.map(({ message }) => message).join('\n ')}` : ''}`
+);
