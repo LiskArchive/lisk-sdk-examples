@@ -2,25 +2,32 @@ import { useState, useEffect } from 'react';
 import to from 'await-to-js';
 
 import { formatServerError } from './utils/formatters';
-import { getAccount } from './utils/api';
+import { getAccount, getInvoices } from './utils/api';
 import { useStateValue } from './state';
 import config from './config.json';
 
-export function useApi(apiUtil, params) {
+const BLOCK_TIME = 10 * 1000;
+
+export function useInvoices(params) {
   const [data, setData] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  let timeout;
   async function fetchUrl() {
-    const [err, response] = await to(apiUtil(params));
+    const [err, response] = await to(getInvoices(params));
     setLoading(false);
     if (err) {
       setError(formatServerError(err));
     } else {
       setData(response.data);
     }
+    timeout = setTimeout(fetchUrl, BLOCK_TIME);
   }
   useEffect(() => {
     fetchUrl();
+    return function cleanup() {
+      clearTimeout(timeout);
+    };
   // This is meant to happen only on component mount
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

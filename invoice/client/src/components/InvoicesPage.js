@@ -12,14 +12,13 @@ import { utils } from '@liskhq/lisk-transactions';
 import React from 'react';
 
 import { formatAmount, formatTimestamp } from '../utils/formatters';
-import { getInvoices } from '../utils/api';
-import { useApi } from '../hooks';
+import { useInvoices } from '../hooks';
 import { useStateValue } from '../state';
 
 function InvoicesPage() {
   const [{ account: { address } }] = useStateValue();
 
-  const [transactions, loading, error] = useApi(getInvoices, { address });
+  const [transactions, loading, error] = useInvoices({ address });
 
   return (
     <Row start="xs">
