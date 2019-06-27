@@ -18,13 +18,14 @@ export const getInvoices = ({ address }) => new Promise(async (resolve, reject) 
   const [invoicesError, invoicesResponse] = await to(getApiClient().transactions.get({
     senderIdOrRecipientId: address,
     sort: 'timestamp:desc',
+    limit: 100,
     type: InvoiceTransaction.TYPE,
   }));
   if (invoicesError) reject(invoicesError);
 
   const [paymentsError, paymentsResponse] = await to(getApiClient().transactions.get({
-    senderIdOrRecipientId: address,
     sort: 'timestamp:desc',
+    limit: 100,
     type: PaymentTransaction.TYPE,
   }));
   if (paymentsError) reject(paymentsError);
