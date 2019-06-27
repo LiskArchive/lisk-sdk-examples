@@ -38,7 +38,7 @@ function InvoicesPage() {
           </CardHeader>
           {transactions.length
             ? (
-              <Table>
+              <Table responsive>
                 <thead>
                   <tr>
                     <th>Sender/Recepient</th>
