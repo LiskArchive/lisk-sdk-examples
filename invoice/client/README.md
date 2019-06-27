@@ -1,4 +1,23 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Lisk Invoice Client
+This is the client to the Invoice SDK PoC
+
+## Installation
+> Before installing the Lisk SDK, make sure to follow the instructions in the [Lisk SDK - Pre-Install](https://github.com/LiskHQ/lisk-docs/blob/development/lisk-sdk/introduction.md#pre-installation) section.
+
+You need the Invoice backend set up and running on [http://localhost:4000](http://localhost:4000). Assuming you start in [/invoice/client`](https://github.com/LiskHQ/lisk-sdk-examples/tree/development/invoice/client) folder.
+```
+cd ../core
+npm i --registry https://npm.lisk.io
+node index.js | npx bunyan -o short
+```
+
+And then get back to client and install dependencies.
+
+```
+cd ../client
+npm i --registry https://npm.lisk.io
+```
+
 
 ## Available Scripts
 
