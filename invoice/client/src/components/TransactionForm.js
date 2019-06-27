@@ -48,7 +48,7 @@ function TransactionForm({
       </CardHeader>
       <CardBody>
         <Form>
-          {Object.entries(inputs).map(([key, { label }]) => (
+          {Object.entries(inputs).map(([key, { label, disabled }]) => (
             <FormGroup key={key}>
               <Label for={key}>{label}</Label>
               <Input
@@ -56,6 +56,7 @@ function TransactionForm({
                 id={key}
                 value={state.inputs[key].value}
                 invalid={state.inputs[key].error !== ''}
+                disabled={!!disabled}
                 onChange={event => onInputChange(key, event)}
               />
               <FormFeedback>{state.inputs[key].error}</FormFeedback>

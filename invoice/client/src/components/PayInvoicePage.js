@@ -16,10 +16,12 @@ function PayInvoicePage({ location }) {
     invoiceID: {
       label: 'Invoice ID',
       isValid: () => true,
+      disabled: true,
     },
     address: {
-      label: 'Invoice creator address',
+      label: 'Recipient address',
       isValid: value => value.match(/^[1-9]\d{0,19}L$/),
+      disabled: true,
     },
     amount: {
       label: 'Amount',
