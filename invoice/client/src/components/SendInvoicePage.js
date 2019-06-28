@@ -1,11 +1,16 @@
 import { Row, Col } from 'react-flexbox-grid';
 import { faCheck, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 import React from 'react';
 
+import { formatServerError } from '../utils/formatters';
+import { sendInvoice } from '../utils/api';
+import { useStateValue } from '../state';
 import TransactionForm from './TransactionForm';
 import TransactionResult from './TransactionResult';
 
-function SendInvoicePage() {
+function SendInvoicePage({ location }) {
+  const [{ account: { passphrase } }] = useStateValue();
   const inputs = {
     address: {
       label: 'Client address',
@@ -17,15 +22,11 @@ function SendInvoicePage() {
     },
     description: {
       label: 'Description',
-      isValid: () => true,
+      isValid: value => !!value,
     },
   };
 
   const [state, setState] = React.useState({ });
-
-  const isFormValid = inputsData => (
-    !Object.values(inputsData).find(({ error }) => error)
-  );
 
   const onSendClick = (inputsData) => {
     setState({
@@ -35,27 +36,29 @@ function SendInvoicePage() {
         icon: faCircleNotch,
       },
     });
-    setTimeout(() => {
-      if (isFormValid(inputsData)) {
-        setState({
-          sentStatus: {
-            sucess: true,
-            header: 'Invoice Success',
-            icon: faCheck,
-            message: 'Your invoice was sucesfully sent and will be processed by the blockchanin soon.',
-          },
-        });
-      } else {
-        setState({
-          sentStatus: {
-            sucess: false,
-            header: 'Invoice Failed',
-            icon: faTimes,
-            message: 'Sending invoice failed. Please try again.',
-          },
-        });
-      }
-    }, 1000);
+    sendInvoice({
+      client: inputsData.address.value,
+      requestedAmount: inputsData.amount.value,
+      description: inputsData.description.value,
+    }, passphrase).then(() => {
+      setState({
+        sentStatus: {
+          success: true,
+          header: 'Invoice Success',
+          icon: faCheck,
+          message: 'Your invoice was sucesfully sent and will be processed by the blockchanin soon.',
+        },
+      });
+    }).catch((error) => {
+      setState({
+        sentStatus: {
+          success: false,
+          header: 'Invoice Failed',
+          icon: faTimes,
+          message: formatServerError(error),
+        },
+      });
+    });
   };
 
   const { sentStatus } = state;
@@ -63,13 +66,25 @@ function SendInvoicePage() {
   return (
     <Row start="xs">
       <Col xs={12} mdOffset={1} md={10} lgOffset={2} lg={8}>
-        {!sentStatus ?
-          <TransactionForm title="Send Invoice" inputs={inputs} callback={onSendClick} submitButtonLabel="Send" /> :
-          <TransactionResult {...sentStatus} />
+        {!sentStatus
+          ? <TransactionForm title="Send Invoice" inputs={inputs} callback={onSendClick} submitButtonLabel="Send" location={location} />
+          : <TransactionResult {...sentStatus} />
         }
       </Col>
     </Row>
   );
 }
+
+SendInvoicePage.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }),
+};
+
+SendInvoicePage.defaultProps = {
+  location: {
+    pathname: '',
+  },
+};
 
 export default SendInvoicePage;

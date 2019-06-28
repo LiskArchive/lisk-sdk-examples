@@ -23,18 +23,36 @@ function TransactionForm({
 
   const onInputChange = (inputName, event) => {
     const { value } = event.target;
+    const error = inputs[inputName].isValid(value) ? '' : 'Invalid value';
     setState({
       inputs: {
         ...state.inputs,
         [inputName]: {
           value,
-          error: inputs[inputName].isValid(value) ? '' : 'Invalid value',
+          error,
         },
       },
     });
+    return error;
   };
 
-  const onSubmitClick = () => callback(state.inputs);
+  const validateForm = () => (
+    Object.keys(inputs).map(key => (
+      onInputChange(key, { target: { value: state.inputs[key].value } })
+    )).filter(x => x).length === 0
+  );
+
+  const isFormValid = () => (
+    !Object.values(inputs).find(({ error }) => error)
+  );
+
+  const onSubmitClick = (e) => {
+    if (validateForm()) {
+      callback(state.inputs);
+    }
+    e.preventDefault();
+  };
+
 
   return (
     <Card>
@@ -43,7 +61,7 @@ function TransactionForm({
       </CardHeader>
       <CardBody>
         <Form>
-          {Object.entries(inputs).map(([key, { label }]) => (
+          {Object.entries(inputs).map(([key, { label, disabled }]) => (
             <FormGroup key={key}>
               <Label for={key}>{label}</Label>
               <Input
@@ -51,19 +69,28 @@ function TransactionForm({
                 id={key}
                 value={state.inputs[key].value}
                 invalid={state.inputs[key].error !== ''}
+                disabled={!!disabled}
                 onChange={event => onInputChange(key, event)}
               />
               <FormFeedback>{state.inputs[key].error}</FormFeedback>
             </FormGroup>
-              ))}
+          ))}
           <Row between="xs">
             <Col xs={5}>
               <Link to="/invoices?showData">
-                <Button block>Cancel</Button>
+                <Button type="reset" block>Cancel</Button>
               </Link>
             </Col>
             <Col xs={5}>
-              <Button color="primary" onClick={onSubmitClick} block>{submitButtonLabel}</Button>
+              <Button
+                type="submit"
+                color="primary"
+                disabled={!isFormValid()}
+                onClick={onSubmitClick}
+                block
+              >
+                {submitButtonLabel}
+              </Button>
             </Col>
           </Row>
         </Form>

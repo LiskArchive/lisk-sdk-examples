@@ -9,18 +9,13 @@ import { validation } from '@liskhq/lisk-passphrase';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { getAccount } from '../utils';
-import { useStateValue } from '../state';
+import { usePassphraseToSignIn } from '../hooks';
 
 function SignInPage({ history }) {
-  const [, dispatch] = useStateValue();
-
-  const [state, setState] = React.useState({
+  const [{ passphrase, error }, setState] = React.useState({
     passphrase: '',
     error: '',
   });
-
-  const { passphrase, error, loading } = state;
 
   const onPasshraseChange = (evt) => {
     const { value } = evt.target;
@@ -28,26 +23,16 @@ function SignInPage({ history }) {
     setState({
       passphrase: value,
       error: errors[0] ? errors[0].message : '',
-      loading: false,
     });
   };
 
-  const onSignInClick = () => {
-    setState({
-      ...state,
-      loading: true,
-    });
-    getAccount({ passphrase }).then((account) => {
-      dispatch({
-        type: 'accountSignedIn',
-        account,
-      });
-      setState({
-        ...state,
-        loading: false,
-      });
-      history.push('/invoices');
-    });
+  const [loading, serverError, signIn] = usePassphraseToSignIn(history);
+
+  const onSignInClick = (e) => {
+    if (passphrase !== '' && error === '') {
+      signIn(passphrase);
+    }
+    e.preventDefault();
   };
 
   return (
@@ -61,16 +46,15 @@ function SignInPage({ history }) {
                 <Label for="passphrase">Passphrase</Label>
                 <Input
                   type="password"
-                  name="passphrase"
                   id="passphrase"
                   placeholder="Enter 12 word BIP 39 passphrase"
                   value={passphrase}
-                  invalid={error !== ''}
+                  invalid={(error || serverError) !== ''}
                   onChange={onPasshraseChange}
                 />
-                <FormFeedback>{error}</FormFeedback>
+                <FormFeedback>{error || serverError}</FormFeedback>
               </FormGroup>
-              <Button color="primary" size="lg" block onClick={onSignInClick} disabled={loading}>
+              <Button color="primary" type="submit" size="lg" block onClick={onSignInClick} disabled={loading}>
                 {loading ? <Spinner color="light" size="sm" /> : 'Sign In'}
               </Button>
             </Form>

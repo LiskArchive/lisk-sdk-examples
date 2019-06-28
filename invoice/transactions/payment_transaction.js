@@ -7,7 +7,7 @@ class PaymentTransaction extends TransferTransaction {
 	}
 
 	async prepare(store) {
-		super.prepare(store)
+		await super.prepare(store);
 		await store.transaction.cache([
 			{
 				id: this.asset.data,

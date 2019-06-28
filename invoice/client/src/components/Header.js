@@ -1,16 +1,23 @@
-import React from 'react';
 import {
   Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
 } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
-import { useStateValue } from '../state';
+import React from 'react';
+
+import { formatAmount } from '../utils/formatters';
 import { name } from '../config.json';
+import { useStateValue } from '../state';
+import logo from '../assets/logo.svg';
 
 export default function Header() {
-  const [{ account }] = useStateValue();
+  const [{ account }, dispatch] = useStateValue();
   const [{ collapsed }, setState] = React.useState({
     collapsed: true,
   });
+
+  const logout = () => {
+    dispatch({ type: 'accountSignedOut' });
+  };
 
   const toggleNavbar = () => {
     setState({
@@ -20,17 +27,39 @@ export default function Header() {
 
   return (
     <Navbar color="faded" light expand="md">
-      <NavbarBrand tag={RRNavLink} to="/" className="mr-auto">{name}</NavbarBrand>
-      <NavbarToggler onClick={toggleNavbar} className="mr-2" />
-      { account ?
-        <Collapse isOpen={!collapsed} navbar>
-          <Nav navbar>
-            <NavItem>
-              <NavLink tag={RRNavLink} to="/invoices">My Invoices</NavLink>
-            </NavItem>
-          </Nav>
-        </Collapse> :
-        null
+      <NavbarBrand tag={RRNavLink} to="/" className="mr-auto">
+        <img src={logo} alt={name} style={{ width: 140 }} />
+      </NavbarBrand>
+      { account
+        ? (
+          <React.Fragment>
+            <NavbarToggler onClick={toggleNavbar} className="mr-2" />
+            <Collapse isOpen={!collapsed} navbar>
+              <Nav navbar>
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/invoices">My Invoices</NavLink>
+                </NavItem>
+              </Nav>
+            </Collapse>
+            <span>
+              {' '}
+Address:
+              <strong>
+                {account.address}
+                {' '}
+              </strong>
+&nbsp;
+              {' '}
+            </span>
+            <span>
+              {' '}
+Balance:
+              <strong>{formatAmount(account.balance)}</strong>
+            </span>
+            <NavLink tag={RRNavLink} to="/" onClick={logout}>Logout</NavLink>
+          </React.Fragment>
+        )
+        : null
       }
     </Navbar>
   );

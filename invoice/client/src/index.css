@@ -11,3 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+pre {
+  white-space: pre-wrap;
+  margin-bottom: 0;
+  text-align: left;
+}
+
+table tr th:last-child,
+table tr td:last-child {
+  text-align: right;
+}
+
+table tr td:first-child {
+  white-space: nowrap;
+}
