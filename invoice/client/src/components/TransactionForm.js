@@ -23,22 +23,35 @@ function TransactionForm({
 
   const onInputChange = (inputName, event) => {
     const { value } = event.target;
+    const error = inputs[inputName].isValid(value) ? '' : 'Invalid value';
     setState({
       inputs: {
         ...state.inputs,
         [inputName]: {
           value,
-          error: inputs[inputName].isValid(value) ? '' : 'Invalid value',
+          error,
         },
       },
     });
+    return error;
   };
 
-  const onSubmitClick = () => callback(state.inputs);
+  const validateForm = () => (
+    Object.keys(inputs).map(key => (
+      onInputChange(key, { target: { value: state.inputs[key].value } })
+    )).filter(x => x).length === 0
+  );
 
   const isFormValid = () => (
     !Object.values(inputs).find(({ error }) => error)
   );
+
+  const onSubmitClick = (e) => {
+    if (validateForm()) {
+      callback(state.inputs);
+    }
+    e.preventDefault();
+  };
 
 
   return (

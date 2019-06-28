@@ -22,7 +22,7 @@ function SendInvoicePage({ location }) {
     },
     description: {
       label: 'Description',
-      isValid: () => true,
+      isValid: value => !!value,
     },
   };
 

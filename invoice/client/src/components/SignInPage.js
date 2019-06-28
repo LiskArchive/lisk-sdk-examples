@@ -28,8 +28,11 @@ function SignInPage({ history }) {
 
   const [loading, serverError, signIn] = usePassphraseToSignIn(history);
 
-  const onSignInClick = () => {
-    signIn(passphrase);
+  const onSignInClick = (e) => {
+    if (passphrase !== '' && error === '') {
+      signIn(passphrase);
+    }
+    e.preventDefault();
   };
 
   return (
@@ -43,7 +46,6 @@ function SignInPage({ history }) {
                 <Label for="passphrase">Passphrase</Label>
                 <Input
                   type="password"
-                  name="passphrase"
                   id="passphrase"
                   placeholder="Enter 12 word BIP 39 passphrase"
                   value={passphrase}
@@ -52,7 +54,7 @@ function SignInPage({ history }) {
                 />
                 <FormFeedback>{error || serverError}</FormFeedback>
               </FormGroup>
-              <Button color="primary" size="lg" block onClick={onSignInClick} disabled={loading}>
+              <Button color="primary" type="submit" size="lg" block onClick={onSignInClick} disabled={loading}>
                 {loading ? <Spinner color="light" size="sm" /> : 'Sign In'}
               </Button>
             </Form>
