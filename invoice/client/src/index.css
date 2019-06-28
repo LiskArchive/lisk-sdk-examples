@@ -22,3 +22,7 @@ table tr th:last-child,
 table tr td:last-child {
   text-align: right;
 }
+
+table tr td:first-child {
+  white-space: nowrap;
+}
