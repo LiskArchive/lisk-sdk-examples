@@ -65,11 +65,12 @@ function TransactionForm({
           <Row between="xs">
             <Col xs={5}>
               <Link to="/invoices?showData">
-                <Button block>Cancel</Button>
+                <Button type="reset" block>Cancel</Button>
               </Link>
             </Col>
             <Col xs={5}>
               <Button
+                type="submit"
                 color="primary"
                 disabled={!isFormValid()}
                 onClick={onSubmitClick}
