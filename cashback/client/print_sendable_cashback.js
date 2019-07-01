@@ -1,5 +1,8 @@
 const createSendableTransaction = require('./create_sendable_transaction_base_trs');
 const CashbackTransaction = require('../cashback_transaction');
+const transactions = require('@liskhq/lisk-transactions');
+const { EPOCH_TIME } = require('@liskhq/lisk-constants');
+
 
 /**
  *  To directly send the printed transaction:
@@ -8,17 +11,15 @@ const CashbackTransaction = require('../cashback_transaction');
  */
 
 const getTimestamp = () => {
-	const epochTime = "2016-05-24T17:00:00.000Z" //default epoch time
-	// check config file or curl localhost:4000/api/node/constants to verify your epoc time
-	const millisSinceEpoc = Date.now() - Date.parse(epochTime);
+	const millisSinceEpoc = Date.now() - Date.parse(EPOCH_TIME);
 	const inSeconds = ((millisSinceEpoc) / 1000).toFixed(0);
 	return  parseInt(inSeconds);
 }
 let c = createSendableTransaction(CashbackTransaction, {
 	type: 9,
 	data: null,
-	amount: `${2 * (10 ** 8)}`,
-	fee: `${10 ** 7}`,
+	amount: `${transactions.utils.convertLSKToBeddows(2)}`,
+	fee: `${transactions.utils.convertLSKToBeddows(0.1)}`,
 	recipientId: '10881167371402274308L', //delegate genesis_100
 	recipientPublicKey: 'addb0e15a44b0fdc6ff291be28d8c98f5551d0cd9218d749e30ddb87c6e31ca9',
 	senderPublicKey: 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f',
