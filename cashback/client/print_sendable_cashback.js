@@ -18,8 +18,8 @@ const getTimestamp = () => {
 let c = createSendableTransaction(CashbackTransaction, {
 	type: 9,
 	data: null,
-	amount: `${transactions.utils.convertLSKToBeddows(2)}`,
-	fee: `${transactions.utils.convertLSKToBeddows(0.1)}`,
+	amount: `${transactions.utils.convertLSKToBeddows('2')}`,
+	fee: `${transactions.utils.convertLSKToBeddows('0.1')}`,
 	recipientId: '10881167371402274308L', //delegate genesis_100
 	recipientPublicKey: 'addb0e15a44b0fdc6ff291be28d8c98f5551d0cd9218d749e30ddb87c6e31ca9',
 	senderPublicKey: 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f',
