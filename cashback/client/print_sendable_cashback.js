@@ -11,7 +11,8 @@ const { EPOCH_TIME } = require('@liskhq/lisk-constants');
  */
 
 const getTimestamp = () => {
-	const millisSinceEpoc = Date.now() - Date.parse(EPOCH_TIME);
+    // check config file or curl localhost:4000/api/node/constants to verify your epoc time
+    const millisSinceEpoc = Date.now() - Date.parse(EPOCH_TIME);
 	const inSeconds = ((millisSinceEpoc) / 1000).toFixed(0);
 	return  parseInt(inSeconds);
 }
