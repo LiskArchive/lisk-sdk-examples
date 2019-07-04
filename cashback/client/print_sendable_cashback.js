@@ -1,4 +1,3 @@
-const createSendableTransaction = require('./create_sendable_transaction_base_trs');
 const CashbackTransaction = require('../cashback_transaction');
 const transactions = require('@liskhq/lisk-transactions');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
