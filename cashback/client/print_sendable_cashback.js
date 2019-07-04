@@ -14,20 +14,17 @@ const getTimestamp = () => {
 	const millisSinceEpoc = Date.now() - Date.parse(EPOCH_TIME);
 	const inSeconds = ((millisSinceEpoc) / 1000).toFixed(0);
 	return  parseInt(inSeconds);
-}
-let c = createSendableTransaction(CashbackTransaction, {
-	type: 9,
-	data: null,
-	amount: `${transactions.utils.convertLSKToBeddows(2)}`,
-	fee: `${transactions.utils.convertLSKToBeddows(0.1)}`,
-	recipientId: '10881167371402274308L', //delegate genesis_100
-	recipientPublicKey: 'addb0e15a44b0fdc6ff291be28d8c98f5551d0cd9218d749e30ddb87c6e31ca9',
-	senderPublicKey: 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f',
-	passphrase: 'wagon stock borrow episode laundry kitten salute link globe zero feed marble',
-	secondPassphrase: null,
-	timestamp: getTimestamp(),
+};
+
+const tx = new CashbackTransaction({
+    type: 11,
+    amount: `${transactions.utils.convertLSKToBeddows('2')}`,
+    fee: `${transactions.utils.convertLSKToBeddows('0.1')}`,
+    recipientId: '10881167371402274308L', //delegate genesis_100
+    timestamp: getTimestamp(),
 });
 
+tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble');
 
-console.log(c);
+console.log(tx.stringify());
 process.exit(1);
