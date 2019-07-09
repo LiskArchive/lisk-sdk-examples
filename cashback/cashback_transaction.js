@@ -1,10 +1,10 @@
 const {
-	transactions,
+	transactions: { TransferTransaction },
 	BigNum,
 } = require('lisk-sdk');
 
 
-class CashbackTransaction extends transactions.TransferTransaction {
+class CashbackTransaction extends TransferTransaction {
 
 	static get TYPE () {
 		return 11;
