@@ -58,29 +58,23 @@ class InvoiceTransaction extends BaseTransaction {
 	applyAsset(store) {
 		const sender = store.account.get(this.senderId);
 
-		// Using JSON.stringify/parse to recursively clones the object
-		const updatedSender = JSON.parse(JSON.stringify(sender));
-
 		// Save invoice count and IDs
-		updatedSender.asset.invoiceCount = updatedSender.asset.invoiceCount === undefined ? 1 : updatedSender.asset.invoiceCount++;
-		updatedSender.asset.invoicesSent = updatedSender.asset.invoicesSent === undefined ? [this.id] : [...updatedSender.asset.invoicesSent, this.id];
-		store.account.set(sender.address, updatedSender);
+		sender.asset.invoiceCount = sender.asset.invoiceCount === undefined ? 1 : sender.asset.invoiceCount++;
+		sender.asset.invoicesSent = sender.asset.invoicesSent === undefined ? [this.id] : [...sender.asset.invoicesSent, this.id];
+		store.account.set(sender.address, sender);
 		return [];
 	}
 
 	undoAsset(store) {
 		const sender = store.account.get(this.senderId);
 
-		// Using JSON.stringify/parse to recursively clones the object
-		const originalSender = JSON.parse(JSON.stringify(sender));
-
 		// Rollback invoice count and IDs
-		originalSender.asset.invoiceCount = originalSender.asset.invoiceCount === 1 ? undefined : originalSender.asset.invoiceCount--;
-		originalSender.asset.invoicesSent = originalSender.asset.invoicesSent.splice(
-			originalSender.asset.invoicesSent.indexOf(this.id),
+		sender.asset.invoiceCount = sender.asset.invoiceCount === 1 ? undefined : sender.asset.invoiceCount--;
+		sender.asset.invoicesSent = sender.asset.invoicesSent.splice(
+			sender.asset.invoicesSent.indexOf(this.id),
 			1,
 		);
-		store.account.set(sender.address, originalSender);
+		store.account.set(sender.address, sender);
 		return [];
 	}
 
