@@ -17,7 +17,6 @@ const getTimestamp = () => {
 };
 
 const tx = new CashbackTransaction({
-    type: 11,
     amount: `${transactions.utils.convertLSKToBeddows('2')}`,
     fee: `${transactions.utils.convertLSKToBeddows('0.1')}`,
     recipientId: '10881167371402274308L', //delegate genesis_100
