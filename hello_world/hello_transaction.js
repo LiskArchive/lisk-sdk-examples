@@ -1,9 +1,9 @@
 const {
 	BaseTransaction,
-	TransactionError,
+    transactions,
 } = require('lisk-sdk');
 
-class HelloTransaction extends BaseTransaction {
+class HelloTransaction extends transactions.BaseTransaction {
 
 	static get TYPE () {
 		return 10;
