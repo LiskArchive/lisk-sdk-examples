@@ -1,7 +1,6 @@
-const { TransferTransaction, TransactionError } = require('@liskhq/lisk-transactions');
+const { transactions: { TransferTransaction, TransactionError } } = require('lisk-sdk');
 
 class PaymentTransaction extends TransferTransaction {
-
 	static get TYPE () {
 		return 14;
 	}

@@ -1,9 +1,12 @@
-const {	BaseTransaction, TransactionError } = require('@liskhq/lisk-transactions');
+const { transactions: { BaseTransaction, TransactionError } } = require('lisk-sdk');
 
 class InvoiceTransaction extends BaseTransaction {
-
 	static get TYPE () {
 		return 13;
+	}
+
+	static get FEE () {
+		return `${10 ** 8}`;
 	}
 
 	async prepare(store) {
