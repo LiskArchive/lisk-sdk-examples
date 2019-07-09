@@ -1,12 +1,16 @@
 const {
-    transactions: { BaseTransaction },
+    transactions: { BaseTransaction, TransactionError },
 } = require('lisk-sdk');
 
 class HelloTransaction extends BaseTransaction {
 
 	static get TYPE () {
 		return 10;
-	}
+	};
+
+	static get FEE () {
+		return `${10 ** 8}`;
+	};
 
 	applyAsset(store) {
         const errors = [];

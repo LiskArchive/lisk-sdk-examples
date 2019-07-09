@@ -8,7 +8,11 @@ class CashbackTransaction extends TransferTransaction {
 
 	static get TYPE () {
 		return 11;
-	}
+	};
+
+    static get FEE () {
+        return `${10 ** 7}`;
+    };
 
 	applyAsset(store) {
 		super.applyAsset(store);
