@@ -58,7 +58,7 @@ export const getAccount = ({ passphrase }) => new Promise(async (resolve, reject
         passphrase,
         address,
         publicKey,
-        balance: 0,
+        balance: '0',
       });
     }
   } else {
