@@ -5,7 +5,7 @@ configDevnet.app.label = 'HelloWorld-blockchain-application';
 
 const app = new Application(genesisBlockDevnet, configDevnet);
 
-app.registerTransaction(HelloTransaction.TYPE, HelloTransaction);
+app.registerTransaction(HelloTransaction);
 
 app
 	.run()
