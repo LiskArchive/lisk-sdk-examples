@@ -3,8 +3,8 @@ const { InvoiceTransaction, PaymentTransaction } = require('../transactions');
 
 const app = new Application(genesisBlockDevnet, configDevnet);
 
-app.registerTransaction(13, InvoiceTransaction);
-app.registerTransaction(14, PaymentTransaction);
+app.registerTransaction(InvoiceTransaction);
+app.registerTransaction(PaymentTransaction);
 
 app
 	.run()

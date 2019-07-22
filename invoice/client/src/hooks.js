@@ -44,7 +44,7 @@ export function usePassphraseToSignIn(history) {
     setLoading(true);
     const [err, response] = await to(getAccount({ passphrase }));
     setLoading(false);
-    if (!error) {
+    if (!err) {
       dispatch({
         type: 'accountUpdated',
         account: response,
