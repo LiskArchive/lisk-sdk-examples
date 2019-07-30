@@ -15,8 +15,6 @@ class HelloTransaction extends BaseTransaction {
 	applyAsset(store) {
         const errors = [];
         const sender = store.account.get(this.senderId);
-        const newObj = { ...sender, asset: { hello: this.asset.hello } };
-        store.account.set(sender.address, newObj);
         if (sender.asset && sender.asset.hello) {
             errors.push(
                 new TransactionError(
