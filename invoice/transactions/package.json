@@ -22,6 +22,6 @@
 	},
 	"main": "index.js",
 	"dependencies": {
-		"lisk-sdk": "2.1.0-alpha.4"
+		"lisk-sdk": "2.1.0"
 	}
 }
