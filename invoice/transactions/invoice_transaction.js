@@ -70,7 +70,7 @@ class InvoiceTransaction extends BaseTransaction {
 
 		// Rollback invoice count and IDs
 		sender.asset.invoiceCount = sender.asset.invoiceCount === 1 ? undefined : sender.asset.invoiceCount--;
-		sender.asset.invoicesSent = sender.asset.invoicesSent.splice(
+		sender.asset.invoicesSent = sender.asset.invoicesSent.length === 1 ? undefined : sender.asset.invoicesSent.splice(
 			sender.asset.invoicesSent.indexOf(this.id),
 			1,
 		);
