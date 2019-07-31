@@ -77,7 +77,6 @@ const createInvoice = ({
       description,
     },
     fee: transactions.utils.convertLSKToBeddows('1'),
-    senderPublicKey: getAddressAndPublicKeyFromPassphrase(passphrase).publicKey,
     recipientId: client,
     timestamp: dateToLiskEpochTimestamp(new Date()),
   })
@@ -104,8 +103,6 @@ const createPayment = ({
     },
     fee: transactions.utils.convertLSKToBeddows('0.1'),
     amount: transactions.utils.convertLSKToBeddows(amount),
-    recipientId,
-    senderPublicKey: getAddressAndPublicKeyFromPassphrase(passphrase).publicKey,
     timestamp: dateToLiskEpochTimestamp(new Date()),
   })
 );
