@@ -70,7 +70,6 @@ const createInvoice = ({
   client, requestedAmount, description,
 }, passphrase) => (
   new InvoiceTransaction({
-    type: InvoiceTransaction.TYPE,
     asset: {
       client,
       requestedAmount: transactions.utils.convertLSKToBeddows(requestedAmount),
@@ -97,7 +96,6 @@ const createPayment = ({
   recipientId, amount, invoiceID,
 }, passphrase) => (
   new PaymentTransaction({
-    type: PaymentTransaction.TYPE,
     asset: {
       data: invoiceID,
     },
