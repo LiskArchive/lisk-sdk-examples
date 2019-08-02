@@ -101,6 +101,7 @@ const createPayment = ({
     },
     fee: transactions.utils.convertLSKToBeddows('0.1'),
     amount: transactions.utils.convertLSKToBeddows(amount),
+    recipientId,
     timestamp: dateToLiskEpochTimestamp(new Date()),
   })
 );
