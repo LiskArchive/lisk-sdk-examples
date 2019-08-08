@@ -59,7 +59,7 @@ class InvoiceTransaction extends BaseTransaction {
 		const sender = store.account.get(this.senderId);
 
 		// Save invoice count and IDs
-		sender.asset.invoiceCount = sender.asset.invoiceCount === undefined ? 1 : sender.asset.invoiceCount++;
+		sender.asset.invoiceCount = sender.asset.invoiceCount === undefined ? 1 : ++sender.asset.invoiceCount;
 		sender.asset.invoicesSent = sender.asset.invoicesSent === undefined ? [this.id] : [...sender.asset.invoicesSent, this.id];
 		store.account.set(sender.address, sender);
 		return [];
@@ -69,7 +69,7 @@ class InvoiceTransaction extends BaseTransaction {
 		const sender = store.account.get(this.senderId);
 
 		// Rollback invoice count and IDs
-		sender.asset.invoiceCount = sender.asset.invoiceCount === 1 ? undefined : sender.asset.invoiceCount--;
+		sender.asset.invoiceCount = sender.asset.invoiceCount === 1 ? undefined : --sender.asset.invoiceCount;
 		sender.asset.invoicesSent = sender.asset.invoicesSent.length === 1 ? undefined : sender.asset.invoicesSent.splice(
 			sender.asset.invoicesSent.indexOf(this.id),
 			1,
