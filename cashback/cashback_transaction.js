@@ -10,12 +10,12 @@ class CashbackTransaction extends TransferTransaction {
 		return 11;
 	};
 
-    static get FEE () {
-        return `${10 ** 7}`;
-    };
+	static get FEE () {
+		return `${10 ** 7}`;
+	};
 
 	applyAsset(store) {
-		super.applyAsset(store);
+		const errors = super.applyAsset(store);
 
 		const sender = store.account.get(this.senderId);
 		const updatedSenderBalanceAfterBonus = new BigNum(sender.balance).add(
@@ -27,11 +27,11 @@ class CashbackTransaction extends TransferTransaction {
 		};
 		store.account.set(sender.address, updatedSender);
 
-		return [];
+		return errors;
 	}
 
 	undoAsset(store) {
-		super.undoAsset(store);
+		const errors = super.undoAsset(store);
 
 		const sender = store.account.get(this.senderId);
 		const updatedSenderBalanceAfterBonus = new BigNum(sender.balance).sub(
@@ -43,7 +43,7 @@ class CashbackTransaction extends TransferTransaction {
 		};
 		store.account.set(sender.address, updatedSender);
 
-		return [];
+		return errors;
 	}
 }
 
