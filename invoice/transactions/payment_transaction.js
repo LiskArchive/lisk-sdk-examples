@@ -15,8 +15,8 @@ class PaymentTransaction extends TransferTransaction {
 	 }
 
 	applyAsset(store) {
-		super.applyAsset(store);
-		const errors = [];
+		const errors = super.applyAsset(store);
+
 		const transaction = store.transaction.find(
 			transaction => transaction.id === this.asset.data
 		); // Find related invoice in transactions for invoiceID
@@ -51,9 +51,9 @@ class PaymentTransaction extends TransferTransaction {
 	undoAsset(store) {
 		// No rollback needed as there is only validation happening in applyAsset
 		// Higher level function will rollback the attempted payment (send back tokens)
-		super.undoAsset(store); 
+		const errors = super.undoAsset(store);
 	
-		return [];
+		return errors;
 	}
 
 }
