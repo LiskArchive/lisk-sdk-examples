@@ -9,7 +9,7 @@ Casback application extends the Transfer Transaction of SDK by adding an additio
 Install dependencies: 
 
 ```
-npm i --registry https://npm.lisk.io
+npm i lisk-sdk 
 ```
 
 Start node:
