@@ -11,7 +11,7 @@ Please visit our [comprehensive tutorial](https://github.com/LiskHQ/lisk-docs/bl
 Install dependencies: 
 
 ```
-npm i lisk-sdk 
+npm i 
 ```
 
 Start node:
