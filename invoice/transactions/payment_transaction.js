@@ -22,26 +22,25 @@ class PaymentTransaction extends TransferTransaction {
 		); // Find related invoice in transactions for invoiceID
 
 		if (!transaction) {
-            return [ new TransactionError(
+            errors.push( new TransactionError(
 					'Invoice does not exist for ID',
 					this.id,
 					'.asset.invoiceID',
 					this.asset.data,
 					'Existing invoiceID registered as invoice transaction',
-				) ];
+				));
 		}
         if (this.amount.lt(transaction.asset.requestedAmount)) {
-            return [ new TransactionError(
+            errors.push( new TransactionError(
                 'Paid amount is lower than amount stated on invoice',
                 this.id,
                 '.amount',
                 transaction.requestedAmount,
                 'Expected amount to be equal or greated than `requestedAmount`',
-            )];
+            ));
         }
         this.recipientId = transaction.senderId;
-        super.applyAsset(store);
-        return [];
+        return errors;
 	}
 
 	undoAsset(store) {
