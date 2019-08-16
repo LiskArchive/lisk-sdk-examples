@@ -15,6 +15,8 @@ class PaymentTransaction extends TransferTransaction {
 	 }
 
 	applyAsset(store) {
+	    const errors = [];
+
 		const transaction = store.transaction.find(
 			transaction => transaction.id === this.asset.data
 		); // Find related invoice in transactions for invoiceID
@@ -38,7 +40,7 @@ class PaymentTransaction extends TransferTransaction {
             ));
         }
         this.recipientId = transaction.senderId;
-        const errors = super.applyAsset(store); //transfer tokens after getting the correct reciepientId
+        errors.concat(super.applyAsset(store)); //transfer tokens after getting the correct reciepientId
         return errors;
 	}
 
