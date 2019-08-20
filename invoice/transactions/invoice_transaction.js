@@ -11,11 +11,6 @@ class InvoiceTransaction extends BaseTransaction {
 
 	async prepare(store) {
 		await super.prepare(store);
-		await store.account.cache([
-			{
-				address: this.senderId,
-			},
-		]);
 	}
 
 	validateAsset() {
