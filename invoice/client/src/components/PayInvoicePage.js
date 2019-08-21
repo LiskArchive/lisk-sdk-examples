@@ -53,7 +53,7 @@ function PayInvoicePage({ location }) {
           success: true,
           header: 'Payment Success',
           icon: faCheck,
-          message: 'Your payment was sucesfully sent and will be processed by the blockchanin soon.',
+          message: 'Your payment was successfully sent and will be processed by the blockchain soon.',
         },
       });
     } else {

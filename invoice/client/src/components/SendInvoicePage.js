@@ -50,7 +50,7 @@ function SendInvoicePage({ location }) {
           success: true,
           header: 'Invoice Success',
           icon: faCheck,
-          message: 'Your invoice was sucesfully sent and will be processed by the blockchanin soon.',
+          message: 'Your invoice was successfully sent and will be processed by the blockchain soon.',
         },
       });
     } else {
