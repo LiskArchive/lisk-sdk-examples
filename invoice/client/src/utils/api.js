@@ -70,7 +70,6 @@ const createInvoice = ({
   client, requestedAmount, description,
 }, passphrase) => (
   new InvoiceTransaction({
-    type: InvoiceTransaction.TYPE,
     asset: {
       client,
       requestedAmount: transactions.utils.convertLSKToBeddows(requestedAmount),
