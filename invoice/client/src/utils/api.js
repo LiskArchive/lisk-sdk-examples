@@ -66,10 +66,10 @@ export const getAccount = ({ passphrase }) => new Promise(async (resolve, reject
   }
 });
 
-const createInvoice = ({
+export const sendInvoice = ({
   client, requestedAmount, description,
-}, passphrase) => (
-  new InvoiceTransaction({
+}, passphrase) => {
+  const invoiceTx = new InvoiceTransaction({
     asset: {
       client,
       requestedAmount: transactions.utils.convertLSKToBeddows(requestedAmount),
@@ -77,39 +77,23 @@ const createInvoice = ({
     },
     recipientId: client,
     timestamp: dateToLiskEpochTimestamp(new Date()),
-  })
-);
-
-export const sendInvoice = ({
-  client, requestedAmount, description,
-}, passphrase) => {
-  const invoiceTx = createInvoice({
-    client, requestedAmount, description,
-  }, passphrase);
+  });
 
   invoiceTx.sign(passphrase);
   return getApiClient().transactions.broadcast(invoiceTx.toJSON());
 };
 
-const createPayment = ({
+export const sendPayment = ({
   recipientId, amount, invoiceID,
-}, passphrase) => (
-  new PaymentTransaction({
+}, passphrase) => {
+  const paymentTx = new PaymentTransaction({
     asset: {
       data: invoiceID,
     },
     amount: transactions.utils.convertLSKToBeddows(amount),
     recipientId,
     timestamp: dateToLiskEpochTimestamp(new Date()),
-  })
-);
-
-export const sendPayment = ({
-  recipientId, amount, invoiceID,
-}, passphrase) => {
-  const paymentTx = createPayment({
-    recipientId, amount, invoiceID,
-  }, passphrase);
+  });
 
   paymentTx.sign(passphrase);
   return getApiClient().transactions.broadcast(paymentTx.toJSON());
