@@ -30,6 +30,7 @@
     "build": "react-scripts build",
     "eslint": "eslint ./"
   },
+  "eslintIgnore": ["build"],
   "eslintConfig": {
     "extends": [
       "airbnb",
