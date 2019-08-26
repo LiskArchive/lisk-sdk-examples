@@ -6,7 +6,7 @@ Casback application extends the Transfer Transaction of SDK by adding an additio
 
 ## Usage
 
-Please visit our [comprehensive tutorial](https://github.com/LiskHQ/lisk-docs/blob/master/start/tutorials/cashback.md) for a full explaination of how to build this example.
+Please visit our [comprehensive tutorial](https://github.com/LiskHQ/lisk-docs/blob/master/start/tutorials/cashback.md) for a full explanation of how to build this example.
 
 Install dependencies: 
 
