@@ -28,12 +28,12 @@ class PaymentTransaction extends TransferTransaction {
 					this.id,
 					'.amount',
 					transaction.requestedAmount,
-					'Expected amount to be equal or greated than `requestedAmount`',
+					'Expected amount to be equal or greater than `requestedAmount`',
 				));
 			}
 			if (transaction.senderId !== this.recipientId) {
 				errors.push(new TransactionError(
-					'RecipientId is not equal to the address, that sent the invoice.',
+					'RecipientId is not equal to the address that has sent the invoice.',
 					this.id,
 					'.recipientId',
 					transaction.senderId,
