@@ -36,8 +36,8 @@ class PaymentTransaction extends TransferTransaction {
 					'RecipientId is not equal to the address that has sent the invoice.',
 					this.id,
 					'.recipientId',
+					this.recipientId,
 					transaction.senderId,
-					'Expected recipientId to be equal to the id of the sender of the invoice.',
 				));
 			}
 		} else {
