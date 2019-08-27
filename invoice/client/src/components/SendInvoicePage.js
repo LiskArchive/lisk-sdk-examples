@@ -2,6 +2,7 @@ import { Row, Col } from 'react-flexbox-grid';
 import { faCheck, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import React from 'react';
+import to from 'await-to-js';
 
 import { formatServerError } from '../utils/formatters';
 import { sendInvoice } from '../utils/api';
@@ -28,7 +29,7 @@ function SendInvoicePage({ location }) {
 
   const [state, setState] = React.useState({ });
 
-  const onSendClick = (inputsData) => {
+  const onSendClick = async (inputsData) => {
     setState({
       sentStatus: {
         pending: true,
@@ -36,20 +37,23 @@ function SendInvoicePage({ location }) {
         icon: faCircleNotch,
       },
     });
-    sendInvoice({
+
+    const [, error] = await to(sendInvoice({
       client: inputsData.address.value,
       requestedAmount: inputsData.amount.value,
       description: inputsData.description.value,
-    }, passphrase).then(() => {
+    }, passphrase));
+
+    if (!error) {
       setState({
         sentStatus: {
           success: true,
           header: 'Invoice Success',
           icon: faCheck,
-          message: 'Your invoice was sucesfully sent and will be processed by the blockchanin soon.',
+          message: 'Your invoice was successfully sent and will be processed by the blockchain soon.',
         },
       });
-    }).catch((error) => {
+    } else {
       setState({
         sentStatus: {
           success: false,
@@ -58,7 +62,7 @@ function SendInvoicePage({ location }) {
           message: formatServerError(error),
         },
       });
-    });
+    }
   };
 
   const { sentStatus } = state;
@@ -67,7 +71,15 @@ function SendInvoicePage({ location }) {
     <Row start="xs">
       <Col xs={12} mdOffset={1} md={10} lgOffset={2} lg={8}>
         {!sentStatus
-          ? <TransactionForm title="Send Invoice" inputs={inputs} callback={onSendClick} submitButtonLabel="Send" location={location} />
+          ? (
+            <TransactionForm
+              title="Send Invoice"
+              inputs={inputs}
+              callback={onSendClick}
+              submitButtonLabel="Send"
+              location={location}
+            />
+          )
           : <TransactionResult {...sentStatus} />
         }
       </Col>

@@ -17,6 +17,7 @@ class PaymentTransaction extends TransferTransaction {
 	applyAsset(store) {
 	    const errors = [];
 
+        errors.concat(super.applyAsset(store)); //transfer tokens after getting the correct reciepientId
 		const transaction = store.transaction.find(
 			transaction => transaction.id === this.asset.data
 		); // Find related invoice in transactions for invoiceID
@@ -39,8 +40,15 @@ class PaymentTransaction extends TransferTransaction {
                 'Expected amount to be equal or greated than `requestedAmount`',
             ));
         }
-        this.recipientId = transaction.senderId;
-        errors.concat(super.applyAsset(store)); //transfer tokens after getting the correct reciepientId
+        if (transaction.senderId !== this.recipientId) {
+            errors.push( new TransactionError(
+                'RecipientId is not equal to the address, that sent the invoice.',
+                this.id,
+                '.recipientId',
+                transaction.senderId,
+                'Expected recipientId to be equal to the id of the sender of the invoice.',
+            ));
+        }
         return errors;
 	}
 

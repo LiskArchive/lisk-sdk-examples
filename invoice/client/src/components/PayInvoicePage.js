@@ -2,6 +2,7 @@ import { Row, Col } from 'react-flexbox-grid';
 import { faCheck, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import React from 'react';
+import to from 'await-to-js';
 
 import { formatServerError } from '../utils/formatters';
 import { sendPayment } from '../utils/api';
@@ -31,7 +32,7 @@ function PayInvoicePage({ location }) {
 
   const [state, setState] = React.useState({ });
 
-  const onPayClick = (inputsData) => {
+  const onPayClick = async (inputsData) => {
     setState({
       sentStatus: {
         pending: true,
@@ -39,20 +40,23 @@ function PayInvoicePage({ location }) {
         icon: faCircleNotch,
       },
     });
-    sendPayment({
+
+    const [, error] = await to(sendPayment({
       invoiceID: inputsData.invoiceID.value,
       amount: inputsData.amount.value,
       recipientId: inputsData.address.value,
-    }, passphrase).then(() => {
+    }, passphrase));
+
+    if (!error) {
       setState({
         sentStatus: {
           success: true,
           header: 'Payment Success',
           icon: faCheck,
-          message: 'Your payment was sucesfully sent and will be processed by the blockchanin soon.',
+          message: 'Your payment was successfully sent and will be processed by the blockchain soon.',
         },
       });
-    }).catch((error) => {
+    } else {
       setState({
         sentStatus: {
           success: false,
@@ -61,7 +65,7 @@ function PayInvoicePage({ location }) {
           message: formatServerError(error),
         },
       });
-    });
+    }
   };
 
   const { sentStatus } = state;
