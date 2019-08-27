@@ -15,9 +15,8 @@ class PaymentTransaction extends TransferTransaction {
 	 }
 
 	applyAsset(store) {
-	    const errors = [];
-
-        errors.concat(super.applyAsset(store)); //transfer tokens after getting the correct reciepientId
+	    const errors = super.applyAsset(store);
+		
 		const transaction = store.transaction.find(
 			transaction => transaction.id === this.asset.data
 		); // Find related invoice in transactions for invoiceID
