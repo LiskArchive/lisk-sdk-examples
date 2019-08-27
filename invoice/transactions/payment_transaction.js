@@ -1,7 +1,7 @@
 const { TransferTransaction, TransactionError } = require('@liskhq/lisk-transactions');
 
 class PaymentTransaction extends TransferTransaction {
-	static get TYPE () {
+	static get TYPE() {
 		return 14;
 	}
 
@@ -12,43 +12,43 @@ class PaymentTransaction extends TransferTransaction {
 				id: this.asset.data,
 			},
 		]);
-	 }
+	}
 
 	applyAsset(store) {
-	    const errors = super.applyAsset(store);
-		
+		const errors = super.applyAsset(store);
+
 		const transaction = store.transaction.find(
 			transaction => transaction.id === this.asset.data
 		); // Find related invoice in transactions for invoiceID
 
 		if (!transaction) {
-            errors.push( new TransactionError(
-					'Invoice does not exist for ID',
-					this.id,
-					'.asset.invoiceID',
-					this.asset.data,
-					'Existing invoiceID registered as invoice transaction',
-				));
+			errors.push(new TransactionError(
+				'Invoice does not exist for ID',
+				this.id,
+				'.asset.invoiceID',
+				this.asset.data,
+				'Existing invoiceID registered as invoice transaction',
+			));
 		}
-        if (this.amount.lt(transaction.asset.requestedAmount)) {
-            errors.push( new TransactionError(
-                'Paid amount is lower than amount stated on invoice',
-                this.id,
-                '.amount',
-                transaction.requestedAmount,
-                'Expected amount to be equal or greated than `requestedAmount`',
-            ));
-        }
-        if (transaction.senderId !== this.recipientId) {
-            errors.push( new TransactionError(
-                'RecipientId is not equal to the address, that sent the invoice.',
-                this.id,
-                '.recipientId',
-                transaction.senderId,
-                'Expected recipientId to be equal to the id of the sender of the invoice.',
-            ));
-        }
-        return errors;
+		if (this.amount.lt(transaction.asset.requestedAmount)) {
+			errors.push(new TransactionError(
+				'Paid amount is lower than amount stated on invoice',
+				this.id,
+				'.amount',
+				transaction.requestedAmount,
+				'Expected amount to be equal or greated than `requestedAmount`',
+			));
+		}
+		if (transaction.senderId !== this.recipientId) {
+			errors.push(new TransactionError(
+				'RecipientId is not equal to the address, that sent the invoice.',
+				this.id,
+				'.recipientId',
+				transaction.senderId,
+				'Expected recipientId to be equal to the id of the sender of the invoice.',
+			));
+		}
+		return errors;
 	}
 
 	undoAsset(store) {
