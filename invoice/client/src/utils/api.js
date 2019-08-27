@@ -52,8 +52,8 @@ export const getAccount = ({ passphrase }) => new Promise(async (resolve, reject
         passphrase,
       });
     } else {
-    // when the account has no transactions yet (therefore is not saved on the blockchain)
-    // this endpoint returns { success: false }
+      // when the account has no transactions yet (therefore is not saved on the blockchain)
+      // this endpoint returns { success: false }
       resolve({
         passphrase,
         address,

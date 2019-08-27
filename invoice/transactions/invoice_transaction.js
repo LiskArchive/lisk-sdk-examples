@@ -1,11 +1,11 @@
 const { BaseTransaction, TransactionError } = require('@liskhq/lisk-transactions');
 
 class InvoiceTransaction extends BaseTransaction {
-	static get TYPE () {
+	static get TYPE() {
 		return 13;
 	}
 
-	static get FEE () {
+	static get FEE() {
 		return `${10 ** 8}`;
 	}
 
