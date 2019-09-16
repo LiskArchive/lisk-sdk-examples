@@ -1,32 +1,39 @@
-## Hello World
-This is the reference implementation for the Hello World example, find the [full step by step guide here](https://github.com/LiskHQ/lisk-sdk-examples/tree/RachBLondon-patch-1/hello_world).
+# Hello World
 
-If you have gi cloned this repo - you can install the dependencies:
+This is a Hello World application created using alpha version of `lisk-sdk`.
+Find the [full step by step guide here](https://github.com/LiskHQ/lisk-docs/blob/master/start/tutorials/hello-world.md).
 
-```
-npm i 
-```
-To start a node:
-```
-node ./src/index | npx bunyan -o short
-```
-Post a custom transaction to /api/transactions:
-
+#### Install dependencies:
 
 ```
-{  
-   "id":"1199714748623931346",
+npm i
+```
+
+#### Start node:
+
+```
+node index.js | npx bunyan -o short
+```
+
+#### Post a custom transaction to `/api/transactions`:
+
+##### Example:
+```
+curl -XPOST -H "Content-type: application/json" -d '{
+   "id":"17201273500760578616",
    "amount":"0",
    "type":10,
-   "timestamp":0,
+   "timestamp":104523093,
    "senderPublicKey":"c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f",
    "senderId":"16313739661670634666L",
    "recipientId":"10881167371402274308L",
-   "fee":"100000000",
-   "signature":"e6da5923ee9b769bd5624612af536ca4348d5b32c4552a05161a356e472b8708487022fd4e9787a1b7e548a98c64341f52f2b8b12a39d4115f820b8f01064003",
+   "fee":"100000000","signature":"bcb64b1d2efa0450f143296eb0d9ffd5159fc04f9d3f1d3a95c261912632db7910d05e3be4c34cfc46f001ebdba66b8c17cbaddb0df4ef31245b4ab0270c3e00",
    "signatures":[],
-   "asset":{  
-      "hello":"world"
-   }
-}
+   "asset":{"hello":"world"}
+}' http://localhost:4000/api/transactions
+```
+
+#### Verify the transaction by querying endpoint `/api/transactions?id=`:
+```
+curl -s http://localhost:4000/api/transactions?id=17201273500760578616
 ```

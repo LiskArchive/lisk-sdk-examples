@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lisk-sdk": "2.3.5"
+    "lisk-sdk": "2.3.5",
+    "@liskhq/lisk-constants": "1.2.3"
   }
 }
