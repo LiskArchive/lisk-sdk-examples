@@ -25,16 +25,20 @@ node index.js | npx bunyan -o short
 ##### Example:
 ```
 curl -XPOST -H "Content-type: application/json" -d '{
-    "type": 11,
-    "id":"13311755314561666527",
-    "amount":"100000000000000",
-    "timestamp":93891325,
-    "senderPublicKey":"d1ba3238c3fb14c811634ec4723f9c0095dcbf8117104695584ab95f940e393f",
-    "senderId":"750765602177534752L",
+    "type":11,
+    "id":"13427241074692915298",
+    "amount":"200000000",
+    "timestamp":104521537,
+    "senderPublicKey":"c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f",
+    "senderId":"16313739661670634666L",
     "recipientId":"10881167371402274308L",
-    "fee":"100000000",
-    "signature":"946a2b75886c94e5ce4df30a7654b0a33f8a11f2007632421820b258a5186d55407ea989b41e12a179409271fd40144415f0b2e1e0792f4f9784a2f6c4131001",
+    "fee":"10000000","signature":"eb80710f2ed124707f9dd71063cd2ef42c5e835a18672090ecf15f58a32055924731e53842d60ab7b6827048de62b27bab4401f5a5bb6dc00391143a1e1e0309",
     "signatures":[],
     "asset":{}
 }' http://localhost:4000/api/transactions
+```
+
+#### Verify the transaction by querying endpoint `/api/transactions?id=`:
+```
+curl -s http://localhost:4000/api/transactions?id=13427241074692915298
 ```
