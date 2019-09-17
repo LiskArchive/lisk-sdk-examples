@@ -11,7 +11,7 @@ Please visit our [comprehensive tutorial](https://github.com/LiskHQ/lisk-docs/bl
 #### Install dependencies:
 
 ```
-npm i
+npm ci
 ```
 
 #### Start node:
@@ -32,7 +32,8 @@ curl -XPOST -H "Content-type: application/json" -d '{
     "senderPublicKey":"c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f",
     "senderId":"16313739661670634666L",
     "recipientId":"10881167371402274308L",
-    "fee":"10000000","signature":"eb80710f2ed124707f9dd71063cd2ef42c5e835a18672090ecf15f58a32055924731e53842d60ab7b6827048de62b27bab4401f5a5bb6dc00391143a1e1e0309",
+    "fee":"10000000",
+    "signature":"eb80710f2ed124707f9dd71063cd2ef42c5e835a18672090ecf15f58a32055924731e53842d60ab7b6827048de62b27bab4401f5a5bb6dc00391143a1e1e0309",
     "signatures":[],
     "asset":{}
 }' http://localhost:4000/api/transactions

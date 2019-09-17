@@ -6,7 +6,7 @@ Find the [full step by step guide here](https://github.com/LiskHQ/lisk-docs/blob
 #### Install dependencies:
 
 ```
-npm i
+npm ci
 ```
 
 #### Start node:
@@ -27,7 +27,8 @@ curl -XPOST -H "Content-type: application/json" -d '{
    "senderPublicKey":"c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f",
    "senderId":"16313739661670634666L",
    "recipientId":"10881167371402274308L",
-   "fee":"100000000","signature":"bcb64b1d2efa0450f143296eb0d9ffd5159fc04f9d3f1d3a95c261912632db7910d05e3be4c34cfc46f001ebdba66b8c17cbaddb0df4ef31245b4ab0270c3e00",
+   "fee":"100000000",
+   "signature":"bcb64b1d2efa0450f143296eb0d9ffd5159fc04f9d3f1d3a95c261912632db7910d05e3be4c34cfc46f001ebdba66b8c17cbaddb0df4ef31245b4ab0270c3e00",
    "signatures":[],
    "asset":{"hello":"world"}
 }' http://localhost:4000/api/transactions
