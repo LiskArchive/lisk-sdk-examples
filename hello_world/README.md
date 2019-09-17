@@ -1,7 +1,7 @@
 # Hello World
 
 This is a Hello World application created using alpha version of `lisk-sdk`.
-Find the [full step by step guide here](https://github.com/LiskHQ/lisk-docs/blob/master/start/tutorials/hello-world.md).
+Find the [full step by step guide here](https://lisk.io/documentation/start/tutorials/hello-world).
 
 #### Install dependencies:
 
