@@ -41,7 +41,7 @@ function PayInvoicePage({ location }) {
       },
     });
 
-    const [, error] = await to(sendPayment({
+    const [error] = await to(sendPayment({
       invoiceID: inputsData.invoiceID.value,
       amount: inputsData.amount.value,
       recipientId: inputsData.address.value,
