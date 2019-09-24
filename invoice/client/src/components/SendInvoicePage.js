@@ -38,7 +38,7 @@ function SendInvoicePage({ location }) {
       },
     });
 
-    const [, error] = await to(sendInvoice({
+    const [error] = await to(sendInvoice({
       client: inputsData.address.value,
       requestedAmount: inputsData.amount.value,
       description: inputsData.description.value,
