@@ -1,5 +1,5 @@
 {
-  "name": "lisk-sdk-examples-cashback",
+  "name": "cashback",
   "version": "1.0.0",
   "description": "Implements a cashback functionality",
   "main": "./server/index.js",
@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lisk-sdk": "2.1.0-alpha.1"
+    "lisk-sdk": "2.3.5",
+    "@liskhq/lisk-constants": "1.2.3"
   }
 }
