@@ -35,8 +35,11 @@ This application needs to be installed on different independent nodes and will s
 . A client application, which is displaying information from the blockchain to the user.
 It needs a frontend, which should be listing at least a list of packageIDs and their publickeys, the carrier, sender, recipient, and a status field (delivery ongoing, delivery error, delivery delayed, delivery success)
 . An IoT application, which is stored on a microcontroller/raspberry pi. This application will track that the package is not manipulated during the delivery.
-To do this, certain sensors will be connected to it, that track information like like, temperature and/or humidity inside of the package.
+To do this, certain sensors will be connected to it, that track information like light, temperature and/or humidity inside of the package.
 If something unexpected is detected by the IoT app, it will create a transaction object, sign it, and send it to the network.
+The second important function of the IoT app, is to pay the security and porto to the carrier.
+In a certain time interval, the package will get it's own account data from the blockchain. As soon, as the `deliveryStatus` equals `successful`, `delayed` or `failed`, it will pay out the porto and the security to the participants.
+If the delivery isn't successful, it should send the security and porto back to the package owners account.
 
 === Hardware
 
@@ -55,33 +58,43 @@ This transaction should only go of, when the package is traveling (between the f
 
 registerPackageTransaction::
 * Signed by: owner
-* Required data: receiverID, receiverLocation, porto, minSecurity ,minTrust, estTravelTime
+* Required data: packagePublickey, receiverID, receiverLocation, senderLocation, porto, minSecurity, minTrust, estTravelTime
+* Altered data: `deliveryStatus="pending"`, describes the current status of the delivery inside the package account.
 * Description: Register package on the network.
 A separate account for the package will be created.
 ** `receiverID` the ID of the recipient in the network (to verify succesful delivery later).
-** `receiverLocation` could be a concrete address, or a latitude,longitude pair.
+** `receiverLocation` could be a concrete address, or a latitude,longitude pair of the recipients' location.
+** `senderLocation` could be a concrete address, or a latitude,longitude pair of the senders' location.
 ** `porto` needs to be paid by the owner, and is stored in the account of the package.
- The `porto` will be paid to the carriers account, after succesful delivery of the package.
+The `porto` will be paid to the carriers account, after succesful delivery of the package.
 ** `minSecurity` is the minimum amount, a person has to pay to register as a carrier for this package.
 ** `minTrust` is the minimum trust that is needed, to register as a carrier for this package.
 ** `estTravelTime` The estimated travel time. If the carrier needs longer than this, he/she will be punished a little.
 
-registerCarrierTransaction::
-* Signed by: carrier
-* Required data: paketID, security
-* Description: Register as dedicated Carrier, that will transport the package from sender to recipient.
+startDeliveryTransaction::
+* Signed by: Owner and Carrier
+* Required data: timestamp, packageID, security
+* Altered data: `deliveryStatus="ongoing"`, describes the current status of the delivery inside the package account.
+* Description: Defines start time of the package delivery.
+Owner and Carrier sign the transaction.
 `security` is a certain amount of tokens, that the carrier must afford, to register as Carrier for this package.
 The Security is paid to the package account.
 If the carrier behaves maliciously, the security will not be paid back (it will be transferred to the package owners account, together with the porto).
+The transaction should fail, if the Carrier does not fulfill the requirements in terms of trust and security, that the owner defined as a minimum in the `registerPackageTransaction`.
 
-passOnTransaction::
-* Signed by: Owner/Recipient and Carrier
-* Required data: timestamp, paketID
+
+stopDeliveryTransaction::
+* Signed by: Recipient and Carrier
+* Required data: timestamp, packageID
+* Altered data: `deliveryStatus="successful|delayed|failed"`, describes the status of the delivery inside the package account.
+`successful` if package was delivered in estimated timespan. Delayed, if the package was delivered later. Failed, if the travel time is more than 2 times higher, than the `estTravelTime`.
 * Description: verification between 2 waypoints.
-The Carrier should receive tokens on successful transportation of the package (from the porto).
-In addition , the Carrier should receive a certain amount of trust-points on successful transportation of the package.
+** If the delivery is successful:
+*** The Carrier receives the porto tokens on successful transportation of the package.
+*** The Carrier receives a certain amount of trust-points.
 ** If the delivery is delayed:
-*** Deduction of trust points only.
+*** Deduction of trust points form the Carrier
 ** If the delivery fails, the Carrier can be punished:
-*** securityTokens to owner
-*** and deduction of trust points
+*** Security tokens and Porto will be transferred to package Owner
+*** Deduction of trust points from the Carrier
+
