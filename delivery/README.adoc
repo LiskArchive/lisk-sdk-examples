@@ -1,0 +1,87 @@
+= Lisk Delivery
+Mona Bärenfänger <mona@lightcurve.io>
+:toc:
+
+Lisk Delivery is a PoC (Proof of Concept) blockchain application, to showcase the features and capabilities of the Lisk alpha SDK.
+
+== Idea
+
+The goal is to create a simple decentralized package delivery system.
+The packages are registered on the blockchain network by the package owner.
+
+Other participants on the network can then register as carrier for a particular package.
+
+As next step, the carrier would go to the package owners' address, receive the package and start the delivery to the recipient.
+Both sender and carrier need to sign a transaction, that verifies that the package has been passed on to the carrier.
+
+When reaching the recipient of the package, the carrier passes the package to the recipient.
+Both sender and carrier need to sign a transaction, that verifies that the package has been passed on to the recipient.
+
+The decentralized delivery should have the following incentives:
+
+* the package owner should have access to a metric to see how much the carrier can be trusted
+* the package owner should get a compensation, if something goes wrong during the delivery
+* The carrier should get rewarded on successful delivery of the package
+* The carrier should be punished, if somehting goes wrong with the delivery
+
+== Requirements
+
+=== Software
+
+To achieve this, 3 different kind of applications need to be developed:
+
+. A blockchain application, which accepts the application-specific <<_custom_transactions, transaction types>>.
+This application needs to be installed on different independent nodes and will setup and maintain the blockchain which is used to store the data about the packages, carrier and users.
+. A client application, which is displaying information from the blockchain to the user.
+It needs a frontend, which should be listing at least a list of packageIDs and their publickeys, the carrier, sender, recipient, and a status field (delivery ongoing, delivery error, delivery delayed, delivery success)
+. An IoT application, which is stored on a microcontroller/raspberry pi. This application will track that the package is not manipulated during the delivery.
+To do this, certain sensors will be connected to it, that track information like like, temperature and/or humidity inside of the package.
+If something unexpected is detected by the IoT app, it will create a transaction object, sign it, and send it to the network.
+
+=== Hardware
+
+* https://buyzero.de/collections/raspberry-pi-zero-kits/products/raspberry-pi-zero-w?variant=38399156114[Raspberry Pi Zero W] (Later maybe https://www.neonious.com/neoniousOne[Neonious])
+* https://www.amazon.de/PEMENOL-Fotowiderstand-Anschl%C3%BCsse-Photodetektor-Comperator/dp/B07DP1YM5X/ref=sr_1_1?keywords=ldr+modul&qid=1569485546&s=gateway&sr=8-1[Photoresistor]
+* https://www.amazon.de/Female-Female-Male-Female-Male-Male-Steckbr%C3%BCcken-Drahtbr%C3%BCcken-bunt/dp/B01EV70C78/ref=sr_1_5?keywords=dupont+kabel&qid=1569485735&s=gateway&sr=8-5[Dupont cables]
+* https://www.amazon.de/AZDelivery-AM2302-Temperatursensor-Luftfeuchtigkeitssensor-Arduino/dp/B06XF4TNT9/ref=sr_1_1_sspa?crid=35G9VO3PY15BQ&keywords=dht22&qid=1569485584&s=gateway&sprefix=dht%2Caps%2C153&sr=8-1-spons&psc=1&smid=A1X7QLRQH87QA3&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzOE1YSzU4WlBZUDdVJmVuY3J5cHRlZElkPUEwODAwMjUwMUNNRkdEQUNQUTJYUCZlbmNyeXB0ZWRBZElkPUEwNzEwNjA5VTJNSlFXNjM5RzAzJndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ==[Temp/Humidity sensor]
+
+=== Custom Transactions
+
+lightAlarmTransaction::
+* Signed by: Package
+* Required data: timestamp
+* Description: If light is detected by the photoresistor inside the package, the package sends this transaction to the network.
+This transaction should only go of, when the package is traveling (between the first and the last `passOnTransaction`).
+
+registerPackageTransaction::
+* Signed by: owner
+* Required data: receiverID, receiverLocation, porto, minSecurity ,minTrust, estTravelTime
+* Description: Register package on the network.
+A separate account for the package will be created.
+** `receiverID` the ID of the recipient in the network (to verify succesful delivery later).
+** `receiverLocation` could be a concrete address, or a latitude,longitude pair.
+** `porto` needs to be paid by the owner, and is stored in the account of the package.
+ The `porto` will be paid to the carriers account, after succesful delivery of the package.
+** `minSecurity` is the minimum amount, a person has to pay to register as a carrier for this package.
+** `minTrust` is the minimum trust that is needed, to register as a carrier for this package.
+** `estTravelTime` The estimated travel time. If the carrier needs longer than this, he/she will be punished a little.
+
+registerCarrierTransaction::
+* Signed by: carrier
+* Required data: paketID, security
+* Description: Register as dedicated Carrier, that will transport the package from sender to recipient.
+`security` is a certain amount of tokens, that the carrier must afford, to register as Carrier for this package.
+The Security is paid to the package account.
+If the carrier behaves maliciously, the security will not be paid back (it will be transferred to the package owners account, together with the porto).
+
+passOnTransaction::
+* Signed by: Owner/Recipient and Carrier
+* Required data: timestamp, paketID
+* Description: verification between 2 waypoints.
+The Carrier should receive tokens on successful transportation of the package (from the porto).
+In addition , the Carrier should receive a certain amount of trust-points on successful transportation of the package.
+** If the delivery is delayed:
+*** Deduction of trust points only.
+** If the delivery fails, the Carrier can be punished:
+*** securityTokens to owner
+*** and deduction of trust points
