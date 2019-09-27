@@ -3,7 +3,7 @@ const {
     TransactionError,
 } = require('lisk-sdk');
 
-class RegisterPackageTransaction extends BaseTransaction {
+class RegisterPacketTransaction extends BaseTransaction {
 
     static get TYPE () {
         return 20;
@@ -17,20 +17,20 @@ class RegisterPackageTransaction extends BaseTransaction {
     async prepare(store) {
         await store.account.cache([
             {
-                address: this.asset.packageId,
+                address: this.asset.packetId,
             },
         ]);
     }
 
     validateAsset() {
         const errors = [];
-        if (!this.asset.packageId || typeof this.asset.packageId !== 'string') {
+        if (!this.asset.packetId || typeof this.asset.packetId !== 'string') {
             errors.push(
                 new TransactionError(
-                    'Invalid "asset.packageId" defined on transaction',
+                    'Invalid "asset.packetId" defined on transaction',
                     this.id,
-                    '.asset.packageId',
-                    this.asset.packageId
+                    '.asset.packetId',
+                    this.asset.packetId
                 )
             );
         }
@@ -39,9 +39,9 @@ class RegisterPackageTransaction extends BaseTransaction {
 
     applyAsset(store) {
         const errors = [];
-        const package = store.account.get(this.asset.packageId);
+        const packet = store.account.get(this.asset.packetId);
         const newObj = {
-            ...package,
+            ...packet,
             asset: {
                 receiverId: this.asset.receiverId,
                 receiverLocation: this.asset.receiverLocation,
@@ -52,17 +52,17 @@ class RegisterPackageTransaction extends BaseTransaction {
                 estTravelTime: this.asset.estTravelTime
             }
         };
-        store.account.set(package.address, newObj);
+        store.account.set(packet.address, newObj);
         return errors; // array of TransactionErrors, returns empty array if no errors are thrown
     }
 
     undoAsset(store) {
-        const package = store.account.get(this.asset.packageId);
-        const oldObj = { ...package, asset: null };
-        store.account.set(package.address, oldObj);
+        const packet = store.account.get(this.asset.packetId);
+        const oldObj = { ...packet, asset: null };
+        store.account.set(packet.address, oldObj);
         return [];
     }
 
 }
 
-module.exports = HelloTransaction;
+module.exports = RegisterPacketTransaction;

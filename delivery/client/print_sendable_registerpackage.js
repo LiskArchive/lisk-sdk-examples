@@ -1,4 +1,4 @@
-const RegisterPackageTransaction = require('../transactions/register-package');
+const RegisterPacketTransaction = require('../transactions/register-packet');
 const transactions = require('@liskhq/lisk-transactions');
 const cryptography = require('@liskhq/lisk-cryptography');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
@@ -11,7 +11,7 @@ const getTimestamp = () => {
     return  parseInt(inSeconds);
 };
 
-const getPackageCredentials = () => {
+const getPacketCredentials = () => {
     const passphrase = Mnemonic.generateMnemonic();
     const keys = cryptography.getPrivateAndPublicKeyFromPassphrase(
         passphrase
@@ -25,11 +25,11 @@ const getPackageCredentials = () => {
     return credentials;
 };
 
-const packageCredentials = getPackageCredentials();
+const packetCredentials = getPacketCredentials();
 
-let tx =  new RegisterPackageTransaction({
+let tx =  new RegisterPacketTransaction({
     asset: {
-        packageId: packageCredentials.address,
+        packetId: packetCredentials.address,
         senderLocation: "def alley, 456 someCity",
         receiverId: "123L",
         receiverLocation: "abc street, 123 someCity",
@@ -48,7 +48,7 @@ let tx =  new RegisterPackageTransaction({
 tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble');
 
 console.log("+++++++++++++++++++++++++++++++++" );
-console.log("Package Credentials:" + packageCredentials);
+console.dir(packetCredentials);
 console.log("+++++++++++++++++++++++++++++++++" );
 console.log("+++++++++++++++++++++++++++++++++" );
 console.log(tx.stringify());
