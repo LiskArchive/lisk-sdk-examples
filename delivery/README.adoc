@@ -14,6 +14,9 @@ Other participants on the network can then register as carrier for a particular 
 As next step, the carrier would go to the package owners' address, receive the package and start the delivery to the recipient.
 Both sender and carrier need to sign a transaction, that verifies that the package has been passed on to the carrier.
 
+During the transportation of the package, the package will track itself, to check if it gets manipulated during the travel.
+If a manipulation is detected, it will send a self-signed alarm transaction to the network.
+
 When reaching the recipient of the package, the carrier passes the package to the recipient.
 Both sender and carrier need to sign a transaction, that verifies that the package has been passed on to the recipient.
 
