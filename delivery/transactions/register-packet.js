@@ -49,7 +49,8 @@ class RegisterPacketTransaction extends BaseTransaction {
                 porto: this.asset.porto,
                 minSecurity: this.asset.minSecurity,
                 minTrust: this.asset.minTrust,
-                estTravelTime: this.asset.estTravelTime
+                estTravelTime: this.asset.estTravelTime,
+                deliveryStatus: "pending"
             }
         };
         store.account.set(packet.address, newObj);

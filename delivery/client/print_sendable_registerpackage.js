@@ -37,7 +37,6 @@ let tx =  new RegisterPacketTransaction({
         minSecurity: `${transactions.utils.convertLSKToBeddows('100')}`,
         minTrust: 25,
         estTravelTime: "18000", // 18,000 seconds = 5 hrs
-        deliveryStatus: "pending"
     },
     //fee: `${transactions.utils.convertLSKToBeddows('1')}`,
     fee: "0",
