@@ -1,5 +1,5 @@
 const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
-const RegisterPacketTransaction = require('transactions/register-packet');
+const RegisterPacketTransaction = require('../transactions/register-packet');
 
 configDevnet.app.label = 'lisk-delivery';
 
