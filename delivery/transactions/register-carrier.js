@@ -5,22 +5,6 @@ const {
 
 class RegisterCarrierTransaction extends BaseTransaction {
 
-    //let carrier signs packetId, carrierPublickey and security
-    // carrier sends signed object to the owner
-    // owner includes carriers signature in the startDeliveryTransaction object.
-    //maybe this is not the best way.. better ask science team, how to create a transaction with multiple signatures.
-    // owner could send the tx, but not give the packet to the carrier. Carrier will get punished for this :(
-    /**
-     * {
-     *   "data": {
-     *     "packetId": "abc",
-     *     "carrierPublicKey": "123",
-     *     "security": "100"
-     *   },
-     *   "signature": "b214hqjv2j3v25j"
-     * }
-     *
-     */
     static get TYPE () {
         return 21;
     }
@@ -60,7 +44,7 @@ class RegisterCarrierTransaction extends BaseTransaction {
         const newObj = {...packet};
         newObj.asset.availableCarrier.push(this.senderId);
         store.account.set(packet.address, newObj);
-        return errors; // array of TransactionErrors, returns empty array if no errors are thrown
+        return errors;
     }
 
     undoAsset(store) {
@@ -72,9 +56,9 @@ class RegisterCarrierTransaction extends BaseTransaction {
             newObj.asset.availableCarrier.splice(index, 1);
         }
         store.account.set(packet.address, newObj);
-        return errors; // array of TransactionErrors, returns empty array if no errors are thrown
+        return errors;
     }
 
 }
 
-module.exports = StartDeliveryTransaction;
+module.exports = RegisterCarrierTransaction;

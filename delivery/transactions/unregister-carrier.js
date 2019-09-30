@@ -3,24 +3,8 @@ const {
     TransactionError,
 } = require('lisk-sdk');
 
-class RegisterCarrierTransaction extends BaseTransaction {
+class UnregisterCarrierTransaction extends BaseTransaction {
 
-    //let carrier signs packetId, carrierPublickey and security
-    // carrier sends signed object to the owner
-    // owner includes carriers signature in the startDeliveryTransaction object.
-    //maybe this is not the best way.. better ask science team, how to create a transaction with multiple signatures.
-    // owner could send the tx, but not give the packet to the carrier. Carrier will get punished for this :(
-    /**
-     * {
-     *   "data": {
-     *     "packetId": "abc",
-     *     "carrierPublicKey": "123",
-     *     "security": "100"
-     *   },
-     *   "signature": "b214hqjv2j3v25j"
-     * }
-     *
-     */
     static get TYPE () {
         return 22;
     }
@@ -77,4 +61,4 @@ class RegisterCarrierTransaction extends BaseTransaction {
 
 }
 
-module.exports = StartDeliveryTransaction;
+module.exports = UnregisterCarrierTransaction;

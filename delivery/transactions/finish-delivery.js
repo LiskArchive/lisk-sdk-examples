@@ -1,16 +1,12 @@
 const {
-    transactions: { BaseTransaction },
+    transactions: { TransferTransaction },
     TransactionError,
 } = require('lisk-sdk');
 
-class StartDeliveryTransaction extends BaseTransaction {
-    // owner could send the tx, but not give the packet to the carrier. Carrier will get punished for this :(
-    // advanced idea: think about trust point system for owner/receiver as well
-
-    // Carrier should ONLY post "register-carrier", when the carrier is already at the location of the packet owner.
+class FinishDeliveryTransaction extends TransferTransaction {
 
     static get TYPE () {
-        return 23;
+        return 24;
     }
 
     static get FEE () {
@@ -67,7 +63,7 @@ class StartDeliveryTransaction extends BaseTransaction {
                 )
             );
         }
-        return errors; // array of TransactionErrors, returns empty array if no errors are thrown
+        return errors;
     }
 
     undoAsset(store) {
@@ -79,4 +75,4 @@ class StartDeliveryTransaction extends BaseTransaction {
 
 }
 
-module.exports = StartDeliveryTransaction;
+module.exports = FinishDeliveryTransaction;
