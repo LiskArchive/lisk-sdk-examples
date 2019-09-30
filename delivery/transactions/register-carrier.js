@@ -42,7 +42,7 @@ class RegisterCarrierTransaction extends BaseTransaction {
         const errors = [];
         const packet = store.account.get(this.asset.packetId);
         const newObj = {...packet};
-        newObj.asset.availableCarrier.push(this.senderId);
+        newObj.asset.standbyCarrier.push(this.senderId);
         store.account.set(packet.address, newObj);
         return errors;
     }
@@ -51,9 +51,9 @@ class RegisterCarrierTransaction extends BaseTransaction {
         const errors = [];
         const packet = store.account.get(this.asset.packetId);
         const newObj = {...packet};
-        const index = newObj.asset.availableCarrier.indexOf(this.senderId);
+        const index = newObj.asset.standbyCarrier.indexOf(this.senderId);
         if (index > -1) {
-            newObj.asset.availableCarrier.splice(index, 1);
+            newObj.asset.standbyCarrier.splice(index, 1);
         }
         store.account.set(packet.address, newObj);
         return errors;

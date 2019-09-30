@@ -40,7 +40,7 @@ class FinishDeliveryTransaction extends TransferTransaction {
     applyAsset(store) {
         const errors = [];
         const packet = store.account.get(this.asset.packetId);
-        const index = newObj.asset.availableCarrier.indexOf(this.asset.carrierId);
+        const index = newObj.asset.standbyCarrier.indexOf(this.asset.carrierId);
         if (index > -1 && this.asset.deliveryStatus === "pending") {
             const updatedData = {
                 asset: {
@@ -56,7 +56,7 @@ class FinishDeliveryTransaction extends TransferTransaction {
         } else {
             errors.push(
                 new TransactionError(
-                    'CarrierId not found in availableCarriers list',
+                    'CarrierId not found in standbyCarriers list',
                     this.id,
                     '.asset.carrierId',
                     this.asset.carrierId

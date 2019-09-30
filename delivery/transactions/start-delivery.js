@@ -44,7 +44,7 @@ class StartDeliveryTransaction extends BaseTransaction {
     applyAsset(store) {
         const errors = [];
         const packet = store.account.get(this.asset.packetId);
-        const index = newObj.asset.availableCarrier.indexOf(this.asset.carrierId);
+        const index = newObj.asset.standbyCarrier.indexOf(this.asset.carrierId);
         if (index > -1 && this.asset.deliveryStatus === "pending") {
             const carrier = store.account.get(this.asset.carrierId);
             if (packet.asset.minTrust <= carrier.asset.trust) {
@@ -80,11 +80,10 @@ class StartDeliveryTransaction extends BaseTransaction {
                     )
                 );
             }
-
         } else {
             errors.push(
                 new TransactionError(
-                    'CarrierId not found in availableCarriers list',
+                    'CarrierId not found in standbyCarriers list',
                     this.id,
                     '.asset.carrierId',
                     this.asset.carrierId
