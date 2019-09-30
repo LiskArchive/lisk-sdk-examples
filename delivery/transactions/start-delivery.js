@@ -4,23 +4,11 @@ const {
 } = require('lisk-sdk');
 
 class StartDeliveryTransaction extends TransferTransaction {
-
-    //let carrier signs packetId, carrierPublickey and security
-    // carrier sends signed object to the owner
-    // owner includes carriers signature in the startDeliveryTransaction object.
-    //maybe this is not the best way.. better ask science team, how to create a transaction with multiple signatures.
     // owner could send the tx, but not give the packet to the carrier. Carrier will get punished for this :(
+    // advanced idea: think about trust point system for owner/receiver as well
+
     // Carrier should ONLY post "register-carrier", when the carrier is already at the location of the packet owner.
-    /**
-     * {
-     *   "data": {
-     *     "packetId": "abc",
-     *     "carrierPublicKey": "123",
-     *     "security": "100"
-     *   },
-     *   "signature": "b214hqjv2j3v25j"
-     * }
-     */
+
     static get TYPE () {
         return 23;
     }
