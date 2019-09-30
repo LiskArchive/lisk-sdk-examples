@@ -40,6 +40,15 @@ class RegisterPacketTransaction extends BaseTransaction {
     applyAsset(store) {
         const errors = [];
         const packet = store.account.get(this.asset.packetId);
+        const owner = store.account.get(this.senderId);
+        const ownerBalanceWithoutPorto = new BigNum(owner.balance).sub(
+            new BigNum(this.asset.porto)
+        );
+        const updatedOwner = {
+            ...owner,
+            balance: ownerBalanceWithoutPorto.toString()
+        };
+        store.account.set(owner.address, updatedOwner);
         const newObj = {
             ...packet,
             asset: {
