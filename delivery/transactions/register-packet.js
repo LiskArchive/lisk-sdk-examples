@@ -45,12 +45,14 @@ class RegisterPacketTransaction extends BaseTransaction {
             asset: {
                 receiverId: this.asset.receiverId,
                 receiverLocation: this.asset.receiverLocation,
-                senderLocation: this.asset.senderLocation,
+                ownerId: this.asset.senderPublicKey,
+                ownerLocation: this.asset.senderLocation,
                 porto: this.asset.porto,
                 minSecurity: this.asset.minSecurity,
                 minTrust: this.asset.minTrust,
                 estTravelTime: this.asset.estTravelTime,
-                deliveryStatus: "pending"
+                deliveryStatus: "pending",
+                standbyCarrier: []
             }
         };
         store.account.set(packet.address, newObj);
