@@ -1,6 +1,6 @@
 const {
     transactions: { BaseTransaction },
-    TransactionError,
+    TransactionError, BigNum
 } = require('lisk-sdk');
 
 class StartDeliveryTransaction extends BaseTransaction {
@@ -46,17 +46,41 @@ class StartDeliveryTransaction extends BaseTransaction {
         const packet = store.account.get(this.asset.packetId);
         const index = newObj.asset.availableCarrier.indexOf(this.asset.carrierId);
         if (index > -1 && this.asset.deliveryStatus === "pending") {
-            const updatedData = {
-                asset: {
-                    deliveryStatus: "ongoing",
-                    activeCarrier: this.asset.carrierId
-                }
-            };
-            const newObj = {
-                ...packet,
-                ...updatedData
-            };
-            store.account.set(packet.address, newObj);
+            const carrier = store.account.get(this.asset.carrierId);
+            if (packet.asset.minTrust <= carrier.asset.trust) {
+                const packetBalanceWithSecurity = new BigNum(packet.balance).add(
+                    new BigNum(packet.minSecurity)
+                );
+                const carrierBalanceWithoutSecurity = new BigNum(packet.balance).sub(
+                    new BigNum(packet.minSecurity)
+                );
+                const updatedCarrier = {
+                    ...carrier,
+                    balance: carrierBalanceWithoutSecurity.toString()
+                };
+                store.account.set(carrier.address, updatedCarrier);
+                const updatedData = {
+                    asset: {
+                        deliveryStatus: "ongoing",
+                        activeCarrier: this.asset.carrierId,
+                        balance: packetBalanceWithSecurity.toString()
+                    }
+                };
+                const newObj = {
+                    ...packet,
+                    ...updatedData
+                };
+                store.account.set(packet.address, newObj);
+            } else {
+                errors.push(
+                    new TransactionError(
+                        'carrier has not enough trust to deliver the packet',
+                        packet.asset.minTrust,
+                        carrier.asset.trust
+                    )
+                );
+            }
+
         } else {
             errors.push(
                 new TransactionError(
@@ -67,14 +91,48 @@ class StartDeliveryTransaction extends BaseTransaction {
                 )
             );
         }
-        return errors; // array of TransactionErrors, returns empty array if no errors are thrown
+        return errors;
     }
 
     undoAsset(store) {
+        const errors = [];
         const packet = store.account.get(this.asset.packetId);
-        const oldObj = { ...packet, asset: null };
-        store.account.set(packet.address, oldObj);
-        return [];
+        if (packet.asset.activeCarrier === this.asset.carrierId && this.asset.deliveryStatus !== "pending") {
+            const carrier = store.account.get(this.asset.carrierId);
+            const packetBalanceWithoutSecurity = new BigNum(packet.balance).sub(
+                new BigNum(packet.minSecurity)
+            );
+            const carrierBalanceWithSecurity = new BigNum(packet.balance).add(
+                new BigNum(packet.minSecurity)
+            );
+            const updatedCarrier = {
+                ...carrier,
+                balance: carrierBalanceWithSecurity.toString()
+            };
+            store.account.set(carrier.address, updatedCarrier);
+            const updatedData = {
+                asset: {
+                    deliveryStatus: "pending",
+                    activeCarrier: null,
+                    balance: packetBalanceWithoutSecurity.toString()
+                }
+            };
+            const newObj = {
+                ...packet,
+                ...updatedData
+            };
+            store.account.set(packet.address, newObj);
+        } else {
+            errors.push(
+                new TransactionError(
+                    'CarrierId not found in activeCarrier',
+                    this.id,
+                    '.asset.carrierId',
+                    this.asset.carrierId
+                )
+            );
+        }
+        return errors;
     }
 
 }
