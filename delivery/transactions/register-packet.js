@@ -19,6 +19,9 @@ class RegisterPacketTransaction extends BaseTransaction {
             {
                 address: this.asset.packetId,
             },
+            {
+                address: this.senderId,
+            }
         ]);
     }
 

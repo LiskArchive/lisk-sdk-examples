@@ -23,6 +23,9 @@ class StartDeliveryTransaction extends BaseTransaction {
             {
                 address: this.asset.packetId,
             },
+            {
+                address: this.asset.carrierId,
+            }
         ]);
     }
 
