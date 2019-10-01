@@ -31,14 +31,12 @@ let tx =  new RegisterPacketTransaction({
     asset: {
         packetId: packetCredentials.address,
         senderLocation: "def alley, 456 someCity",
-        receiverId: "123L",
-        receiverLocation: "abc street, 123 someCity",
+        receipientLocation: "abc street, 123 someCity",
         porto: `${transactions.utils.convertLSKToBeddows('5')}`,
-        minSecurity: `${transactions.utils.convertLSKToBeddows('100')}`,
+        security: `${transactions.utils.convertLSKToBeddows('100')}`,
         minTrust: 25,
         estTravelTime: "18000", // 18,000 seconds = 5 hrs
     },
-    //fee: `${transactions.utils.convertLSKToBeddows('1')}`,
     fee: "0",
     recipientId: "10881167371402274308L",
     timestamp: getTimestamp()

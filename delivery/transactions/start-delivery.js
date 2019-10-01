@@ -52,10 +52,10 @@ class StartDeliveryTransaction extends BaseTransaction {
             const carrier = store.account.get(this.asset.carrierId);
             if (packet.asset.minTrust <= carrier.asset.trust) {
                 const packetBalanceWithSecurity = new BigNum(packet.balance).add(
-                    new BigNum(packet.minSecurity)
+                    new BigNum(packet.security)
                 );
                 const carrierBalanceWithoutSecurity = new BigNum(packet.balance).sub(
-                    new BigNum(packet.minSecurity)
+                    new BigNum(packet.security)
                 );
                 const updatedCarrier = {
                     ...carrier,
@@ -102,10 +102,10 @@ class StartDeliveryTransaction extends BaseTransaction {
         if (packet.asset.activeCarrier === this.asset.carrierId && this.asset.deliveryStatus !== "pending") {
             const carrier = store.account.get(this.asset.carrierId);
             const packetBalanceWithoutSecurity = new BigNum(packet.balance).sub(
-                new BigNum(packet.minSecurity)
+                new BigNum(packet.security)
             );
             const carrierBalanceWithSecurity = new BigNum(packet.balance).add(
-                new BigNum(packet.minSecurity)
+                new BigNum(packet.security)
             );
             const updatedCarrier = {
                 ...carrier,

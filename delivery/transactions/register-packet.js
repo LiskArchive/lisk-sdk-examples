@@ -57,10 +57,10 @@ class RegisterPacketTransaction extends BaseTransaction {
             asset: {
                 receiverId: this.asset.receiverId,
                 receiverLocation: this.asset.receiverLocation,
-                ownerId: this.asset.senderPublicKey,
+                ownerId: this.senderId,
                 ownerLocation: this.asset.senderLocation,
                 porto: this.asset.porto,
-                minSecurity: this.asset.minSecurity,
+                security: this.asset.security,
                 minTrust: this.asset.minTrust,
                 estTravelTime: this.asset.estTravelTime,
                 deliveryStatus: "pending",
@@ -68,7 +68,7 @@ class RegisterPacketTransaction extends BaseTransaction {
             }
         };
         store.account.set(packet.address, newObj);
-        return errors; // array of TransactionErrors, returns empty array if no errors are thrown
+        return errors;
     }
 
     undoAsset(store) {
