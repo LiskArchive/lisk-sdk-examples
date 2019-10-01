@@ -54,12 +54,12 @@ class RegisterPacketTransaction extends BaseTransaction {
         store.account.set(owner.address, updatedOwner);
         const newObj = {
             ...packet,
+            balance : this.asset.porto,
             asset: {
                 receiverId: this.asset.receiverId,
                 receiverLocation: this.asset.receiverLocation,
                 ownerId: this.senderId,
                 ownerLocation: this.asset.senderLocation,
-                porto: this.asset.porto,
                 security: this.asset.security,
                 minTrust: this.asset.minTrust,
                 estTravelTime: this.asset.estTravelTime,
@@ -73,8 +73,17 @@ class RegisterPacketTransaction extends BaseTransaction {
 
     undoAsset(store) {
         const packet = store.account.get(this.asset.packetId);
-        const oldObj = { ...packet, asset: null };
+        const oldObj = { ...packet, balance: 0, asset: null };
         store.account.set(packet.address, oldObj);
+        const owner = store.account.get(this.senderId);
+        const ownerBalanceWithPorto = new BigNum(owner.balance).add(
+            new BigNum(this.asset.porto)
+        );
+        const updatedOwner = {
+            ...owner,
+            balance: ownerBalanceWithPorto.toString()
+        };
+        store.account.set(owner.address, updatedOwner);
         return [];
     }
 
