@@ -36,7 +36,8 @@ To achieve this, 3 different kind of applications need to be developed:
 . A blockchain application, which accepts the application-specific <<_custom_transactions, transaction types>>.
 This application needs to be installed on different independent nodes and will setup and maintain the blockchain which is used to store the data about the packets, carrier and users.
 . A client application, which is displaying information from the blockchain to the user.
-It needs a frontend, which should be listing at least a list of packetIDs and their publickeys, the carrier, sender, recipient, and a status field (delivery ongoing, delivery error, delivery delayed, delivery success)
+It needs a frontend, which should be listing at least a list of packetIDs and their publickeys, the carrier, sender, recipient, and a status field (delivery ongoing, delivery error, delivery delayed, delivery success).
+It should also provide an easy way to create and send the different transaction types to the network.
 . An IoT application, which is stored on a microcontroller/raspberry pi. This application will track that the packet is not manipulated during the delivery.
 To do this, certain sensors will be connected to it, that track information like light, temperature and/or humidity inside of the packet.
 If something unexpected is detected by the IoT app, it will create a transaction object, sign it, and send it to the network.
