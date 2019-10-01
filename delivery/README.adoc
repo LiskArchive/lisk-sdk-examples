@@ -6,25 +6,25 @@ Lisk Delivery is a PoC (Proof of Concept) blockchain application, to showcase th
 
 == Idea
 
-The goal is to create a simple decentralized package delivery system.
-The packages are registered on the blockchain network by the package owner.
+The goal is to create a simple decentralized packet delivery system.
+The packets are registered on the blockchain network by the packet owner.
 
-Other participants on the network can then register as carrier for a particular package.
+Other participants on the network can then register as carrier for a particular packet.
 
-As next step, the carrier would go to the package owners' address, receive the package and start the delivery to the recipient.
-Both sender and carrier need to sign a transaction, that verifies that the package has been passed on to the carrier.
+As next step, the carrier would go to the packet owners' address, receive the packet and start the delivery to the recipient.
+Both sender and carrier need to sign a transaction, that verifies that the packet has been passed on to the carrier.
 
-During the transportation of the package, the package will track itself, to check if it gets manipulated during the travel.
+During the transportation of the packet, the packet will track itself, to check if it gets manipulated during the travel.
 If a manipulation is detected, it will send a self-signed alarm transaction to the network.
 
-When reaching the recipient of the package, the carrier passes the package to the recipient.
-Both sender and carrier need to sign a transaction, that verifies that the package has been passed on to the recipient.
+When reaching the recipient of the packet, the carrier passes the packet to the recipient.
+Both sender and carrier need to sign a transaction, that verifies that the packet has been passed on to the recipient.
 
 The decentralized delivery should have the following incentives:
 
-* The package owner should have access to a metric to see how much the carrier can be trusted
-* The package owner should get a compensation, if something goes wrong during the delivery
-* The carrier should get rewarded on successful delivery of the package
+* The packet owner should have access to a metric to see how much the carrier can be trusted
+* The packet owner should get a compensation, if something goes wrong during the delivery
+* The carrier should get rewarded on successful delivery of the packet
 * The carrier should be punished, if somehting goes wrong with the delivery
 
 == Requirements
@@ -34,15 +34,15 @@ The decentralized delivery should have the following incentives:
 To achieve this, 3 different kind of applications need to be developed:
 
 . A blockchain application, which accepts the application-specific <<_custom_transactions, transaction types>>.
-This application needs to be installed on different independent nodes and will setup and maintain the blockchain which is used to store the data about the packages, carrier and users.
+This application needs to be installed on different independent nodes and will setup and maintain the blockchain which is used to store the data about the packets, carrier and users.
 . A client application, which is displaying information from the blockchain to the user.
-It needs a frontend, which should be listing at least a list of packageIDs and their publickeys, the carrier, sender, recipient, and a status field (delivery ongoing, delivery error, delivery delayed, delivery success)
-. An IoT application, which is stored on a microcontroller/raspberry pi. This application will track that the package is not manipulated during the delivery.
-To do this, certain sensors will be connected to it, that track information like light, temperature and/or humidity inside of the package.
+It needs a frontend, which should be listing at least a list of packetIDs and their publickeys, the carrier, sender, recipient, and a status field (delivery ongoing, delivery error, delivery delayed, delivery success)
+. An IoT application, which is stored on a microcontroller/raspberry pi. This application will track that the packet is not manipulated during the delivery.
+To do this, certain sensors will be connected to it, that track information like light, temperature and/or humidity inside of the packet.
 If something unexpected is detected by the IoT app, it will create a transaction object, sign it, and send it to the network.
 The second important function of the IoT app, is to pay the security and porto to the carrier.
-In a certain time interval, the package will get it's own account data from the blockchain. As soon, as the `deliveryStatus` equals `successful`, `delayed` or `failed`, it will pay out the porto and the security to the participants.
-If the delivery isn't successful, it should send the security and porto back to the package owners account.
+In a certain time interval, the packet will get it's own account data from the blockchain. As soon, as the `deliveryStatus` equals `successful`, `delayed` or `failed`, it will pay out the porto and the security to the participants.
+If the delivery isn't successful, it should send the security and porto back to the packet owners account.
 
 === Hardware
 
@@ -60,23 +60,23 @@ If the delivery isn't successful, it should send the security and porto back to 
 lightAlarmTransaction::
 * Signed by: Package
 * Required data: timestamp
-* Description: If light is detected by the photoresistor inside the package, the package sends this transaction to the network.
-This transaction should only go of, when the package is traveling (between `startDeliveryTransaction` and `finishDeliveryTransaction`).
+* Description: If light is detected by the photoresistor inside the packet, the packet sends this transaction to the network.
+This transaction should only go of, when the packet is traveling (between `startDeliveryTransaction` and `finishDeliveryTransaction`).
 
 registerPackageTransaction::
 * Signed by: Owner
-* Required data: packagePublickey, receiverID, receiverLocation, senderLocation, porto, minSecurity, minTrust, estTravelTime
-* Altered data: `deliveryStatus="pending"`, describes the current status of the delivery inside the package account.
-* Description: Register package on the network.
-A separate account for the package will be created.
+* Required data: packetPublickey, receiverID, receiverLocation, senderLocation, porto, minSecurity, minTrust, estTravelTime
+* Altered data: `deliveryStatus="pending"`, describes the current status of the delivery inside the packet account.
+* Description: Register packet on the network.
+A separate account for the packet will be created.
 ** `deliveryStatus`: the status of the delivery
 ** `receiverID` the ID of the recipient in the network (to verify succesful delivery later).
 ** `receiverLocation` could be a concrete address, or a latitude,longitude pair of the recipients' location.
 ** `senderLocation` could be a concrete address, or a latitude,longitude pair of the senders' location.
-** `porto` needs to be paid by the owner, and is stored in the account of the package.
-The `porto` will be paid to the carriers account, after successful delivery of the package.
-** `minSecurity` is the minimum amount, a person has to pay to register as a carrier for this package.
-** `minTrust` is the minimum trust that is needed, to register as a carrier for this package.
+** `porto` needs to be paid by the owner, and is stored in the account of the packet.
+The `porto` will be paid to the carriers account, after successful delivery of the packet.
+** `minSecurity` is the minimum amount, a person has to pay to register as a carrier for this packet.
+** `minTrust` is the minimum trust that is needed, to register as a carrier for this packet.
 ** `estTravelTime` The estimated travel time. If the carrier needs longer than this, he/she will be punished a little.
 ** `standbyCarrier` A list of Carriers, that registered for transporting the packet.
 
@@ -84,40 +84,40 @@ registerCarrierTransaction::
 * Signed by: Carrier
 * Required data: packetId
 * Altered data: Push the Id of the carrier into the `standbyCarrier` list of the packet
-Description: Register as a carrier for a particular packet.
+* Description: Register as a carrier for a particular packet.
 `deliveryStatus` needs to be `"pending"` in order to successfully register as standbyCarrier.
 
 unregisterCarrierTransaction::
 * Signed by: Carrier
 * Required data: packetId
 * Altered data: Remove the Id of the carrier from the `standbyCarrier` list of the packet
-Description: Unregister as a carrier for a particular packet.
+* Description: Unregister as a carrier for a particular packet.
 
 startDeliveryTransaction::
 * Signed by: Owner
-* Required data: timestamp, packageID, security, carrierId
-* Altered data: `deliveryStatus="ongoing"`, describes the current status of the delivery inside the package account.
+* Required data: timestamp, packetID, security, carrierId
+* Altered data: `deliveryStatus="ongoing"`, describes the current status of the delivery inside the packet account.
 `asset.activeDelegate=carrierId`
-* Description: Defines start time of the package delivery.
-`security` is a certain amount of tokens, that the carrier must afford, to register as Carrier for this package.
-The Security is paid to the package account and deducted from the Carrier.
-If the carrier behaves maliciously, the security will not be paid back (it will be transferred to the package owners account, together with the porto).
+* Description: Defines start time of the packet delivery.
+`security` is a certain amount of tokens, that the carrier must afford, to register as Carrier for this packet.
+The Security is paid to the packet account and deducted from the Carrier.
+If the carrier behaves maliciously, the security will not be paid back (it will be transferred to the packet owners account, together with the porto).
 The transaction should fail, if the Carrier does not fulfill the requirements in terms of trust and security, that the owner defined as a minimum in the `registerPackageTransaction`.
 
 finishDeliveryTransaction::
 * Signed by: Recipient
-* Required data: timestamp, packageID
-* Altered data: `deliveryStatus="successful|delayed|failed"`, describes the status of the delivery inside the package account.
-** `successful` if package was delivered in estimated timespan.
-** `delayed`, if the package was delivered later.
+* Required data: timestamp, packetID
+* Altered data: `deliveryStatus="successful|delayed|failed"`, describes the status of the delivery inside the packet account.
+** `successful` if packet was delivered in estimated timespan.
+** `delayed`, if the packet was delivered later.
 ** `failed`, if the travel time is more than 2 times higher, than the `estTravelTime`.
-* Description: Defines end time of the package delivery.
+* Description: Defines end time of the packet delivery.
 ** If the delivery is successful:
-*** The Carrier receives the porto tokens on successful transportation of the package.
+*** The Carrier receives the porto tokens on successful transportation of the packet.
 *** The Carrier receives a certain amount of trust-points.
 ** If the delivery is delayed:
 *** Deduction of trust points form the Carrier
 ** If the delivery fails, the Carrier can be punished:
-*** Security tokens and Porto will be transferred to package Owner
+*** Security tokens and Porto will be transferred to packet Owner
 *** Deduction of trust points from the Carrier
 
