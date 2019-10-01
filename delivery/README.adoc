@@ -12,13 +12,13 @@ The packets are registered on the blockchain network by the packet owner.
 Other participants on the network can then register as carrier for a particular packet.
 
 As next step, the carrier would go to the packet owners' address, receive the packet and start the delivery to the recipient.
-Both sender and carrier need to sign a transaction, that verifies that the packet has been passed on to the carrier.
+The sender needs to sign a transaction, that verifies that the packet has been passed on to the carrier.
 
 During the transportation of the packet, the packet will track itself, to check if it gets manipulated during the travel.
 If a manipulation is detected, it will send a self-signed alarm transaction to the network.
 
 When reaching the recipient of the packet, the carrier passes the packet to the recipient.
-Both sender and carrier need to sign a transaction, that verifies that the packet has been passed on to the recipient.
+The recipient needs to sign a transaction, that verifies that the packet has been passed on to the recipient.
 
 The decentralized delivery should have the following incentives:
 
