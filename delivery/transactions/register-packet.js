@@ -1,7 +1,7 @@
 const {
     transactions: { BaseTransaction },
     TransactionError,
-} = require('lisk-sdk');
+} = require('@liskhq/lisk-transactions');
 
 class RegisterPacketTransaction extends BaseTransaction {
 

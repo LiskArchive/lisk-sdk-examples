@@ -1,7 +1,7 @@
 const {
     transactions: { BaseTransaction },
     TransactionError, BigNum
-} = require('lisk-sdk');
+} = require('@liskhq/lisk-transactions');
 
 class StartDeliveryTransaction extends BaseTransaction {
     // owner could send the tx, but not give the packet to the carrier. Carrier will get punished for this :(

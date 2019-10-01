@@ -1,7 +1,7 @@
 const {
     transactions: { TransferTransaction },
     TransactionError,
-} = require('lisk-sdk');
+} = require('@liskhq/lisk-transactions');
 
 class FinishDeliveryTransaction extends TransferTransaction {
 
