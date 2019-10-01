@@ -66,7 +66,7 @@ This transaction should only go of, when the packet is traveling (between `start
 
 registerPackageTransaction::
 * Signed by: Owner
-* Required data: packetPublickey, receiverID, receiverLocation, senderLocation, porto, minSecurity, minTrust, estTravelTime
+* Required data: packetPublickey, receiverID, receiverLocation, senderLocation, porto, security, minTrust, estTravelTime
 * Altered data: `deliveryStatus="pending"`, describes the current status of the delivery inside the packet account.
 * Description: Register packet on the network.
 A separate account for the packet will be created.
@@ -76,7 +76,8 @@ A separate account for the packet will be created.
 ** `senderLocation` could be a concrete address, or a latitude,longitude pair of the senders' location.
 ** `porto` needs to be paid by the owner, and is stored in the account of the packet.
 The `porto` will be paid to the carriers account, after successful delivery of the packet.
-** `minSecurity` is the minimum amount, a person has to pay to register as a carrier for this packet.
+** `security` is the amount of tokens a person has to pay as a security, before carrying the packet.
+Will be paid back on successful delivery of the packet.
 ** `minTrust` is the minimum trust that is needed, to register as a carrier for this packet.
 ** `estTravelTime` The estimated travel time. If the carrier needs longer than this, he/she will be punished a little.
 ** `standbyCarrier` A list of Carriers, that registered for transporting the packet.
@@ -96,14 +97,13 @@ unregisterCarrierTransaction::
 
 startDeliveryTransaction::
 * Signed by: Owner
-* Required data: timestamp, packetID, security, carrierId
+* Required data: timestamp, packetID, carrierId
 * Altered data: `deliveryStatus="ongoing"`, describes the current status of the delivery inside the packet account.
 `asset.activeDelegate=carrierId`
 * Description: Defines start time of the packet delivery.
-`security` is a certain amount of tokens, that the carrier must afford, to register as Carrier for this packet.
-The Security is paid to the packet account and deducted from the Carrier.
+`security` will get deducted form the carrier account and added to the packet account.
 If the carrier behaves maliciously, the security will not be paid back (it will be transferred to the packet owners account, together with the porto).
-The transaction should fail, if the Carrier does not fulfill the requirements in terms of trust and security, that the owner defined as a minimum in the `registerPackageTransaction`.
+This transaction should fail, if the Carrier does not fulfill the requirements in terms of trust and security, that the owner defined as a minimum in the `registerPackageTransaction`.
 
 finishDeliveryTransaction::
 * Signed by: Recipient
