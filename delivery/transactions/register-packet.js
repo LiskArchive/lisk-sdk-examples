@@ -1,7 +1,7 @@
 const {
     BaseTransaction,
     TransactionError,
-    BigNum
+    utils
 } = require('@liskhq/lisk-transactions');
 
 class RegisterPacketTransaction extends BaseTransaction {
@@ -45,8 +45,9 @@ class RegisterPacketTransaction extends BaseTransaction {
         const errors = [];
         const packet = store.account.get(this.asset.packetId);
         const owner = store.account.get(this.senderId);
-        const ownerBalanceWithoutPorto = new BigNum(owner.balance).sub(
-            new BigNum(this.asset.porto)
+
+        const ownerBalanceWithoutPorto = new utils.BigNum(owner.balance).sub(
+            new utils.BigNum(this.asset.porto)
         );
         const updatedOwner = {
             ...owner,
@@ -77,8 +78,8 @@ class RegisterPacketTransaction extends BaseTransaction {
         const oldObj = { ...packet, balance: 0, asset: null };
         store.account.set(packet.address, oldObj);
         const owner = store.account.get(this.senderId);
-        const ownerBalanceWithPorto = new BigNum(owner.balance).add(
-            new BigNum(this.asset.porto)
+        const ownerBalanceWithPorto = new utils.BigNum(owner.balance).add(
+            new utils.BigNum(this.asset.porto)
         );
         const updatedOwner = {
             ...owner,

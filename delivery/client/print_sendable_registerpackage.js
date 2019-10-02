@@ -1,8 +1,6 @@
 const RegisterPacketTransaction = require('../transactions/register-packet');
 const transactions = require('@liskhq/lisk-transactions');
-const cryptography = require('@liskhq/lisk-cryptography');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
-const { Mnemonic } = require('@liskhq/lisk-passphrase');
 
 const getTimestamp = () => {
     // check config file or curl localhost:4000/api/node/constants to verify your epoc time
@@ -11,21 +9,7 @@ const getTimestamp = () => {
     return  parseInt(inSeconds);
 };
 
-const getPacketCredentials = () => {
-    const passphrase = Mnemonic.generateMnemonic();
-    const keys = cryptography.getPrivateAndPublicKeyFromPassphrase(
-        passphrase
-    );
-    const credentials = {
-        address: cryptography.getAddressFromPublicKey(keys.publicKey),
-        passphrase: passphrase,
-        publicKey: keys.publicKey,
-        privateKey: keys.privateKey
-    }
-    return credentials;
-};
-
-const packetCredentials = getPacketCredentials();
+const packetCredentials = {}; // insert here the packetCredentials-object created in create_and_initialize_packet_account.js
 
 let tx =  new RegisterPacketTransaction({
     asset: {
@@ -42,12 +26,13 @@ let tx =  new RegisterPacketTransaction({
     timestamp: getTimestamp()
 });
 
+//tx.sign(packetCredentials.privateKey);
 tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble');
 
-console.log("+++++++++++++++++++++++++++++++++" );
-console.dir(packetCredentials);
-console.log("+++++++++++++++++++++++++++++++++" );
-console.log("+++++++++++++++++++++++++++++++++" );
+// console.log("+++++++++++++++++++++++++++++++++" );
+// console.dir(packetCredentials);
+// console.log("+++++++++++++++++++++++++++++++++" );
+// console.log("+++++++++++++++++++++++++++++++++" );
 console.log(tx.stringify());
-console.log("+++++++++++++++++++++++++++++++++" );
+//console.log("+++++++++++++++++++++++++++++++++" );
 process.exit(0);
