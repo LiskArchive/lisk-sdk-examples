@@ -28,7 +28,7 @@ let tx =  new transactions.TransferTransaction({
 
 tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble');
 
-api.transactions.broadcast(tx.stringify()).then(res => {
+api.transactions.broadcast(tx.toJSON()).then(res => {
     console.log(res.data);
     console.log("+++++++++++++++++++++++++++++++++" );
     console.dir(packetCredentials);
@@ -36,6 +36,6 @@ api.transactions.broadcast(tx.stringify()).then(res => {
     console.log("+++++++++++++++++++++++++++++++++" );
     console.log(tx.stringify());
     console.log("+++++++++++++++++++++++++++++++++" );
-});
+}).catch(err => { console.log(JSON.stringify(err.errors, null, 2)) });
 
 

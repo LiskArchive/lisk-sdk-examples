@@ -9,7 +9,7 @@ const getTimestamp = () => {
     return  parseInt(inSeconds);
 };
 
-const packetCredentials = {}; // insert here the packetCredentials-object created in create_and_initialize_packet_account.js
+const packetCredentials = { }; // insert here the packetCredentials-object created in create_and_initialize_packet_account.js
 
 let tx =  new RegisterPacketTransaction({
     asset: {
@@ -26,13 +26,7 @@ let tx =  new RegisterPacketTransaction({
     timestamp: getTimestamp()
 });
 
-//tx.sign(packetCredentials.privateKey);
 tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble');
 
-// console.log("+++++++++++++++++++++++++++++++++" );
-// console.dir(packetCredentials);
-// console.log("+++++++++++++++++++++++++++++++++" );
-// console.log("+++++++++++++++++++++++++++++++++" );
 console.log(tx.stringify());
-//console.log("+++++++++++++++++++++++++++++++++" );
 process.exit(0);

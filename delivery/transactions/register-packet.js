@@ -49,6 +49,9 @@ class RegisterPacketTransaction extends BaseTransaction {
         const ownerBalanceWithoutPorto = new utils.BigNum(owner.balance).sub(
             new utils.BigNum(this.asset.porto)
         );
+        const packetBalanceWithPorto = new utils.BigNum(packet.balance).add(
+            new utils.BigNum(this.asset.porto)
+        );
         const updatedOwner = {
             ...owner,
             balance: ownerBalanceWithoutPorto.toString()
@@ -56,10 +59,10 @@ class RegisterPacketTransaction extends BaseTransaction {
         store.account.set(owner.address, updatedOwner);
         const newObj = {
             ...packet,
-            balance : this.asset.porto,
+            balance : packetBalanceWithPorto.toString(),
             asset: {
-                receiverId: this.asset.receiverId,
-                receiverLocation: this.asset.receiverLocation,
+                receipientId: this.asset.receipientId,
+                receipientLocation: this.asset.receipientLocation,
                 ownerId: this.senderId,
                 ownerLocation: this.asset.senderLocation,
                 security: this.asset.security,
