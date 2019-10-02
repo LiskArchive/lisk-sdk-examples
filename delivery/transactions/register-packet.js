@@ -1,6 +1,7 @@
 const {
-    transactions: { BaseTransaction },
+    BaseTransaction,
     TransactionError,
+    BigNum
 } = require('@liskhq/lisk-transactions');
 
 class RegisterPacketTransaction extends BaseTransaction {

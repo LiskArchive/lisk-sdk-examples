@@ -1,6 +1,7 @@
 const {
-    transactions: { BaseTransaction },
-    TransactionError, BigNum
+    BaseTransaction,
+    TransactionError,
+    BigNum
 } = require('@liskhq/lisk-transactions');
 
 class StartDeliveryTransaction extends BaseTransaction {
