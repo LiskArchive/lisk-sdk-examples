@@ -61,7 +61,7 @@ class RegisterPacketTransaction extends BaseTransaction {
             ...packet,
             balance : packetBalanceWithPorto.toString(),
             asset: {
-                recipient: this.asset.recipientId,
+                recipient: this.recipientId,
                 sender: this.senderId,
                 security: this.asset.security,
                 porto: this.asset.porto,

@@ -129,5 +129,34 @@ Get Account data for a specific ID::
 To check if the packet registration was successful, check the packet account:
 [source, bash]
 ----
-curl -X GET "http://localhost:4000/api/accounts?address=5420762878027534930L" | python -m json.tool
+curl -X GET "http://localhost:4000/api/accounts?address=933972897873682359L" | python -m json.tool
+----
+
+Expected result:
+[source,json]
+----
+{
+    "data": [
+        {
+            "address": "933972897873682359L",
+            "asset": {
+                "carrier": null,
+                "minTrust": 5,
+                "porto": "500000000",
+                "recipient": "10881167371402274308L",
+                "security": "10000000000",
+                "sender": "16313739661670634666L",
+                "status": "pending"
+            },
+            "balance": "1000001235",
+            "publicKey": "",
+            "secondPublicKey": ""
+        }
+    ],
+    "links": {},
+    "meta": {
+        "limit": 10,
+        "offset": 0
+    }
+}
 ----

@@ -6,34 +6,31 @@ const getTimestamp = () => {
     // check config file or curl localhost:4000/api/node/constants to verify your epoc time
     const millisSinceEpoc = Date.now() - Date.parse(EPOCH_TIME);
     const inSeconds = ((millisSinceEpoc) / 1000).toFixed(0);
-    return  parseInt(inSeconds);
+    return parseInt(inSeconds);
 };
 
-const packetCredentials = { address: '5420762878027534930L',
+const packetCredentials = { address: '933972897873682359L',
     passphrase:
-        'range axis twin quote rate rifle cute math quantum talk must round',
+        'warfare science dirt response size torch paper horn suspect inmate prize way',
     publicKey:
-        '1529b602ea69497ff5e38c3d1db5e90f9dfb6ee2f0e83534c89f18579a24653b',
+        '26fa78c7747de51aba9ca2f9ca9d8566bfb3638a77d03a44990ddecee7ef62ee',
     privateKey:
-        'f3058da026f8b1a93643dc6864fc5ef7830b7614dd09292bc5f2ca3d4b115f9e1529b602ea69497ff5e38c3d1db5e90f9dfb6ee2f0e83534c89f18579a24653b'
-}; // insert here the packetCredentials-object created in create_and_initialize_packet_account.js
+        '39bcd0ed4e3f417af9a1276721dae20658c6e0051792671935d20465d675b4b126fa78c7747de51aba9ca2f9ca9d8566bfb3638a77d03a44990ddecee7ef62ee'
+};
 
 let tx =  new RegisterPacketTransaction({
     asset: {
         packetId: packetCredentials.address,
-        senderLocation: "def alley, 456 someCity",
-        receipientLocation: "abc street, 123 someCity",
         porto: `${transactions.utils.convertLSKToBeddows('5')}`,
         security: `${transactions.utils.convertLSKToBeddows('100')}`,
-        minTrust: 25,
-        estTravelTime: "18000", // 18,000 seconds = 5 hrs
+        minTrust: 5,
     },
     fee: "0",
-    recipientId: "10881167371402274308L",
+    recipientId: "10881167371402274308L", // dummy delegate_100
     timestamp: getTimestamp()
 });
 
-tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble');
+tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble'); // 16313739661670634666L
 
 console.log(tx.stringify());
 process.exit(0);
