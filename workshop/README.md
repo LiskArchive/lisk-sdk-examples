@@ -233,3 +233,56 @@ The full constructor logic for this can be found on [Github](https://github.com/
 ### Which filters can we use for the Store?
 **Task 7: Read up about which filters we can use and why we can access them. You can find it at section `A/ Filters Usage` in [this article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
 
+### Should we extend from BaseTransaction or TransferTransaction?
+**Task 8: To answer this question, read the following section `1. Should I extend from` in [the article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
+
+### Exploring Payment Transaction
+The idea for the `PaymentTransaction` is that you write the logic yourself based on the requirements and tips I give. The payment transaction will extend from the `TransferTransaction` although we do not recommend this (it simplifies things).
+
+The idea for this transaction is that it will accept only one value that represents the ID of the invoice transaction the client wants to pay for. This invoice ID will be send in an asset field that contains a data field (as the `TransferTransaction` requires this).
+
+```
+"asset": {
+    "data": "14582705636451260901",
+}
+```
+
+**Note:** For each step, the solution can be found in the section below `Solution: Payment Transaction`.
+
+Steps to be implemented:
+1. Replace the `super` cache call with the [actual implementation in TransferTransaction](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/0_transfer_transaction.ts#L69). Remember the task about reading up on combining AND and OR, this is exactly what happens here.
+
+2. Besides that, we also want to cache the invoice transaction using the `this.asset.data` field which contains the invoice ID. Make use of the exposed `transaction` store.
+
+3. Find a transaction in the `transaction` store where the `id` matches the id in `this.asset.data`.
+
+
+### Solution: Payment Transaction
+
+<details>
+    <summary>Prepare() function (step 1 & 2):</summary>
+
+    async prepare(store) {
+        await store.account.cache([
+            {
+                address: this.senderId,
+            },
+            {
+                address: this.recipientId,
+            },
+        ]);
+        await store.transaction.cache([
+            {
+                id: this.asset.data,
+            },
+        ]);
+    }
+</details>
+
+<details>
+    <summary>Step 3:</summary>
+
+    const transaction = store.transaction.find(
+		transaction => transaction.id === this.asset.data
+	); // Find related invoice in transactions for invoiceID
+</details>

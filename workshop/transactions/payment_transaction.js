@@ -6,12 +6,20 @@ class PaymentTransaction extends TransferTransaction {
 	}
 
 	async prepare(store) {
-		await super.prepare(store);
+		// await super.prepare(store); // To be replaced
+		await store.account.cache([
+			{
+				address: this.senderId,
+			},
+			{
+				address: this.recipientId,
+			},
+		]); // @TODO Remove
 		await store.transaction.cache([
 			{
 				id: this.asset.data,
 			},
-		]);
+		]); // @TODO Remove
 	}
 
 	applyAsset(store) {
