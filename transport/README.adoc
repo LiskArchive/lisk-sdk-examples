@@ -68,14 +68,14 @@ A separate account for the packet will be created.
 ** `senderLocation` could be a concrete address, or a latitude,longitude pair of the senders' location.
 ** `porto` needs to be paid by the owner, and is stored in the account of the packet.
 The `porto` will be paid to the carriers account, after successful delivery of the packet.
-** `security` is the amount of tokens a person has to pay as a security, before carrying the packet.
-Will be paid back on successful delivery of the packet.
+** `security` is the amount of tokens a person has to lock as a security, before carrying the packet.
+Will be unlocked on successful delivery of the packet.
 ** `minTrust` is the minimum trust that is needed, to register as a carrier for this packet.
 ** `estTravelTime` The estimated travel time. If the carrier needs longer than this, he/she will be punished a little.
 
 startDeliveryTransaction::
-* Signed by: Owner
-* Required data: timestamp, packetID, carrierId
+* Signed by: Carrier
+* Required data: timestamp, packetID
 * Altered data: `deliveryStatus="ongoing"`, describes the current status of the delivery inside the packet account.
 `asset.activeDelegate=carrierId`
 * Description: Defines start time of the packet delivery.
@@ -85,17 +85,14 @@ This transaction should fail, if the Carrier does not fulfill the requirements i
 
 finishDeliveryTransaction::
 * Signed by: Recipient
-* Required data: timestamp, packetID
-* Altered data: `deliveryStatus="successful|delayed|failed"`, describes the status of the delivery inside the packet account.
+* Required data: timestamp, packetID, status
+* Altered data: `deliveryStatus="successful|failed"`, describes the status of the delivery inside the packet account.
 ** `successful` if packet was delivered in estimated timespan.
-** `delayed`, if the packet was delivered later.
-** `failed`, if the travel time is more than 2 times higher, than the `estTravelTime`.
+** `failed`, if the packet does not arrive.
 * Description: Defines end time of the packet delivery.
 ** If the delivery is successful:
 *** The Carrier receives the porto tokens on successful transportation of the packet.
 *** The Carrier receives a certain amount of trust-points.
-** If the delivery is delayed:
-*** Deduction of trust points form the Carrier
 ** If the delivery fails, the Carrier can be punished:
 *** Security tokens and Porto will be transferred to packet Owner
 *** Deduction of trust points from the Carrier
