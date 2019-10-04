@@ -86,6 +86,51 @@ new TransactionError(
 )
 ```
 
+#### applyAsset()
+Finally, we have arrived to the hard work! Let's dissect the function line by line.
+
+```javascript
+applyAsset(store) {
+    const sender = store.account.get(this.senderId);
+
+    // Save invoice count and IDs
+    sender.asset.invoiceCount = sender.asset.invoiceCount === undefined ? 1 : ++sender.asset.invoiceCount;
+    sender.asset.invoicesSent = sender.asset.invoicesSent === undefined ? [this.id] : [...sender.asset.invoicesSent, this.id];
+    store.account.set(sender.address, sender);
+    return [];
+}
+```
+
+First, we retrieve the data from the store. The store exposes two key-value stores: `account` and `transaction`.
+The `account` store is read-write, `transaction` store is read-only.
+
+**Task 3: Read about the exposed methods by both stores [in the section `B/ Retrieving Data`](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
+
+Now you have read about the exposed methods, you know that the `account` store exposes a `get` function that returns a deep clone of the account object. This means we can freely change properties on the object without having to care about references to the orignal object.
+
+Next, we have to code with the idea that this can be the first custom transaction. This means that the properties like `invoiceCount` and `invoicesSent` do not yet exist in the asset field of the sender account. Therefore, we have this logic to check if the property is undefined or not. If it is, we set the `invoiceCount` to 1, otherwise we increase the count by one.
+
+Same applies to `invoicesSent`. If the property doesn't exist, we create a new array with the id of the transaction. Otherwise, we append the id to the existing array.
+
+Next, we update the object in the key-value store `store.account.set(sender.address, sender)`. We can only save a modified account object by using the address of the account followed by the updated sender object.
+
+```
+Note: Under the hood, the cache method retrieves data from the database and stores this data in an in-memory key-value store inside the Lisk application. When updating an account with the set method, it doens't mean we are changing the account in the database yet. Only when the transaction gets into the transaction pool and no errors occur, the transaction will be applied and the changes we made in the key-value store will be saved to the database.
+```
+
+Notice that we return an empty array at the end of the function. The same idea applies here as well. As the `validateAsset()` function does only allow for static checks, more advanced checks that require data from the store can be performed in the `applyAsset()` function. In case of an error, we put the error in an array and return this array. However, for the `invoiceTransaction` we do not require additional validation steps, so we decided to simply return an empty array.
+
+#### undoAsset()
+Now it's your turn. Your task is to write the reversed logic of the `applyAsset()` function.
+
+**Task: Complete code for undo function:
+1. Retrieve sender account
+2. Reduce `invoiceCount` (remember the `undefined` state when it's the first transaction)
+3. Remove id from `invoicesSent` array (Tip: use splice - Also remember `undefined` case)
+4. Return errors
+
+
+
 ### Solution: Invoice Transaction
 
 <details>
