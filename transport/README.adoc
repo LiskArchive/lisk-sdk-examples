@@ -1,0 +1,102 @@
+= Lisk Transport
+Mona Bärenfänger <mona@lightcurve.io>
+:toc:
+
+Lisk Transport is a PoC (Proof of Concept) blockchain application, to showcase the features and capabilities of the Lisk alpha SDK.
+
+== Idea
+
+The goal is to create a simple decentralized supply chain tracking system.
+
+Before registering the packet on the network, the owner needs to create a new account for the packet and store the public key on the IoT device inside the packet.
+This is necessary, because the packet needs to sign the transactions it sends to the network, in order to communicate with it.
+The packets are registered on the blockchain network by the packet owner.
+
+As next step, a carrier would go to the packet owners' address, receive the packet and start the delivery to the recipient.
+The carrier needs to sign a transaction, that verifies that the packet has been passed on to the carrier.
+With this transaciton, the Carrier will lock a certain amount of tokens in his account, that was defined by the packet owner when registering the packet on the network.
+
+During the transportation of the packet, the packet will track itself, to check if it gets manipulated during the travel.
+If a manipulation is detected, it will send a self-signed alarm transaction to the network.
+
+When reaching the recipient of the packet, the carrier passes the packet to the recipient.
+The recipient needs to sign a transaction, that verifies that the packet has been passed on to the recipient.
+
+== Requirements
+
+=== Software
+
+To achieve this, 3 different kind of applications need to be developed:
+
+. A blockchain application, which accepts the application-specific <<_custom_transactions, transaction types>>.
+This application needs to be installed on different independent nodes and will setup and maintain the blockchain which is used to store the data about the packets, carrier and users.
+. A client application, which is displaying information from the blockchain to the user.
+It needs a frontend, which should be listing at least a list of packetIDs and their publickeys, the carrier, sender, recipient, and a status field (delivery ongoing, delivery error, delivery delayed, delivery success).
+It should also provide an easy way to create and send the different transaction types to the network.
+. An IoT application, which is stored on a microcontroller/raspberry pi. This application will track that the packet is not manipulated during the delivery.
+To do this, certain sensors will be connected to it, that track information like light, temperature and/or humidity inside of the packet.
+If something unexpected is detected by the IoT app, it will create a transaction object, sign it, and send it to the network.
+
+=== Hardware
+
+* https://buyzero.de/collections/raspberry-pi-zero-kits/products/raspberry-pi-zero-w?variant=38399156114[Raspberry Pi Zero W] (Later maybe https://www.neonious.com/neoniousOne[Neonious])
+* https://www.raspberrypi.org/documentation/installation/sd-cards.md[SD card]
+* https://www.digikey.de/product-detail/de/raspberry-pi/RPI%2520USB-C%2520POWER%2520SUPPLY%2520BLACK%2520EU/1690-RPIUSB-CPOWERSUPPLYBLACKEU-ND/10258762?utm_adgroup=AC+DC+Desktop%2C+Wall+Adapters&mkwid=sqB225Odq&pcrid=282621978632&pkw=&pmt=&pdv=c&productid=10258762&slid=&gclid=EAIaIQobChMIwp2s46zs5AIVTOh3Ch2muQtuEAQYASABEgJUMvD_BwE[Power plug]
+* https://www.conrad.de/de/p/raspberry-pi-erweiterungs-platine-s-usv-akku-300mah-raspberry-pi-2-b-raspberry-pi-3-b-raspberry-pi-a-raspberry-1539577.html?WT.mc_id=google_pla&WT.srch=1&ef_id=EAIaIQobChMI8NLb6eDp5AIVgc13Ch3RpwMGEAQYByABEgIN3_D_BwE:G:s&gclid=EAIaIQobChMI8NLb6eDp5AIVgc13Ch3RpwMGEAQYByABEgIN3_D_BwE&hk=SEM&s_kwcid=AL!222!3!367270211499!!!g[Battery]
+* https://www.amazon.de/PEMENOL-Fotowiderstand-Anschl%C3%BCsse-Photodetektor-Comperator/dp/B07DP1YM5X/ref=sr_1_1?keywords=ldr+modul&qid=1569485546&s=gateway&sr=8-1[Photoresistor]
+* https://www.amazon.de/Female-Female-Male-Female-Male-Male-Steckbr%C3%BCcken-Drahtbr%C3%BCcken-bunt/dp/B01EV70C78/ref=sr_1_5?keywords=dupont+kabel&qid=1569485735&s=gateway&sr=8-5[Dupont cables]
+* https://www.amazon.de/AZDelivery-AM2302-Temperatursensor-Luftfeuchtigkeitssensor-Arduino/dp/B06XF4TNT9/ref=sr_1_1_sspa?crid=35G9VO3PY15BQ&keywords=dht22&qid=1569485584&s=gateway&sprefix=dht%2Caps%2C153&sr=8-1-spons&psc=1&smid=A1X7QLRQH87QA3&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzOE1YSzU4WlBZUDdVJmVuY3J5cHRlZElkPUEwODAwMjUwMUNNRkdEQUNQUTJYUCZlbmNyeXB0ZWRBZElkPUEwNzEwNjA5VTJNSlFXNjM5RzAzJndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ==[Temp/Humidity sensor]
+
+
+=== Custom Transactions
+
+lightAlarmTransaction::
+* Signed by: Package
+* Required data: timestamp
+* Description: If light is detected by the photoresistor inside the packet, the packet sends this transaction to the network.
+This transaction should only go of, when the packet is traveling (between `startDeliveryTransaction` and `finishDeliveryTransaction`).
+
+registerPackageTransaction::
+* Signed by: Owner
+* Required data: packetPublickey, receiverID, receiverLocation, senderLocation, porto, security, minTrust, estTravelTime
+* Altered data: `deliveryStatus="pending"`, describes the current status of the delivery inside the packet account.
+* Description: Register packet on the network.
+A separate account for the packet will be created.
+** `deliveryStatus`: the status of the delivery
+** `receiverID` the ID of the recipient in the network (to verify succesful delivery later).
+** `receiverLocation` could be a concrete address, or a latitude,longitude pair of the recipients' location.
+** `senderLocation` could be a concrete address, or a latitude,longitude pair of the senders' location.
+** `porto` needs to be paid by the owner, and is stored in the account of the packet.
+The `porto` will be paid to the carriers account, after successful delivery of the packet.
+** `security` is the amount of tokens a person has to pay as a security, before carrying the packet.
+Will be paid back on successful delivery of the packet.
+** `minTrust` is the minimum trust that is needed, to register as a carrier for this packet.
+** `estTravelTime` The estimated travel time. If the carrier needs longer than this, he/she will be punished a little.
+
+startDeliveryTransaction::
+* Signed by: Owner
+* Required data: timestamp, packetID, carrierId
+* Altered data: `deliveryStatus="ongoing"`, describes the current status of the delivery inside the packet account.
+`asset.activeDelegate=carrierId`
+* Description: Defines start time of the packet delivery.
+`security` will get deducted form the carrier account and added to the packet account.
+If the carrier behaves maliciously, the security will not be paid back (it will be transferred to the packet owners account, together with the porto).
+This transaction should fail, if the Carrier does not fulfill the requirements in terms of trust and security, that the owner defined as a minimum in the `registerPackageTransaction`.
+
+finishDeliveryTransaction::
+* Signed by: Recipient
+* Required data: timestamp, packetID
+* Altered data: `deliveryStatus="successful|delayed|failed"`, describes the status of the delivery inside the packet account.
+** `successful` if packet was delivered in estimated timespan.
+** `delayed`, if the packet was delivered later.
+** `failed`, if the travel time is more than 2 times higher, than the `estTravelTime`.
+* Description: Defines end time of the packet delivery.
+** If the delivery is successful:
+*** The Carrier receives the porto tokens on successful transportation of the packet.
+*** The Carrier receives a certain amount of trust-points.
+** If the delivery is delayed:
+*** Deduction of trust points form the Carrier
+** If the delivery fails, the Carrier can be punished:
+*** Security tokens and Porto will be transferred to packet Owner
+*** Deduction of trust points from the Carrier
+
