@@ -84,21 +84,20 @@ Will be unlocked on successful delivery of the packet.
 
 startDeliveryTransaction::
 * Signed by: Carrier
-* Required data: timestamp, packetID
+* Required data: packetID
 * Altered data: `deliveryStatus="ongoing"`, describes the current status of the delivery inside the packet account.
-`asset.activeDelegate=carrierId`
 * Description: Defines start time of the packet delivery.
 `security` will get deducted form the carrier account and added to the packet account.
-If the carrier behaves maliciously, the security will not be paid back (it will be transferred to the packet owners account, together with the porto).
+If the carrier behaves maliciously, the security will not be unlocked (it will be transferred to the packet owners account, together with the porto).
 This transaction should fail, if the Carrier does not fulfill the requirements in terms of trust and security, that the owner defined as a minimum in the `registerPackageTransaction`.
 
 finishDeliveryTransaction::
 * Signed by: Recipient
-* Required data: timestamp, packetID, status
+* Required data: packetID, status
 * Altered data: `deliveryStatus="successful|failed"`, describes the status of the delivery inside the packet account.
 ** `successful` if packet was delivered in estimated timespan.
 ** `failed`, if the packet does not arrive.
-* Description: Defines end time of the packet delivery.
+* Description: Defines the end of the packet transport.
 ** If the delivery is successful:
 *** The Carrier receives the porto tokens on successful transportation of the packet.
 *** The Carrier receives a certain amount of trust-points.
