@@ -129,7 +129,9 @@ the transaction will be applied and the changes we made in the key-value store w
 Notice that we return an empty array at the end of the function. The same idea applies here as well. As the `validateAsset()` function does only allow for static checks, more advanced checks that require data from the store can be performed in the `applyAsset()` function. In case of an error, we put the error in an array and return this array. However, for the `invoiceTransaction` we do not require additional validation steps, so we decided to simply return an empty array.
 
 #### undoAsset()
-Now it's your turn. Your task is to write the reversed logic of the `applyAsset()` function.
+Now it's your turn. Your task is to write the reversed logic of the `applyAsset()` function. The `undoAsset()` function is used to roll back changes that were done by the `applyAsset()` function.
+
+At this moment, the function is called when a fork occurs and we want to switch to a different chain. In that case, we have to undo transactions and we need to know how to undo a transaction for each specific transaction type. That's why we have to define custom undo logic for this custom transaction.
 
 **Task: Complete code for undo function:**
 1. Retrieve sender account
