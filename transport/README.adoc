@@ -107,7 +107,7 @@ finishTransportTransaction::
 
 === Queries
 
-NOTE: These queries can be run inside of the `transport/client` directory.
+NOTE: You find the scripts in the `transport/client` directory.
 
 Create and initialize a new packet account:
 [source, bash]
