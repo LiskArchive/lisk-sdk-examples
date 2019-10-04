@@ -1,18 +1,14 @@
 const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
 const RegisterPacketTransaction = require('../transactions/register-packet');
-const RegisterCarrierTransaction = require('../transactions/register-carrier');
-const UnregisterCarrierTransaction = require('../transactions/unregister-carrier');
-const StartDeliveryTransaction = require('../transactions/start-delivery');
-const FinishDeliveryTransaction = require('../transactions/finish-delivery');
+const StartTransportTransaction = require('../transactions/start-transport');
+const FinishTransportTransaction = require('../transactions/finish-transport');
 
-configDevnet.app.label = 'lisk-delivery';
+configDevnet.app.label = 'lisk-transport';
 
 const app = new Application(genesisBlockDevnet, configDevnet);
 app.registerTransaction(RegisterPacketTransaction);
-app.registerTransaction(RegisterCarrierTransaction);
-app.registerTransaction(UnregisterCarrierTransaction);
-app.registerTransaction(StartDeliveryTransaction);
-app.registerTransaction(FinishDeliveryTransaction);
+app.registerTransaction(StartTransportTransaction);
+app.registerTransaction(FinishTransportTransaction);
 
 app
     .run()
