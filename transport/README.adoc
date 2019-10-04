@@ -109,13 +109,16 @@ finishTransportTransaction::
 
 NOTE: You find the scripts in the `transport/client` directory.
 
-Create and initialize a new packet account:
+Create and initialize a new packet account::
+Creates public/private key pair, address and passphrase for a new account.
+The sender also automatically sends some tokens over to the new created account, to make it appear in the database.
 [source, bash]
 ----
 node create_and_initialize_packet_account.js
 ----
 
 Register a packet on the blockhain::
+Before running the script, open `print_sendable_registerpackage.js` and set as `packetId` the ID you received when running `create_and_initialize_packet_account.js` .
 [source, bash]
 ----
 node print_sendable_registerpackage.js | tee >(curl -X POST -H "Content-Type: application/json" -d @- localhost:4000/api/transactions)
@@ -123,6 +126,7 @@ node print_sendable_registerpackage.js | tee >(curl -X POST -H "Content-Type: ap
 ----
 
 Get Account data for a specific ID::
+To check if the packet registration was successful, check the packet account:
 [source, bash]
 ----
 curl -X GET "http://localhost:4000/api/accounts?address=5420762878027534930L" | python -m json.tool
