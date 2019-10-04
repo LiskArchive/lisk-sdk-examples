@@ -105,3 +105,25 @@ finishTransportTransaction::
 *** Security tokens and Porto will be transferred to packet Owner
 *** Deduction of trust points from the Carrier
 
+=== Queries
+
+NOTE: These queries can be run inside of the `transport/client` directory.
+
+Create and initialize a new packet account:
+[source, bash]
+----
+node create_and_initialize_packet_account.js
+----
+
+Register a packet on the blockhain::
+[source, bash]
+----
+node print_sendable_registerpackage.js | tee >(curl -X POST -H "Content-Type: application/json" -d @- localhost:4000/api/transactions)
+
+----
+
+Get Account data for a specific ID::
+[source, bash]
+----
+curl -X GET "http://localhost:4000/api/accounts?address=5420762878027534930L" | python -m json.tool
+----
