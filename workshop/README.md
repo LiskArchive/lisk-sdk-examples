@@ -256,6 +256,18 @@ Steps to be implemented:
 
 3. Find a transaction in the `transaction` store where the `id` matches the id in `this.asset.data`.
 
+4. If you found a transaction, validate if the amount for this transaction is at least equal or larger than the `requestedAmount` from the `InvoiceTransaction`. If you didn't find a transaction, push a `TransactionError` in the `errors` array using the interface we saw earlier in the workshop. 
+
+To complete things, we should throw an error if the `recipientId` differs from the `senderId` of the invoice transaction.
+
+**Notice:** As our validation requires data that comes from the `store` object, we can't perform this in the `validateAsset` function. Therefore, we don't have to define this function.
+
+// Step 5: let user think on undo function (show code and put comment - undo code or not? no because we are not changing any data in the store)
+
+// TODO: look for todo's and uncomment them when the code is stable
+// Test the solution for payment (bear in mind the prepare step with copied logic from transfer tx)
+// Create generator for this tx type and add validation step
+// Optionally, give a last task for locking tokens if we have time (should code this for the design patterns article)
 
 ### Solution: Payment Transaction
 
@@ -285,4 +297,47 @@ Steps to be implemented:
     const transaction = store.transaction.find(
 		transaction => transaction.id === this.asset.data
 	); // Find related invoice in transactions for invoiceID
+</details>
+
+<details>
+    <summary>Step 4:</summary>
+
+    applyAsset(store) {
+		const errors = super.applyAsset(store);
+
+		const transaction = store.transaction.find(
+			transaction => transaction.id === this.asset.data
+		); // Find related invoice in transactions for invoiceID
+
+		if (transaction) {
+			if (this.amount.lt(transaction.asset.requestedAmount)) {
+				errors.push(new TransactionError(
+					'Paid amount is lower than amount stated on invoice',
+					this.id,
+					'.amount',
+					transaction.requestedAmount,
+					'Expected amount to be equal or greater than `requestedAmount`',
+				));
+			}
+			if (transaction.senderId !== this.recipientId) {
+				errors.push(new TransactionError(
+					'RecipientId is not equal to the address that has sent the invoice.',
+					this.id,
+					'.recipientId',
+					this.recipientId,
+					transaction.senderId,
+				));
+			}
+		} else {
+			errors.push(new TransactionError(
+				'Invoice does not exist for ID',
+				this.id,
+				'.asset.invoiceID',
+				this.asset.data,
+				'Existing invoiceID registered as invoice transaction',
+			));
+		}
+
+		return errors;
+	}
 </details>
