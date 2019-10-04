@@ -14,7 +14,7 @@ The packets are registered on the blockchain network by the packet owner.
 
 As next step, a carrier would go to the packet owners' address, receive the packet and start the delivery to the recipient.
 The carrier needs to sign a transaction, that verifies that the packet has been passed on to the carrier.
-With this transaciton, the Carrier will lock a certain amount of tokens in his account, that was defined by the packet owner when registering the packet on the network.
+With this transaction, the Carrier will lock a certain amount of tokens in his account, that was defined by the packet owner when registering the packet on the network.
 
 During the transportation of the packet, the packet will track itself, to check if it gets manipulated during the travel.
 If a manipulation is detected, it will send a self-signed alarm transaction to the network.
@@ -27,7 +27,7 @@ The recipient needs to sign a transaction, that verifies that the packet has bee
 The MVP of LiskTransport consists only of 1 custom transaction type: `lightAlarmTransaction`.
 
 It can be extended to use other sensors as well.
-In that case, additional sensor-specifi transaction types are needed, e.g. `humidityTransaction` and `temperatureTransaction`.
+In that case, additional sensor-specific transaction types are needed, e.g. `humidityTransaction` and `temperatureTransaction`.
 
 The IoT application will detect light(/humidity/temperature) and send the status of it to the network.
 
