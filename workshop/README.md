@@ -51,6 +51,8 @@ As we will be only modifying the sender (freelancer) their account, we just need
 
 **Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts) at line 399 to copy the implementation.**
 
+_Solution can be found in the `Solution: Invoice Transaction` section._
+
 Notice, we are looking for an account using the `address` filter. In order to understand better the difference between passing an array or an object to the cache function, I ask you to read up about the difference.
 
 **Task 2: Read about AND and OR filters [at the section `B/ Combining Filters`](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc)**
@@ -115,7 +117,13 @@ Same applies to `invoicesSent`. If the property doesn't exist, we create a new a
 Next, we update the object in the key-value store `store.account.set(sender.address, sender)`. We can only save a modified account object by using the address of the account followed by the updated sender object.
 
 ```
-Note: Under the hood, the cache method retrieves data from the database and stores this data in an in-memory key-value store inside the Lisk application. When updating an account with the set method, it doens't mean we are changing the account in the database yet. Only when the transaction gets into the transaction pool and no errors occur, the transaction will be applied and the changes we made in the key-value store will be saved to the database.
+Note: Under the hood, the cache method retrieves data from the database
+and stores this data in an in-memory key-value store inside the Lisk application.
+
+When updating an account with the set method, it doens't mean we are changing the account in the database yet.
+
+Only when the transaction gets into the transaction pool and no errors occur,
+the transaction will be applied and the changes we made in the key-value store will be saved to the database.
 ```
 
 Notice that we return an empty array at the end of the function. The same idea applies here as well. As the `validateAsset()` function does only allow for static checks, more advanced checks that require data from the store can be performed in the `applyAsset()` function. In case of an error, we put the error in an array and return this array. However, for the `invoiceTransaction` we do not require additional validation steps, so we decided to simply return an empty array.
@@ -123,13 +131,13 @@ Notice that we return an empty array at the end of the function. The same idea a
 #### undoAsset()
 Now it's your turn. Your task is to write the reversed logic of the `applyAsset()` function.
 
-**Task: Complete code for undo function:
+**Task: Complete code for undo function:**
 1. Retrieve sender account
 2. Reduce `invoiceCount` (remember the `undefined` state when it's the first transaction)
 3. Remove id from `invoicesSent` array (Tip: use splice - Also remember `undefined` case)
 4. Return errors
 
-
+_Solution can be found in the `Solution: Invoice Transaction` section._
 
 ### Solution: Invoice Transaction
 
