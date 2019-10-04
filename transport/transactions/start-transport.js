@@ -4,7 +4,7 @@ const {
     BigNum
 } = require('@liskhq/lisk-transactions');
 
-class StartDeliveryTransaction extends BaseTransaction {
+class StartTransportTransaction extends BaseTransaction {
     // owner could send the tx, but not give the packet to the carrier. Carrier will get punished for this :(
     // advanced idea: think about trust point system for owner/receiver as well
 
@@ -107,4 +107,4 @@ class StartDeliveryTransaction extends BaseTransaction {
 
 }
 
-module.exports = StartDeliveryTransaction;
+module.exports = StartTransportTransaction;

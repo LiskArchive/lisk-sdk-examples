@@ -3,7 +3,7 @@ const {
     TransactionError
 } = require('@liskhq/lisk-transactions');
 
-class FinishDeliveryTransaction extends TransferTransaction {
+class FinishTransportTransaction extends TransferTransaction {
 
     static get TYPE () {
         return 24;
@@ -75,4 +75,4 @@ class FinishDeliveryTransaction extends TransferTransaction {
 
 }
 
-module.exports = FinishDeliveryTransaction;
+module.exports = FinishTransportTransaction;

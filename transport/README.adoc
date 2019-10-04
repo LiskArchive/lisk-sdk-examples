@@ -68,7 +68,7 @@ lightAlarmTransaction::
 * Description: If light is detected by the photoresistor inside the packet, the packet sends this transaction to the network.
 This transaction should only go of, when the packet is traveling (between `startDeliveryTransaction` and `finishDeliveryTransaction`).
 
-registerPackageTransaction::
+registerPacketTransaction::
 * Signed by: Owner
 * Required data: packetPublickey, receiverID, receiverLocation, senderLocation, porto, security, minTrust, estTravelTime
 * Altered data: `deliveryStatus="pending"`, describes the current status of the delivery inside the packet account.
@@ -82,7 +82,7 @@ The `porto` will be paid to the carriers account, after successful delivery of t
 Will be unlocked on successful delivery of the packet.
 ** `minTrust` is the minimum trust that is needed, to register as a carrier for this packet.
 
-startDeliveryTransaction::
+startTransportTransaction::
 * Signed by: Carrier
 * Required data: packetID
 * Altered data: `deliveryStatus="ongoing"`, describes the current status of the delivery inside the packet account.
@@ -91,7 +91,7 @@ startDeliveryTransaction::
 If the carrier behaves maliciously, the security will not be unlocked (it will be transferred to the packet owners account, together with the porto).
 This transaction should fail, if the Carrier does not fulfill the requirements in terms of trust and security, that the owner defined as a minimum in the `registerPackageTransaction`.
 
-finishDeliveryTransaction::
+finishTransportTransaction::
 * Signed by: Recipient
 * Required data: packetID, status
 * Altered data: `deliveryStatus="successful|failed"`, describes the status of the delivery inside the packet account.
