@@ -61,7 +61,7 @@ The `validateAsset` function is responsible for only performing static checks. T
 As a best practice, we want to define an empty `errors` array which we return at the end of the function.
 Next up, we perform validation for each property in the asset field (client, requestedAmount, and description).
 
-In case we find an error, we push a new `TransactionError` into the array. In case the function returns an array that contains errors, the transaction will be discarded.
+In case we find an error, we push a new `TransactionError` into the array. The errors array is returned at the end of the function. In case the function returns an array that contains errors, the transaction will be discarded.
 
 To go deeper into the `TransactionError`, the function is exported by `@liskhq/lisk-transactions`. You can find the constructor [here](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/errors.ts#L22).
 
