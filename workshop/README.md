@@ -133,13 +133,63 @@ Now it's your turn. Your task is to write the reversed logic of the `applyAsset(
 
 At this moment, the function is called when a fork occurs and we want to switch to a different chain. In that case, we have to undo transactions and we need to know how to undo a transaction for each specific transaction type. That's why we have to define custom undo logic for this custom transaction.
 
-**Task: Complete code for undo function:**
+**Task 4: Complete code for undo function:**
 1. Retrieve sender account
 2. Reduce `invoiceCount` (remember the `undefined` state when it's the first transaction)
 3. Remove id from `invoicesSent` array (Tip: use splice - Also remember `undefined` case)
 4. Return errors
 
 _Solution can be found in the `Solution: Invoice Transaction` section._
+
+### Testing the InvoiceTransaction
+To test the `InvoiceTransaction`, we have to register the custom transaction to our blockchain in the `index.js` file in the root of the `/workshop` folder.
+
+You'll find code that is commented out. Uncomment the line for importing the `InvoiceTransaction` and uncomment the line of code that registers the custom transaction to the application.
+
+Next, verify if everything is fine by starting the application with `npm start`. In order to verify if our custom invoice transaction works, we should send an invoice transaction. The `/workshop/generator/invoice.js` file contains a generator that uses a genesis account with sufficient funds and creates a JSON object (Run `node generator/invoice.js`).
+
+**Task 5: Quickly explore the generator code at `/workshop/generator/invoice.js`. The code displays how you can generate a transaction object on a client. Normally, we would broadcast the transaction via the Lisk API Client, but as we will be sending the payload via Postman, we are just using `console.log` to print the payload.**
+
+However, the generator does not remove fields that have `undefined` value and doesn't put `"` around each property. To speed things up, you'll find a formatted JSON transaction object down below:
+
+<details>
+    <summary>Invoice Tx JSON:</summary>
+
+    { 
+        "id": "6068542855269194380",
+        "amount": "0",
+        "type": 13,
+        "timestamp": 106087382,
+        "senderPublicKey":
+        "c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f",
+        "senderId": "16313739661670634666L",
+        "recipientId": "8273455169423958419L",
+        "fee": "100000000",
+        "signature":
+            "4855b3b65484b94e6653601dfcafe1205a77fd16431c9e034460015ae9c09e1bd81be7877c9b9cca68b63979a3483589f79b2619093f3266e46515f16382cd02",
+        "signatures": [],
+        "asset":
+        { "client": "Michiel GmbH",
+            "requestedAmount": "1050000000",
+            "description": "Workshop delivered" }
+    }
+</details>
+
+Now, when the blockchain application is running (`npm start`), let's send the above JSON payload to the transactions endpoint with a POST request: `http://localhost:4000/api/transactions`. You should receive the following success result:
+
+```json
+{
+    "meta": {
+        "status": true
+    },
+    "data": {
+        "message": "Transaction(s) accepted"
+    },
+    "links": {}
+}
+```
+
+If you want to be absolutely sure the transaction has been accepted and included in a block, query the following endpoint with the right transaction type as an argument (GET request): `http://localhost:4000/api/transactions?type=13`.
 
 ### Solution: Invoice Transaction
 
@@ -171,3 +221,15 @@ _Solution can be found in the `Solution: Invoice Transaction` section._
         return [];
     }
 </details>
+
+## Nuggets of Knowledge for Custom Transactions
+Before we continue with the `PaymentTransaction`, let's first explore some important concepts related to custom transactions.
+
+### Why can we access this.id or this.amount?
+**Task 6: Read section `7. Why can I use` in the [article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc) to learn why we can access these properties.**
+The full constructor logic for this can be found on [Github](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts#L142).
+
+
+### Which filters can we use for the Store?
+**Task 7: Read up about which filters we can use and why we can access them. You can find it at section `A/ Filters Usage` in [this article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
+
