@@ -32,12 +32,14 @@ The invoice transaction accepts three parameters (send by the freelancer to the 
 This means that we will be only modifying the sender (freelancer) his account.
 
 ### Exploring Invoice Transaction
-First of all, navigate in your terminal to the `./transactions` folder. Run `npm install` to again install the required dependencies as we see the `/transactions` folder as a separate module.
+First of all, navigate in your terminal to the `./transactions` folder. Run `npm install` to again install the required dependencies as we treat the `/transactions` folder as a separate module.
 
 Now, let's get technical. Open the file at `./transactions/invoice_transaction.js`. For this transaction, most code is ready so we can learn how to write a custom transaction. After this, we'll be writing the payment transaction ourselves.
 
 ### Extending BaseTransaction
-The next thing to notice, we are extending the `InvoiceTransaction` from the [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts).
+The next thing to notice, we are extending the `InvoiceTransaction` from the [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts). This gives us the ability to write logic for `prepare`, `validateAsset`, `TYPE`, `FEE`, `applyAsset`, and `undoAsset`.
+
+Let's explore the different functions and their implementations in the `invoice_transaction.js` file.
 
 #### Getter for TYPE
 Static function that returns {number}.
@@ -46,11 +48,13 @@ Static function that returns {number}.
 Static function that returns {number}. We are converting a fee to Beddows which is the lowest denominal in the Lisk ecosystem: 10 ** 8 = 1 LSK (100000000).
 
 #### prepare()
-As we will be only modifying the sender (freelancer) their account, we just need to store this account in the cache of the key-value store. At the moment, we are calling the method through `super`. However, this is a bad practice as the implementation might change inside the `BaseTransaction`. Therefore, we want to go to the `BaseTransaction` to copy the code that caches the sender account.
+As we will be only modifying the sender (freelancer) their account, we just need to store this account in the cache of the key-value store. At the moment, we are calling the method through `super`.
 
-**Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts) at line 399 to copy the implementation.**
+However, this is a bad practice as the implementation might change inside the `BaseTransaction`. Therefore, we want to open the `BaseTransaction` to copy the code that caches the sender account.
 
-_The solution can be found in the `Solution: Invoice Transaction` section._
+**Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts) at line 399 to copy the implementation and paste it in the prepare() function for InvoiceTransaction replacing the `super` call.**
+
+_The solution for each step can be found in the `Solution: Invoice Transaction` section._
 
 Notice, we are looking for an account using the `address` filter. In order to understand better the difference between passing an array or an object to the cache function, I ask you to read up about the difference.
 
@@ -235,6 +239,26 @@ The full constructor logic for this can be found on [Github](https://github.com/
 ### Should we extend from BaseTransaction or TransferTransaction?
 **Task 8: To answer this question, read the following section `1. Should I extend from` in [this article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
 
+## Transaction 2: Payment Transaction
+The payment transaction accepts one parameter in the `asset.data` field (send by the client to the freelancer):
+```json
+{
+    "asset": {
+        "data": "<string: invoice ID>"
+    }
+}
+```
+
+### Implementation Details
+- Validate if invoice ID exists and if the client is sending the required balance to the freelancer
+- Make sure the tokens are send to the right account
+- We do not keep track on the payment status (in the account asset field) as we can query the API to find all payment transactions and look for the invoiceID.
+
+### Exploring Payment Transaction
+If you haven't done this step for the invoice transaction: navigate in your terminal to the `./transactions` folder. Run `npm install` to again install the required dependencies as we treat the `/transactions` folder as a separate module.
+
+Now, let's get technical. Open the file at `./transactions/payment_transaction.js`. For this transaction, most code needs to be written. Good luck!
+
 ### Exploring Payment Transaction
 The idea for the `PaymentTransaction` is that you write the logic yourself based on the requirements and tips I give. The payment transaction will extend from the `TransferTransaction` although we do not recommend this (it simplifies things).
 
@@ -246,16 +270,16 @@ The idea for this transaction is that it will accept only one value that represe
 }
 ```
 
-**Note:** For each step, the solution can be found in the section below `Solution: Payment Transaction`.
+**Note:** For each step, the solution can be found in the section below called `Solution: Payment Transaction`.
 
-Steps to be implemented:
-1. Replace the `super` cache call with the [actual implementation in TransferTransaction](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/0_transfer_transaction.ts#L69). Remember the task about reading up on combining AND and OR, this is exactly what happens here.
+#### Steps To Be Implemented
+1. Replace the `super` cache call with the [actual implementation in TransferTransaction](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/0_transfer_transaction.ts#L69). Remember the task about reading up on combining AND and OR, this is exactly what happens here.<br><br>
 
-2. Besides that, we also want to cache the invoice transaction using the `this.asset.data` field which contains the invoice ID. Make use of the exposed `transaction` store.
+2. Besides that, we also want to cache the invoice transaction using the `this.asset.data` field which contains the invoice ID. Make use of the exposed `transaction` store.<br><br>
 
-3. Find a transaction in the `transaction` store where the `id` matches the id in `this.asset.data`.
+3. Find a transaction in the `transaction` store where the `id` matches the id in `this.asset.data`.<br><br>
 
-4. If you found a transaction, validate if the amount for this transaction is at least equal or larger than the `requestedAmount` from the `InvoiceTransaction`. If you didn't find a transaction, push a `TransactionError` in the `errors` array using the interface we saw earlier in the workshop. 
+4. If you found a transaction, validate if the amount for this transaction is at least equal or larger than the `requestedAmount` from the `InvoiceTransaction`. If you didn't find a transaction, push a `TransactionError` in the `errors` array using the interface we saw earlier in the workshop.<br><br>
 
 To complete things, we should throw an error if the `recipientId` differs from the `senderId` of the invoice transaction. This check needs to be in place to make sure the right person is receiving money for the issued invoice.
 
@@ -284,9 +308,11 @@ However, we need to fund it using the following transaction payload - send via P
         "signature": "bd2cc2c0a653aa2ea25b5034c885a53a5f44779d527f1f0e476b5a5fa08deb86d4dd7fc86133f8fba75fcc9f8fae92c11bf1bf6df55efc5f50ca8dba675f7202",
         "id": "4232693658353776133"
     }
-</details>
+</details><br>
 
-Next, we can use the generator to generate a transaction that fulfills the previous invoice transaction using the right accounts. **Do not forget to modify the `invoiceId` field which holds the ID of the invoice transaction you want to pay for at `/generator/payment.js:28`.**
+Next, we can use the generator to generate a transaction that fulfills the previous invoice transaction using the right accounts.
+
+**Do not forget to modify the `invoiceId` field which holds the ID of the invoice transaction you want to pay for at `/generator/payment.js:28`.**
 
 If you don't know this ID anymore, look up the transaction using the API: http://localhost:4000/api/transactions?type=13
 
@@ -310,7 +336,7 @@ Run the generator with `node generator/payment.js` and copy the outputted `--- P
         "signatures": [],
         "asset": { "data": "6068542855269194380" }
     }
-</details>
+</details><br>
 
 Next, send this generated payload to the `/api/transactions` endpoint. If it gets accepted, your good! Success :)
 
@@ -321,7 +347,7 @@ End of the workshop!
 ### Solution: Payment Transaction
 
 <details>
-    <summary>Prepare() function (step 1 & 2):</summary>
+    <summary>Step 1 & 2: Prepare()</summary>
 
     async prepare(store) {
         await store.account.cache([
@@ -341,7 +367,7 @@ End of the workshop!
 </details>
 
 <details>
-    <summary>Step 3:</summary>
+    <summary>Step 3: Find transaction</summary>
 
     const transaction = store.transaction.find(
 		transaction => transaction.id === this.asset.data
@@ -349,7 +375,7 @@ End of the workshop!
 </details>
 
 <details>
-    <summary>Step 4:</summary>
+    <summary>Step 4: applyAsset() with validation logic</summary>
 
     applyAsset(store) {
 		const errors = super.applyAsset(store);
