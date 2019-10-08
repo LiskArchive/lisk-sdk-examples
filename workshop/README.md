@@ -258,16 +258,68 @@ Steps to be implemented:
 
 4. If you found a transaction, validate if the amount for this transaction is at least equal or larger than the `requestedAmount` from the `InvoiceTransaction`. If you didn't find a transaction, push a `TransactionError` in the `errors` array using the interface we saw earlier in the workshop. 
 
-To complete things, we should throw an error if the `recipientId` differs from the `senderId` of the invoice transaction.
+To complete things, we should throw an error if the `recipientId` differs from the `senderId` of the invoice transaction. This check needs to be in place to make sure the right person is receiving money for the issued invoice.
 
 **Notice:** As our validation requires data that comes from the `store` object, we can't perform this in the `validateAsset` function. Therefore, we don't have to define this function.
 
-// Step 5: let user think on undo function (show code and put comment - undo code or not? no because we are not changing any data in the store)
+5. Think about the implementation of the `undo` function. Tip: We only have to undo actions in case we save/modify data through the store object.
 
 // TODO: look for todo's and uncomment them when the code is stable
-// Test the solution for payment (bear in mind the prepare step with copied logic from transfer tx)
-// Create generator for this tx type and add validation step
-// Optionally, give a last task for locking tokens if we have time (should code this for the design patterns article)
+
+### Testing the PaymentTransaction
+First of all, we will be using the following account: `8273455169423958419L`
+However, we need to fund it using the following transaction payload - send via POST /api/transactions:
+
+<details>
+    <summary>Fund account with 100 LSK</summary>
+
+    {
+        "amount": "10000000000",
+        "recipientId": "8273455169423958419L",
+        "senderPublicKey": "c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f",
+        "timestamp": 106429639,
+        "type": 0,
+        "fee": "10000000",
+        "asset": {
+            
+        },
+        "senderId": "16313739661670634666L",
+        "signature": "bd2cc2c0a653aa2ea25b5034c885a53a5f44779d527f1f0e476b5a5fa08deb86d4dd7fc86133f8fba75fcc9f8fae92c11bf1bf6df55efc5f50ca8dba675f7202",
+        "id": "4232693658353776133"
+    }
+</details>
+
+Next, we can use the generator to generate a transaction that fulfils the previous invoice transaction using the right accounts. **Do not forget to modify the `invoiceId` field which holds the ID of the invoice transaction you want to pay for at `/generator/payment.js:28`.**
+
+If you don't know this ID anymore, look up the transaction using the API: http://localhost:4000/api/transactions?type=13
+
+Run the generator with `node generator/payment.js` and copy the outputted `--- Payment Tx ---`. The payment transaction should look similar to the one below here:
+
+<details>
+    <summary>Payment Tx JSON:</summary>
+
+    {   
+        "id": "14610813406835243898",
+        "amount": "1100000000",
+        "type": 14,
+        "timestamp": 106416998,
+        "senderPublicKey":
+            "9d3058175acab969f41ad9b86f7a2926c74258670fe56b37c429c01fca9f2f0f",
+        "senderId": "8273455169423958419L",
+        "recipientId": "16313739661670634666L",
+        "fee": "10000000",
+        "signature":
+            "a9cfd197227737aaa05d2292ff6a278e6ab81e412b9c17363d0e4a942f8f28c78407f58f46ef56f8fb755de5eec1775a0214d2b789163cf75036f6ee655bd104",
+        "signatures": [],
+        "asset": { "data": "6068542855269194380" }
+    }
+</details>
+
+Next, send this generated payload to the `/api/transactions` endpoint. If it gets accepted, your good! Success :)
+
+You can do a final check to see if `16313739661670634666L` has received the amount for the invoice in her account balance: http://localhost:4000/api/accounts?address=16313739661670634666L
+
+End of the workshop!
 
 ### Solution: Payment Transaction
 
@@ -337,6 +389,19 @@ To complete things, we should throw an error if the `recipientId` differs from t
 				'Existing invoiceID registered as invoice transaction',
 			));
 		}
+
+		return errors;
+	}
+</details>
+
+<details>
+    <summary>Step 5: Undo()</summary>
+
+    undoAsset(store) {
+		// No rollback needed as there is only validation happening in applyAsset
+		// Higher level function will rollback the attempted payment (send back tokens)
+
+		const errors = super.undoAsset(store);
 
 		return errors;
 	}

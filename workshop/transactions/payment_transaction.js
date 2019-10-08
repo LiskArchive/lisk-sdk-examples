@@ -6,66 +6,29 @@ class PaymentTransaction extends TransferTransaction {
 	}
 
 	async prepare(store) {
-		// await super.prepare(store); // To be replaced
-		await store.account.cache([
-			{
-				address: this.senderId,
-			},
-			{
-				address: this.recipientId,
-			},
-		]); // @TODO Remove
-		await store.transaction.cache([
-			{
-				id: this.asset.data,
-			},
-		]); // @TODO Remove
+		await super.prepare(store); // To be replaced (step 1 & 2)
 	}
 
 	applyAsset(store) {
+		// Need to call super here to get validation errors from validation logic in applyAsset function of TransferTransaction
 		const errors = super.applyAsset(store);
 
-		const transaction = store.transaction.find(
-			transaction => transaction.id === this.asset.data
-		); // Find related invoice in transactions for invoiceID
+		// Code step 3 comes here
 
-		if (transaction) {
-			if (this.amount.lt(transaction.asset.requestedAmount)) {
-				errors.push(new TransactionError(
-					'Paid amount is lower than amount stated on invoice',
-					this.id,
-					'.amount',
-					transaction.requestedAmount,
-					'Expected amount to be equal or greater than `requestedAmount`',
-				));
-			}
-			if (transaction.senderId !== this.recipientId) {
-				errors.push(new TransactionError(
-					'RecipientId is not equal to the address that has sent the invoice.',
-					this.id,
-					'.recipientId',
-					this.recipientId,
-					transaction.senderId,
-				));
-			}
+		// Code step 4 comes below here
+		if (transaction) { // if transaction found in step 3 -> start validation
+			
 		} else {
-			errors.push(new TransactionError(
-				'Invoice does not exist for ID',
-				this.id,
-				'.asset.invoiceID',
-				this.asset.data,
-				'Existing invoiceID registered as invoice transaction',
-			));
+			// Return TransactionError if tx doesn't exist
 		}
 
 		return errors;
 	}
 
 	undoAsset(store) {
-		// No rollback needed as there is only validation happening in applyAsset
-		// Higher level function will rollback the attempted payment (send back tokens)
+		const errors = super.undoAsset(store); // Needs to be called for validation errors
 
-		const errors = super.undoAsset(store);
+		// Potential code step 5 comes here
 
 		return errors;
 	}
