@@ -264,8 +264,6 @@ To complete things, we should throw an error if the `recipientId` differs from t
 
 5. Think about the implementation of the `undo` function. Tip: We only have to undo actions in case we save/modify data through the store object.
 
-// TODO: look for todo's and uncomment them when the code is stable
-
 ### Testing the PaymentTransaction
 First of all, we will be using the following account: `8273455169423958419L`
 However, we need to fund it using the following transaction payload - send via POST /api/transactions:
