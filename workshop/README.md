@@ -5,17 +5,17 @@ The workshop demands you actively participate in order to get familiar with cust
 
 ## Concept: LiskBills
 This workshop will cover some aspects of using the Alpha SDK for developing custom transactions.
-First, we will explore two custom transactions which we used for LiskBills. The idea is that we can send an `invoice_transaction` to send an invoice to a client. Next, the client can fulfil the invoice by sending a `payment_transaction`.
+First, we will explore two custom transactions which we used for LiskBills. The idea is that we can send an `invoice_transaction` to send an invoice to a client. Next, the client can fulfill the invoice by sending a `payment_transaction`.
 
 ## Setup
 1. Clone [Lisk-SDK-Examples](https://github.com/LiskHQ/lisk-sdk-examples) repository locally and checkout branch `workshop-custom-txs-start`.
 
 2. Navigate inside `/workshop` folder and run `npm install` to install the required dependencies.
 
-3. In order to verify the setup is correct, try to run the application with `npm start`. The `npm start` command will run the `index.js` file and pipe the outputted logs to our preferred log formatter Bunyan. If everything is running fine, you can go to the next section.
+3. In order to verify the setup is correct, try to run the application with `npm start`. The `npm start` command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan (wraps: `node index.js | npx bunyan -o short`). If everything is running fine, you can go to the next section.
 
 ## Transaction 1: Invoice Transaction
-The invoice transaction accepts three parameters (send by the freelancer to client):
+The invoice transaction accepts three parameters (send by the freelancer to the client):
 ```json
 {
     "client": "<string: company name>",
@@ -37,25 +37,24 @@ First of all, navigate in your terminal to the `./transactions` folder. Run `npm
 Now, let's get technical. Open the file at `./transactions/invoice_transaction.js`. For this transaction, most code is ready so we can learn how to write a custom transaction. After this, we'll be writing the payment transaction ourselves.
 
 ### Extending BaseTransaction
-First thing to notice, we are extending the `InvoiceTransaction` from the [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts).
+The next thing to notice, we are extending the `InvoiceTransaction` from the [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts).
 
 #### Getter for TYPE
 Static function that returns {number}.
 
 #### Getter for FEE
-Static function that returns {number}.
---> 10 ** 8 = 1 LSK
+Static function that returns {number}. We are converting a fee to Beddows which is the lowest denominal in the Lisk ecosystem: 10 ** 8 = 1 LSK (100000000).
 
 #### prepare()
 As we will be only modifying the sender (freelancer) their account, we just need to store this account in the cache of the key-value store. At the moment, we are calling the method through `super`. However, this is a bad practice as the implementation might change inside the `BaseTransaction`. Therefore, we want to go to the `BaseTransaction` to copy the code that caches the sender account.
 
 **Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts) at line 399 to copy the implementation.**
 
-_Solution can be found in the `Solution: Invoice Transaction` section._
+_The solution can be found in the `Solution: Invoice Transaction` section._
 
 Notice, we are looking for an account using the `address` filter. In order to understand better the difference between passing an array or an object to the cache function, I ask you to read up about the difference.
 
-**Task 2: Read about AND and OR filters [at the section `B/ Combining Filters`](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc)**
+**Task 2: Read about AND and OR filters [at section `B/ Combining Filters`](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc)**
 
 #### ValidateAsset()
 The `validateAsset` function is responsible for only performing static checks. This means the function is synchronous and cannot retrieve data from the `store` (the cached sender account). Therefore, we can perform initial checks like validating the presence of the parameter and if it has the correct type. Any other validation logic can be applied as long it does not have to await a promise.
@@ -106,13 +105,13 @@ applyAsset(store) {
 First, we retrieve the data from the store. The store exposes two key-value stores: `account` and `transaction`.
 The `account` store is read-write, `transaction` store is read-only.
 
-**Task 3: Read about the exposed methods by both stores [in the section `B/ Retrieving Data`](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
+**Task 3: Read about the exposed methods by both stores [at the section `B/ Retrieving Data`](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
 
-Now you have read about the exposed methods, you know that the `account` store exposes a `get` function that returns a deep clone of the account object. This means we can freely change properties on the object without having to care about references to the orignal object.
+Now you have read about the exposed methods, you know that the `account` store exposes a `get` function that returns a deep clone of the account object. This means we can freely change properties on the object without having to care about references to the original object.
 
-Next, we have to code with the idea that this can be the first custom transaction. This means that the properties like `invoiceCount` and `invoicesSent` do not yet exist in the asset field of the sender account. Therefore, we have this logic to check if the property is undefined or not. If it is, we set the `invoiceCount` to 1, otherwise we increase the count by one.
+Next, we have to code with the idea that this can be the first custom transaction. This means that the properties like `invoiceCount` and `invoicesSent` do not yet exist in the asset field of the sender account. Therefore, we have this logic to check if the property is undefined or not. If it is, we set the `invoiceCount` to 1, otherwise, we increase the count by one.
 
-Same applies to `invoicesSent`. If the property doesn't exist, we create a new array with the id of the transaction. Otherwise, we append the id to the existing array.
+The same applies to `invoicesSent`. If the property doesn't exist, we create a new array with the id of the transaction. Otherwise, we append the id to the existing array.
 
 Next, we update the object in the key-value store `store.account.set(sender.address, sender)`. We can only save a modified account object by using the address of the account followed by the updated sender object.
 
@@ -120,7 +119,7 @@ Next, we update the object in the key-value store `store.account.set(sender.addr
 Note: Under the hood, the cache method retrieves data from the database
 and stores this data in an in-memory key-value store inside the Lisk application.
 
-When updating an account with the set method, it doens't mean we are changing the account in the database yet.
+When updating an account with the set method, it doesn't mean we are changing the account in the database yet.
 
 Only when the transaction gets into the transaction pool and no errors occur,
 the transaction will be applied and the changes we made in the key-value store will be saved to the database.
@@ -139,7 +138,7 @@ At this moment, the function is called when a fork occurs and we want to switch 
 3. Remove id from `invoicesSent` array (Tip: use splice - Also remember `undefined` case)
 4. Return errors
 
-_Solution can be found in the `Solution: Invoice Transaction` section._
+_The solution can be found in the `Solution: Invoice Transaction` section._
 
 ### Testing the InvoiceTransaction
 To test the `InvoiceTransaction`, we have to register the custom transaction to our blockchain in the `index.js` file in the root of the `/workshop` folder.
@@ -234,12 +233,12 @@ The full constructor logic for this can be found on [Github](https://github.com/
 **Task 7: Read up about which filters we can use and why we can access them. You can find it at section `A/ Filters Usage` in [this article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
 
 ### Should we extend from BaseTransaction or TransferTransaction?
-**Task 8: To answer this question, read the following section `1. Should I extend from` in [the article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
+**Task 8: To answer this question, read the following section `1. Should I extend from` in [this article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
 
 ### Exploring Payment Transaction
 The idea for the `PaymentTransaction` is that you write the logic yourself based on the requirements and tips I give. The payment transaction will extend from the `TransferTransaction` although we do not recommend this (it simplifies things).
 
-The idea for this transaction is that it will accept only one value that represents the ID of the invoice transaction the client wants to pay for. This invoice ID will be send in an asset field that contains a data field (as the `TransferTransaction` requires this).
+The idea for this transaction is that it will accept only one value that represents the ID of the invoice transaction the client wants to pay for. This invoice ID will be sent in an asset field that contains a data field (as the `TransferTransaction` requires this).
 
 ```
 "asset": {
@@ -287,7 +286,7 @@ However, we need to fund it using the following transaction payload - send via P
     }
 </details>
 
-Next, we can use the generator to generate a transaction that fulfils the previous invoice transaction using the right accounts. **Do not forget to modify the `invoiceId` field which holds the ID of the invoice transaction you want to pay for at `/generator/payment.js:28`.**
+Next, we can use the generator to generate a transaction that fulfills the previous invoice transaction using the right accounts. **Do not forget to modify the `invoiceId` field which holds the ID of the invoice transaction you want to pay for at `/generator/payment.js:28`.**
 
 If you don't know this ID anymore, look up the transaction using the API: http://localhost:4000/api/transactions?type=13
 
