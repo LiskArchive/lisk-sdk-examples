@@ -48,5 +48,3 @@ api.transactions.broadcast(tx.toJSON()).then(res => {
 }).catch(err => {
     console.log(JSON.stringify(err.errors, null, 2));
 });
-
-

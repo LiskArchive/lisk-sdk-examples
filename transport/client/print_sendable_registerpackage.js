@@ -25,8 +25,8 @@ let tx =  new RegisterPacketTransaction({
         security: `${transactions.utils.convertLSKToBeddows('100')}`,
         minTrust: 5,
     },
-    fee: "0",
-    recipientId: "10881167371402274308L", // dummy delegate_100
+    fee: '0',
+    recipientId: '10881167371402274308L', // dummy delegate_100
     timestamp: getTimestamp()
 });
 

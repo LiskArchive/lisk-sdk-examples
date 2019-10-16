@@ -27,6 +27,7 @@ class RegisterPacketTransaction extends BaseTransaction {
     }
 
     validateAsset() {
+        // Static check for presence of `packetId`
         const errors = [];
         if (!this.asset.packetId || typeof this.asset.packetId !== 'string') {
             errors.push(
@@ -38,26 +39,68 @@ class RegisterPacketTransaction extends BaseTransaction {
                 )
             );
         }
+        if (!this.asset.porto || typeof this.asset.porto !== 'string') {
+			errors.push(
+				new TransactionError(
+					'Invalid "asset.porto" defined on transaction',
+					this.id,
+					'.asset.porto',
+					this.asset.porto,
+					'A string value',
+				)
+			);
+        }
+        if (!this.asset.security || typeof this.asset.security !== 'string') {
+			errors.push(
+				new TransactionError(
+					'Invalid "asset.security" defined on transaction',
+					this.id,
+					'.asset.security',
+					this.asset.security,
+					'A string value',
+				)
+			);
+        }
+        if (!this.asset.minTrust || typeof this.asset.minTrust !== 'number') {
+			errors.push(
+				new TransactionError(
+					'Invalid "asset.minTrust" defined on transaction',
+					this.id,
+					'.asset.minTrust',
+					this.asset.minTrust,
+					'A number value',
+				)
+			);
+		}
         return errors;
     }
 
     applyAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.asset.packetId);
+        
+        /* --- Modify sender account --- */
         const sender = store.account.get(this.senderId);
-        const senderBalanceWithoutPorto = new utils.BigNum(sender.balance).sub(
-            new utils.BigNum(this.asset.porto)
-        );
-        const packetBalanceWithPorto = new utils.BigNum(packet.balance).add(
+        const senderBalancePortoDeducted = new utils.BigNum(sender.balance).sub(
             new utils.BigNum(this.asset.porto)
         );
         const updatedSender = {
             ...sender,
-            balance: senderBalanceWithoutPorto.toString()
+            balance: senderBalancePortoDeducted.toString(),
         };
-        // Deduct the porto from senders' account balance
+
+        /**
+         * Update the sender account:
+         * - Deduct the porto from senders' account balance
+         */
         store.account.set(sender.address, updatedSender);
-        const newObj = {
+
+        /* --- Modify packet account --- */
+        const packet = store.account.get(this.asset.packetId);
+        const packetBalanceWithPorto = new utils.BigNum(packet.balance).add(
+            new utils.BigNum(this.asset.porto)
+        );
+
+        const updatedPacketAccount = {
             ...packet,
             balance : packetBalanceWithPorto.toString(),
             asset: {
@@ -66,7 +109,7 @@ class RegisterPacketTransaction extends BaseTransaction {
                 security: this.asset.security,
                 porto: this.asset.porto,
                 minTrust: this.asset.minTrust,
-                status: "pending",
+                status: 'pending',
                 carrier: null
             }
         };
@@ -77,19 +120,24 @@ class RegisterPacketTransaction extends BaseTransaction {
          *   - recipient: ID of the packet recipient
          *   - sender: ID of the packet sender
          *   - carrier: ID of the packet carrier
-         *   - security: Amount of tokens the carrier needs to lock during the transport of the packet
-         *   - porto: the amount of tokens the sender needs to pay for transportation of the packet
-         *   - minTrust: minimal trust that is needed to be carrier for the packet
-         *   - status: status of the transport (pending|ongoing|success|fail)
+         *   - security: Number of tokens the carrier needs to lock during the transport of the packet
+         *   - porto: Number of tokens the sender needs to pay for transportation of the packet
+         *   - minTrust: Minimal trust that is needed to be carrier for the packet
+         *   - status: Status of the transport (pending|ongoing|success|fail)
          */
-        store.account.set(packet.address, newObj);
+        store.account.set(packet.address, updatedPacketAccount);
         return errors;
     }
 
     undoAsset(store) {
+        const errors = [];
+
+        /* --- Revert packet account --- */
         const packet = store.account.get(this.asset.packetId);
-        const oldObj = { ...packet, balance: 0, asset: null };
-        store.account.set(packet.address, oldObj);
+        const originalPacketAccount = { ...packet, balance: 0, asset: null };
+        store.account.set(packet.address, originalPacketAccount);
+
+        /* --- Revert sender account --- */
         const sender = store.account.get(this.senderId);
         const senderBalanceWithPorto = new utils.BigNum(sender.balance).add(
             new utils.BigNum(this.asset.porto)
@@ -99,7 +147,7 @@ class RegisterPacketTransaction extends BaseTransaction {
             balance: senderBalanceWithPorto.toString()
         };
         store.account.set(sender.address, updatedSender);
-        return [];
+        return errors;
     }
 
 }

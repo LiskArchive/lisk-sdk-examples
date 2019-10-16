@@ -78,7 +78,7 @@ A separate account for the packet will be created.
 ** `receiverID` the ID of the recipient in the network (to verify succesful delivery later).
 ** `porto` needs to be paid by the owner, and is stored in the account of the packet.
 The `porto` will be paid to the carriers account, after successful delivery of the packet.
-** `security` is the amount of tokens a person has to lock as a security, before carrying the packet.
+** `security` is the number of tokens a carrier has to lock as a security, before carrying the packet.
 Will be unlocked on successful delivery of the packet.
 ** `minTrust` is the minimum trust that is needed, to register as a carrier for this packet.
 
