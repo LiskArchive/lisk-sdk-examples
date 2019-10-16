@@ -4,6 +4,9 @@ const {
     utils
 } = require('@liskhq/lisk-transactions');
 
+/**
+ * Register new package for sender and update package account.
+ */
 class RegisterPacketTransaction extends BaseTransaction {
 
     static get TYPE () {
@@ -11,7 +14,6 @@ class RegisterPacketTransaction extends BaseTransaction {
     }
 
     static get FEE () {
-        //return `${10 ** 8}`;
         return '0';
     };
 
@@ -27,7 +29,7 @@ class RegisterPacketTransaction extends BaseTransaction {
     }
 
     validateAsset() {
-        // Static check for presence of `packetId`
+        // Static checks for presence of `packetId`, `porto`, `security`, and `minTrust`.
         const errors = [];
         if (!this.asset.packetId || typeof this.asset.packetId !== 'string') {
             errors.push(

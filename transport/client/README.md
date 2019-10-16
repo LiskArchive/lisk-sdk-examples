@@ -4,4 +4,4 @@
 
 By funding an account that doesn't exist yet, a default account will be created for that address. This is an important step for registering our package as we will have to modify the asset field of the packet account.
 
-2. `node print_sendable_registerpackage.js`: 
+2. `node print_sendable_registerpackage.js`: Creates a sendable transaction payload to be sent to the transactions endpoint `localhost:4000/api/transactions`.
