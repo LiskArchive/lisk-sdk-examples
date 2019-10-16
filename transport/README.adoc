@@ -66,7 +66,7 @@ lightAlarmTransaction::
 * Signed by: Package
 * Required data: timestamp
 * Description: If light is detected by the photoresistor inside the packet, the packet sends this transaction to the network.
-This transaction should only go of, when the packet is traveling (between `startDeliveryTransaction` and `finishDeliveryTransaction`).
+This transaction should only go off, when the packet is traveling (between `startDeliveryTransaction` and `finishDeliveryTransaction`).
 
 registerPacketTransaction::
 * Signed by: Owner
@@ -118,10 +118,10 @@ node create_and_initialize_packet_account.js
 ----
 
 Register a packet on the blockhain::
-Before running the script, open `print_sendable_registerpackage.js` and set as `packetId` the ID you received when running `create_and_initialize_packet_account.js` .
+Before running the script, open `print_sendable_register_package.js` and set as `packetId` the ID you received when running `create_and_initialize_packet_account.js` .
 [source, bash]
 ----
-node print_sendable_registerpackage.js | tee >(curl -X POST -H "Content-Type: application/json" -d @- localhost:4000/api/transactions)
+node print_sendable_register_package.js | tee >(curl -X POST -H "Content-Type: application/json" -d @- localhost:4000/api/transactions)
 
 ----
 

@@ -3,20 +3,19 @@ const transactions = require('@liskhq/lisk-transactions');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
 
 const getTimestamp = () => {
-    // check config file or curl localhost:4000/api/node/constants to verify your epoc time
+    // check config file or curl localhost:4000/api/node/constants to verify your epoc time (OK when using /transport/node/index.js)
     const millisSinceEpoc = Date.now() - Date.parse(EPOCH_TIME);
     const inSeconds = ((millisSinceEpoc) / 1000).toFixed(0);
     return parseInt(inSeconds);
 };
 
-const packetCredentials = { address: '933972897873682359L',
-    passphrase:
-        'warfare science dirt response size torch paper horn suspect inmate prize way',
-    publicKey:
-        '26fa78c7747de51aba9ca2f9ca9d8566bfb3638a77d03a44990ddecee7ef62ee',
-    privateKey:
-        '39bcd0ed4e3f417af9a1276721dae20658c6e0051792671935d20465d675b4b126fa78c7747de51aba9ca2f9ca9d8566bfb3638a77d03a44990ddecee7ef62ee'
-};
+const packetCredentials = { address: '7955510739435963639L',
+passphrase:
+ 'okay skill left caught nation tonight agree cover flush mean horn member',
+publicKey:
+ '69b1fdd660dc630709284364b2c6fd258ca5efe6130ddf63e96f4873b8a51b9b',
+privateKey:
+ '6688ef49838f973c065667ef2873b0e9b8de4782b8fcbf2336acb235928af88f69b1fdd660dc630709284364b2c6fd258ca5efe6130ddf63e96f4873b8a51b9b' }
 
 let tx =  new RegisterPacketTransaction({
     asset: {

@@ -1,5 +1,5 @@
 {
-  "name": "LiskDelivery",
+  "name": "lisk-delivery-node",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",

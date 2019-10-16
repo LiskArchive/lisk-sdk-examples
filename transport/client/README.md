@@ -4,4 +4,8 @@
 
 By funding an account that doesn't exist yet, a default account will be created for that address. This is an important step for registering our package as we will have to modify the asset field of the packet account.
 
-2. `node print_sendable_registerpackage.js`: Creates a sendable transaction payload to be sent to the transactions endpoint `localhost:4000/api/transactions`.
+2. `node print_sendable_register_package.js`: Creates a sendable transaction payload to be sent to the transactions endpoint `localhost:4000/api/transactions`.
+
+3. Register carrier (MVP2 implementation)
+
+4. If package is on its way, there is no end timstamp (added by finishTransportTransaction). Also, we need to check for the delivery status which needs to be set to **"ongoing"**. Only if both checks succeed, we can fire the LightAlarmTransaction. (MVP1)
