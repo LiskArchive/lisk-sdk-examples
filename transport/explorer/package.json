@@ -2,13 +2,16 @@
   "name": "lisk-delivery-explorer",
   "version": "1.0.0",
   "description": "Explorer for Lisk delivery proof of concept",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@liskhq/lisk-api-client": "^2.0.3"
+    "@liskhq/lisk-api-client": "^2.0.3",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "pug": "^2.0.4"
   }
 }

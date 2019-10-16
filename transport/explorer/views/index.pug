@@ -1,0 +1,26 @@
+doctype html
+html(lang="en")
+  head
+    title Lisk Transport Explorer
+
+    link(href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', rel='stylesheet')
+    script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js')
+    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js')
+
+  body
+    block menu
+      nav.navbar.navbar-expand-lg.navbar-light.bg-light
+        a(href='/').navbar-brand
+  
+        nav.collapse.navbar-collapse
+          ul.navbar-nav.mr-auto
+            li.nav-item
+              a(href='/accounts').nav-link Accounts
+
+    .container
+      block content
+        .jumbotron
+          h1 Lisk Transport Explorer
+          p.lead
+            | Browse transactions for Lisk Transport Proof of Concept
