@@ -35,16 +35,18 @@ let tx = new transactions.TransferTransaction({
     recipientId: packetCredentials.address,
 });
 
-tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble');
+tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble'); // Genesis account with address: 16313739661670634666L
 
 api.transactions.broadcast(tx.toJSON()).then(res => {
+    console.log("++++++++++++++++ API Response +++++++++++++++++");
     console.log(res.data);
-    console.log("+++++++++++++++++++++++++++++++++" );
+    console.log("++++++++++++++++ Credentials +++++++++++++++++");
     console.dir(packetCredentials);
-    console.log("+++++++++++++++++++++++++++++++++" );
-    console.log("+++++++++++++++++++++++++++++++++" );
+    console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
     console.log(tx.stringify());
-    console.log("+++++++++++++++++++++++++++++++++" );
-}).catch(err => { console.log(JSON.stringify(err.errors, null, 2)) });
+    console.log("++++++++++++++++ End Script +++++++++++++++++");
+}).catch(err => {
+    console.log(JSON.stringify(err.errors, null, 2));
+});
 
 
