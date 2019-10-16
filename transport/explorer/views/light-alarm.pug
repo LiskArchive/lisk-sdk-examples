@@ -1,0 +1,20 @@
+extends index.pug
+
+block content
+  h2 LightAlarm Transactions (Type: 21)
+
+  table(border='1')
+    tr
+      th ID
+      th Timestamp
+      th SenderId
+      th RecipientId
+      th Asset
+
+    each transaction in transactions
+      tr
+        td= transaction.id
+        td= transaction.timestamp
+        td= transaction.senderId
+        td= transaction.recipientId
+        td= transaction.asset || '{}'

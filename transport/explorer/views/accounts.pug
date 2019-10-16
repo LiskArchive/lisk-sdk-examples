@@ -1,0 +1,16 @@
+extends index.pug
+
+block content
+  h2 Accounts
+
+  table(border='1')
+    tr
+      th Address
+      th Balance
+      th Asset
+
+    each account in accounts
+      tr
+        td= account.address
+        td= account.balance
+        td= JSON.stringify(account.asset, null, 2)

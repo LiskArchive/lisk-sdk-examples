@@ -9,13 +9,13 @@ const getTimestamp = () => {
     return parseInt(inSeconds);
 };
 
-const packetCredentials = { address: '7955510739435963639L',
+const packetCredentials = { address: '3715338682269676579L',
 passphrase:
- 'okay skill left caught nation tonight agree cover flush mean horn member',
+ 'shaft angle ivory inhale hawk quantum below enter load drum boss silent',
 publicKey:
- '69b1fdd660dc630709284364b2c6fd258ca5efe6130ddf63e96f4873b8a51b9b',
+ '6a5ad57be35517c0dfa18c45475f7a76592f8b4c99bc4224f2829e4297b901f9',
 privateKey:
- '6688ef49838f973c065667ef2873b0e9b8de4782b8fcbf2336acb235928af88f69b1fdd660dc630709284364b2c6fd258ca5efe6130ddf63e96f4873b8a51b9b' }
+ '8b4c4d91a5aa9b7476330b323244c75c8c32c7fdd7181ecf8d3bd113f662fcf16a5ad57be35517c0dfa18c45475f7a76592f8b4c99bc4224f2829e4297b901f9' }
 
 let tx =  new RegisterPacketTransaction({
     asset: {
