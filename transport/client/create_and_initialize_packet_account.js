@@ -5,6 +5,15 @@ const { Mnemonic } = require('@liskhq/lisk-passphrase');
 
 const api = new APIClient(['http://localhost:4000']);
 
+/**
+ * Util function for creating credetials object.
+ * 
+ * @param {Object} credentials
+ * @param {string} credentials.address
+ * @param {string} credentials.passphrase
+ * @param {string} credentials.publicKey
+ * @param {string} credentials.privateKey
+ */
 const getPacketCredentials = () => {
     const passphrase = Mnemonic.generateMnemonic();
     const keys = cryptography.getPrivateAndPublicKeyFromPassphrase(
@@ -21,7 +30,7 @@ const getPacketCredentials = () => {
 
 const packetCredentials = getPacketCredentials();
 
-let tx =  new transactions.TransferTransaction({
+let tx = new transactions.TransferTransaction({
     amount: '1235',
     recipientId: packetCredentials.address,
 });
