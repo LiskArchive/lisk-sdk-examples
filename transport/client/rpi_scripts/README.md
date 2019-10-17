@@ -9,8 +9,6 @@ For using any of these scripts copy all the contents of the desired folder into 
 
 
 For wiring both sensors check the following image: 
-
-Reference-style: 
 ![alt text][logo]
 
 [logo]: https://raw.githubusercontent.com/LiskHQ/lisk-sdk-examples/lisk-transport/transport/client/rpi_scripts/lisk_rpi_ldr_and_temperature_sensors_wiring.png "Wiring diagram for sensors"
