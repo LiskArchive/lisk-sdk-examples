@@ -6,6 +6,8 @@ const LightAlarmTransaction = require('../../../transactions/light-alarm');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
 const { APIClient } = require('@liskhq/lisk-api-client');
 
+const api = new APIClient(['http://localhost:4000']);
+
 const getTimestamp = () => {
     // check config file or curl localhost:4000/api/node/constants to verify your epoc time (OK when using /transport/node/index.js)
     const millisSinceEpoc = Date.now() - Date.parse(EPOCH_TIME);
