@@ -5,6 +5,7 @@ const FinishTransportTransaction = require('../transactions/finish-transport');
 const LightAlarmTransaction = require('../transactions/light-alarm');
 
 configDevnet.app.label = 'lisk-transport';
+configDevnet.modules.http_api.access.public = true;
 
 const app = new Application(genesisBlockDevnet, configDevnet);
 app.registerTransaction(RegisterPacketTransaction);
