@@ -55,6 +55,12 @@ class FinishTransportTransaction extends BaseTransaction {
         if (this.asset.senderId === packet.carrier) {
             // if the transport was a success
             if ( this.asset.status === "success") {
+                /**
+                 * Update the Carrier account:
+                 * - Unlock security
+                 * - Add porto & security to balance
+                 * - Earn 1 trustpoint
+                 */
                 const carrierBalanceWithSecurityAndPorto = new utils.BigNum(carrier.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.porto));
                 const updatedTrust = sender.asset.trust ? sender.asset.trust + 1 : 1;
                 const updatedCarrier = {
@@ -65,13 +71,12 @@ class FinishTransportTransaction extends BaseTransaction {
                         trust: updatedTrust
                     }
                 };
-                /**
-                 * Update the Carrier account:
-                 * - Unlock security
-                 * - Add porto & security to balance
-                 * - Earn 1 trustpoint
-                 */
                 store.account.set(carrier.address, updatedCarrier);
+                /**
+                 * Update the Packet account:
+                 * - Remove porto from balance
+                 * - Change status to "success"
+                 */
                 const updatedData = {
                     balance: '0',
                     asset: {
@@ -82,25 +87,25 @@ class FinishTransportTransaction extends BaseTransaction {
                     ...packet,
                     ...updatedData
                 };
-                /**
-                 * Update the Packet account:
-                 * - Remove porto from balance
-                 * - Change status to "success"
-                 */
                 store.account.set(packet.address, newObj);
                 return errors;
             }
             // if the transport failed
+            /**
+             * Update the Sender account:
+             * - Add porto and security to balance
+             */
             const senderBalanceWithSecurityAndPorto = new utils.BigNum(sender.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.porto));
             const updatedSender = {
                 ...sender,
                 balance: senderBalanceWithSecurityAndPorto.toString(),
             };
-            /**
-             * Update the Sender account:
-             * - Add porto and security to balance
-             */
             store.account.set(sender.address, updatedSender);
+            /**
+             * Update the Carrier account:
+             * - Reduce trust by 1
+             * - Set lockedSecurity to 0
+             */
             const updatedTrust = carrier.asset.trust - 1;
             const updatedCarrier = {
                 ...carrier,
@@ -109,12 +114,12 @@ class FinishTransportTransaction extends BaseTransaction {
                     lockedSecurity: '0'
                 },
             };
-            /**
-             * Update the Carrier account:
-             * - Reduce trust by 1
-             * - Set lockedSecurity to 0
-             */
             store.account.set(carrier.address, updatedCarrier);
+            /**
+             * Update the Packet account:
+             * - set status to "fail"
+             * - Remove porto from balance
+             */
             const updatedData = {
                 balance: '0',
                 asset: {
@@ -125,11 +130,6 @@ class FinishTransportTransaction extends BaseTransaction {
                 ...packet,
                 ...updatedData
             };
-            /**
-             * Update the Packet account:
-             * - set status to "fail"
-             * - Remove porto from balance
-             */
             store.account.set(packet.address, newObj);
 
             return errors;

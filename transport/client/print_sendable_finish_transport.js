@@ -1,4 +1,4 @@
-const StartTranportTransaction = require('../transactions/start-transport');
+const FinishTransportTransaction = require('../transactions/finish-transport');
 //const transactions = require('@liskhq/lisk-transactions');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
 
@@ -18,16 +18,17 @@ const packetCredentials = { address: '8589518043398634788L',
         'e7357004da88509c75b37ed9cb01a8716200f7d1964df3c124ba87a0a23277c274f094b8c5eb5ccf7765fb5b111c94e132e04d32d880beca6ff5599ef8f45400' }
 
 
-let tx =  new StartTranportTransaction({
+let tx =  new FinishTransportTransaction({
     asset: {
-        packetId: packetCredentials.address
+        packetId: packetCredentials.address,
+        status: "success"
     },
     fee: '0',
     recipientId: '10881167371402274308L', // dummy delegate_100
     timestamp: getTimestamp()
 });
-//16313739661670634666L
-tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble'); // 16313739661670634666L
+
+tx.sign('actress route auction pudding shiver crater forum liquid blouse imitate seven front'); // 10881167371402274308L
 
 console.log(tx.stringify());
 process.exit(0);
