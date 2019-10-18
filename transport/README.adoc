@@ -148,7 +148,7 @@ Expected result:
                 "sender": "16313739661670634666L",
                 "status": "pending"
             },
-            "balance": "1000001235",
+            "balance": "500001235",
             "publicKey": "",
             "secondPublicKey": ""
         }
