@@ -5,10 +5,6 @@ const {
 } = require('@liskhq/lisk-transactions');
 
 class StartTransportTransaction extends BaseTransaction {
-    // sender could send the tx, but not give the packet to the carrier. Carrier will get punished for this :(
-    // advanced idea: think about trust point system for sender/receiver as well
-
-    // Carrier should ONLY post "register-carrier", when the carrier is already at the location of the packet sender.
 
     static get TYPE () {
         return 23;
@@ -50,43 +46,36 @@ class StartTransportTransaction extends BaseTransaction {
         const packet = store.account.get(this.asset.packetId);
         const carrier = store.account.get(this.senderId);
         // If the carrier has the trust to transport the packet
-        if (packet.asset.minTrust <= carrier.asset.trust) {
-            const carrierBalanceWithoutSecurity = new utils.BigNum(carrier.balance).sub(
-                new utils.BigNum(packet.security)
-            );
-            const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
-            const updatedCarrier = {
-                ...carrier,
-                balance: carrierBalanceWithoutSecurity.toString(),
-                asset: {
-                    lockedSecurity: packet.security,
-                    trust: carrierTrust
-                }
-            };
+        const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
+        if (packet.asset.minTrust <= carrierTrust) {
             /**
              * Update the Carrier account:
              * - Lock security inside the account
              * - Remove the security form balance
              * - initialize carriertrust, if not present already
              */
-            store.account.set(carrier.address, updatedCarrier);
-            const updatedData = {
+            const carrierBalanceWithoutSecurity = new utils.BigNum(carrier.balance).sub(
+                new utils.BigNum(packet.asset.security)
+            );
+            const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
+            const updatedCarrier = {
+                ...carrier,
+                balance: carrierBalanceWithoutSecurity.toString(),
                 asset: {
-                    status: "ongoing",
-                    carrier: carrier.address
+                    trust: carrierTrust,
+                    lockedSecurity: packet.asset.security,
                 }
             };
-            const newObj = {
-                ...packet,
-                ...updatedData
-            };
+            store.account.set(carrier.address, updatedCarrier);
             /**
              * Update the Packet account:
              * - Set status to "ongoing"
              * - set carrier to ID of the carrier
              */
-            store.account.set(packet.address, newObj);
-        } else {
+            packet.asset.status = "ongoing";
+            packet.asset.carrier = carrier.address;
+            store.account.set(packet.address, packet);
+       } else {
             errors.push(
                 new TransactionError(
                     'carrier has not enough trust to deliver the packet',
@@ -102,7 +91,7 @@ class StartTransportTransaction extends BaseTransaction {
         const packet = store.account.get(this.asset.packetId);
         const carrier = store.account.get(this.asset.carrierId);
         const carrierBalanceWithSecurity = new utils.BigNum(carrier.balance).add(
-            new utils.BigNum(packet.security)
+            new utils.BigNum(packet.assset.security)
         );
         const updatedCarrier = {
             ...carrier,

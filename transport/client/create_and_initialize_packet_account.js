@@ -6,8 +6,8 @@ const { Mnemonic } = require('@liskhq/lisk-passphrase');
 const api = new APIClient(['http://localhost:4000']);
 
 /**
- * Util function for creating credetials object.
- * 
+ * Util function for creating credentials object.
+ *
  * @param {Object} credentials
  * @param {string} credentials.address
  * @param {string} credentials.passphrase
@@ -31,7 +31,7 @@ const getPacketCredentials = () => {
 const packetCredentials = getPacketCredentials();
 
 let tx = new transactions.TransferTransaction({
-    amount: '1235',
+    amount: `${transactions.utils.convertLSKToBeddows('1')}`,
     recipientId: packetCredentials.address,
 });
 

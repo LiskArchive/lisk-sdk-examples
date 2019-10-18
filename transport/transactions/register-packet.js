@@ -63,7 +63,7 @@ class RegisterPacketTransaction extends BaseTransaction {
 				)
 			);
         }
-        if (!this.asset.minTrust || typeof this.asset.minTrust !== 'number') {
+        if (typeof this.asset.minTrust !== 'number' || isNaN(parseFloat(this.asset.minTrust)) || !isFinite(this.asset.minTrust)) {
 			errors.push(
 				new TransactionError(
 					'Invalid "asset.minTrust" defined on transaction',
@@ -79,8 +79,12 @@ class RegisterPacketTransaction extends BaseTransaction {
 
     applyAsset(store) {
         const errors = [];
-        
+
         /* --- Modify sender account --- */
+        /**
+         * Update the sender account:
+         * - Deduct the porto from senders' account balance
+         */
         const sender = store.account.get(this.senderId);
         const senderBalancePortoDeducted = new utils.BigNum(sender.balance).sub(
             new utils.BigNum(this.asset.porto)
@@ -89,14 +93,21 @@ class RegisterPacketTransaction extends BaseTransaction {
             ...sender,
             balance: senderBalancePortoDeducted.toString(),
         };
-
-        /**
-         * Update the sender account:
-         * - Deduct the porto from senders' account balance
-         */
         store.account.set(sender.address, updatedSender);
 
         /* --- Modify packet account --- */
+        /**
+         * Update the packet account:
+         * - Add the porto to the packet account balance
+         * - Add all important data about the packet inside the asset field:
+         *   - recipient: ID of the packet recipient
+         *   - sender: ID of the packet sender
+         *   - carrier: ID of the packet carrier
+         *   - security: Number of tokens the carrier needs to lock during the transport of the packet
+         *   - porto: Number of tokens the sender needs to pay for transportation of the packet
+         *   - minTrust: Minimal trust that is needed to be carrier for the packet
+         *   - status: Status of the transport (pending|ongoing|success|fail)
+         */
         const packet = store.account.get(this.asset.packetId);
         const packetBalanceWithPorto = new utils.BigNum(packet.balance).add(
             new utils.BigNum(this.asset.porto)
@@ -115,18 +126,6 @@ class RegisterPacketTransaction extends BaseTransaction {
                 carrier: null
             }
         };
-        /**
-         * Update the packet account:
-         * - Add the porto to the packet account balance
-         * - Add all important data about the packet inside the asset field:
-         *   - recipient: ID of the packet recipient
-         *   - sender: ID of the packet sender
-         *   - carrier: ID of the packet carrier
-         *   - security: Number of tokens the carrier needs to lock during the transport of the packet
-         *   - porto: Number of tokens the sender needs to pay for transportation of the packet
-         *   - minTrust: Minimal trust that is needed to be carrier for the packet
-         *   - status: Status of the transport (pending|ongoing|success|fail)
-         */
         store.account.set(packet.address, updatedPacketAccount);
         return errors;
     }

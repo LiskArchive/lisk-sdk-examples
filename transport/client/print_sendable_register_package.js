@@ -9,20 +9,21 @@ const getTimestamp = () => {
     return parseInt(inSeconds);
 };
 
-const packetCredentials = { address: '3715338682269676579L',
-passphrase:
- 'shaft angle ivory inhale hawk quantum below enter load drum boss silent',
-publicKey:
- '6a5ad57be35517c0dfa18c45475f7a76592f8b4c99bc4224f2829e4297b901f9',
-privateKey:
- '8b4c4d91a5aa9b7476330b323244c75c8c32c7fdd7181ecf8d3bd113f662fcf16a5ad57be35517c0dfa18c45475f7a76592f8b4c99bc4224f2829e4297b901f9' }
+const packetCredentials = { address: '13072505682812576010L',
+    passphrase:
+        'six subway group pioneer feature flame guess gather frog head start improve',
+    publicKey:
+        '561c89a44d2820ae08e9bc178fa5e1ca2bcf5ba79f1f176fa1bd195b288dbb4f',
+    privateKey:
+        '157f4882811c0a429fcfdc3e890a9eabedc162682e1829b546e6e64e3466f1e5561c89a44d2820ae08e9bc178fa5e1ca2bcf5ba79f1f176fa1bd195b288dbb4f' }
+
 
 let tx =  new RegisterPacketTransaction({
     asset: {
         packetId: packetCredentials.address,
         porto: `${transactions.utils.convertLSKToBeddows('5')}`,
         security: `${transactions.utils.convertLSKToBeddows('100')}`,
-        minTrust: 5,
+        minTrust: 0,
     },
     fee: '0',
     recipientId: '10881167371402274308L', // dummy delegate_100
