@@ -17,4 +17,4 @@ block content
         td= transaction.timestamp
         td= transaction.senderId
         td= transaction.recipientId
-        td= transaction.asset || '{}'
+        td= JSON.stringify(transaction.asset, null, 2) || '{}'

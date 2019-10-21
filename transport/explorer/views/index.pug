@@ -13,7 +13,7 @@ html(lang="en")
       nav.navbar.navbar-expand-lg.navbar-light.bg-light
         a(href='/').navbar-brand
             | Home
-  
+
         nav.collapse.navbar-collapse
           ul.navbar-nav.mr-auto
             li.nav-item
@@ -22,6 +22,8 @@ html(lang="en")
               a(href='/register-packet').nav-link RegisterPacketTransactions
             li.nav-item
               a(href='/light-alarm').nav-link LightAlarmTransactions
+            li.nav-item
+              a(href='/initialize').nav-link Initialize
 
     .container
       block content
@@ -34,7 +36,7 @@ html(lang="en")
         @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
         body {
             background: linear-gradient(45deg, #004AFF 0%, #93F4FE 100%);
-            width: 100%;  
+            width: 100%;
             min-height: 100vh;
         }
         h1, .lead, .nav-link {
