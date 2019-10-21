@@ -16,17 +16,24 @@ class FinishTransportTransaction extends BaseTransaction {
     };
 
     async prepare(store) {
-        const packet = await store.account.cache([
+        /**
+         * Get packet account
+         */
+        await store.account.cache([
             {
                 address: this.asset.packetId,
             }
         ]);
+        /**
+         * Get sender and recipient accounts of the packet
+         */
+        const pckt = store.account.get(this.asset.packetId);
         await store.account.cache([
             {
-                address: packet.carrier,
+                address: pckt.carrier,
             },
             {
-                address: packet.sender,
+                address: pckt.sender,
             },
         ]);
     }
