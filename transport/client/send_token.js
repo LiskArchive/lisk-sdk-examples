@@ -8,7 +8,7 @@ const api = new APIClient(['http://localhost:4000']);
 
 let tx = new transactions.TransferTransaction({
     amount: `${transactions.utils.convertLSKToBeddows('2000')}`,
-    recipientId: accounts.carrier2.address,
+    recipientId: accounts.carrier.address,
 });
 
 tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble'); // Genesis account with address: 16313739661670634666L

@@ -16,7 +16,7 @@ let tx =  new StartTranportTransaction({
     timestamp: getTimestamp()
 });
 
-tx.sign(accounts.carrier2.passphrase);
+tx.sign(accounts.carrier.passphrase);
 
 console.log(tx.stringify());
 process.exit(0);

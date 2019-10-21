@@ -121,7 +121,7 @@ Register a packet on the blockhain::
 Before running the script, open `print_sendable_register_package.js` and set as `packetId` the ID you received when running `create_and_initialize_packet_account.js` .
 [source, bash]
 ----
-node print_sendable_register_package.js | tee >(curl -X POST -H "Content-Type: application/json" -d @- localhost:4000/api/transactions)
+node print_sendable_register_packet.js | tee >(curl -X POST -H "Content-Type: application/json" -d @- localhost:4000/api/transactions)
 
 ----
 
