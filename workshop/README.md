@@ -27,27 +27,29 @@ The invoice transaction accepts three parameters (send by the freelancer to the 
 ```
 
 ### Implementation Details
-- Validate all three parameters
-- Keep track of the number of invoices the sender has sent with a property `invoiceCount` in the asset field (type: `number`).
-- Keep track of the IDs of the sent invoices in a property `invoicesSent` in the asset field (type: `Array`).
+- Validates all three parameters
+- Keeps track of the number of invoices the freelancer has sent using a property `invoiceCount` in the asset field of the freelancer his account (type: `number`).
+- Keeps track of the IDs of the sent invoices using a property `invoicesSent` in the asset field of the freelancer his account (type: `Array`).
 
 This means that we will be only modifying the sender (freelancer) his account.
 
 ### Exploring Invoice Transaction
-First of all, navigate in your terminal to the `./transactions` folder. Run `npm install` to again install the required dependencies as we treat the `/transactions` folder as a separate module.
-
-Now, let's get technical. Open the file at `./transactions/invoice_transaction.js`. For this transaction, most code is ready so we can learn how to write a custom transaction. After this, we'll be writing the payment transaction ourselves.
+Now, let's get technical. Open the file at `./transactions/invoice_transaction.js`. For this transaction, most code is ready so we can learn how to write a custom transaction. After this, you'll be writing the payment transaction yourselves.
 
 ### Extending BaseTransaction
-The next thing to notice, we are extending the `InvoiceTransaction` from the [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts). This gives us the ability to write logic for `prepare`, `validateAsset`, `TYPE`, `FEE`, `applyAsset`, and `undoAsset`.
+Ok, let's talk briefly about the BaseTransaction. The next thing to notice, we are extending the `InvoiceTransaction` from the [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts). This gives us the ability to write logic for `prepare()`, `validateAsset()`, `TYPE`, `FEE`, `applyAsset()`, and `undoAsset()`.
 
-Let's explore the different functions and their implementations in the `invoice_transaction.js` file.
+Let's explore the different functions and their implementations in the `invoice_transaction.js` file. Open the file so you can follow along with the code.
 
 #### Getter for TYPE
-Static function that returns {number}.
+Static function that returns {number}. This is the type identifier for the transaction. We use this number to uniquely register our new custom transaction in our blockchain network. This means that we can't register transactions with the same transaction TYPE.
+
+**Important:** The Lisk protocol reserves transaction [types 0 - 7](https://lisk.io/documentation/lisk-protocol/transactions) currently.
 
 #### Getter for FEE
-Static function that returns {number}. We are converting a fee to Beddows which is the lowest denominal in the Lisk ecosystem: 10 ** 8 = 1 LSK (100000000).
+Static function that returns {number}. The fee must be paid when sending this transaction to the blockchain network. We are converting a fee from LSK to Beddows which is the lowest denominal in the Lisk ecosystem: 10 ** 8 = 1 LSK (100000000).
+
+_Note: It is possible to use a zero fee._
 
 #### prepare()
 As we will be only modifying the sender (freelancer) their account, we just need to store this account in the cache of the key-value store. At the moment, we are calling the method through `super`.
