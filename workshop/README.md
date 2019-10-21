@@ -1,18 +1,20 @@
 # Workshop: Knowledge Sharing on Custom Transactions
 
-This workshop will guide you through learning about custom transactions with a step-by-step approach.
-The workshop demands you actively participate in order to get familiar with custom transactions.
+This workshop will guide you through learning about custom transactions with a step-by-step approach. The workshop demands you to actively participate in order to get familiar with custom transactions.
 
 ## Concept: LiskBills
 This workshop will cover some aspects of using the Alpha SDK for developing custom transactions.
-First, we will explore two custom transactions which we used for LiskBills. The idea is that we can send an `invoice_transaction` to send an invoice to a client. Next, the client can fulfill the invoice by sending a `payment_transaction`.
+
+First, we will explore two custom transaction types which we used for LiskBills. The **idea** is that a freelancer can send an `invoice_transaction` to send an invoice to a client. Next, the client can pay for the invoice by sending a `payment_transaction` to the freelancer.
 
 ## Setup
 1. Clone [Lisk-SDK-Examples](https://github.com/LiskHQ/lisk-sdk-examples) repository locally and checkout branch `workshop-custom-txs-start`.
 
-2. Navigate inside `/workshop` folder and run `npm install` to install the required dependencies.
+2. Navigate inside `/workshop` folder and run `npm install` to install the required dependencies for the workshop.
 
-3. In order to verify the setup is correct, try to run the application with `npm start`. The `npm start` command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan (wraps: `node index.js | npx bunyan -o short`). If everything is running fine, you can go to the next section.
+3. Next, the `/workshop/transactions` folder is considered a separate module which holds the code for the transaction types. Again, we have to execute `npm install` inside this folder.
+
+4. To verify the setup is correct, try to run the application with `npm start`. The `npm start` command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan (wraps: `node index.js | npx bunyan -o short`). If everything is running fine, you can go to the next section.
 
 ## Transaction 1: Invoice Transaction
 The invoice transaction accepts three parameters (send by the freelancer to the client):
