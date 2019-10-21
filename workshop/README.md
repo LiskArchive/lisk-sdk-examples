@@ -67,7 +67,7 @@ Notice, the `prepare` function looks for the account using the `address` filter.
 **Task 2: Read about how to use [storage entities](https://github.com/LiskHQ/lisk-sdk/blob/development/framework/src/components/storage/README.md#how-to-use-storage-entities) and examine the examples. Next, read the section about [filters](https://github.com/LiskHQ/lisk-sdk/blob/development/framework/src/components/storage/README.md#filters).**
 
 #### ValidateAsset()
-The `validateAsset` function is responsible for only performing static checks. This means the function is synchronous and cannot retrieve data from the `store` (the cached sender account). Therefore, we can perform initial checks like validating the presence of the parameter and if it has the correct type. Any other validation logic can be applied as long it does not have to await a promise.
+The `validateAsset` function is responsible for only performing static checks. This means the function is synchronous and cannot use data from the key-value store (which holds the cached sender account). Therefore, we can only perform initial checks like validating the presence of the parameter and if the parameter has the correct type. Any other validation logic can be applied as long it does not have to await a promise.
 
 As a best practice, we want to define an empty `errors` array which we return at the end of the function.
 Next up, we perform validation for each property in the asset field (client, requestedAmount, and description).
@@ -98,7 +98,7 @@ new TransactionError(
 ```
 
 #### applyAsset()
-Finally, we have arrived to the hard work! Let's dissect the function line by line.
+Finally, we have arrived to the hard work! Let's dissect the `applyAsset` function line by line.
 
 ```javascript
 applyAsset(store) {
@@ -113,7 +113,9 @@ applyAsset(store) {
 ```
 
 First, we retrieve the data from the store. The store exposes two key-value stores: `account` and `transaction`.
-The `account` store is read-write, `transaction` store is read-only.
+The `account` store is read-write, `transaction` store is read-only. This means we can modify data for the account object but transaction data cannot be changed.
+
+**Extra**: If you wonder where the `this.senderId` comes from, every transaction its properties are accessible through the `this` keyword. So is `this.asset` also accessible.
 
 **Task 3: Read about the exposed methods by both stores [at the section `B/ Retrieving Data`](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
 
