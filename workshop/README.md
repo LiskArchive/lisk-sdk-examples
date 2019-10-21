@@ -52,17 +52,19 @@ Static function that returns {number}. The fee must be paid when sending this tr
 _Note: It is possible to use a zero fee._
 
 #### prepare()
-As we will be only modifying the sender (freelancer) their account, we just need to store this account in the cache of the key-value store. At the moment, we are calling the method through `super`.
+The prepare function is used to cache data from the database in a key-value store. This data can later be accessed in the `applyAsset` or `undoAsset` functions to update the state of an account.
+
+As we will be only modifying the sender (freelancer) his account, we just need to cache this account in the key-value store. At the moment, we are implicitly caching the account by calling the implementation in the BaseTransaction class through `super`.
 
 However, this is a bad practice as the implementation might change inside the `BaseTransaction`. Therefore, we want to open the `BaseTransaction` to copy the code that caches the sender account.
 
-**Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts) at line 399 to copy the implementation and paste it in the prepare() function for InvoiceTransaction replacing the `super` call.**
+**Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts) at line 399 to copy the implementation of the `prepare()` function and paste it in the `prepare()` function for InvoiceTransaction replacing the `super` call.**
 
-_The solution for each step can be found in the `Solution: Invoice Transaction` section._
+_The solution for each step can be found in the section `Solution: Invoice Transaction`._
 
-Notice, we are looking for an account using the `address` filter. In order to understand better the difference between passing an array or an object to the cache function, I ask you to read up about the difference.
+Notice, the `prepare` function looks for the account using the `address` filter. In order to get a better understanding of filters, complete task 2 below.
 
-**Task 2: Read about AND and OR filters [at section `B/ Combining Filters`](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc)**
+**Task 2: Read about how to use [storage entities](https://github.com/LiskHQ/lisk-sdk/blob/development/framework/src/components/storage/README.md#how-to-use-storage-entities) and examine the examples. Next, read the section about [filters](https://github.com/LiskHQ/lisk-sdk/blob/development/framework/src/components/storage/README.md#filters).**
 
 #### ValidateAsset()
 The `validateAsset` function is responsible for only performing static checks. This means the function is synchronous and cannot retrieve data from the `store` (the cached sender account). Therefore, we can perform initial checks like validating the presence of the parameter and if it has the correct type. Any other validation logic can be applied as long it does not have to await a promise.
