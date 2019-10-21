@@ -69,7 +69,7 @@ class FinishTransportTransaction extends BaseTransaction {
                  * - Earn 1 trustpoint
                  */
                 const carrierBalanceWithSecurityAndPorto = new utils.BigNum(carrier.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.porto));
-                const updatedTrust = sender.asset.trust ? sender.asset.trust + 1 : 1;
+                const updatedTrust = carrier.asset.trust ? carrier.asset.trust + 1 : 1;
 
                 carrier.balance = carrierBalanceWithSecurityAndPorto.toString();
                 carrier.asset.lockedSecurity = null;
