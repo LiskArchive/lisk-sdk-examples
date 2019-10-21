@@ -35,7 +35,7 @@ class StartTransportTransaction extends BaseTransaction {
     applyAsset(store) {
         const errors = [];
         const packet = store.account.get(this.recipientId);
-        if (packet.asset.satus === "pending"){
+        if (packet.asset.status === "pending"){
             const carrier = store.account.get(this.senderId);
             // If the carrier has the trust to transport the packet
             const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;

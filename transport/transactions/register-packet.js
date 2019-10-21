@@ -79,7 +79,9 @@ class RegisterPacketTransaction extends BaseTransaction {
 
     applyAsset(store) {
         const errors = [];
-        if (packet.asset.status) {
+        const packet = store.account.get(this.asset.packetId);
+
+        if (!packet.asset.status) {
             /* --- Modify sender account --- */
             /**
              * Update the sender account:
@@ -108,7 +110,6 @@ class RegisterPacketTransaction extends BaseTransaction {
              *   - minTrust: Minimal trust that is needed to be carrier for the packet
              *   - status: Status of the transport (pending|ongoing|success|fail)
              */
-            const packet = store.account.get(this.asset.packetId);
             const packetBalanceWithPorto = new utils.BigNum(packet.balance).add(
                 new utils.BigNum(this.asset.porto)
             );
