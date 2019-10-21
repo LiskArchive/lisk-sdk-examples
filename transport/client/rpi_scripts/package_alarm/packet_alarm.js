@@ -1,15 +1,16 @@
 const PIN = require("rpi-pins");
 const GPIO = new PIN.GPIO();
-// rpi-pins uses the WiringPi pin numbering system (check https://pinout.xyz/pinout/pin16_gpio23)
+// Rpi-pins uses the WiringPi pin numbering system (check https://pinout.xyz/pinout/pin16_gpio23)
 GPIO.setPin(4, PIN.MODE.INPUT);
 const LightAlarmTransaction = require('../../../transactions/light-alarm');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
 const { APIClient } = require('@liskhq/lisk-api-client');
 
+// Enter here the IP of the node you want to reach for API requests
 const api = new APIClient(['http://localhost:4000']);
 
 const getTimestamp = () => {
-    // check config file or curl localhost:4000/api/node/constants to verify your epoc time (OK when using /transport/node/index.js)
+    // Check config file or curl localhost:4000/api/node/constants to verify your epoc time (OK when using /transport/node/index.js)
     const millisSinceEpoc = Date.now() - Date.parse(EPOCH_TIME);
     const inSeconds = ((millisSinceEpoc) / 1000).toFixed(0);
     return parseInt(inSeconds);
