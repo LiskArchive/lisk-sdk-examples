@@ -1,4 +1,4 @@
-const StartTranportTransaction = require('../transactions/start-transport');
+const StartTransportTransaction = require('../transactions/start-transport');
 //const transactions = require('@liskhq/lisk-transactions');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
 const accounts = require('./accounts.json');
@@ -10,7 +10,7 @@ const getTimestamp = () => {
     return parseInt(inSeconds);
 };
 
-let tx =  new StartTranportTransaction({
+let tx =  new StartTransportTransaction({
     fee: '0',
     recipientId: accounts.packet.address, // (recipient is required here, but not used)
     timestamp: getTimestamp()
