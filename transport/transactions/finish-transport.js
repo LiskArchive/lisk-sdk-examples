@@ -69,7 +69,7 @@ class FinishTransportTransaction extends BaseTransaction {
                  * - Earn 1 trustpoint
                  */
                 const carrierBalanceWithSecurityAndPorto = new utils.BigNum(carrier.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.porto));
-                const updatedTrust = carrier.asset.trust ? carrier.asset.trust + 1 : 1;
+                const updatedTrust = carrier.asset.trust ? ++carrier.asset.trust : 1;
 
                 carrier.balance = carrierBalanceWithSecurityAndPorto.toString();
                 carrier.asset.lockedSecurity = null;
@@ -136,29 +136,33 @@ class FinishTransportTransaction extends BaseTransaction {
         const packet = store.account.get(this.recipientId);
         const carrier = store.account.get(packet.carrier);
         const sender = store.account.get(packet.sender);
+        /* --- Revert successful transport --- */
         if ( this.asset.status === "success") {
-            const carrierBalanceWithouSecurityAndPorto = new utils.BigNum(carrier.balance).sub(new utils.BigNum(packet.asset.security)).sub(new utils.BigNum(packet.asset.porto));
-            const downdatedCarrier = {
-                ...carrier,
-                balance: carrierBalanceWithouSecurityAndPorto.toString(),
-                asset: {
-                    lockedSecurity: packet.asset.security,
-                    trust: carrier.asset.trust - 1
-                }
-            };
-            store.account.set(carrier.address, downdatedCarrier);
+            /* --- Revert carrier account --- */
+            const carrierBalanceWithoutSecurityAndPorto = new utils.BigNum(carrier.balance).sub(new utils.BigNum(packet.asset.security)).sub(new utils.BigNum(packet.asset.porto));
 
+            carrier.balance = carrierBalanceWithoutSecurityAndPorto.toString();
+            carrier.asset.lockedSecurity = packet.asset.security;
+            carrier.asset.trust--;
+
+            store.account.set(carrier.address, carrier);
+
+        /* --- Revert failed transport --- */
         } else {
+            /* --- Revert sender account --- */
             const senderBalanceWithoutSecurityAndPorto = new utils.BigNum(sender.balance).sub(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.porto));
-            const downdatedSender = {
-                ...sender,
-                balance: senderBalanceWithoutSecurityAndPorto.toString(),
-            };
-            store.account.set(sender.address, downdatedSender);
+            sender.balance = senderBalanceWithoutSecurityAndPorto.toString();
+            store.account.set(sender.address, sender);
+            /* --- Revert carrier account --- */
+            carrier.asset.trust++;
+            carrier.asset.lockedSecurity = packet.asset.security;
+            store.account.set(carrier.address, carrier);
         }
+        /* --- Revert packet account --- */
         packet.balance = packet.asset.porto;
         packet.asset.status = "ongoing";
-        store.account.set(packet.address, oldObj);
+
+        store.account.set(packet.address, packet);
         return errors;
     }
 }

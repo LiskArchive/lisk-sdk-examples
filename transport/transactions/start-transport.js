@@ -86,6 +86,7 @@ class StartTransportTransaction extends BaseTransaction {
         const errors = [];
         const packet = store.account.get(this.recipientId);
         const carrier = store.account.get(this.senderId);
+        /* --- Revert carrier account --- */
         const carrierBalanceWithSecurity = new utils.BigNum(carrier.balance).add(
             new utils.BigNum(packet.assset.security)
         );
@@ -94,6 +95,7 @@ class StartTransportTransaction extends BaseTransaction {
             balance: carrierBalanceWithSecurity.toString()
         };
         store.account.set(carrier.address, updatedCarrier);
+        /* --- Revert packet account --- */
         const updatedData = {
             asset: {
                 deliveryStatus: "pending",
