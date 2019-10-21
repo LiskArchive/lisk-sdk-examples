@@ -31,7 +31,7 @@ const getPacketCredentials = () => {
 const packetCredentials = getPacketCredentials();
 
 let tx = new transactions.TransferTransaction({
-    amount: `${transactions.utils.convertLSKToBeddows('1')}`,
+    amount: '1',
     recipientId: packetCredentials.address,
 });
 
