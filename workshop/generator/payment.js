@@ -16,20 +16,20 @@ const createPaymentJSON = ({
     });
 
     paymentTx.sign(passphrase);
-    return paymentTx.toJSON();
+    return paymentTx;
 };
 
 const recipientId = '16313739661670634666L'; // Address of user that send the invoice to me
 const passphrase = 'robust swift grocery peasant forget share enable convince deputy road keep cheap'; // Passphrase of person who wants to fulfill invoice (associated address: 8273455169423958419L)
 
-const paymentJSON = createPaymentJSON({
+const paymentTransaction = createPaymentJSON({
     recipientId,
     amount: '11', // Requested amount: 10.5 (want to give bit extra)
     invoiceId: '6068542855269194380', // Look up the ID of the invoice you have created (use: http://localhost:4000/api/transactions?type=13)
 }, passphrase);
 
 console.log('------------- Payment Tx - Type 14 -----------------');
-console.log(paymentJSON);
+console.log(paymentTransaction.stringify());
 console.log('------------- Fund Account Tx - Type 0 -----------------');
 
 // ------- Payment JSON to fund account ------- //
@@ -45,5 +45,4 @@ const transaction = transactions.utils.signRawTransaction({
 });
 
 console.log(JSON.stringify(transaction));
-
-
+process.exit(0);

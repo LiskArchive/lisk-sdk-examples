@@ -17,16 +17,17 @@ const createInvoiceJSON = ({
     });
 
     invoiceTx.sign(passphrase);
-    return invoiceTx.toJSON();
+    return invoiceTx;
 };
 
 const recipientId = '8273455169423958419L'; // Associated passphrase: robust swift grocery peasant forget share enable convince deputy road keep cheap
 const passphrase = 'wagon stock borrow episode laundry kitten salute link globe zero feed marble'; // Associated account ID: 16313739661670634666L
 
-const invoiceJSON = createInvoiceJSON({
+const invoiceTransaction = createInvoiceJSON({
     client: 'Michiel GmbH',
     requestedAmount: '10.5',
     description: 'Workshop delivered',
 }, recipientId, passphrase);
 
-console.log(invoiceJSON);
+console.log(invoiceTransaction.stringify());
+process.exit(0);
