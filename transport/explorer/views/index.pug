@@ -12,6 +12,7 @@ html(lang="en")
     block menu
       nav.navbar.navbar-expand-lg.navbar-light.bg-light
         a(href='/').navbar-brand
+            | Home
   
         nav.collapse.navbar-collapse
           ul.navbar-nav.mr-auto
@@ -28,3 +29,37 @@ html(lang="en")
           h1 Lisk Transport Explorer
           p.lead
             | Browse transactions for Lisk Transport Proof of Concept
+
+    style.
+        @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+        body {
+            background: linear-gradient(45deg, #004AFF 0%, #93F4FE 100%);
+            width: 100%;  
+            min-height: 100vh;
+        }
+        h1, .lead, .nav-link {
+            font-family: 'Poppins', sans-serif;
+        }
+        .navbar-expand-lg {
+            background-color: #001a3e !important;
+        }
+        .nav-link, .navbar-brand {
+            color: white !important;
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+        h2 {
+            color: white;
+            padding-top: 50px;
+            padding-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+        }
+        th, td {
+            padding: 6px;
+        }
+        table td, table th {
+            border: 1px solid black;
+            color: white;
+        }
