@@ -115,15 +115,17 @@ class RegisterPacketTransaction extends BaseTransaction {
 
         const updatedPacketAccount = {
             ...packet,
-            balance : packetBalanceWithPorto.toString(),
-            asset: {
-                recipient: this.recipientId,
-                sender: this.senderId,
-                security: this.asset.security,
-                porto: this.asset.porto,
-                minTrust: this.asset.minTrust,
-                status: 'pending',
-                carrier: null
+            ...{
+                balance : packetBalanceWithPorto.toString(),
+                asset: {
+                    recipient: this.recipientId,
+                    sender: this.senderId,
+                    security: this.asset.security,
+                    porto: this.asset.porto,
+                    minTrust: this.asset.minTrust,
+                    status: 'pending',
+                    carrier: null
+                }
             }
         };
         store.account.set(packet.address, updatedPacketAccount);

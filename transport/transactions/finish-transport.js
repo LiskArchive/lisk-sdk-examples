@@ -21,32 +21,32 @@ class FinishTransportTransaction extends BaseTransaction {
          */
         await store.account.cache([
             {
-                address: this.asset.packetId,
+                address: this.recipientId,
             }
         ]);
         /**
          * Get sender and recipient accounts of the packet
          */
-        const pckt = store.account.get(this.asset.packetId);
+        const pckt = store.account.get(this.recipientId);
         await store.account.cache([
             {
-                address: pckt.carrier,
+                address: pckt.asset.carrier,
             },
             {
-                address: pckt.sender,
+                address: pckt.asset.sender,
             },
         ]);
     }
 
     validateAsset() {
         const errors = [];
-        if (!this.asset.packetId || typeof this.asset.packetId !== 'string') {
+        if (!this.recipientId || typeof this.recipientId !== 'string') {
             errors.push(
                 new TransactionError(
                     'Invalid "asset.packetId" defined on transaction',
                     this.id,
                     '.asset.packetId',
-                    this.asset.packetId
+                    this.recipientId
                 )
             );
         }
@@ -55,7 +55,7 @@ class FinishTransportTransaction extends BaseTransaction {
 
     applyAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.asset.packetId);
+        const packet = store.account.get(this.recipientId);
         const carrier = store.account.get(packet.asset.carrier);
         const sender = store.account.get(packet.asset.sender);
         // if the transaction has been signed by the packet recipient
@@ -68,33 +68,23 @@ class FinishTransportTransaction extends BaseTransaction {
                  * - Add porto & security to balance
                  * - Earn 1 trustpoint
                  */
-                const carrierBalanceWithSecurityAndPorto = new utils.BigNum(carrier.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.porto));
+                const carrierBalanceWithSecurityAndPorto = new utils.BigNum(carrier.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.porto));
                 const updatedTrust = sender.asset.trust ? sender.asset.trust + 1 : 1;
-                const updatedCarrier = {
-                    ...carrier,
-                    balance: carrierBalanceWithSecurityAndPorto.toString(),
-                    asset: {
-                        lockedSecurity: '0',
-                        trust: updatedTrust
-                    }
-                };
-                store.account.set(carrier.address, updatedCarrier);
+
+                carrier.balance = carrierBalanceWithSecurityAndPorto.toString();
+                carrier.asset.lockedSecurity = null;
+                carrier.trust = updatedTrust;
+
+                store.account.set(carrier.address, carrier);
                 /**
                  * Update the Packet account:
                  * - Remove porto from balance
                  * - Change status to "success"
                  */
-                const updatedData = {
-                    balance: '0',
-                    asset: {
-                        status: "success",
-                    }
-                };
-                const newObj = {
-                    ...packet,
-                    ...updatedData
-                };
-                store.account.set(packet.address, newObj);
+                packet.balance = '0';
+                packet.asset.status = 'success';
+
+                store.account.set(packet.address, packet);
                 return errors;
             }
             // if the transport failed
@@ -102,42 +92,31 @@ class FinishTransportTransaction extends BaseTransaction {
              * Update the Sender account:
              * - Add porto and security to balance
              */
-            const senderBalanceWithSecurityAndPorto = new utils.BigNum(sender.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.porto));
-            const updatedSender = {
-                ...sender,
-                balance: senderBalanceWithSecurityAndPorto.toString(),
-            };
-            store.account.set(sender.address, updatedSender);
+            const senderBalanceWithSecurityAndPorto = new utils.BigNum(sender.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.porto));
+
+            sender.balance = senderBalanceWithSecurityAndPorto;
+
+            store.account.set(sender.address, sender);
             /**
              * Update the Carrier account:
              * - Reduce trust by 1
              * - Set lockedSecurity to 0
              */
             const updatedTrust = carrier.asset.trust - 1;
-            const updatedCarrier = {
-                ...carrier,
-                asset: {
-                    trust: updatedTrust,
-                    lockedSecurity: '0'
-                },
-            };
+
+            carrier.asset.trust = updatedTrust;
+            carrier.asset.lockedSecurity = null;
+
             store.account.set(carrier.address, updatedCarrier);
             /**
              * Update the Packet account:
              * - set status to "fail"
              * - Remove porto from balance
              */
-            const updatedData = {
-                balance: '0',
-                asset: {
-                    deliveryStatus: "fail",
-                }
-            };
-            const newObj = {
-                ...packet,
-                ...updatedData
-            };
-            store.account.set(packet.address, newObj);
+            packet.balance = '0';
+            packet.asset.status = 'fail';
+
+            store.account.set(packet.address, packet);
 
             return errors;
         }
@@ -154,7 +133,7 @@ class FinishTransportTransaction extends BaseTransaction {
 
     undoAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.asset.packetId);
+        const packet = store.account.get(this.recipientId);
         const carrier = store.account.get(packet.carrier);
         const sender = store.account.get(packet.sender);
         if ( this.asset.status === "success") {
@@ -177,16 +156,8 @@ class FinishTransportTransaction extends BaseTransaction {
             };
             store.account.set(sender.address, downdatedSender);
         }
-        const downdatedData = {
-            balance: packet.asset.porto,
-            asset: {
-                deliveryStatus: "ongoing",
-            }
-        };
-        const oldObj = {
-            ...packet,
-            ...downdatedData
-        };
+        packet.balance = packet.asset.porto;
+        packet.asset.status = "ongoing";
         store.account.set(packet.address, oldObj);
         return errors;
     }
