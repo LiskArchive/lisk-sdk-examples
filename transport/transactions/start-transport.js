@@ -18,7 +18,7 @@ class StartTransportTransaction extends BaseTransaction {
     async prepare(store) {
         await store.account.cache([
             {
-                address: this.asset.packetId,
+                address: this.recipientId,
             },
             {
                 address: this.senderId,
@@ -28,42 +28,35 @@ class StartTransportTransaction extends BaseTransaction {
 
     validateAsset() {
         const errors = [];
-        if (!this.asset.packetId || typeof this.asset.packetId !== 'string') {
-            errors.push(
-                new TransactionError(
-                    'Invalid "asset.packetId" defined on transaction',
-                    this.id,
-                    '.asset.packetId',
-                    this.asset.packetId
-                )
-            );
-        }
+
         return errors;
     }
 
     applyAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.asset.packetId);
+        const packet = store.account.get(this.recipientId);
         const carrier = store.account.get(this.senderId);
         // If the carrier has the trust to transport the packet
         const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
-        if (packet.asset.minTrust <= carrierTrust) {
+        const carrierBalance = new utils.BigNum(carrier.balance);
+        const packetSecurity = new utils.BigNum(packet.asset.security);
+        if (packet.asset.minTrust <= carrierTrust && carrierBalance.gte(packetSecurity)) {
             /**
              * Update the Carrier account:
              * - Lock security inside the account
              * - Remove the security form balance
              * - initialize carriertrust, if not present already
              */
-            const carrierBalanceWithoutSecurity = new utils.BigNum(carrier.balance).sub(
-                new utils.BigNum(packet.asset.security)
-            );
+            const carrierBalanceWithoutSecurity = carrierBalance.sub(packetSecurity);
             const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
             const updatedCarrier = {
                 ...carrier,
-                balance: carrierBalanceWithoutSecurity.toString(),
-                asset: {
-                    trust: carrierTrust,
-                    lockedSecurity: packet.asset.security,
+                ...{
+                    balance: carrierBalanceWithoutSecurity.toString(),
+                    asset: {
+                        trust: carrierTrust,
+                        lockedSecurity: packet.asset.security,
+                    }
                 }
             };
             store.account.set(carrier.address, updatedCarrier);
@@ -78,8 +71,11 @@ class StartTransportTransaction extends BaseTransaction {
        } else {
             errors.push(
                 new TransactionError(
-                    'carrier has not enough trust to deliver the packet',
-                    packet.asset.minTrust
+                    'carrier has not enough trust to deliver the packet, or not enough balance to pay the security',
+                    packet.asset.minTrust,
+                    carrier.asset.trust,
+                    packet.asset.security,
+                    carrier.balance
                 )
             );
         }
@@ -88,8 +84,8 @@ class StartTransportTransaction extends BaseTransaction {
 
     undoAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.asset.packetId);
-        const carrier = store.account.get(this.asset.carrierId);
+        const packet = store.account.get(this.recipientId);
+        const carrier = store.account.get(this.senderId);
         const carrierBalanceWithSecurity = new utils.BigNum(carrier.balance).add(
             new utils.BigNum(packet.assset.security)
         );
