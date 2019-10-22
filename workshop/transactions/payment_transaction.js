@@ -1,4 +1,7 @@
-const { TransferTransaction, TransactionError } = require('@liskhq/lisk-transactions');
+const {
+	TransferTransaction,
+	TransactionError,
+} = require('@liskhq/lisk-transactions');
 
 class PaymentTransaction extends TransferTransaction {
 	static get TYPE() {
@@ -16,8 +19,8 @@ class PaymentTransaction extends TransferTransaction {
 		// Code step 3 comes here
 
 		// Code step 4 comes below here
-		if (transaction) { // if transaction found in step 3 -> start validation
-			
+		if (transaction) {
+			// if transaction found in step 3 -> start validation
 		} else {
 			// Return TransactionError if tx doesn't exist
 		}
@@ -32,7 +35,6 @@ class PaymentTransaction extends TransferTransaction {
 
 		return errors;
 	}
-
 }
 
 module.exports = PaymentTransaction;

@@ -1,110 +1,110 @@
 const {
-  BaseTransaction,
-  TransactionError
-} = require("@liskhq/lisk-transactions");
+	BaseTransaction,
+	TransactionError,
+} = require('@liskhq/lisk-transactions');
 
 class InvoiceTransaction extends BaseTransaction {
-  static get TYPE() {
-    return 13;
-  }
+	static get TYPE() {
+		return 13;
+	}
 
-  static get FEE() {
-    return `${10 ** 8}`;
-  }
+	static get FEE() {
+		return `${10 ** 8}`;
+	}
 
-  async prepare(store) {
-    await super.prepare(store); // To be replaced
-  }
+	async prepare(store) {
+		await super.prepare(store); // To be replaced
+	}
 
-  validateAsset() {
-    const errors = [];
-    if (!this.asset.client || typeof this.asset.client !== "string") {
-      errors.push(
-        new TransactionError(
-          'Invalid "asset.client" defined on transaction',
-          this.id,
-          ".asset.client",
-          this.asset.client,
-          "A string value"
-        )
-      );
-    }
-    if (
-      !this.asset.requestedAmount ||
-      typeof this.asset.requestedAmount !== "string"
-    ) {
-      errors.push(
-        new TransactionError(
-          'Invalid "asset.requestedAmount" defined on transaction',
-          this.id,
-          ".asset.requestedAmount",
-          this.asset.requestedAmount,
-          "A string value"
-        )
-      );
-    }
-    if (!this.asset.description || typeof this.asset.description !== "string") {
-      errors.push(
-        new TransactionError(
-          'Invalid "asset.description" defined on transaction',
-          this.id,
-          ".asset.description",
-          this.asset.description,
-          "A string value"
-        )
-      );
-    }
-    return errors;
-  }
+	validateAsset() {
+		const errors = [];
+		if (!this.asset.client || typeof this.asset.client !== 'string') {
+			errors.push(
+				new TransactionError(
+					'Invalid "asset.client" defined on transaction',
+					this.id,
+					'.asset.client',
+					this.asset.client,
+					'A string value',
+				),
+			);
+		}
+		if (
+			!this.asset.requestedAmount ||
+			typeof this.asset.requestedAmount !== 'string'
+		) {
+			errors.push(
+				new TransactionError(
+					'Invalid "asset.requestedAmount" defined on transaction',
+					this.id,
+					'.asset.requestedAmount',
+					this.asset.requestedAmount,
+					'A string value',
+				),
+			);
+		}
+		if (!this.asset.description || typeof this.asset.description !== 'string') {
+			errors.push(
+				new TransactionError(
+					'Invalid "asset.description" defined on transaction',
+					this.id,
+					'.asset.description',
+					this.asset.description,
+					'A string value',
+				),
+			);
+		}
+		return errors;
+	}
 
-  applyAsset(store) {
-    const sender = store.account.get(this.senderId);
+	applyAsset(store) {
+		const sender = store.account.get(this.senderId);
 
-    // Save invoice count and IDs
-    if (!sender.asset.invoiceCount) {
-      sender.asset.invoiceCount = 0;
-    }
+		// Save invoice count and IDs
+		if (!sender.asset.invoiceCount) {
+			sender.asset.invoiceCount = 0;
+		}
 
-    if (!sender.asset.invoicesSent) {
-      sender.asset.invoicesSent = [];
-    }
+		if (!sender.asset.invoicesSent) {
+			sender.asset.invoicesSent = [];
+		}
 
-    sender.asset.invoiceCount++;
-    sender.asset.invoicesSent.push(this.id);
+		sender.asset.invoiceCount++;
+		sender.asset.invoicesSent.push(this.id);
 
-    store.account.set(sender.address, sender);
-    return [];
-  }
+		store.account.set(sender.address, sender);
+		return [];
+	}
 
-  undoAsset(store) {
-    const sender = store.account.get(this.senderId);
-    const errors = [];
-    const invoiceIndex = sender.asset.invoicesSent.indexOf(this.id);
+	undoAsset(store) {
+		const sender = store.account.get(this.senderId);
+		const errors = [];
+		const invoiceIndex = sender.asset.invoicesSent.indexOf(this.id);
 
-    if (invoiceIndex === -1 || sender.asset.invoiceCount === 0) {
-      // todo split errors
-      errors.push(
-        new TransactionError(
-          'Invalid "asset.description" defined on transaction',
-          this.id,
-          ".asset.description",
-          this.asset.description,
-          "A string value"
-        )
-      );
-    } else {
-      // Undo logic comes here
-      sender.asset.invoiceCount--;
+		if (invoiceIndex === -1 || sender.asset.invoiceCount === 0) {
+			// todo split errors
+			errors.push(
+				new TransactionError(
+					'Invalid "asset.description" defined on transaction',
+					this.id,
+					'.asset.description',
+					this.asset.description,
+					'A string value',
+				),
+			);
+		} else {
+			// Undo logic comes here
+			sender.asset.invoiceCount--;
 
-      sender.asset.invoicesSent = sender.asset.invoicesSent.filter(
-        id => id !== this.id
-      );
+			sender.asset.invoicesSent = sender.asset.invoicesSent.filter(
+				id => id !== this.id,
+			);
 
-      store.account.set(sender.address, sender); // Save updated sender account
-    }
+			store.account.set(sender.address, sender); // Save updated sender account
+		}
 
-    return errors;
-  }
+		return errors;
+	}
 }
 
 module.exports = InvoiceTransaction;
