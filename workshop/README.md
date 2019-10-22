@@ -72,7 +72,7 @@ As we will be only modifying the sender (freelancer) his account, we just need t
 
 However, this is a bad practice as the implementation might change inside the `BaseTransaction`. Therefore, we want to open the `BaseTransaction` to copy the code that caches the sender account.
 
-**Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts#L400-L404) and copy the highlighted implementation of the `prepare()` function and paste it in the `prepare()` function for InvoiceTransaction replacing the `super` call.**
+**Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts#L400-L404) and copy the highlighted implementation of the `prepare()` function (don't copy the whole function definition as it's created in TypeScript) and paste it in the `prepare()` function for InvoiceTransaction replacing the `super` call.**
 
 _The solution for each step can be found in the section `Solution: Invoice Transaction`._
 
