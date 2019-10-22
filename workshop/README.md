@@ -8,7 +8,7 @@ This workshop will guide you through learning about custom transactions with a s
 - Code editor like _Visual Studio Code_
 - Node.js (v10 or higher installed - use [nvm](https://github.com/nvm-sh/nvm#install--update-script) for easy switching between versions)
 - Have `curl` or `Postman` installed
-- Have Postgres system-wide installed, don't install via Docker! ([Installation guide by Lisk](https://lisk.io/documentation/lisk-core/setup/source#b-postgres-system-wide))
+- Have Postgres **system-wide** installed, **don't install via Docker**! ([Installation guide by Lisk](https://lisk.io/documentation/lisk-core/setup/source#b-postgres-system-wide))
 
 ## Setup
 1. Clone [Lisk-SDK-Examples](https://github.com/LiskHQ/lisk-sdk-examples) repository locally.<br><br>
@@ -56,12 +56,12 @@ Ok, let's talk briefly about the BaseTransaction. The next thing to notice, we a
 Let's explore the different functions and their implementations in the `invoice_transaction.js` file. Open the file so you can follow along with the code.
 
 #### Getter for TYPE
-Static function that returns {number}. This is the type identifier for the transaction. We use this number to uniquely register our new custom transaction in our blockchain network. This means that we can't register transactions with the same transaction TYPE.
+Static function that returns **{number}**. This is the type identifier for the transaction. We use this number to uniquely register our new custom transaction in our blockchain network. This means that we can't register transactions with the same transaction TYPE.
 
-**Important:** The Lisk protocol reserves transaction [types 0 - 7](https://lisk.io/documentation/lisk-protocol/transactions) currently.
+**Important: The Lisk Protocol reserves transaction [types 0 - 4](https://lisk.io/documentation/lisk-protocol/transactions) and Lisk Core reserves transaction types 5 - 7.**
 
 #### Getter for FEE
-Static function that returns {number}. The fee must be paid when sending this transaction to the blockchain network. We are converting a fee from LSK to Beddows which is the lowest denominal in the Lisk ecosystem: 10 ** 8 = 1 LSK (100000000).
+Static function that returns **{string}**. The fee must be paid when sending this transaction to the blockchain network. We are converting a fee from LSK to Beddows which is the lowest denominal in the Lisk ecosystem: `10 ** 8 = 1 LSK (100000000)`.
 
 _Note: It is possible to use a zero fee._
 
@@ -72,7 +72,7 @@ As we will be only modifying the sender (freelancer) his account, we just need t
 
 However, this is a bad practice as the implementation might change inside the `BaseTransaction`. Therefore, we want to open the `BaseTransaction` to copy the code that caches the sender account.
 
-**Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts) at line 399 to copy the implementation of the `prepare()` function and paste it in the `prepare()` function for InvoiceTransaction replacing the `super` call.**
+**Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts#L400-L404) and copy the highlighted implementation of the `prepare()` function and paste it in the `prepare()` function for InvoiceTransaction replacing the `super` call.**
 
 _The solution for each step can be found in the section `Solution: Invoice Transaction`._
 
@@ -152,7 +152,7 @@ and stores this data in an in-memory key-value store inside the Lisk application
 
 When updating an account with the set method, it doesn't mean we are changing the account in the database yet.
 
-Only when the transaction gets into the transaction pool and no errors occur,
+Only when the transaction gets into a block and no errors occur,
 the transaction will be applied and the changes we made in the key-value store will be saved to the database.
 ```
 
