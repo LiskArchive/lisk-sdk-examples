@@ -319,7 +319,7 @@ If you haven't installed the dependencies inside the `./transactions` folder yet
 Now, let's get technical. Open the file at `./transactions/payment_transaction.js`. For this transaction type (14), most code needs to be written. Good luck!
 
 ### Exploring Payment Transaction
-The idea for the `PaymentTransaction` is that you write the logic yourself based on the requirements and tips I give to you. The payment transaction will extend from the `TransferTransaction` although we do not recommend this (it simplifies things).
+The idea for the `PaymentTransaction` is that you write the logic yourself based on the requirements and tips we give to you. The payment transaction will extend from the `TransferTransaction` although we do not recommend this (it simplifies things).
 
 The idea for this transaction is that it will accept only one value that represents the ID of the invoice transaction the client wants to pay for. This invoice ID will be sent in an asset field that contains a data field (as the `TransferTransaction` requires this).
 
