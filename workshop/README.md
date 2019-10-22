@@ -18,7 +18,7 @@ First, we will explore two custom transaction types that we used for LiskBills. 
 
 2. Navigate inside `/workshop` folder and run `npm install` to install the required dependencies for the workshop.
 
-3. Next, the `/workshop/transactions` folder is considered a separate module which holds the code for the transaction types. Again, we have to execute `npm install` inside this folder to install the remaining dependencies. If you take 
+3. Next, the `/workshop/transactions` folder is considered a separate module which holds the code for the transaction types. Again, we have to execute `npm install` inside this folder to install the remaining dependencies. Notice in both `package.json` files, there is only one dependency we use: `lisk-sdk: 2.3.5`.
 
 4. To verify the setup is correct, try to run the application with `npm start`. The `npm start` command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan (wraps: `node index.js | npx bunyan -o short`). If everything is running fine, you can go to the next section.
 
