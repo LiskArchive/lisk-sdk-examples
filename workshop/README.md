@@ -1,26 +1,34 @@
 # Workshop: Knowledge Sharing on Custom Transactions
 
-This workshop will guide you through learning about custom transactions with a step-by-step approach. The workshop demands you to actively participate in order to get familiar with custom transactions.
+This workshop will guide you through learning about custom transactions with a step-by-step approach. The workshop demands you to actively participate in order to get familiar with custom transactions. This workshop focuses on the LiskBills proof of concept which showcases the potential of the Lisk Alpha SDK, in particular developing custom transactions.
+
+**Make sure to read the prerequisites and execute each step of the setup.**
 
 ## Prerequisites
-- Code editor like Visual Studio Code
-- Node.js (preferably v10 or higher installed)
+- Code editor like _Visual Studio Code_
+- Node.js (v10 or higher installed - use [nvm](https://github.com/nvm-sh/nvm#install--update-script) for easy switching between versions)
 - Have `curl` or `Postman` installed
-- Have Postgres database installed ([tutorial by Lisk](https://lisk.io/documentation/lisk-core/setup/source#postgresql))
-
-## Concept: LiskBills
-This workshop will cover some aspects of using the Alpha SDK for developing custom transactions.
-
-First, we will explore two custom transaction types that we used for LiskBills. The **idea** is that a freelancer can send an `invoice_transaction` to send an invoice to a client. Next, the client can pay for the invoice by sending a `payment_transaction` to the freelancer.
+- Have Postgres system-wide installed, don't install via Docker! ([Installation guide by Lisk](https://lisk.io/documentation/lisk-core/setup/source#b-postgres-system-wide))
 
 ## Setup
-1. Clone [Lisk-SDK-Examples](https://github.com/LiskHQ/lisk-sdk-examples) repository locally and checkout branch `workshop-custom-txs-start`.
+1. Clone [Lisk-SDK-Examples](https://github.com/LiskHQ/lisk-sdk-examples) repository locally.<br><br>
 
-2. Navigate inside `/workshop` folder and run `npm install` to install the required dependencies for the workshop.
+2. Checkout branch `development` (by default active branch).<br><br>
 
-3. Next, the `/workshop/transactions` folder is considered a separate module which holds the code for the transaction types. Again, we have to execute `npm install` inside this folder to install the remaining dependencies. Notice in both `package.json` files, there is only one dependency we use: `lisk-sdk: 2.3.5`.
+2. Navigate inside `/workshop` folder and run `npm install` to install the required dependencies for the workshop.<br><br>
 
-4. To verify the setup is correct, try to run the application with `npm start`. The `npm start` command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan (wraps: `node index.js | npx bunyan -o short`). If everything is running fine, you can go to the next section.
+3. Next, the `/workshop/transactions` folder is considered a separate module which holds the code for the transaction types. Again, we have to execute `npm install` inside this folder to install the remaining dependencies. Notice in both `package.json` files, there is only one dependency we use: `lisk-sdk: 2.3.5`.<br><br>
+
+4. To verify the setup is correct, try to run the application with `npm start`. The `npm start` command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan (wraps: `node index.js | npx bunyan -o short`). If everything is running fine, you can go to the next section.<br><br>_In case you have experimented before with Lisk, it is possible you have to first drop your database and recreate it with:_ `dropdb lisk_dev && createdb lisk_dev`.
+
+## Concept: LiskBills
+Imagine **Alice (Freelancer)** and **Bob (Client)**. Bob is looking for a new logo for his website and decides to consult a freelancer. While looking for a good designer, he comes across Alice who offers some spectacular designs in her portfolio. Bob is so excited he decides to immediately employ Alice’s skillset.
+
+A few days go by, and Alice returns the promised logo together with an invoice. However, Bob is a big fan of blockchain technology as it helps to ease the settlement process. It often happens parties disagree about the agreed price, product, or even shipping terms. Bob, therefore, believes blockchain can help with recording all this information right from the beginning, so no disputes can occur and human error can be eliminated. The blockchain should act as proof for the invoice.
+
+For the above reason, Bob asks Alice to create the invoice via a Lisk custom transaction (InvoiceTransaction). Next, he creates another custom transaction to send the payment to Alice (PaymentTransaction).
+
+**In summary:** We will explore the above two custom transaction types that we used for LiskBills. The idea is that a freelancer can send an `invoice_transaction` to send an invoice to a client. Next, the client can pay for the invoice by sending a `payment_transaction` to the freelancer.
 
 ## Transaction 1: Invoice Transaction
 The invoice transaction accepts three parameters (send by the freelancer to the client):
