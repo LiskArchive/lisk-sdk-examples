@@ -19,7 +19,7 @@ This workshop will guide you through learning about custom transactions with a s
 
 3. Next, the `/workshop/transactions` folder is considered a separate module which holds the code for the transaction types. Again, we have to execute `npm install` inside this folder to install the remaining dependencies. Notice in both `package.json` files, there is only one dependency we use: `lisk-sdk: 2.3.5`.<br><br>
 
-4. To verify the setup is correct, try to run the application with `npm start`. The `npm start` command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan (wraps: `node index.js | npx bunyan -o short`). If everything is running fine, you can go to the next section.<br><br>_In case you have experimented before with Lisk, it is possible you have to first drop your database and recreate it with:_ `dropdb lisk_dev && createdb lisk_dev`.
+4. To verify if the setup is correct, try to run the application with `node index.js | npx bunyan -o short` from the root of the `/workshop` folder. This command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan. If everything is running fine, you can go to the next section.<br><br>_In case you have experimented before with Lisk, it is possible you have to first drop your database and recreate it with:_ `dropdb lisk_dev && createdb lisk_dev`.
 
 ## Concept: LiskBills
 Imagine **Alice (Freelancer)** and **Bob (Client)**. Bob is looking for a new logo for his website and decides to consult a freelancer. While looking for a good designer, he comes across Alice who offers some spectacular designs in her portfolio. Bob is so excited he decides to immediately employ Alice’s skillset.
@@ -179,7 +179,7 @@ You'll find code that is commented out. Uncomment the line for importing the `In
 
 ![Register custom transactoin](./assets/01-index-register.png)
 
-Next, verify if everything is fine by starting the application with `npm start`. In order to verify if our custom invoice transaction works, we should send an invoice transaction. 
+Next, verify if everything is fine by starting the application with `node index.js | npx bunyan -o short` from the root of the `/workshop` folder. In order to verify if our custom invoice transaction works, we should send an invoice transaction. 
 
 #### Generate Invoice Transaction
 The `/workshop/generator/invoice.js` file contains a generator that uses a genesis account with sufficient funds and creates an InvoiceTransaction JSON object (Run `node generator/invoice.js`).
@@ -212,7 +212,7 @@ To speed things up, you'll find a formatted JSON transaction object down below:
 </details>
 
 #### Broadcast Invoice Transaction
-Now, when the blockchain application is running (`npm start`), let's send the above JSON payload to the transactions endpoint with a POST request: `http://localhost:4000/api/transactions`. You can use Postman or `curl`:
+Now, when the blockchain application is running (`node index.js | npx bunyan -o short`), let's send the above JSON payload to the transactions endpoint with a POST request: `http://localhost:4000/api/transactions`. You can use Postman or `curl`:
 
 ```bash
 curl -XPOST -H "Content-type: application/json" -d '{ 
@@ -351,7 +351,8 @@ To complete things, we should throw an error if the `recipientId` differs from t
 Ok, now you have implemented all steps, let's verify your implementation. If you are not sure, the solution can be found down below in the section `Solution: Payment Transaction`.
 
 ### Testing the PaymentTransaction
-First of all, we are using the following account for sending the PaymentTransaction: `8273455169423958419L`. However, the account needs funds to pay for the transaction fee. 
+First of all, uncomment the line for importing the `PaymentTransaction` and uncomment the line of code that registers the custom transaction to the application in the `workshop/index.js` file.
+Note, we are using the following account for sending the PaymentTransaction: `8273455169423958419L`. However, the account needs funds to pay for the transaction fee. 
 
 **Task: Therefore, we need to fund the account using the following transaction payload which you should send via a POST request to `http://localhost:4000/api/transactions`:**
 
