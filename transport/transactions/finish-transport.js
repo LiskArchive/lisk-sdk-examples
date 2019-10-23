@@ -7,7 +7,7 @@ const {
 class FinishTransportTransaction extends BaseTransaction {
 
     static get TYPE () {
-        return 24;
+        return 22;
     }
 
     static get FEE () {
