@@ -60,14 +60,14 @@ class LightAlarmTransaction extends BaseTransaction {
 
         // Check status="ongoing" to accept the LightAlarmTransaction
         const packet = store.account.get(this.senderId);
-        if (packet.asset.status !== 'ongoing') {
+        if (packet.asset.status !== 'ongoing' || packet.asset.status !== 'alarm') {
             errors.push(
                 new TransactionError(
                     'Transaction invalid because delivery is not "ongoing".',
                     this.id,
                     'packet.asset.status',
                     packet.asset.status,
-                    `Expected status to be equal to "ongoing"`,
+                    `Expected status to be equal to "ongoing" or "alarm"`,
                 )
             );
 
