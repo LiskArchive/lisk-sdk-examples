@@ -10,7 +10,7 @@ const {
 class LightAlarmTransaction extends BaseTransaction {
 
     static get TYPE () {
-        return 21;
+        return 23;
     }
 
     static get FEE () {
@@ -73,32 +73,15 @@ class LightAlarmTransaction extends BaseTransaction {
 
             return errors;
         }
-        const packet = store.account.get(this.recipientId);
-        const carrier = store.account.get(packet.asset.carrier);
-        const sender = store.account.get(packet.asset.sender);
-        const senderBalanceWithSecurityAndPorto = new utils.BigNum(sender.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.porto));
 
-        sender.balance = senderBalanceWithSecurityAndPorto;
-
-        store.account.set(sender.address, sender);
-        /**
-         * Update the Carrier account:
-         * - Reduce trust by 1
-         * - Set lockedSecurity to 0
-         */
-        const updatedTrust = --carrier.asset.trust;
-
-        carrier.asset.trust = updatedTrust;
-        carrier.asset.lockedSecurity = null;
-
-        store.account.set(carrier.address, updatedCarrier);
         /**
          * Update the Packet account:
-         * - set status to "fail"
-         * - Remove porto from balance
+         * - set packet status to "manipulated"
+         * - set packet message to "Light alarm!"
          */
-        packet.balance = '0';
-        packet.asset.status = 'fail';
+        packet.asset.status = 'alarm';
+        packet.asset.alarms = packet.asset.alarms ? packet.asset.alarms : {};
+        packet.asset.alarms.light = packet.asset.alarms.light ? packet.asset.alarms.light.push(this.timestamp) : [this.timestamp] ;
 
         store.account.set(packet.address, packet);
 
