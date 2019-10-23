@@ -67,9 +67,7 @@ app.get('/packet-accounts', async(req, res) => {
     for (var i = 0; i < accountsArray.length; i++) {
         let accountAsset = accountsArray[i].asset;
         if (accountAsset && Object.keys(accountAsset).length > 0){
-            if (accountAsset.status === 'success'){
-                accountsArray[i].status = 'success';
-            }
+            accountsArray[i].status = accountAsset.status ? accountAsset.status : null;
             assetAccounts.push(accountsArray[i]);
         }//Do something
     }
