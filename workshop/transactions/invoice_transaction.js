@@ -77,30 +77,23 @@ class InvoiceTransaction extends BaseTransaction {
 	}
 
 	undoAsset(store) {
-		const sender = store.account.get(this.senderId);
 		const errors = [];
-		const invoiceIndex = sender.asset.invoicesSent.indexOf(this.id);
+		const sender = {}; // Step 4.1 retrieve sender from store (replace code)
+		const invoiceId = sender.asset.invoicesSent.find(id => id === this.id);
 
-		if (invoiceIndex === -1 || sender.asset.invoiceCount === 0) {
-			// todo split errors
+		if (invoiceId === undefined || sender.asset.invoiceCount === 0) {
 			errors.push(
 				new TransactionError(
-					'Invalid "asset.description" defined on transaction',
+					'Invoice ID does not exist in sender.asset.invoicesSent',
 					this.id,
-					'.asset.description',
-					this.asset.description,
+					'sender.asset.invoicesSent',
+					sender.asset.invoicesSent,
 					'A string value',
 				),
 			);
 		} else {
-			// Undo logic comes here
-			sender.asset.invoiceCount--;
-
-			sender.asset.invoicesSent = sender.asset.invoicesSent.filter(
-				id => id !== this.id,
-			);
-
-			store.account.set(sender.address, sender); // Save updated sender account
+			// Step 4.2 and 4.3: Undo logic comes here
+			// Step 4.4: Save updated sender account
 		}
 
 		return errors;

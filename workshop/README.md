@@ -8,7 +8,7 @@ This workshop will guide you through learning about custom transactions with a s
 - Code editor like _Visual Studio Code_
 - Node.js (v10 or higher installed - use [nvm](https://github.com/nvm-sh/nvm#install--update-script) for easy switching between versions)
 - Have `curl` or `Postman` installed
-- Have Postgres **system-wide** installed, **don't install via Docker**! ([Installation guide by Lisk](https://lisk.io/documentation/lisk-core/setup/source#b-postgres-system-wide))
+- Have Postgres **system-wide** installed, **don't install via Docker**! ([Installation guide by Lisk](https://lisk.io/documentation/lisk-core/setup/source#b-postgres-system-wide)) Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
 
 ## Setup
 1. Clone [Lisk-SDK-Examples](https://github.com/LiskHQ/lisk-sdk-examples) repository locally.<br><br>
@@ -19,7 +19,7 @@ This workshop will guide you through learning about custom transactions with a s
 
 3. Next, the `/workshop/transactions` folder is considered a separate module which holds the code for the transaction types. Again, we have to execute `npm install` inside this folder to install the remaining dependencies. Notice in both `package.json` files, there is only one dependency we use: `lisk-sdk: 2.3.5`.<br><br>
 
-4. To verify if the setup is correct, try to run the application with `node index.js | npx bunyan -o short` from the root of the `/workshop` folder. This command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan. If everything is running fine, you can go to the next section.<br><br>_In case you have experimented before with Lisk, it is possible you have to first drop your database and recreate it with:_ `dropdb lisk_dev && createdb lisk_dev`.
+4. To verify if the setup is correct, try to run the application with `node index.js | npx bunyan -o short` from the root of the `/workshop` folder. This command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan. If everything is running fine, you can go to the next section. To stop the node, hit CTRL+C.<br><br>_In case you have experimented before with Lisk, it is possible you have to first drop your database and recreate it with:_ `dropdb lisk_dev && createdb lisk_dev`.
 
 ## Concept: LiskBills
 Imagine **Alice (Freelancer)** and **Bob (Client)**. Bob is looking for a new logo for his website and decides to consult a freelancer. While looking for a good designer, he comes across Alice who offers some spectacular designs in her portfolio. Bob is so excited he decides to immediately employ Alice’s skillset.
@@ -53,24 +53,24 @@ Now, let's get technical. Open the file at `./transactions/invoice_transaction.j
 ### Extending BaseTransaction
 Ok, let's talk briefly about the BaseTransaction. The next thing to notice, we are extending the `InvoiceTransaction` from the [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts). This gives us the ability to write logic for `prepare()`, `validateAsset()`, `TYPE`, `FEE`, `applyAsset()`, and `undoAsset()`.
 
-Let's explore the different functions and their implementations in the `invoice_transaction.js` file. Open the file so you can follow along with the code.
+Let's explore the different functions and their implementations in the `invoice_transaction.js` file. Open the file so you can follow along with the code.<br><br>
 
 #### Getter for TYPE
 Static function that returns **{number}**. This is the type identifier for the transaction. We use this number to uniquely register our new custom transaction in our blockchain network. This means that we can't register transactions with the same transaction TYPE.
 
-**Important: The Lisk Protocol reserves transaction [types 0 - 4](https://lisk.io/documentation/lisk-protocol/transactions) and Lisk Core reserves transaction types 5 - 7.**
+**Important: The Lisk Protocol reserves transaction [types 0 - 4](https://lisk.io/documentation/lisk-protocol/transactions) and Lisk Core reserves transaction types 5 - 7.**<br><br>
 
 #### Getter for FEE
 Static function that returns **{string}**. The fee must be paid when sending this transaction to the blockchain network. We are converting a fee from LSK to Beddows which is the lowest denominal in the Lisk ecosystem: `10 ** 8 = 1 LSK (100000000)`.
 
-_Note: It is possible to use a zero fee._
+_Note: It is possible to use a zero fee._<br><br>
 
 #### prepare()
 The prepare function is used to cache data from the database in a key-value store. This data can later be accessed in the `applyAsset` or `undoAsset` functions to update the state of an account.
 
 As we will be only modifying the sender (freelancer) his account, we just need to cache this account in the key-value store. At the moment, we are implicitly caching the account by calling the implementation in the BaseTransaction class through `super`.
 
-However, this is a bad practice as the implementation might change inside the `BaseTransaction`. Therefore, we want to open the `BaseTransaction` to copy the code that caches the sender account.
+However, this is a bad practice as the implementation might change inside the `BaseTransaction`. Therefore, we want to open the `BaseTransaction` to copy the code that caches the sender account.<br><br>
 
 **Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts#L400-L404) and copy the highlighted implementation of the `prepare()` function (don't copy the whole function definition as it's created in TypeScript) and paste it in the `prepare()` function for InvoiceTransaction replacing the `super` call.**
 
@@ -78,7 +78,7 @@ _The solution for each step can be found in the section `Solution: Invoice Trans
 
 Notice, the `prepare` function looks for the account using the `address` filter. In order to get a better understanding of filters, complete task 2 below.
 
-**Task 2: Read about how to use [storage entities](https://github.com/LiskHQ/lisk-sdk/blob/development/framework/src/components/storage/README.md#how-to-use-storage-entities) and examine the examples. Next, read the section about [filters](https://github.com/LiskHQ/lisk-sdk/blob/development/framework/src/components/storage/README.md#filters).**
+**Task 2: Read about how to use [storage entities](https://github.com/LiskHQ/lisk-sdk/blob/development/framework/src/components/storage/README.md#how-to-use-storage-entities) and examine the examples. Next, read the section about [filters](https://github.com/LiskHQ/lisk-sdk/blob/development/framework/src/components/storage/README.md#filters).**<br><br>
 
 #### ValidateAsset()
 The `validateAsset` function is responsible for only performing static checks. This means the function is synchronous and cannot use data from the key-value store (which holds the cached sender account). Therefore, we can only perform initial checks like validating the presence of the parameter and if the parameter has the correct type. Any other validation logic can be applied as long it does not have to await a promise.
@@ -119,8 +119,17 @@ applyAsset(store) {
     const sender = store.account.get(this.senderId);
 
     // Save invoice count and IDs
-    sender.asset.invoiceCount = sender.asset.invoiceCount === undefined ? 1 : ++sender.asset.invoiceCount;
-    sender.asset.invoicesSent = sender.asset.invoicesSent === undefined ? [this.id] : [...sender.asset.invoicesSent, this.id];
+    if (!sender.asset.invoiceCount) {
+        sender.asset.invoiceCount = 0;
+    }
+
+    if (!sender.asset.invoicesSent) {
+        sender.asset.invoicesSent = [];
+    }
+
+    sender.asset.invoiceCount++;
+    sender.asset.invoicesSent.push(this.id);
+
     store.account.set(sender.address, sender);
     return [];
 }
@@ -129,19 +138,19 @@ applyAsset(store) {
 First, we retrieve the data from the store. The store exposes two key-value stores: `account` and `transaction`.
 The `account` store is read-write, `transaction` store is read-only. This means we can modify data for the account object but transaction data cannot be changed.
 
-**Extra**: If you wonder where the `this.senderId` comes from, every transaction its properties are accessible through the `this` keyword. So is `this.asset` also accessible.
+**Extra**: If you wonder where the `this.senderId` comes from, every transaction its properties are accessible through the `this` keyword. So are `this.id` and `this.asset` also accessible.<br><br>
 
 **Task 3: Read about the exposed methods by both stores [at the section `B/ Retrieving Data`](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
 
 Now you have read about the exposed methods, you know that the `account` store exposes a `get` function that returns a deep clone of the account object. This means we can freely change properties on the object without having to care about references to the original object.
 
-Next, we have to code with the idea that this can be the first custom transaction. This means that the properties like `invoiceCount` and `invoicesSent` do not yet exist in the asset field of the sender account. Therefore, we have this logic to check if the property is undefined or not. If it is, we set the `invoiceCount` to 1, otherwise, we increase the count by one.
+Next, we have to code with the idea that this can be the first custom transaction. This means that the properties like `invoiceCount` and `invoicesSent` do not yet exist in the asset field of the sender account. Therefore, we have this logic to check if the property exists or not. If not, we set the `invoiceCount` to zero and the `invoicesSent` array to an empty array.
 
-The same applies to `invoicesSent`. If the property doesn't exist, we create a new array with the id of the transaction. Otherwise, we append the id to the existing array.
+Next, we increase the value and push the transaction id to the `invoicesSent` array.
 
 ```javascript
-sender.asset.invoiceCount = sender.asset.invoiceCount === undefined ? 1 : ++sender.asset.invoiceCount;
-sender.asset.invoicesSent = sender.asset.invoicesSent === undefined ? [this.id] : [...sender.asset.invoicesSent, this.id;
+sender.asset.invoiceCount++;
+sender.asset.invoicesSent.push(this.id);
 ```
 
 Next, we update the object in the key-value store `store.account.set(sender.address, sender)`. We can only save a modified account object by using the address of the account followed by the updated sender object.
@@ -166,9 +175,9 @@ Now, it's your turn. Your task is to write the reversed logic of the `applyAsset
 **Task 4: Complete the code for Undo() function:**
 Here's the flow of actions for the `undo()` function:
 1. Retrieve sender account
-2. Reduce `invoiceCount` (**Tip**: remember the `undefined` state when it's the first transaction)
-3. Remove id from `invoicesSent` array (**Tip**: use splice - Again, remember the `undefined` case)
-4. Return errors
+2. Reduce `invoiceCount`
+3. Remove id from `invoicesSent` array
+4. Save updated sender object
 
 _The solution can be found in the `Solution: Invoice Transaction` section._
 
@@ -182,11 +191,15 @@ You'll find code that is commented out. Uncomment the line for importing the `In
 Next, verify if everything is fine by starting the application with `node index.js | npx bunyan -o short` from the root of the `/workshop` folder. In order to verify if our custom invoice transaction works, we should send an invoice transaction. 
 
 #### Generate Invoice Transaction
-The `/workshop/generator/invoice.js` file contains a generator that uses a genesis account with sufficient funds and creates an InvoiceTransaction JSON object (Run `node generator/invoice.js`).
+The `/workshop/generator/invoice.js` file contains a generator that uses a delegate account with sufficient funds and creates an InvoiceTransaction JSON object (Run `node generator/invoice.js`).
 
-**Task 5: Quickly explore the generator code at `/workshop/generator/invoice.js`. Next, run the generator and copy the printed JSON transaction payload from your terminal. We will use this payload in the next step to send to the exposed API of our blockchain.**
+**Task 5: Quickly explore the generator code at `/workshop/generator/invoice.js`. You can run the generator from the root of the project with:**
 
-To speed things up, you'll find a formatted JSON transaction object down below:
+```bash
+node generator/invoice.js
+```
+
+You'll find a formatted JSON transaction object down below which has been created with the generator. In the next step, you'll learn how to send this payload to the blockchain application.
 
 <details>
     <summary>Invoice Tx JSON:</summary>
@@ -210,9 +223,10 @@ To speed things up, you'll find a formatted JSON transaction object down below:
             "description": "Workshop delivered" }
     }
 </details>
+<br>
 
 #### Broadcast Invoice Transaction
-Now, when the blockchain application is running (`node index.js | npx bunyan -o short`), let's send the above JSON payload to the transactions endpoint with a POST request: `http://localhost:4000/api/transactions`. You can use Postman or `curl`:
+Now, start the blockchain application again with `node index.js | npx bunyan -o short` and use the below command for sending the transaction payload to the `http://localhost:4000/api/transactions` endpoint.
 
 ```bash
 curl -XPOST -H "Content-type: application/json" -d '{ 
@@ -249,9 +263,12 @@ You should receive the following success result:
 }
 ```
 
-If you want to be absolutely sure the transaction has been accepted and included in a block, query the following endpoint with the right transaction type (13) as an argument (GET request): `curl "http://localhost:4000/api/transactions?type=13"`.
+If you want to be absolutely sure the transaction has been accepted and included in a block, query the following endpoint with the right transaction type (13) as an argument (GET request).
+```bash
+curl "http://localhost:4000/api/transactions?type=13"
+```
 
-The query should return an array of type 13 transactions. If this is your first transaction, the array should only contain one type 13 transaction.
+The query should return an array of type 13 transactions. If this is your first transaction, the array should only contain one type 13 transaction.<br><br>
 
 ### Solution: Invoice Transaction
 
@@ -260,10 +277,10 @@ The query should return an array of type 13 transactions. If this is your first 
 
     async prepare(store) {
         await store.account.cache([
-			{
-				address: this.senderId,
-			},
-		]);
+		    {
+			    address: this.senderId,
+		    },
+	    ]);
     }
 </details>
 
@@ -271,18 +288,34 @@ The query should return an array of type 13 transactions. If this is your first 
     <summary>Undo() function:</summary>
 
     undoAsset(store) {
-        const sender = store.account.get(this.senderId);
+		const sender = store.account.get(this.senderId);
+		const errors = [];
+		const invoiceId = sender.asset.invoicesSent.find(id => id === this.id);
 
-		// Rollback invoice count and IDs
-		sender.asset.invoiceCount = sender.asset.invoiceCount === 1 ? undefined : --sender.asset.invoiceCount;
-		sender.asset.invoicesSent = sender.asset.invoicesSent.length === 1 ? undefined : sender.asset.invoicesSent.splice(
-			sender.asset.invoicesSent.indexOf(this.id),
-			1,
-		);
-		store.account.set(sender.address, sender);
-        return [];
-    }
+		if (invoiceId === undefined || sender.asset.invoiceCount === 0) {
+			errors.push(
+				new TransactionError(
+					'Invoice ID does not exist in sender.asset.invoicesSent',
+					this.id,
+					'sender.asset.invoicesSent',
+					sender.asset.invoicesSent,
+					'A string value',
+				),
+			);
+		} else {
+			// Undo logic comes here
+			sender.asset.invoiceCount--;
+			sender.asset.invoicesSent = sender.asset.invoicesSent.filter(
+				id => id !== this.id,
+			);
+
+			store.account.set(sender.address, sender); // Save updated sender account
+		}
+
+		return errors;
+	}
 </details>
+<br>
 
 ## Nuggets of Knowledge about Custom Transactions
 Before we continue with the `PaymentTransaction`, let's first explore some important concepts related to custom transactions.
@@ -292,12 +325,14 @@ Before we continue with the `PaymentTransaction`, let's first explore some impor
 
 The full constructor logic for this can be found on [Github](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts#L142).
 
+**Remember that the constructor logic converts this.amount from a string to a `Bignum`. We will use this Bignum to compare with the requested amount of the invoice transaction.**<br><br>
+
 
 ### Which filters can we use for the Store?
-**Task 7: Read up about which filters we can use and why we can access them. You can find it at section `A/ Filters Usage` in [this article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
+**Task 7: Read up about which filters we can use and why we can access them. You can find it at section `A/ Filters Usage` in [this article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**<br><br>
 
 ### Should we extend from BaseTransaction or TransferTransaction?
-**Task 8: To answer this question, read the following section `1. Should I extend from` in [this article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**
+**Task 8: To answer this question, read the following section `1. Should I extend from` in [this article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).**<br><br>
 
 ## Transaction 2: Payment Transaction
 The payment transaction accepts one parameter in the `asset.data` field (sent by the client to the freelancer):
@@ -329,85 +364,93 @@ The idea for this transaction is that it will accept only one value that represe
 }
 ```
 
-**Note:** For each step, the solution can be found in the section below called `Solution: Payment Transaction`.
+**Note:** For each step, the solution can be found in the section below called `Solution: Payment Transaction`.<br><br>
 
 #### Steps To Be Implemented
 1. Replace the `super` cache call with the [actual implementation in the TransferTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/0_transfer_transaction.ts#L69). 
 
-Small task: Read up on combining AND and OR filters, this is exactly what happens in the `prepare()` function of the `TransferTransaction` class. You can find the info at section `B/ Combining Filters` in [this article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc)<br><br>
+Small task: Read up on combining AND and OR filters, this is exactly what happens in the `prepare()` function of the `TransferTransaction` class. You can find the info at section `B/ Combining Filters` in [this article](https://blog.lisk.io/a-deep-dive-into-custom-transactions-statestore-basetransaction-and-transfertransaction-df769493ccbc).<br>
 
 2. Besides that, we also want to cache the invoice transaction using the `this.asset.data` field which contains the invoice ID. Make use of the exposed `transaction` store.<br><br>
 
 3. Find a transaction in the `transaction` store where the `id` matches the id in `this.asset.data`.<br><br>
 
-4. If you've found a transaction, validate if the amount for this transaction is at least equal to (or greater than) the `requestedAmount` from the `InvoiceTransaction`. If you didn't find a transaction, push a `TransactionError` in the `errors` array using the interface we saw earlier in the workshop. **Tip: The `applyAsset` function in our PaymentTransaction holds some basic structure for this check.**<br><br>
+4. If you've found a transaction, validate if the amount for this transaction is at least equal to (or greater than) the `requestedAmount` from the `InvoiceTransaction`. Use the following expression for comparing those values as `this.amount` is of instance Bignum. `this.amount.lt(transaction.asset.requestedAmount)`. 
+
+If you didn't find a transaction, push a `TransactionError` in the `errors` array using the interface we saw earlier in the workshop. **Tip: The `applyAsset` function in our PaymentTransaction holds some basic structure for this check.**
 
 To complete things, we should throw an error if the `recipientId` differs from the `senderId` of the invoice transaction. This check needs to be in place to make sure the right person is receiving money for the issued invoice.
 
-**Notice:** As our validation requires data that comes from the `store` object, we can't perform this in the `validateAsset` function. Therefore, we don't have to define this function.
+**Notice:** As our validation requires data that comes from the `store` object, we can't perform this in the `validateAsset` function. Therefore, we don't have to define this function.<br><br>
 
-5. At last, think about the implementation of the `undo` function. Tip: We only have to undo actions in case we save/modify data through the store object.
+5. At last, think about the implementation of the `undo` function. Tip: We only have to undo actions in case we save/modify data through the store object.<br><br>
 
-Ok, now you have implemented all steps, let's verify your implementation. If you are not sure, the solution can be found down below in the section `Solution: Payment Transaction`.
+Ok, now you have implemented all steps, let's verify your implementation. If you are not sure, the solution can be found down below in the section `Solution: Payment Transaction`.<br><br>
 
 ### Testing the PaymentTransaction
-First of all, uncomment the line for importing the `PaymentTransaction` and uncomment the line of code that registers the custom transaction to the application in the `workshop/index.js` file.
+First of all, uncomment the line for importing the `PaymentTransaction` and uncomment the line of code that registers the custom transaction to the application in the `workshop/index.js` file. Next, make sure to start your blockchain application again with `node index.js | npx bunyan -o short`.
+
+#### Fund Account
 Note, we are using the following account for sending the PaymentTransaction: `8273455169423958419L`. However, the account needs funds to pay for the transaction fee. 
 
-**Task: Therefore, we need to fund the account using the following transaction payload which you should send via a POST request to `http://localhost:4000/api/transactions`:**
+**Task: Therefore, we need to fund the account using the following command to send a transaction:**
 
-<details>
-    <summary>Fund account with 100 LSK</summary>
+```bash
+curl -XPOST -H "Content-type: application/json" -d '{
+    "amount": "10000000000",
+    "recipientId": "8273455169423958419L",
+    "senderPublicKey": "c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f",
+    "timestamp": 106429639,
+    "type": 0,
+    "fee": "10000000",
+    "asset": {
+        
+    },
+    "senderId": "16313739661670634666L",
+    "signature": "bd2cc2c0a653aa2ea25b5034c885a53a5f44779d527f1f0e476b5a5fa08deb86d4dd7fc86133f8fba75fcc9f8fae92c11bf1bf6df55efc5f50ca8dba675f7202",
+    "id": "4232693658353776133"
+}' http://localhost:4000/api/transactions
+```
 
-    {
-        "amount": "10000000000",
-        "recipientId": "8273455169423958419L",
-        "senderPublicKey": "c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f",
-        "timestamp": 106429639,
-        "type": 0,
-        "fee": "10000000",
-        "asset": {
-            
-        },
-        "senderId": "16313739661670634666L",
-        "signature": "bd2cc2c0a653aa2ea25b5034c885a53a5f44779d527f1f0e476b5a5fa08deb86d4dd7fc86133f8fba75fcc9f8fae92c11bf1bf6df55efc5f50ca8dba675f7202",
-        "id": "4232693658353776133"
-    }
-</details><br>
+We can create a similar funding transaction as well by using the `fund.js` generator which you use like `node generator/fund.js`.
 
-Next, we can use the generator to generate a transaction that fulfills the previous invoice transaction using the right accounts.
+#### Send Payment Transaction
+Next, we can use the `payment.js` generator to generate a PaymentTransaction that fulfills the previous invoice transaction using the right accounts. **Do not forget to modify the `invoiceId` field which holds the ID of the invoice transaction you want to pay for at `/generator/payment.js:28`.** If you don't know this ID anymore, look up the transaction using the API: 
 
-**Do not forget to modify the `invoiceId` field which holds the ID of the invoice transaction you want to pay for at `/generator/payment.js:28`.**
+```bash
+curl "http://localhost:4000/api/transactions?type=13"
+```
 
-If you don't know this ID anymore, look up the transaction using the API: http://localhost:4000/api/transactions?type=13
+To speed things up, we have created the correct payload for you. Let's send this generated payload to the `/transactions` endpoint with the below command. If the transaction gets accepted, your good! Success :)
 
-Run the generator with `node generator/payment.js` and copy the outputted payload below this section in your terminal: `--- Payment Tx ---`. The payment transaction should look similar to the one below here:
+```bash
+curl -XPOST -H "Content-type: application/json" -d '{   
+    "id": "14610813406835243898",
+    "amount": "1100000000",
+    "type": 14,
+    "timestamp": 106416998,
+    "senderPublicKey":
+        "9d3058175acab969f41ad9b86f7a2926c74258670fe56b37c429c01fca9f2f0f",
+    "senderId": "8273455169423958419L",
+    "recipientId": "16313739661670634666L",
+    "fee": "10000000",
+    "signature":
+        "a9cfd197227737aaa05d2292ff6a278e6ab81e412b9c17363d0e4a942f8f28c78407f58f46ef56f8fb755de5eec1775a0214d2b789163cf75036f6ee655bd104",
+    "signatures": [],
+    "asset": { "data": "6068542855269194380" }
+}' http://localhost:4000/api/transactions
+```
 
-<details>
-    <summary>Payment Tx JSON:</summary>
+To proof the data is actually stored in Postgres, you can use `psql` or a grahpical tool like [pgAdmin](https://www.pgadmin.org/). Here is the transaction data for both invoice and payment transaction.
 
-    {   
-        "id": "14610813406835243898",
-        "amount": "1100000000",
-        "type": 14,
-        "timestamp": 106416998,
-        "senderPublicKey":
-            "9d3058175acab969f41ad9b86f7a2926c74258670fe56b37c429c01fca9f2f0f",
-        "senderId": "8273455169423958419L",
-        "recipientId": "16313739661670634666L",
-        "fee": "10000000",
-        "signature":
-            "a9cfd197227737aaa05d2292ff6a278e6ab81e412b9c17363d0e4a942f8f28c78407f58f46ef56f8fb755de5eec1775a0214d2b789163cf75036f6ee655bd104",
-        "signatures": [],
-        "asset": { "data": "6068542855269194380" }
-    }
-</details><br>
+![Query result pgAdmin](./assets/02-query-result.png)
 
-Next, send this generated payload to the `http://localhost:4000/api/transactions` endpoint with a POST request. If the transaction gets accepted, your good! Success :)
+You can do a final check to see if `16313739661670634666L` has received the payment for the invoice in the account balance: 
+```bash
+curl http://localhost:4000/api/accounts?address=16313739661670634666L
+```
 
-You can do a final check to see if `16313739661670634666L` has received the payment for the invoice in the account balance: `http://localhost:4000/api/accounts?address=16313739661670634666L` (GET)
-
-End of the workshop!
+End of the workshop, congratulations!
 
 ### Solution: Payment Transaction
 
