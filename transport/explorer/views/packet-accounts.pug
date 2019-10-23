@@ -17,7 +17,7 @@ block content
 
         each account in accounts
 
-            tr
+            tr(class=account.asset.status)
                 td= account.address
                 td= account.balance
-                td(class=account.status)= JSON.stringify(account.asset, null, 2)
+                td= JSON.stringify(account.asset, null, 2)

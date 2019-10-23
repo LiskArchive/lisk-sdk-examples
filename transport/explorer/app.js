@@ -67,9 +67,8 @@ app.get('/packet-accounts', async(req, res) => {
     for (var i = 0; i < accountsArray.length; i++) {
         let accountAsset = accountsArray[i].asset;
         if (accountAsset && Object.keys(accountAsset).length > 0){
-            accountsArray[i].status = accountAsset.status ? accountAsset.status : null;
             assetAccounts.push(accountsArray[i]);
-        }//Do something
+        }
     }
 
     res.render('packet-accounts', { accounts: assetAccounts });
