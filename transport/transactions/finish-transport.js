@@ -55,9 +55,9 @@ class FinishTransportTransaction extends BaseTransaction {
 
     applyAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.recipientId);
-        const carrier = store.account.get(packet.asset.carrier);
-        const sender = store.account.get(packet.asset.sender);
+        let packet = store.account.get(this.recipientId);
+        let carrier = store.account.get(packet.asset.carrier);
+        let sender = store.account.get(packet.asset.sender);
         // if the transaction has been signed by the packet recipient
         if (this.asset.senderId === packet.carrier) {
             // if the transport was a success
@@ -93,7 +93,7 @@ class FinishTransportTransaction extends BaseTransaction {
              */
             const senderBalanceWithSecurityAndPorto = new utils.BigNum(sender.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.porto));
 
-            sender.balance = senderBalanceWithSecurityAndPorto;
+            sender.balance = senderBalanceWithSecurityAndPorto.toString();
 
             store.account.set(sender.address, sender);
             /**
@@ -101,12 +101,10 @@ class FinishTransportTransaction extends BaseTransaction {
              * - Reduce trust by 1
              * - Set lockedSecurity to 0
              */
-            const updatedTrust = carrier.asset.trust - 1;
-
-            carrier.asset.trust = updatedTrust;
+            carrier.asset.trust = carrier.asset.trust ? --carrier.asset.trust : -1;
             carrier.asset.lockedSecurity = null;
 
-            store.account.set(carrier.address, updatedCarrier);
+            store.account.set(carrier.address, carrier);
             /**
              * Update the Packet account:
              * - set status to "fail"
