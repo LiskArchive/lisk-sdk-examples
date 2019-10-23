@@ -5,6 +5,10 @@ extends index.pug
 block content
     h2 Packet Accounts
 
+    p(class='pending') grey = "pending"
+    p(class='ongoing') yellow = "ongoing"
+    p(class='success') green = "success"
+    p(class='fail') red = "fail"
     table(border='1')
         tr
             th Address
