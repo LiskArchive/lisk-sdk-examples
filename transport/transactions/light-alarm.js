@@ -76,8 +76,8 @@ class LightAlarmTransaction extends BaseTransaction {
 
         /**
          * Update the Packet account:
-         * - set packet status to "manipulated"
-         * - set packet message to "Light alarm!"
+         * - set packet status to "alarm"
+         * - add current timestamp to light alarms list
          */
         packet.asset.status = 'alarm';
         packet.asset.alarms = packet.asset.alarms ? packet.asset.alarms : {};
