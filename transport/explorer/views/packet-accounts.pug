@@ -1,0 +1,19 @@
+extends index.pug
+
+
+
+block content
+    h2 Packet Accounts
+
+    table(border='1')
+        tr
+            th Address
+            th Balance
+            th Asset
+
+        each account in accounts
+
+            tr
+                td= account.address
+                td= account.balance
+                td(class=account.status)= JSON.stringify(account.asset, null, 2)

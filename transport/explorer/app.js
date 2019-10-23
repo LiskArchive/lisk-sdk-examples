@@ -44,7 +44,37 @@ app.get('/accounts', async(req, res) => {
         }
     } while (accounts.length === 100);
 
+
     res.render('accounts', { accounts: accountsArray });
+});
+
+app.get('/packet-accounts', async(req, res) => {
+    let offset = 0;
+    let accounts = [];
+    let accountsArray = [];
+
+    do {
+        const retrievedAccounts = await api.accounts.get({ limit: 100, offset });
+        accounts = retrievedAccounts.data;
+        accountsArray.push(...accounts);
+
+        if (accounts.length === 100) {
+            offset += 100;
+        }
+    } while (accounts.length === 100);
+
+    let assetAccounts = [];
+    for (var i = 0; i < accountsArray.length; i++) {
+        let accountAsset = accountsArray[i].asset;
+        if (accountAsset && Object.keys(accountAsset).length > 0){
+            if (accountAsset.status === 'success'){
+                accountsArray[i].status = 'success';
+            }
+            assetAccounts.push(accountsArray[i]);
+        }//Do something
+    }
+
+    res.render('packet-accounts', { accounts: assetAccounts });
 });
 
 /**
@@ -155,7 +185,7 @@ app.get('/initialize', async(req, res) => {
 });
 
 app.post('/post-register-packet', function (req, res) {
-    console.log(req.body);
+    console.dir(req.body);
     res.send(req.body);
 
     res.end()

@@ -24,6 +24,8 @@ html(lang="en")
               a(href='/light-alarm').nav-link LightAlarmTransactions
             li.nav-item
               a(href='/initialize').nav-link Initialize
+            li.nav-item
+              a(href='/packet-accounts').nav-link Packet accounts
 
     .container
       block content
@@ -64,4 +66,8 @@ html(lang="en")
         table td, table th {
             border: 2px solid white;
             color: white;
+        }
+        .success {
+            background-color: chartreuse !important;
+            color: darkgreen !important;
         }
