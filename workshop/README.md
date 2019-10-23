@@ -165,7 +165,7 @@ Only when the transaction gets into a block and no errors occur,
 the transaction will be applied and the changes we made in the key-value store will be saved to the database.
 ```
 
-Notice that we return an empty array at the end of the function. The same idea applies here as well. As the `validateAsset()` function does only allow for static checks, more advanced checks that require data from the store can be performed in the `applyAsset()` function. In case of an error, we put the error in an array and return this array. However, for the `invoiceTransaction`, we do not require additional validation steps, so we decided to simply return an empty array.
+Notice that we return an empty array at the end of the function. The same idea applies here as well. As the `validateAsset()` function does only allow for static checks, more advanced checks that require data from the store can be performed in the `applyAsset()` function. In case of an error, we put the error in an array and return this array. However, for the `invoiceTransaction`, we do not require additional validation steps, so we decided to simply return an empty array.<br><br>
 
 #### undoAsset()
 Now, it's your turn. Your task is to write the reversed logic of the `applyAsset()` function. The `undoAsset()` function is used to roll back changes that were done by the `applyAsset()` function.
@@ -179,7 +179,7 @@ Here's the flow of actions for the `undo()` function:
 3. Remove id from `invoicesSent` array
 4. Save updated sender object
 
-_The solution can be found in the `Solution: Invoice Transaction` section._
+_The solution can be found in the `Solution: Invoice Transaction` section._<br><br>
 
 ### Testing the InvoiceTransaction
 To test the `InvoiceTransaction`, we have to register the custom transaction to our blockchain in the `index.js` file in the root of the `/workshop` folder.
@@ -188,7 +188,7 @@ You'll find code that is commented out. Uncomment the line for importing the `In
 
 ![Register custom transactoin](./assets/01-index-register.png)
 
-Next, verify if everything is fine by starting the application with `node index.js | npx bunyan -o short` from the root of the `/workshop` folder. In order to verify if our custom invoice transaction works, we should send an invoice transaction. 
+Next, verify if everything is fine by starting the application with `node index.js | npx bunyan -o short` from the root of the `/workshop` folder. In order to verify if our custom invoice transaction works, we should send an invoice transaction.
 
 #### Generate Invoice Transaction
 The `/workshop/generator/invoice.js` file contains a generator that uses a delegate account with sufficient funds and creates an InvoiceTransaction JSON object (Run `node generator/invoice.js`).
