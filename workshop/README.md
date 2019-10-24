@@ -7,7 +7,7 @@ This workshop will guide you through learning about custom transactions with a s
 
 ## Prerequisites
 - Code editor like _Visual Studio Code_
-- Node.js (v10 or higher installed - use [nvm](https://github.com/nvm-sh/nvm#install--update-script) for easy switching between versions)
+- [Node.js](https://lisk.io/documentation/lisk-core/setup/source#nodejs) (v10 or higher installed - use [nvm](https://github.com/nvm-sh/nvm#install--update-script) for easy switching between versions)
 - Have `curl` or `Postman` installed
 - Have Postgres installed ([Installation guide by Lisk](https://lisk.io/documentation/lisk-core/setup/source#b-postgres-system-wide)). Notice, we also talk about creating a `lisk` user on your system, for MacOS this is not needed.
 
