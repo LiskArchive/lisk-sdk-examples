@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="589px" preserveAspectRatio="none" style="width:1884px;height:589px;" version="1.1" viewBox="0 0 1884 589" width="1884px" zoomAndPan="magnify"><defs><filter height="300%" id="fpaipheca7n1d" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--MD5=[ead227b1f15782be967ad12754f7a231]
+entity Sender--><ellipse cx="31" cy="121.5" fill="#FEFECE" filter="url(#fpaipheca7n1d)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"/><path d="M31,129.5 L31,156.5 M18,137.5 L44,137.5 M31,156.5 L18,171.5 M31,156.5 L44,171.5 " fill="none" filter="url(#fpaipheca7n1d)" style="stroke: #A80036; stroke-width: 2.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="50" x="6" y="191.4951">Sender</text><!--MD5=[4123fcd7795bcaf721e2249b804eb70c]
+entity Recipient--><ellipse cx="1545" cy="121.5" fill="#FEFECE" filter="url(#fpaipheca7n1d)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"/><path d="M1545,129.5 L1545,156.5 M1532,137.5 L1558,137.5 M1545,156.5 L1532,171.5 M1545,156.5 L1558,171.5 " fill="none" filter="url(#fpaipheca7n1d)" style="stroke: #A80036; stroke-width: 2.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="65" x="1512.5" y="191.4951">Recipient</text><!--MD5=[8e76afe5eb33396eb16e65cb9217ddc8]
+entity Carrier--><ellipse cx="961" cy="121.5" fill="#FEFECE" filter="url(#fpaipheca7n1d)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"/><path d="M961,129.5 L961,156.5 M948,137.5 L974,137.5 M961,156.5 L948,171.5 M961,156.5 L974,171.5 " fill="none" filter="url(#fpaipheca7n1d)" style="stroke: #A80036; stroke-width: 2.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="45" x="938.5" y="191.4951">Carrier</text><!--MD5=[993ca174be86879988fb14a1259d1b3a]
+entity initnode--><polygon fill="#FEFECE" filter="url(#fpaipheca7n1d)" points="271,75,281,65,409,65,409,231.0781,399,241.0781,271,241.0781,271,75" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="399" x2="408" y1="75" y2="66"/><line style="stroke: #000000; stroke-width: 1.5;" x1="271" x2="399" y1="75" y2="75"/><line style="stroke: #000000; stroke-width: 1.5;" x1="399" x2="399" y1="75" y2="241.0781"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="53" x="286" y="97.9951">Packet</text><line style="stroke: #000000; stroke-width: 1.0;" x1="271" x2="399" y1="101.2969" y2="101.2969"/><line style="stroke: #000000; stroke-width: 1.0;" x1="399" x2="409" y1="101.2969" y2="91.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="57" x="292" y="118.292">Account</text><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="271" x2="399" y1="125.5938" y2="125.5938"/><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="399" x2="409" y1="125.5938" y2="115.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="14" x="292" y="142.5889">ID</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="296" y="158.8857"/><line style="stroke: #000000; stroke-width: 1.0;" x1="271" x2="399" y1="166.1875" y2="166.1875"/><line style="stroke: #000000; stroke-width: 1.0;" x1="399" x2="409" y1="166.1875" y2="156.1875"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="21" x="292" y="183.1826">IoT</text><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="271" x2="399" y1="190.4844" y2="190.4844"/><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="399" x2="409" y1="190.4844" y2="180.4844"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="81" x="292" y="207.4795">Lightsensor</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="86" x="292" y="223.7764">Raspberry Pi</text><!--MD5=[0b70d51bdd028022f5101c089cfdd98e]
+entity node--><polygon fill="#FEFECE" filter="url(#fpaipheca7n1d)" points="621,26,631,16,803,16,803,279.8594,793,289.8594,621,289.8594,621,26" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="793" x2="802" y1="26" y2="17"/><line style="stroke: #000000; stroke-width: 1.5;" x1="621" x2="793" y1="26" y2="26"/><line style="stroke: #000000; stroke-width: 1.5;" x1="793" x2="793" y1="26" y2="289.8594"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="53" x="636" y="48.9951">Packet</text><line style="stroke: #000000; stroke-width: 1.0;" x1="621" x2="793" y1="52.2969" y2="52.2969"/><line style="stroke: #000000; stroke-width: 1.0;" x1="793" x2="803" y1="52.2969" y2="42.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="57" x="642" y="69.292">Account</text><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="621" x2="793" y1="76.5938" y2="76.5938"/><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="793" x2="803" y1="76.5938" y2="66.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="14" x="642" y="93.5889">ID</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="50" x="642" y="109.8857">Sender</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="65" x="642" y="126.1826">Recipient</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="61" x="642" y="142.4795">minTrust</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="55" x="642" y="158.7764">Security</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="57" x="642" y="175.0732">Postage</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="646" y="191.3701"/><line style="stroke: #000000; stroke-width: 1.0;" x1="621" x2="793" y1="198.6719" y2="198.6719"/><line style="stroke: #000000; stroke-width: 1.0;" x1="793" x2="803" y1="198.6719" y2="188.6719"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="21" x="642" y="215.667">IoT</text><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="621" x2="793" y1="222.9688" y2="222.9688"/><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="793" x2="803" y1="222.9688" y2="212.9688"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="81" x="642" y="239.9639">Lightsensor</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="86" x="642" y="256.2607">Raspberry Pi</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="130" x="642" y="272.5576">Secret passphrase</text><!--MD5=[d4bb979d073464a818782f912af531d1]
+entity node2--><polygon fill="#FEFECE" filter="url(#fpaipheca7n1d)" points="1191,18,1201,8,1373,8,1373,288.1563,1363,298.1563,1191,298.1563,1191,18" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1363" x2="1372" y1="18" y2="9"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1191" x2="1363" y1="18" y2="18"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1363" x2="1363" y1="18" y2="298.1563"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="53" x="1206" y="40.9951">Packet</text><line style="stroke: #000000; stroke-width: 1.0;" x1="1191" x2="1363" y1="44.2969" y2="44.2969"/><line style="stroke: #000000; stroke-width: 1.0;" x1="1363" x2="1373" y1="44.2969" y2="34.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="57" x="1212" y="61.292">Account</text><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="1191" x2="1363" y1="68.5938" y2="68.5938"/><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="1363" x2="1373" y1="68.5938" y2="58.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="14" x="1212" y="85.5889">ID</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="50" x="1212" y="101.8857">Sender</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="65" x="1212" y="118.1826">Recipient</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="45" x="1212" y="134.4795">Carrier</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="61" x="1212" y="150.7764">minTrust</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="55" x="1212" y="167.0732">Security</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="57" x="1212" y="183.3701">Postage</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="1216" y="199.667"/><line style="stroke: #000000; stroke-width: 1.0;" x1="1191" x2="1363" y1="206.9688" y2="206.9688"/><line style="stroke: #000000; stroke-width: 1.0;" x1="1363" x2="1373" y1="206.9688" y2="196.9688"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="21" x="1212" y="223.9639">IoT</text><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="1191" x2="1363" y1="231.2656" y2="231.2656"/><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 1.0,2.0;" x1="1363" x2="1373" y1="231.2656" y2="221.2656"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="81" x="1212" y="248.2607">Lightsensor</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="86" x="1212" y="264.5576">Raspberry Pi</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="130" x="1212" y="280.8545">Secret passphrase</text><ellipse cx="1054.9431" cy="410.6886" fill="#FEFECE" filter="url(#fpaipheca7n1d)" rx="91.4431" ry="20.6886" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="157" x="976.4431" y="415.3371">LightAlarmTransaction!</text><ellipse cx="1516.2471" cy="410.4494" fill="#FEFECE" filter="url(#fpaipheca7n1d)" rx="70.2471" ry="16.4494" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="107" x="1462.7471" y="415.0979">Transport failed</text><ellipse cx="1715.7901" cy="410.258" fill="#FEFECE" filter="url(#fpaipheca7n1d)" rx="79.2901" ry="18.258" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="129" x="1651.2901" y="414.9065">Transport success</text><path d="M922.5,515 L922.5,570.3984 A0,0 0 0 0 922.5,570.3984 L1187.5,570.3984 A0,0 0 0 0 1187.5,570.3984 L1187.5,525 L1177.5,515 L1059,515 L1055,431.125 L1051,515 L922.5,515 A0,0 0 0 0 922.5,515 " fill="#FBFB77" filter="url(#fpaipheca7n1d)" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M1177.5,515 L1177.5,525 L1187.5,525 L1177.5,515 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="85" x="936.5" y="532.0669">status: alarm</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="0" x="932.5" y="547.1997"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="244" x="928.5" y="562.3325">Save current timestamp to alarms-list</text><path d="M1236,507 L1236,577.5313 A0,0 0 0 0 1236,577.5313 L1538,577.5313 A0,0 0 0 0 1538,577.5313 L1538,517 L1528,507 L1425.9093,507 L1500.1821,426.6858 L1417.9093,507 L1236,507 A0,0 0 0 0 1236,507 " fill="#FBFB77" filter="url(#fpaipheca7n1d)" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M1528,507 L1528,517 L1538,517 L1528,507 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="66" x="1242" y="524.0669">status: fail</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="0" x="1246" y="539.1997"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="281" x="1242" y="554.3325">Send Postage + Security to Sender balance</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="180" x="1242" y="569.4653">Reduce trust of Carrier by -1</text><path d="M1573.5,507 L1573.5,577.5313 A0,0 0 0 0 1573.5,577.5313 L1872.5,577.5313 A0,0 0 0 0 1872.5,577.5313 L1872.5,517 L1862.5,507 L1725.1079,507 L1716.9881,429.1324 L1717.1079,507 L1573.5,507 A0,0 0 0 0 1573.5,507 " fill="#FBFB77" filter="url(#fpaipheca7n1d)" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M1862.5,507 L1862.5,517 L1872.5,517 L1862.5,507 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="99" x="1579.5" y="524.0669">status: success</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="0" x="1583.5" y="539.1997"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="278" x="1579.5" y="554.3325">Send Postage + Security to Carrier balance</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="193" x="1579.5" y="569.4653">Increase trust of Carrier by +1</text><path d="M502,383 L502,438.3984 A0,0 0 0 0 502,438.3984 L922,438.3984 A0,0 0 0 0 922,438.3984 L922,393 L912,383 L716,383 L712,290.0432 L708,383 L502,383 A0,0 0 0 0 502,383 " fill="#FBFB77" filter="url(#fpaipheca7n1d)" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M912,383 L912,393 L922,393 L912,383 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="99" x="508" y="400.0669">status: pending</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="0" x="512" y="415.1997"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="399" x="508" y="430.3325">Transfer postage from the  senders account to packet balance</text><path d="M1181.5,375 L1181.5,445.5313 A0,0 0 0 0 1181.5,445.5313 L1402.5,445.5313 A0,0 0 0 0 1402.5,445.5313 L1402.5,385 L1392.5,375 L1294.615,375 L1287.6429,298.3058 L1286.615,375 L1181.5,375 A0,0 0 0 0 1181.5,375 " fill="#FBFB77" filter="url(#fpaipheca7n1d)" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M1392.5,375 L1392.5,385 L1402.5,385 L1392.5,375 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="99" x="1187.5" y="392.0669">status: ongoing</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="0" x="1191.5" y="407.1997"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="189" x="1187.5" y="422.3325">Add carrier to packet account</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="200" x="1187.5" y="437.4653">Lock Security in carrier account</text><!--MD5=[9e15a6808c0d3e6919611510c422654f]
+link Sender to initnode--><path d="M56.025,153 C101.1141,153 197.617,153 265.567,153 " fill="none" id="Sender-&gt;initnode" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="270.8182,153,261.8182,149,265.8182,153,261.8182,157,270.8182,153" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="178" x="74.5" y="146.0669">Initialize the packet account</text><!--MD5=[6c9a9ffeee17b37ec5588653ed2ba74e]
+link initnode to node--><path d="M409.0985,153 C467.2565,153 551.0573,153 615.7789,153 " fill="none" id="initnode-&gt;node" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="620.7977,153,611.7977,149,615.7977,153,611.7977,157,620.7977,153" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="175" x="427.5" y="146.0669">Register packet transaction</text><!--MD5=[2bdfbc614a4a48432b477ce2d12ebf43]
+link node to Carrier--><path d="M803.3045,153 C849.3583,153 901.9496,153 933.2636,153 " fill="none" id="node-&gt;Carrier" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="938.4792,153,929.4792,149,933.4792,153,929.4792,157,938.4792,153" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="99" x="821.25" y="146.0669">Gives packet to</text><!--MD5=[3456556a0c5e63b51533dace4ee5e664]
+link Carrier to node2--><path d="M983.5721,153 C1024.9629,153 1115.2257,153 1185.7077,153 " fill="none" id="Carrier-&gt;node2" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="1190.7473,153,1181.7473,149,1185.7473,153,1181.7473,157,1190.7473,153" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="171" x="1001.75" y="146.0669">Start transport transaction</text><!--MD5=[bc4769c29a5baaf25ef08548d3dff4b0]
+link node2 to LightAlarmTransaction!--><path d="M1190.9784,256.2514 C1148.954,303.9222 1102.6468,356.4513 1076.3653,386.2641 " fill="none" id="node2-&gt;LightAlarmTransaction!" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="1072.9486,390.1398,1081.9008,386.0339,1076.2551,386.3892,1075.8998,380.7435,1072.9486,390.1398" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="120" x="1124" y="341.0669">If packet is opened</text><!--MD5=[66655d3f5e7572fcefe702538fbf15a7]
+link node2 to Recipient--><path d="M1373.2465,153 C1419.2036,153 1472.4199,153 1507.2896,153 " fill="none" id="node2-&gt;Recipient" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="1512.2982,153,1503.2982,149,1507.2982,153,1503.2982,157,1512.2982,153" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="103" x="1391.25" y="146.0669">Receives packet</text><!--MD5=[321998272bd1fedd6b1900ce69e4d447]
+link Recipient to Transport failed--><path d="M1540.3084,194.658 C1534.0823,249.9413 1523.3143,345.5541 1518.4778,388.499 " fill="none" id="Recipient-&gt;Transport failed" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="1517.8906,393.7129,1522.8727,385.2171,1518.4502,388.7443,1514.923,384.3218,1517.8906,393.7129" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="123" x="1526" y="341.0669">FinishTransport: fail</text><!--MD5=[af84d43c12364718849d3c23365d14f9]
+link Recipient to Transport success--><path d="M1572.6642,194.658 C1609.2187,249.7036 1672.3253,344.7326 1701.0198,387.9422 " fill="none" id="Recipient-&gt;Transport success" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="1703.852,392.207,1702.2052,382.4968,1701.0859,388.0418,1695.5409,386.9225,1703.852,392.207" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="156" x="1672" y="341.0669">FinishTransport: success</text><!--MD5=[ed1338ae6208fab6e2b0ed450a4c7326]
+@startuml
+actor Sender
+actor Recipient
+actor Carrier
+
+node initnode [
+<b>Packet
+- - - -
+Account
+  ....
+  ID
+  
+- - - -
+IoT
+....
+Lightsensor
+Raspberry Pi
+]
+
+
+node node [
+<b>Packet
+- - - -
+Account
+  ....
+  ID
+  Sender
+  Recipient
+  minTrust
+  Security
+  Postage
+  
+- - - -
+IoT
+....
+Lightsensor
+Raspberry Pi
+Secret passphrase
+]
+
+node node2 [
+<b>Packet
+- - - -
+Account
+  ....
+  ID
+  Sender
+  Recipient
+  Carrier
+  minTrust
+  Security
+  Postage
+  
+- - - -
+IoT
+....
+Lightsensor
+Raspberry Pi
+Secret passphrase
+]
+
+Sender -> initnode : Initialize the packet account
+initnode -> node : Register packet transaction
+node -> Carrier : Gives packet to
+Carrier -> node2 : Start transport transaction
+node2 - -> (LightAlarmTransaction!) : If packet is opened
+node2 -> Recipient : Receives packet
+Recipient - -> (Transport failed) : FinishTransport: fail
+Recipient - -> (Transport success) : FinishTransport: success
+
+note bottom of (LightAlarmTransaction!)
+  status: alarm
+
+Save current timestamp to alarms-list
+end note
+
+note bottom of (Transport failed)
+  status: fail
+  
+  Send Postage + Security to Sender balance
+  Reduce trust of Carrier by -1
+end note
+
+note bottom of (Transport success)
+  status: success
+  
+  Send Postage + Security to Carrier balance
+  Increase trust of Carrier by +1
+end note
+
+note bottom of node
+  status: pending
+
+  Transfer postage from the  senders account to packet balance
+end note
+
+note bottom of node2
+  status: ongoing
+
+  Add carrier to packet account
+  Lock Security in carrier account
+end note
+@enduml
+
+PlantUML version 1.2019.10(Fri Sep 13 20:53:03 UTC 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 1.8.0_222-heroku-b10
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

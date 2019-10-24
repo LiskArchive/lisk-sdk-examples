@@ -22,7 +22,7 @@ If a manipulation is detected, it will send a self-signed alarm transaction to t
 When reaching the recipient of the packet, the carrier passes the packet to the recipient.
 The recipient needs to sign a transaction, that verifies that the packet has been passed on to the recipient.
 
-image::plantuml.svg[Flow chart of Lisk Transport]
+image::transport-uml.svg[Flow chart of Lisk Transport]
 
 == Requirements
 
@@ -33,7 +33,7 @@ To achieve this, 3 different kind of applications need to be developed:
 . A blockchain application, which accepts the application-specific <<_custom_transactions, transaction types>>.
 This application needs to be installed on different independent nodes and will setup and maintain the blockchain which is used to store the data about the packets, carrier and users.
 . A client application, which is displaying information from the blockchain to the user.
-It needs a frontend, which should be listing at least a list of packetIDs and their publickeys, the carrier, sender, recipient, and a status field (delivery ongoing, delivery error, delivery delayed, delivery success).
+It needs a frontend, which should be listing at least a list of packetIDs, the carrier, sender, recipient, and a status field (`pending | ongoing | alarm | success | fail`).
 It should also provide an easy way to create and send the different transaction types to the network.
 . An IoT application, which is stored on a microcontroller/raspberry pi. This application will track that the packet is not manipulated during the delivery.
 To do this, certain sensors will be connected to it, that track information like light, temperature and/or humidity inside of the packet.
