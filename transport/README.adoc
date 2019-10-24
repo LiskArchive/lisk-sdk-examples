@@ -8,7 +8,7 @@ Lisk Transport is a PoC (Proof of Concept) blockchain application, to showcase t
 
 The goal is to create a simple decentralized supply chain tracking system.
 
-Before registering the packet on the network, the owner needs to create a new account for the packet and store the public key on the IoT device inside the packet.
+Before registering the packet on the network, the owner needs to create a new account for the packet and store the passphrase on the IoT device inside the packet.
 This is necessary, because the packet needs to sign the transactions it sends to the network, in order to communicate with it.
 The packets are registered on the blockchain network by the packet owner.
 
@@ -22,17 +22,7 @@ If a manipulation is detected, it will send a self-signed alarm transaction to t
 When reaching the recipient of the packet, the carrier passes the packet to the recipient.
 The recipient needs to sign a transaction, that verifies that the packet has been passed on to the recipient.
 
-=== MVP
-
-The MVP of LiskTransport consists only of 1 custom transaction type: `lightAlarmTransaction`.
-
-It can be extended to use other sensors as well.
-In that case, additional sensor-specific transaction types are needed, e.g. `humidityTransaction` and `temperatureTransaction`.
-
-The IoT application will detect light(/humidity/temperature) and send the status of it to the network.
-
-The Client app will list all transactions + packet IDs, that have emitted the transaction.
-It will list information about the event as well (e.g. humidity in %, light detected: true|false)
+image::plantuml.svg[Flow chart of Lisk Transport]
 
 == Requirements
 
