@@ -2,6 +2,7 @@
 
 This workshop will guide you through learning about custom transactions with a step-by-step approach. The workshop demands you to actively participate in order to get familiar with custom transactions. This workshop focuses on the LiskBills proof of concept which showcases the potential of the Lisk Alpha SDK, in particular developing custom transactions.
 
+**In case you spot a mistake or see something that needs improvement, use [this feedback form](https://forms.gle/D6Sk3CVYeegmc69bA).**
 **Make sure to read the prerequisites and execute each step of the setup.**
 
 ## Prerequisites
@@ -72,7 +73,7 @@ As we will be only modifying the sender (freelancer) his account, we just need t
 
 However, this is a bad practice as the implementation might change inside the `BaseTransaction`. Therefore, we want to open the `BaseTransaction` to copy the code that caches the sender account.<br><br>
 
-**Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts#L400-L404) and copy the highlighted implementation of the `prepare()` function (don't copy the whole function definition as it's created in TypeScript) and paste it in the `prepare()` function for InvoiceTransaction replacing the `super` call.**
+**Task 1: Go to [BaseTransaction class](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/base_transaction.ts#L348-L352) and copy the highlighted implementation of the `prepare()` function (don't copy the whole function definition as it's created in TypeScript) and paste it in the `prepare()` function for InvoiceTransaction replacing the `super` call.**
 
 _The solution for each step can be found in the section `Solution: Invoice Transaction`._
 
@@ -354,7 +355,7 @@ If you haven't installed the dependencies inside the `./transactions` folder yet
 Now, let's get technical. Open the file at `./transactions/payment_transaction.js`. For this transaction type (14), most code needs to be written. Good luck!
 
 ### Exploring Payment Transaction
-The idea for the `PaymentTransaction` is that you write the logic yourself based on the requirements and tips we give to you. The payment transaction will extend from the `TransferTransaction` although we do not recommend this (it simplifies things).
+The idea for the `PaymentTransaction` is that you write the logic yourself based on the requirements and tips we give to you. The payment transaction will extend from the `TransferTransaction` as we will be sending a payment.
 
 The idea for this transaction is that it will accept only one value that represents the ID of the invoice transaction the client wants to pay for. This invoice ID will be sent in an asset field that contains a data field (as the `TransferTransaction` requires this).
 
@@ -451,6 +452,7 @@ curl http://localhost:4000/api/accounts?address=16313739661670634666L
 ```
 
 End of the workshop, congratulations!
+**Please help us improving this workshop by filling in [this feedback form](https://forms.gle/D6Sk3CVYeegmc69bA).**
 
 ### Solution: Payment Transaction
 
