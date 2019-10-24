@@ -29,7 +29,7 @@ class RegisterPacketTransaction extends BaseTransaction {
     }
 
     validateAsset() {
-        // Static checks for presence of `packetId`, `porto`, `security`, and `minTrust`.
+        // Static checks for presence of `packetId`, `postage`, `security`, and `minTrust`.
         const errors = [];
         if (!this.asset.packetId || typeof this.asset.packetId !== 'string') {
             errors.push(
@@ -41,13 +41,13 @@ class RegisterPacketTransaction extends BaseTransaction {
                 )
             );
         }
-        if (!this.asset.porto || typeof this.asset.porto !== 'string') {
+        if (!this.asset.postage || typeof this.asset.postage !== 'string') {
 			errors.push(
 				new TransactionError(
-					'Invalid "asset.porto" defined on transaction',
+					'Invalid "asset.postage" defined on transaction',
 					this.id,
-					'.asset.porto',
-					this.asset.porto,
+					'.asset.postage',
+					this.asset.postage,
 					'A string value',
 				)
 			);
@@ -85,44 +85,44 @@ class RegisterPacketTransaction extends BaseTransaction {
             /* --- Modify sender account --- */
             /**
              * Update the sender account:
-             * - Deduct the porto from senders' account balance
+             * - Deduct the postage from senders' account balance
              */
             const sender = store.account.get(this.senderId);
-            const senderBalancePortoDeducted = new utils.BigNum(sender.balance).sub(
-                new utils.BigNum(this.asset.porto)
+            const senderBalancePostageDeducted = new utils.BigNum(sender.balance).sub(
+                new utils.BigNum(this.asset.postage)
             );
             const updatedSender = {
                 ...sender,
-                balance: senderBalancePortoDeducted.toString(),
+                balance: senderBalancePostageDeducted.toString(),
             };
             store.account.set(sender.address, updatedSender);
 
             /* --- Modify packet account --- */
             /**
              * Update the packet account:
-             * - Add the porto to the packet account balance
+             * - Add the postage to the packet account balance
              * - Add all important data about the packet inside the asset field:
              *   - recipient: ID of the packet recipient
              *   - sender: ID of the packet sender
              *   - carrier: ID of the packet carrier
              *   - security: Number of tokens the carrier needs to lock during the transport of the packet
-             *   - porto: Number of tokens the sender needs to pay for transportation of the packet
+             *   - postage: Number of tokens the sender needs to pay for transportation of the packet
              *   - minTrust: Minimal trust that is needed to be carrier for the packet
              *   - status: Status of the transport (pending|ongoing|success|fail)
              */
-            const packetBalanceWithPorto = new utils.BigNum(packet.balance).add(
-                new utils.BigNum(this.asset.porto)
+            const packetBalanceWithPostage = new utils.BigNum(packet.balance).add(
+                new utils.BigNum(this.asset.postage)
             );
 
             const updatedPacketAccount = {
                 ...packet,
                 ...{
-                    balance: packetBalanceWithPorto.toString(),
+                    balance: packetBalanceWithPostage.toString(),
                     asset: {
                         recipient: this.recipientId,
                         sender: this.senderId,
                         security: this.asset.security,
-                        porto: this.asset.porto,
+                        postage: this.asset.postage,
                         minTrust: this.asset.minTrust,
                         status: 'pending',
                         carrier: null
@@ -151,12 +151,12 @@ class RegisterPacketTransaction extends BaseTransaction {
 
         /* --- Revert sender account --- */
         const sender = store.account.get(this.senderId);
-        const senderBalanceWithPorto = new utils.BigNum(sender.balance).add(
-            new utils.BigNum(this.asset.porto)
+        const senderBalanceWithPostage = new utils.BigNum(sender.balance).add(
+            new utils.BigNum(this.asset.postage)
         );
         const updatedSender = {
             ...sender,
-            balance: senderBalanceWithPorto.toString()
+            balance: senderBalanceWithPostage.toString()
         };
         store.account.set(sender.address, updatedSender);
         return errors;

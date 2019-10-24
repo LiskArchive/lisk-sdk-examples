@@ -13,7 +13,7 @@ const getTimestamp = () => {
 let tx =  new RegisterPacketTransaction({
     asset: {
         packetId: accounts.packet.address,
-        porto: `${transactions.utils.convertLSKToBeddows('5')}`,
+        postage: `${transactions.utils.convertLSKToBeddows('5')}`,
         security: `${transactions.utils.convertLSKToBeddows('100')}`,
         minTrust: 0,
     },

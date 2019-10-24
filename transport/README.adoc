@@ -60,14 +60,14 @@ This transaction should only go off, when the packet is traveling (between `star
 
 registerPacketTransaction::
 * Signed by: Owner
-* Required data: packetPublickey, receiverID, receiverLocation, senderLocation, porto, security, minTrust, estTravelTime
+* Required data: packetPublickey, receiverID, receiverLocation, senderLocation, postage, security, minTrust, estTravelTime
 * Altered data: `deliveryStatus="pending"`, describes the current status of the delivery inside the packet account.
 * Description: Register packet on the network.
 A separate account for the packet will be created.
-** `deliveryStatus`: the status of the delivery
-** `receiverID` the ID of the recipient in the network (to verify succesful delivery later).
-** `porto` needs to be paid by the owner, and is stored in the account of the packet.
-The `porto` will be paid to the carriers account, after successful delivery of the packet.
+** `status`: the status of the transport
+** `recipient` the ID of the recipient in the network (to verify succesful delivery later).
+** `postage` needs to be paid by the owner, and is stored in the account of the packet.
+The `postage` will be paid to the carriers account, after successful delivery of the packet.
 ** `security` is the number of tokens a carrier has to lock as a security, before carrying the packet.
 Will be unlocked on successful delivery of the packet.
 ** `minTrust` is the minimum trust that is needed, to register as a carrier for this packet.
@@ -78,7 +78,7 @@ startTransportTransaction::
 * Altered data: `deliveryStatus="ongoing"`, describes the current status of the delivery inside the packet account.
 * Description: Defines start time of the packet delivery.
 `security` will get deducted form the carrier account and added to the packet account.
-If the carrier behaves maliciously, the security will not be unlocked (it will be transferred to the packet owners account, together with the porto).
+If the carrier behaves maliciously, the security will not be unlocked (it will be transferred to the packet owners account, together with the postage).
 This transaction should fail, if the Carrier does not fulfill the requirements in terms of trust and security, that the owner defined as a minimum in the `registerPackageTransaction`.
 
 finishTransportTransaction::
@@ -89,10 +89,10 @@ finishTransportTransaction::
 ** `failed`, if the packet does not arrive.
 * Description: Defines the end of the packet transport.
 ** If the delivery is successful:
-*** The Carrier receives the porto tokens on successful transportation of the packet.
+*** The Carrier receives the postage tokens on successful transportation of the packet.
 *** The Carrier receives a certain amount of trust-points.
 ** If the delivery fails, the Carrier can be punished:
-*** Security tokens and Porto will be transferred to packet Owner
+*** Security tokens and Postage will be transferred to packet Owner
 *** Deduction of trust points from the Carrier
 
 === Queries
@@ -132,7 +132,7 @@ Expected result:
             "asset": {
                 "carrier": null,
                 "minTrust": 5,
-                "porto": "500000000",
+                "postage": "500000000",
                 "recipient": "10881167371402274308L",
                 "security": "10000000000",
                 "sender": "16313739661670634666L",

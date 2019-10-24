@@ -65,19 +65,19 @@ class FinishTransportTransaction extends BaseTransaction {
                 /**
                  * Update the Carrier account:
                  * - Unlock security
-                 * - Add porto & security to balance
+                 * - Add postage & security to balance
                  * - Earn 1 trustpoint
                  */
-                const carrierBalanceWithSecurityAndPorto = new utils.BigNum(carrier.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.porto));
+                const carrierBalanceWithSecurityAndPostage = new utils.BigNum(carrier.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.postage));
 
-                carrier.balance = carrierBalanceWithSecurityAndPorto.toString();
+                carrier.balance = carrierBalanceWithSecurityAndPostage.toString();
                 carrier.asset.lockedSecurity = null;
                 carrier.asset.trust = carrier.asset.trust ? ++carrier.asset.trust : 1;
 
                 store.account.set(carrier.address, carrier);
                 /**
                  * Update the Packet account:
-                 * - Remove porto from balance
+                 * - Remove postage from balance
                  * - Change status to "success"
                  */
                 packet.balance = '0';
@@ -89,11 +89,11 @@ class FinishTransportTransaction extends BaseTransaction {
             // if the transport failed
             /**
              * Update the Sender account:
-             * - Add porto and security to balance
+             * - Add postage and security to balance
              */
-            const senderBalanceWithSecurityAndPorto = new utils.BigNum(sender.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.porto));
+            const senderBalanceWithSecurityAndPostage = new utils.BigNum(sender.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.postage));
 
-            sender.balance = senderBalanceWithSecurityAndPorto.toString();
+            sender.balance = senderBalanceWithSecurityAndPostage.toString();
 
             store.account.set(sender.address, sender);
             /**
@@ -108,7 +108,7 @@ class FinishTransportTransaction extends BaseTransaction {
             /**
              * Update the Packet account:
              * - set status to "fail"
-             * - Remove porto from balance
+             * - Remove postage from balance
              */
             packet.balance = '0';
             packet.asset.status = 'fail';
@@ -136,9 +136,9 @@ class FinishTransportTransaction extends BaseTransaction {
         /* --- Revert successful transport --- */
         if ( this.asset.status === "success") {
             /* --- Revert carrier account --- */
-            const carrierBalanceWithoutSecurityAndPorto = new utils.BigNum(carrier.balance).sub(new utils.BigNum(packet.asset.security)).sub(new utils.BigNum(packet.asset.porto));
+            const carrierBalanceWithoutSecurityAndPostage = new utils.BigNum(carrier.balance).sub(new utils.BigNum(packet.asset.security)).sub(new utils.BigNum(packet.asset.postage));
 
-            carrier.balance = carrierBalanceWithoutSecurityAndPorto.toString();
+            carrier.balance = carrierBalanceWithoutSecurityAndPostage.toString();
             carrier.asset.lockedSecurity = packet.asset.security;
             carrier.asset.trust--;
 
@@ -147,8 +147,8 @@ class FinishTransportTransaction extends BaseTransaction {
         /* --- Revert failed transport --- */
         } else {
             /* --- Revert sender account --- */
-            const senderBalanceWithoutSecurityAndPorto = new utils.BigNum(sender.balance).sub(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.porto));
-            sender.balance = senderBalanceWithoutSecurityAndPorto.toString();
+            const senderBalanceWithoutSecurityAndPostage = new utils.BigNum(sender.balance).sub(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.postage));
+            sender.balance = senderBalanceWithoutSecurityAndPostage.toString();
             store.account.set(sender.address, sender);
             /* --- Revert carrier account --- */
             carrier.asset.trust++;
@@ -156,7 +156,7 @@ class FinishTransportTransaction extends BaseTransaction {
             store.account.set(carrier.address, carrier);
         }
         /* --- Revert packet account --- */
-        packet.balance = packet.asset.porto;
+        packet.balance = packet.asset.postage;
         packet.asset.status = "ongoing";
 
         store.account.set(packet.address, packet);
