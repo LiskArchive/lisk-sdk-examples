@@ -1,15 +1,20 @@
 # LiskBills Transactions
 
-This package contains two custom transaction types `13` and `14`, respectively an invoice transaction and a payment transaction.
-Both tranactions are used in the LiskBills proof of concept to showcase how to create custom transactions.
+The LiskBills proof of concept contains two custom transaction types `13` and `14`, respectively an invoice transaction and a payment transaction.
+
+Both tranactions are used in the LiskBills proof of concept to showcase how to create custom transactions. The concept of LiskBills is that we have a freelancer who completed a task for a client. The freelancer wants to send an invoice (InvoiceTransaction) on the blockchain and the client has to pay for the invoice with a PaymentTransaction.
+
+Let's explore the first transaction type: `InvoiceTransaction`.
 
 ## InvoiceTransaction
 
-The invoice transaction is used for sending an invoice request as a service provider to your client.
+The invoice transaction is used for sending an invoice request as a freelancer to your client.
 
 ### Inputs
-The `InvoiceTransaction` requires an `asset` field with the following properties.
-Note: The `requestedAmount` input is expressed in Bedows (1 lisk = 10**8).
+The `InvoiceTransaction` requires an `asset` field with the following properties: `client`, `requestedAmount`, and `description`.
+
+Note: The `requestedAmount` input is expressed in Beddows (1 lisk = 10**8 Beddows).
+
 ```json
 {
     "client": string,
@@ -22,13 +27,14 @@ Example:
 ```json
 asset: {
     "client": "World GmbH",
-    "requestedAmount": `${10 ** 9}`,
+    "requestedAmount": `${10 ** 9}`, // 10 Lisk
     "description": "Test invoice",
 },
 ```
 
 ### Description
 The `InvoiceTransaction` keeps count of the amount of invoices you have sent out with `invoiceCount` property.
+
 Besides that, it also stores the `IDs` of the sent invoices under `invoicesSent`.
 
 

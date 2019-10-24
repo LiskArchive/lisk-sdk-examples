@@ -1,4 +1,7 @@
-const { BaseTransaction, TransactionError } = require('@liskhq/lisk-transactions');
+const {
+	BaseTransaction,
+	TransactionError,
+} = require('@liskhq/lisk-transactions');
 
 class InvoiceTransaction extends BaseTransaction {
 	static get TYPE() {
@@ -23,10 +26,13 @@ class InvoiceTransaction extends BaseTransaction {
 					'.asset.client',
 					this.asset.client,
 					'A string value',
-				)
+				),
 			);
 		}
-		if (!this.asset.requestedAmount || typeof this.asset.requestedAmount !== 'string') {
+		if (
+			!this.asset.requestedAmount ||
+			typeof this.asset.requestedAmount !== 'string'
+		) {
 			errors.push(
 				new TransactionError(
 					'Invalid "asset.requestedAmount" defined on transaction',
@@ -34,7 +40,7 @@ class InvoiceTransaction extends BaseTransaction {
 					'.asset.requestedAmount',
 					this.asset.requestedAmount,
 					'A string value',
-				)
+				),
 			);
 		}
 		if (!this.asset.description || typeof this.asset.description !== 'string') {
@@ -45,7 +51,7 @@ class InvoiceTransaction extends BaseTransaction {
 					'.asset.description',
 					this.asset.description,
 					'A string value',
-				)
+				),
 			);
 		}
 		return errors;
@@ -55,21 +61,43 @@ class InvoiceTransaction extends BaseTransaction {
 		const sender = store.account.get(this.senderId);
 
 		// Save invoice count and IDs
-		sender.asset.invoiceCount = sender.asset.invoiceCount === undefined ? 1 : ++sender.asset.invoiceCount;
-		sender.asset.invoicesSent = sender.asset.invoicesSent === undefined ? [this.id] : [...sender.asset.invoicesSent, this.id];
+		if (!sender.asset.invoiceCount) {
+			sender.asset.invoiceCount = 0;
+		}
+
+		if (!sender.asset.invoicesSent) {
+			sender.asset.invoicesSent = [];
+		}
+
+		sender.asset.invoiceCount++;
+		sender.asset.invoicesSent.push(this.id);
+
 		store.account.set(sender.address, sender);
 		return [];
 	}
 
 	undoAsset(store) {
-		const sender = store.account.get(this.senderId);
+		const errors = [];
+		const sender = {}; // Step 4.1 retrieve sender from store (replace code)
+		const invoiceId = sender.asset.invoicesSent.find(id => id === this.id);
 
-		// Undo logic comes here
-		
-		store.account.set(sender.address, sender); // Save updated sender account
-		return [];
+		if (invoiceId === undefined || sender.asset.invoiceCount === 0) {
+			errors.push(
+				new TransactionError(
+					'Invoice ID does not exist in sender.asset.invoicesSent',
+					this.id,
+					'sender.asset.invoicesSent',
+					sender.asset.invoicesSent,
+					'A string value',
+				),
+			);
+		} else {
+			// Step 4.2 and 4.3: Undo logic comes here
+			// Step 4.4: Save updated sender account
+		}
+
+		return errors;
 	}
-
 }
 
 module.exports = InvoiceTransaction;
