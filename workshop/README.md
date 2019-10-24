@@ -1,4 +1,4 @@
-# Workshop: Knowledge Sharing on Custom Transactions
+# Workshop: Custom Transactions
 
 This workshop will guide you through learning about custom transactions with a step-by-step approach. The workshop demands you to actively participate in order to get familiar with custom transactions. This workshop focuses on the LiskBills proof of concept which showcases the potential of the Lisk Alpha SDK, in particular developing custom transactions.
 
