@@ -1,0 +1,99 @@
+= Workshop: Lisk Transport
+Mona Bärenfänger <mona@lightcurve.io>
+:toc:
+:experimental:
+
+== Motivation
+
+
+
+== Idea
+
+The goal is to create a simple decentralized supply chain tracking system.
+
+Before registering the packet on the network, the sender needs to create a new account for the packet and store the passphrase on the IoT device inside the packet.
+This is necessary, because the packet needs to sign the transactions it sends to the network, in order to communicate with it.
+The packets are registered on the blockchain network by the packet sender.
+
+As next step, a carrier would go to the packet senders' address, receive the packet and start the delivery to the recipient.
+The carrier needs to sign a transaction, that verifies that the packet has been passed on to the carrier.
+With this transaction, the Carrier will lock a certain amount of tokens in his account, that was defined by the packet sender when registering the packet on the network.
+
+During the transportation of the packet, the packet will track itself, to check if it gets manipulated during the travel.
+If a manipulation is detected, it will send a self-signed alarm transaction to the network.
+
+When reaching the recipient of the packet, the carrier passes the packet to the recipient.
+The recipient needs to sign a transaction, that verifies that the packet has been passed on to the recipient.
+
+image::transport-uml.svg[Flow chart of Lisk Transport]
+
+== Requirements
+
+=== Prerequisites
+* Code editor like Visual Studio Code
+* Node.js (v10 or higher installed - use nvm for easy switching between versions)
+* Have curl installed
+* Have Postgres installed (xref:https://lisk.io/documentation/lisk-sdk/setup[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
+
+=== Software
+
+To achieve this, 3 different kind of applications need to be developed:
+
+A blockchain application::
+which accepts the application-specific <<_custom_transactions, transaction types>>.
+This application needs to be installed on different independent nodes and will setup and maintain the blockchain which is used to store the data about the packets, carrier and users.
+A client application::
+which is displaying information from the blockchain to the user.
+It needs a frontend, which should be listing at least a list of packetIDs, the carrier, sender, recipient, and a status field (`pending | ongoing | alarm | success | fail`).
+It should also provide an easy way to create and send the different transaction types to the network.
+An IoT application::
+which is stored on a microcontroller/raspberry pi. This application will track that the packet is not manipulated during the delivery.
+To do this, certain sensors will be connected to it, that track information like light, temperature and/or humidity inside of the packet.
+If something unexpected is detected by the IoT app, it will create a transaction object, sign it, and send it to the network.
+
+=== Hardware
+
+* https://buyzero.de/collections/raspberry-pi-zero-kits/products/raspberry-pi-zero-w?variant=38399156114[Raspberry Pi Zero W]
+* https://www.raspberrypi.org/documentation/installation/sd-cards.md[SD card]
+* https://www.amazon.de/PEMENOL-Fotowiderstand-Anschl%C3%BCsse-Photodetektor-Comperator/dp/B07DP1YM5X/ref=sr_1_1?keywords=ldr+modul&qid=1569485546&s=gateway&sr=8-1[Photoresistor]
+* https://www.amazon.de/Female-Female-Male-Female-Male-Male-Steckbr%C3%BCcken-Drahtbr%C3%BCcken-bunt/dp/B01EV70C78/ref=sr_1_5?keywords=dupont+kabel&qid=1569485735&s=gateway&sr=8-5[Jumper cables]
+* https://www.amazon.de/AZDelivery-AM2302-Temperatursensor-Luftfeuchtigkeitssensor-Arduino/dp/B06XF4TNT9/ref=sr_1_1_sspa?crid=35G9VO3PY15BQ&keywords=dht22&qid=1569485584&s=gateway&sprefix=dht%2Caps%2C153&sr=8-1-spons&psc=1&smid=A1X7QLRQH87QA3&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzOE1YSzU4WlBZUDdVJmVuY3J5cHRlZElkPUEwODAwMjUwMUNNRkdEQUNQUTJYUCZlbmNyeXB0ZWRBZElkPUEwNzEwNjA5VTJNSlFXNjM5RzAzJndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ==[Temp/Humidity sensor]
+* USB -> Micro-USB cable
+* Battery/Powerbank
+
+== 0. Setup of the project
+
+. Clone xref:https://github.com/LiskHQ/lisk-sdk-examples/[Lisk-SDK-Examples] repository locally.
+. Checkout branch `development` (by default active branch).
+. Navigate inside `transport/node` folder and run `npm install` to install the required dependencies for the node application.
+. To verify if the setup is correct, try to run the application with `node index.js | npx bunyan -o short`.
+This command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan.
+If everything is running fine, you can stop the node, by hitting kbd:[CTRL+C].
+. Setup the database:
+.. In case you have experimented before with Lisk, it is possible you have to first drop your database and recreate it with: `dropdb lisk_dev && createdb lisk_dev --owner lisk`.
+.. If you set up the Lisk SDK for the first time, run the following 2 commands:
+[source, bash]
+----
+sudo -u postgres -i createdb lisk_dev --owner lisk
+sudo -u postgres psql -d lisk_dev -c "alter user lisk with password 'password';"
+----
+
+== 1. Prepare the IoT device
+
+== 2. Initalize the packet account
+
+== 3. Implement the custom transactions
+
+=== a. Register packet on the blockchain
+
+=== b. Start Transport
+
+=== c. Packet tracking
+
+=== d. Finish Transport
+
+== 4. Set up IoT
+
+== 5. Create Supply Chain UI
+
+== 6. Test it out!
