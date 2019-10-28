@@ -60,6 +60,18 @@ class FinishTransportTransaction extends BaseTransaction {
         let sender = store.account.get(packet.asset.sender);
         // if the transaction has been signed by the packet recipient
         if (this.asset.senderId === packet.carrier) {
+            // if the packet status isn't "ongoing" or "alarm"
+            if (packet.asset.status !==  "ongoing" && packet.asset.status !== "alarm") {
+                errors.push(
+                    new TransactionError(
+                        'FinishTransport can only be triggered, if packet status is "ongoing" or "alarm" ',
+                        this.id,
+                        'ongoing or alarm',
+                        this.asset.status
+                    )
+                );
+                return errors;
+            }
             // if the transport was a success
             if ( this.asset.status === "success") {
                 /**
@@ -125,7 +137,7 @@ class FinishTransportTransaction extends BaseTransaction {
                 this.asset.recipient
             )
         );
-
+        return errors;
     }
 
     undoAsset(store) {
@@ -147,7 +159,7 @@ class FinishTransportTransaction extends BaseTransaction {
         /* --- Revert failed transport --- */
         } else {
             /* --- Revert sender account --- */
-            const senderBalanceWithoutSecurityAndPostage = new utils.BigNum(sender.balance).sub(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.postage));
+            const senderBalanceWithoutSecurityAndPostage = new utils.BigNum(sender.balance).sub(new utils.BigNum(packet.asset.security)).sub(new utils.BigNum(packet.asset.postage));
             sender.balance = senderBalanceWithoutSecurityAndPostage.toString();
             store.account.set(sender.address, sender);
             /* --- Revert carrier account --- */
