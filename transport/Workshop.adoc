@@ -49,6 +49,11 @@ For convenient usage of the system, a client application will be provided, that 
 
 === General Procedure
 
+This diagram shows the general workflow of the supply chain tracking system.
+ You find detailed descriptions of each step below.
+
+image::transport-uml.svg[Flow chart of Lisk Transport]
+
 ==== Initliaze Packet account
 
 Before registering the packet on the network, the sender needs to create a new account for the packet and store the passphrase on the IoT device inside the packet.
@@ -79,7 +84,7 @@ The carrier needs to sign a transaction `StartTransportTransaction`, that verifi
 
 When creating the `StartTransportTransaction`, the carrier defines:
 
-* The `packetID`: Die ID of the packet that the carrier is going to transport.
+* `packetID`: The ID of the packet that the carrier is going to transport.
 
 This transaction will:
 
@@ -105,8 +110,8 @@ The recipient needs to sign the `FinishTransportTransaction`, that verifies that
 
 When sending the transaction, the recipient needs to specify:
 
-* The `packetID` that the recipient received
-* The `status` of the transport, which has 2 options: `"success"` or `"fail"`
+* `packetID`: The ID of the packet that the recipient received
+* `status`: The status of the transport, which has 2 options: `"success"` or `"fail"`
 
 This transaction will:
 
@@ -119,9 +124,7 @@ This transaction will:
 ** Send `postage` to sender account
 ** Add `security` to the sender account, and nullify `lockedSecurity` from the account fo the carrier.
 ** Decrease `trust` of carrier by -1
-** set packet `status` to `fail`
-
-image::transport-uml.svg[Flow chart of Lisk Transport]
+** Set packet `status` to `fail`
 
 == Requirements
 
@@ -139,15 +142,13 @@ image::transport-uml.svg[Flow chart of Lisk Transport]
 * SD card
 * Photoresistor
 * Jumper cables
-* Temp/Humidity sensor
 * USB -> Micro-USB cable
-* Battery/Powerbank
 
 === Software Prerequisites
-* Code editor like Visual Studio Code
-* Node.js (v10 or higher installed - use nvm for easy switching between versions)
-* Have curl installed
-* Have Postgres installed (xref:https://lisk.io/documentation/lisk-sdk/setup[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
+* A code editor like Visual Studio Code
+* Node.js (`v10` or higher installed - use `nvm` for easy switching between versions)
+* Have `curl` installed
+* Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
 
 === Software
 
@@ -173,21 +174,39 @@ If something unexpected is detected by the IoT app, it will create a transaction
 
 ==== Clone the repo and install the dependencies
 
-. Clone xref:https://github.com/LiskHQ/lisk-sdk-examples/[Lisk-SDK-Examples] repository locally.
+. Clone https://github.com/LiskHQ/lisk-sdk-examples/[Lisk-SDK-Examples] repository locally.
++
+[source,bash]
+----
+git clone https://github.com/LiskHQ/lisk-sdk-examples.git
+cd lisk-sdk-examples
+----
 . Checkout branch `development` (by default active branch).
 . Navigate inside `transport/node` folder and run `npm install` to install the required dependencies for the node application.
-. To verify if the setup is correct, try to run the application with `node index.js | npx bunyan -o short`.
-This command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan.
-If everything is running fine, you can stop the node, by hitting kbd:[CTRL+C].
++
+[source,bash]
+----
+cd transport/node
+npm install
+----
 . Setup the database:
 .. In case you have experimented before with Lisk, it is possible you have to first drop your database and recreate it with: `dropdb lisk_dev && createdb lisk_dev --owner lisk`.
 .. If you set up the Lisk SDK for the first time, run the following 2 commands:
-
++
 [source, bash]
 ----
 createdb lisk_dev --owner lisk
 psql -d lisk_dev -c "alter user lisk with password 'password';"
 ----
+. To verify if the setup is correct, try to run the application with
++
+[source,bash]
+----
+node index.js | npx bunyan -o short
+----
+This command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan.
+
+If everything is running fine, you can stop the node by hitting kbd:[CTRL+C].
 
 ==== Prepare the IoT device
 
@@ -226,7 +245,7 @@ Describe how to implement the missing transaction types. Leave certain parts of 
 ==== d. Finish the Transport
 
 === 2.2 Extend the client application
-Add the following features to the web application from <<_Part_1_track_a_packet_on_the_blockchain, Part 1: Track a packet on the blockchain>>
+Add the following features to the web application from <<_part-1-track-a-packet-on-the-blockchain, Part 1: Track a packet on the blockchain>>
 
 * POST RegisterPacket, StartTransport and FinishTransport Transactions
 * Explorer of registered Packets and Carriers, displaying `packet.asset` data
