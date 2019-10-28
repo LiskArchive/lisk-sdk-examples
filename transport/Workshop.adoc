@@ -40,17 +40,17 @@ The goal is to create a simple decentralized supply chain tracking system.
 The participants of the network can send, transport and receive packets with each other.
 
 For the transportation of the packet, a simple trust system is implemented, that enables the sender to set certain requirements for the carrier of the packet.
-The packet itself will be an active participant in the transportation process, as it will track itself with sensors during the transportation.
-This is to ensure, that it hasn't been manipulated.
+The packet as well will be an active participant in the transportation process, as it will track itself with sensors during the transportation.
+This is to ensure, that it hasn't been manipulated during the transport.
 
 The carrier will be rewarded upon successful transportation, and penalized if the transportation has failed for some reason.
 
-For convenient usage of the system, a client application will be provided, that visualizes all relevant information about the supplychain tracking system, and that let's users interact with the system by posting custom transactions.
+For convenient usage of the system, a client application will be provided, that visualizes all relevant information about the supply chain tracking system, and that let's users interact with the system by posting custom transactions.
 
 === General Procedure
 
 This diagram shows the general workflow of the supply chain tracking system.
- You find detailed descriptions of each step below.
+You find detailed descriptions of each step below.
 
 image::transport-uml.svg[Flow chart of Lisk Transport]
 
@@ -152,9 +152,9 @@ This transaction will:
 
 === Software
 
-To achieve this, 3 different kind of applications need to be developed:
+Three different kind of applications need to be developed, to create the decentralized supply chain system:
 
-A blockchain application::
+A node application::
 which accepts the application-specific transaction types.
 This application needs to be installed on different independent nodes and will setup and maintain the blockchain which is used to store the data about the packets, carrier and users.
 
