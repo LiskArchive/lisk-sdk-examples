@@ -98,7 +98,9 @@ If something unexpected is detected by the IoT app, it will create a transaction
 
 == Part 1: Track a packet on the blockchain
 
-=== 1.0 Setup of the project
+=== 1.0 Setup
+
+==== Clone the repo and install the dependencies
 
 . Clone xref:https://github.com/LiskHQ/lisk-sdk-examples/[Lisk-SDK-Examples] repository locally.
 . Checkout branch `development` (by default active branch).
@@ -115,25 +117,25 @@ sudo -u postgres -i createdb lisk_dev --owner lisk
 sudo -u postgres psql -d lisk_dev -c "alter user lisk with password 'password';"
 ----
 
-=== 1.1 Implement the LightAlarm transaction
-
-* Implementation of the LightAlarmTx
-* Registering it with the node application
-
-=== 1.2 Prepare the IoT device
+==== Prepare the IoT device
 
 * Connect the sensor
 * Install Node
 * Prepare to connect to ssh via USB
 
-=== 1.3 The Web application
+=== 1.1 Implement the LightAlarm transaction
+
+* Implementation of the LightAlarmTx
+* Registering it with the node application
+
+=== 1.2 The Web application
 
 * Initalize the packet account
 ** Create the packet credentials
 ** send 1 Beddow to packet from the genesis account, to initliaze the packet account
-* Light-alarm explorer: Displaying
+* Light-alarm explorer: Displaying the LightAlarmTxs + packetID
 
-=== 1.4 The IoT application
+=== 1.3 The IoT application
 
 * Read the sensor in a certain interval
 * Send LightAlarmTx, if light is detected
@@ -143,13 +145,19 @@ sudo -u postgres psql -d lisk_dev -c "alter user lisk with password 'password';"
 
 === 2.1 Implement RegisterPacket, StartTransport and FinishTransport transactions
 
-==== a. Register packet on the blockchain
+Describe how to implement the missing transaction types. Leave certain parts of the implementation up to the user.
+
+==== a. Register the packet on the blockchain
 
 ==== b. Start the Transport
 
 ==== d. Finish the Transport
 
 === 2.2 Extend the web application
+Add the following features to the web application from <<_Part_1_track_a_packet_on_the_blockchain, Part 1: Track a packet on the blockchain>>
+
+* POST RegisterPacket, StartTransport and FinishTransport Transactions
+* Explorer of registered Packets and Carriers, displaying `packet.asset` data
 
 === 2.3 Test it out!
 
@@ -160,3 +168,7 @@ A full test run of the supply chain tracking workflow with the blockchain applic
 ==== Connecting multiple nodes
 
 This sections explains how to connect several nodes to your blockchain, and how to exchange the dummydelegates with real ones.
+
+==== Writing unit tests for custom transactions
+
+How to test `undoAsset` functions
