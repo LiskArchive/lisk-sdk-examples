@@ -37,20 +37,56 @@ With the global trade networks at stake, blockchain will help flesh out the corr
 == Idea
 
 The goal is to create a simple decentralized supply chain tracking system.
+The participants of the network can send, transport and receive packets with each other.
+
+For the transportation of the packet, a simple trust system is implemented, that enables the sender to set certain requirements for the carrier of the packet.
+The packet itself will be an active participant in the transportation process, as it will track itself with sensors during the transportation.
+This is to ensure, that it hasn't been manipulated.
+
+The carrier will be rewarded upon successful transportation, and penalized if the transportation has failed for some reason.
+
+For convenient usage of the system, a client application will be provided, that visualizes all relevant information about the supplychain tracking system, and that let's users interact with the system by posting custom transactions.
+
+=== General Procedure
+
+==== Initliaze Packet account
 
 Before registering the packet on the network, the sender needs to create a new account for the packet and store the passphrase on the IoT device inside the packet.
 This is necessary, because the packet needs to sign the transactions it sends to the network, in order to communicate with it.
+
+==== Register packet
+
 The packets are registered on the blockchain network by the packet sender.
+During this step, the sender defines
+* `packetId`: The ID of the packet that has been initialized in the step before.
+* `postage`: This amount will be transfered form the senders balance to the packet balance, when registering the packet on the network
+* `security`: The security is the amount of tokens that will be locked on the carrier account, when the carrier receives the packet form the sender
+* `minTrust`: The minimum amount of trust a carrier needs to have, to transport this packet
+* `recipientId`: The ID of the desired recipient of the packet. Only the recipient can send the `FinishTransaction` later, which will finish the transport.
+
+==== Start transport
 
 As next step, a carrier would go to the packet senders' address, receive the packet and start the delivery to the recipient.
-The carrier needs to sign a transaction, that verifies that the packet has been passed on to the carrier.
-With this transaction, the Carrier will lock a certain amount of tokens in his account, that was defined by the packet sender when registering the packet on the network.
+The carrier needs to sign a transaction `StartTransportTransaction`, that verifies that the packet has been passed on to the carrier.
+With this transaction, the Carrier will lock the specified `security` of the packet in his account. This secuiry cannot be accessed by the carrier, unless the transport has been finished successfully.
 
-During the transportation of the packet, the packet will track itself, to check if it gets manipulated during the travel.
+==== Packet tracking
+
+During the transportation of the packet, the packet will track itself with different sensors, to check if it gets manipulated during the travel.
 If a manipulation is detected, it will send a self-signed alarm transaction to the network.
+This transaction will:
+
+* change the packets' status to `alarm`
+* Add the current timestamp to the list `asset.alarms.light` inside of the packet account
+
+==== Finish transport
 
 When reaching the recipient of the packet, the carrier passes the packet to the recipient.
-The recipient needs to sign a transaction, that verifies that the packet has been passed on to the recipient.
+The recipient needs to sign the `FinishTransportTransaction`, that verifies that the packet has been passed on to the recipient.
+When sending the transaction, the recipient needs to specify:
+
+* The packetID that the recipient received
+* The status of the transport, which has 2 options: `"success"` or `"fail"`
 
 image::transport-uml.svg[Flow chart of Lisk Transport]
 
@@ -85,12 +121,14 @@ image::transport-uml.svg[Flow chart of Lisk Transport]
 To achieve this, 3 different kind of applications need to be developed:
 
 A blockchain application::
-which accepts the application-specific <<_custom_transactions, transaction types>>.
+which accepts the application-specific transaction types.
 This application needs to be installed on different independent nodes and will setup and maintain the blockchain which is used to store the data about the packets, carrier and users.
+
 A client application::
 which is displaying information from the blockchain to the user.
 It needs a frontend, which should be listing at least a list of packetIDs, the carrier, sender, recipient, and a status field (`pending | ongoing | alarm | success | fail`).
 It should also provide an easy way to create and send the different transaction types to the network.
+
 An IoT application::
 which is stored on a microcontroller/raspberry pi. This application will track that the packet is not manipulated during the delivery.
 To do this, certain sensors will be connected to it, that track information like light, temperature and/or humidity inside of the packet.
@@ -111,10 +149,11 @@ If everything is running fine, you can stop the node, by hitting kbd:[CTRL+C].
 . Setup the database:
 .. In case you have experimented before with Lisk, it is possible you have to first drop your database and recreate it with: `dropdb lisk_dev && createdb lisk_dev --owner lisk`.
 .. If you set up the Lisk SDK for the first time, run the following 2 commands:
+
 [source, bash]
 ----
-sudo -u postgres -i createdb lisk_dev --owner lisk
-sudo -u postgres psql -d lisk_dev -c "alter user lisk with password 'password';"
+createdb lisk_dev --owner lisk
+psql -d lisk_dev -c "alter user lisk with password 'password';"
 ----
 
 ==== Prepare the IoT device
@@ -128,7 +167,7 @@ sudo -u postgres psql -d lisk_dev -c "alter user lisk with password 'password';"
 * Implementation of the LightAlarmTx
 * Registering it with the node application
 
-=== 1.2 The Web application
+=== 1.2 The client application
 
 * Initalize the packet account
 ** Create the packet credentials
@@ -153,7 +192,7 @@ Describe how to implement the missing transaction types. Leave certain parts of 
 
 ==== d. Finish the Transport
 
-=== 2.2 Extend the web application
+=== 2.2 Extend the client application
 Add the following features to the web application from <<_Part_1_track_a_packet_on_the_blockchain, Part 1: Track a packet on the blockchain>>
 
 * POST RegisterPacket, StartTransport and FinishTransport Transactions
