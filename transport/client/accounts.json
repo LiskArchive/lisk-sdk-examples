@@ -5,12 +5,6 @@
     "encryptedPassphrase": "iterations=1&salt=4ba0d3869948e39a7f9a096679674655&cipherText=f0a1f0009ded34c79a0af40f12fcf35071a88de0778abea2a1f07861386a4b5c6b13f308f1ebf1af9098b66ed77cb22fc8bd872fa71ff71f3dbed1194928b7e447cb4089359a8be64093f9c1c8a3dca8&iv=e0f1fb7574873142c672a565&tag=ad56e67c5115e9a211c3907c400b9458&version=1",
     "publicKey": "76c9494237e608d43fd6fb0114106a7517f5503cf79d7482db58a02304339b6c"
   },
-  "delegate2": {
-    "address":"10881167371402274308L",
-    "passphrase": "actress route auction pudding shiver crater forum liquid blouse imitate seven front",
-    "encryptedPassphrase": "iterations=1&salt=df1895b701abe3dcf29b4d92fc46d3f9&cipherText=0cea5e7df167d98203a679a4bf33e90f2e79a61d78443752014fc99a45c794e6fd7feaf710d89363cd954e51592917e77a2b8918ac680b0a0aa19003b34fa0b34dbd55ff9a8b59f98d9abdcbae970d72949b67&iv=61dc8fe3468f3b959f997f73&tag=33e7c771a90b10a0bb78f70cc72f701c&version=1",
-    "publicKey": "addb0e15a44b0fdc6ff291be28d8c98f5551d0cd9218d749e30ddb87c6e31ca9"
-  },
   "carrier": {
     "address": "6795425954908428407L",
     "passphrase": "coach pupil shock error defense outdoor tube love action exist search idea",

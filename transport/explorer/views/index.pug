@@ -19,11 +19,11 @@ html(lang="en")
             li.nav-item
               a(href='/accounts').nav-link Accounts
             li.nav-item
-              a(href='/packet-accounts').nav-link Packet&Carrier accounts
-            li.nav-item
+              a(href='/packet-accounts').nav-link Packet&amp;Carrier
+            // li.nav-item
               a(href='/register-packet').nav-link RegisterPacketTransactions
             li.nav-item
-              a(href='/light-alarm').nav-link LightAlarmTransactions
+              a(href='/light-alarm').nav-link LightAlarm
             li.nav-item
               a(href='/faucet').nav-link |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Faucet
             li.nav-item
@@ -32,6 +32,8 @@ html(lang="en")
               a(href='/post-register-packet').nav-link Register Packet
             li.nav-item
               a(href='/post-start-transport').nav-link Start Transport
+            li.nav-item
+              a(href='/post-finish-transport').nav-link Finish Transport
 
     .container
       block content

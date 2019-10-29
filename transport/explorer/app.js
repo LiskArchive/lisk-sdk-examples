@@ -5,6 +5,7 @@ const accounts = require('../client/accounts.json');
 const RegisterPacketTransaction = require('../transactions/register-packet');
 const LightAlarmTransaction = require('../transactions/light-alarm');
 const StartTransportTransaction = require('../transactions/start-transport');
+const FinishTransportTransaction = require('../transactions/finish-transport');
 const transactions = require('@liskhq/lisk-transactions');
 const cryptography = require('@liskhq/lisk-cryptography');
 const { Mnemonic } = require('@liskhq/lisk-passphrase');
@@ -109,6 +110,13 @@ app.get('/faucet', async(req, res) => {
  */
 app.get('/post-start-transport', async(req, res) => {
     res.render('post-start-transport');
+});
+
+/**
+ * Request page for sending finish transporttransaction
+ */
+app.get('/post-finish-transport', async(req, res) => {
+    res.render('post-finish-transport');
 });
 
 /**
@@ -287,6 +295,34 @@ app.post('/faucet', function (req, res) {
     });
 
     res.redirect('/faucet');
+});
+
+app.post('/post-finish-transport', function (req, res) {
+    const recipient = req.body.recipient;
+    const status = req.body.status;
+    const passphrase = req.body.passphrase;
+
+    const finishTransportTransaction = new FinishTransportTransaction({
+        recipientId: recipient,
+        asset: {
+            status,
+        },
+        timestamp: dateToLiskEpochTimestamp(new Date()),
+    });
+
+    finishTransportTransaction.sign(passphrase);
+
+    api.transactions.broadcast(finishTransportTransaction.toJSON()).then(res => {
+        console.log("++++++++++++++++ API Response +++++++++++++++++");
+        console.log(res.data);
+        console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
+        console.log(finishTransportTransaction.stringify());
+        console.log("++++++++++++++++ End Script +++++++++++++++++");
+    }).catch(err => {
+        console.log(JSON.stringify(err.errors, null, 2));
+    });
+
+    res.redirect('/post-finish-transport');
 });
 
 app.listen(PORT, () => console.info(`Explorer app listening on port ${PORT}!`));
