@@ -1,8 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { APIClient } = require('@liskhq/lisk-api-client');
+const accounts = require('../client/accounts.json');
 const RegisterPacketTransaction = require('../transactions/register-packet');
 const LightAlarmTransaction = require('../transactions/light-alarm');
+const StartTransportTransaction = require('../transactions/start-transport');
 const transactions = require('@liskhq/lisk-transactions');
 const cryptography = require('@liskhq/lisk-cryptography');
 const { Mnemonic } = require('@liskhq/lisk-passphrase');
@@ -21,6 +23,11 @@ app.set('view engine', 'pug')
 // parse application/json
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+/* Utils */
+const dateToLiskEpochTimestamp = date => (
+    Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
+);
 
 /* Routes */
 app.get('/', (req, res) => {
@@ -91,6 +98,20 @@ app.get('/post-register-packet', async(req, res) => {
 });
 
 /**
+ * Request faucet page for funding accounts from genesis
+ */
+app.get('/faucet', async(req, res) => {
+    res.render('faucet');
+});
+
+/**
+ * Request page for starting transport transaction
+ */
+app.get('/post-start-transport', async(req, res) => {
+    res.render('post-start-transport');
+});
+
+/**
  * Request RegisterPackage transactions
  */
 app.get('/register-packet', async(req, res) => {
@@ -145,9 +166,6 @@ app.get('/light-alarm/:senderId', async(req, res) => {
 });
 
 app.get('/initialize', async(req, res) => {
-    //console.log(req.body);
-   // res.send(req.body);
-
     const getPacketCredentials = () => {
         const passphrase = Mnemonic.generateMnemonic();
         const keys = cryptography.getPrivateAndPublicKeyFromPassphrase(
@@ -193,13 +211,82 @@ app.post('/post-register-packet', function (req, res) {
     const packetId = req.body.packetid;
     const postage = req.body.postage;
     const security = req.body.security;
-    const mintrust = req.body.mintrust;
-    const recipient = req.body.recipient;
+    const minTrust = +req.body.mintrust;
+    const recipientId = req.body.recipient;
+    const passphrase = req.body.passphrase;
 
-    console.log(recipient);
+    const registerPackageTransaction = new RegisterPacketTransaction({
+        asset: {
+            security: transactions.utils.convertLSKToBeddows(security),
+            minTrust,
+            postage: transactions.utils.convertLSKToBeddows(postage),
+            packetId,
+        },
+        recipientId,
+        timestamp: dateToLiskEpochTimestamp(new Date()),
+    });
 
-    res.end()
+    registerPackageTransaction.sign(passphrase);
+
+    api.transactions.broadcast(registerPackageTransaction.toJSON()).then(res => {
+        console.log("++++++++++++++++ API Response +++++++++++++++++");
+        console.log(res.data);
+        console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
+        console.log(registerPackageTransaction.stringify());
+        console.log("++++++++++++++++ End Script +++++++++++++++++");
+    }).catch(err => {
+        console.log(JSON.stringify(err.errors, null, 2));
+    });
+
+    res.redirect('/post-register-packet');
 });
 
+app.post('/post-start-transport', function (req, res) {
+    const recipientId = req.body.recipient;
+    const passphrase = req.body.passphrase;
+
+    // Send start transport transaction
+    const startTransportTransaction = new StartTransportTransaction({
+        recipientId,
+        timestamp: dateToLiskEpochTimestamp(new Date()),
+    });
+
+    startTransportTransaction.sign(passphrase);
+
+    api.transactions.broadcast(startTransportTransaction.toJSON()).then(res => {
+        console.log("++++++++++++++++ API Response +++++++++++++++++");
+        console.log(res.data);
+        console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
+        console.log(startTransportTransaction.stringify());
+        console.log("++++++++++++++++ End Script +++++++++++++++++");
+    }).catch(err => {
+        console.log(JSON.stringify(err.errors, null, 2));
+    });
+
+    res.redirect('/post-start-transport');
+});
+
+app.post('/faucet', function (req, res) {
+    const address = req.body.address;
+    const amount = req.body.amount;
+
+    const fundTransaction = new transactions.TransferTransaction({
+        amount: transactions.utils.convertLSKToBeddows(amount),
+        recipientId: address,
+    });
+
+    fundTransaction.sign(accounts.sender.passphrase); // Genesis account
+    api.transactions.broadcast(fundTransaction.toJSON()).then(res => {
+        console.log("++++++++++++++++ API Response +++++++++++++++++");
+        console.log(res.data);
+        console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
+        console.log(fundTransaction.stringify());
+        console.log("++++++++++++++++ End Script +++++++++++++++++");
+    }).catch(err => {
+        console.log(JSON.stringify(err.errors, null, 2));
+    });
+
+    res.redirect('/faucet');
+});
 
 app.listen(PORT, () => console.info(`Explorer app listening on port ${PORT}!`));

@@ -3,7 +3,7 @@ extends index.pug
 block content
     h2 Register a new packet (Type: 20)
 
-    form(method='post' action='/post-register-packet')
+    form(method='POST' action='/post-register-packet')
         div.form-group
             label(for='packetid') PacketID:
             input.form-control(type='text', placeholder='packet ID' name='packetid')
@@ -18,6 +18,9 @@ block content
             input#mintrust.form-control(type='text', placeholder='8' name='mintrust')
         div.form-group
             label(for='recipient') Recipient:
-            input#recipient.form-control(type='text', placeholder='865737457634553L' name='recipient')
-        button.btn.btn-warning(type='submit') Sign up
+            input#recipient.form-control(type='text', value='10881167371402274308L' name='recipient')
+        div.form-group
+            label(for='passphrase') Passphrase of sender:
+            input#recipient.form-control(type='text', value='wagon stock borrow episode laundry kitten salute link globe zero feed marble' name='passphrase')
+        button.btn.btn-warning(type='submit') Register
 
