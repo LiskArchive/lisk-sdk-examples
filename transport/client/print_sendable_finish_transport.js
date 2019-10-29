@@ -15,7 +15,7 @@ let tx =  new FinishTransportTransaction({
         status: "success"
     },
     fee: '0',
-    recipientId: accounts.packet.address, // (recipient is required here, but not used)
+    recipientId: accounts.packet.address,
     timestamp: getTimestamp()
 });
 
