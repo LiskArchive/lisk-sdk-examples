@@ -12,7 +12,7 @@ const getTimestamp = () => {
 let tx =  new LightAlarmTransaction({
     asset: { message: "packet open!"},
     fee: '0',
-    recipientId: accounts.recipient.address, // (recipient is required, but not used)
+    recipientId: accounts.recipient.address,
     timestamp: getTimestamp()
 });
 
