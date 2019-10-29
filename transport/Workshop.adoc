@@ -20,10 +20,6 @@ For example, medical or aerospace science industries could easily utilise blockc
 Retail giants on another hand, can be one of the primary examples of blockchain use cases if we consider how the immutable, trustless nature of a supply chain can be used to crack down on the ethical implications of how some of the raw foods are being sourced, but also improve quality and investigate where the spoiled food came from and how it got on the store shelf.
 Insights like these help today’s retailers improve storage and farming techniques in order to raise the food standard for the end customer as well as reduce the amount of food waste that does not meet contemporary health and safety regulation requirements.
 
-Benefiting from the insights provided by blockchain supply chain could also help level the playing the field of small to mid-size businesses against corporate giants.
-If we consider the reduction in costs for a company which opts for a permanent, insightful blockchain-based supply chain monitoring will be astronomical when compared to a costly supply chain or operations manager.
-A greater, atomised transparency for all stages of the supply chain could perhaps also have a positive effect on curbing global drug trade channels and goods theft, crime types which benefit from murky intercontinental trade lines.
-
 image::blockchain-supply-chain.jpg[Blockchain Supply Chain]
 
 === Conclusion
