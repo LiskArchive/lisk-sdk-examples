@@ -20,6 +20,7 @@ app.set('view engine', 'pug')
 
 // parse application/json
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 /* Routes */
 app.get('/', (req, res) => {
@@ -80,6 +81,13 @@ app.get('/packet-accounts', async(req, res) => {
 app.get('/accounts/:address', async(req, res) => {
     const { data: accounts } = await api.accounts.get({ address: req.params.address });
     res.render('accounts', { accounts });
+});
+
+/**
+ * Request page for registring new packet
+ */
+app.get('/post-register-packet', async(req, res) => {
+    res.render('post-register-packet');
 });
 
 /**
@@ -182,8 +190,13 @@ app.get('/initialize', async(req, res) => {
 });
 
 app.post('/post-register-packet', function (req, res) {
-    console.dir(req.body);
-    res.send(req.body);
+    const packetId = req.body.packetid;
+    const postage = req.body.postage;
+    const security = req.body.security;
+    const mintrust = req.body.mintrust;
+    const recipient = req.body.recipient;
+
+    console.log(recipient);
 
     res.end()
 });
