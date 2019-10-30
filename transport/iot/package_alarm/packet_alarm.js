@@ -30,7 +30,6 @@ setInterval(() => {
 	if(state === 1) {
 		console.log('Package has been opened! Send lisk transaction!');
         let tx =  new LightAlarmTransaction({
-            asset: {},
             timestamp: getTimestamp()
         });
 

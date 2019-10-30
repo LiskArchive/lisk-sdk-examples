@@ -170,6 +170,49 @@ If something unexpected is detected by the IoT app, it will create a transaction
 
 ==== Clone the repo and install the dependencies
 
+The below steps describe how to create the initial files for this tutorial.
+The basic file structure looks as following:
+
+----
+.
+├── README.adoc
+├── Workshop.adoc
+├── client <1>
+│   ├── accounts.json
+│   ├── app.js
+│   ├── package.json
+│   ├── scripts
+│   └── views
+├── iot <2>
+│   ├── README.md
+│   ├── lisk_rpi_ldr_and_temperature_sensors_wiring.png
+│   ├── package_alarm
+│   │   ├── package.json
+│   │   └── packet_alarm.js
+│   └── temperature_and_humidity
+│       ├── package.json
+│       └── read_temperature_and_humidity.js
+├── node <3>
+│   ├── index.js
+│   ├── logs
+│   │   └── devnet
+│   │       ├── lisk.log
+│   │       └── lisk_db.log
+│   └── package.json
+├── transactions <4>
+│   ├── finish-transport.js
+│   ├── light-alarm.js
+│   ├── register-packet.js
+│   └── start-transport.js
+----
+
+<1> Contains the code for the <<software, client application>>
+<2> Contains the code for the <<software, IoT application>>
+<3> Contains the code for the <<software, node application>>
+<4> Contains the <<general-procedure, custom transactions>>
+
+===== Steps to set up the project:
+
 . Clone https://github.com/LiskHQ/lisk-sdk-examples/[Lisk-SDK-Examples] repository locally.
 +
 [source,bash]
@@ -218,6 +261,12 @@ If everything is running fine, you can stop the node by hitting kbd:[CTRL+C].
 For the very simple version of the packet tracking, only one custom transaction type needs to be implemented: the `LightAlarmTransaction`.
 This transaction will be send by the IoT device inside of the packet, if it detects anomalies with its' connected photoresistor.
 
+[source,bash]
+----
+cd transactions
+----
+
+.contents of light-alarm
 [source,js]
 ----
 const {
@@ -232,37 +281,22 @@ const {
 class LightAlarmTransaction extends BaseTransaction {
 
     static get TYPE () {
-        return 23;
+        return 23; <1>
     }
 
     static get FEE () {
-        return '0';
+        return '0'; <2>
     };
 
     async prepare(store) {
         await store.account.cache([
             {
-                address: this.senderId, // Sent by packet (self-signed)
+                address: this.senderId, <3>
             }
-        ]);
-        /**
-         * Get sender and recipient accounts of the packet
-         */
-        const pckt = store.account.get(this.senderId);
-        await store.account.cache([
-            {
-                address: pckt.asset.carrier,
-            },
-            {
-                address: pckt.asset.sender,
-            },
         ]);
     }
 
     validateAsset() {
-        // Static checks for presence of `timestamp` which holds the timestamp of when the alarm was triggered
-        // `timestamp` is not used for further validation, we just use it for keeping track when the alarm has been fired.
-        // Currently, we do not care about the format of the timestamp (require type string)
         const errors = [];
         if (!this.timestamp || typeof this.timestamp !== 'number') {
             errors.push(
@@ -277,57 +311,58 @@ class LightAlarmTransaction extends BaseTransaction {
         return errors;
     }
 
-    applyAsset(store) {
-        const errors = [];
+    applyAsset(store) {} // insert implementation below
 
-        // Check status="ongoing" to accept the LightAlarmTransaction
-        const packet = store.account.get(this.senderId);
-        if (packet.asset.status !== 'ongoing' && packet.asset.status !== 'alarm') {
-            errors.push(
-                new TransactionError(
-                    'Transaction invalid because delivery is not "ongoing".',
-                    this.id,
-                    'packet.asset.status',
-                    packet.asset.status,
-                    `Expected status to be equal to "ongoing" or "alarm"`,
-                )
-            );
+    undoAsset(store) {} // insert implementation below
+}
+module.exports = LightAlarmTransaction;
+----
 
-            return errors;
-        }
+<1> Set the transaction type (this has to be unique in the network).
+<2> Set the transaction fee. This needs to be paid by the sender when posting the transaction to the network.
+Set it to `0` for now, so the packet doesn't need any funds to send an alarm transaction.
+<3> Cache the packet account. To be able to work on a consistent data set, cache the needed data from the database.
+For the `LightAlarmTransaction`, we only need the packet account data.
+<4> Static checks for presence and correct datatype of `timestamp`, which holds the timestamp of when the alarm was triggered.
 
-        /**
-         * Update the Packet account:
-         * - set packet status to "alarm"
-         * - add current timestamp to light alarms list
-         */
-        packet.asset.status = 'alarm';
-        packet.asset.alarms = packet.asset.alarms ? packet.asset.alarms : {};
-        packet.asset.alarms.light = packet.asset.alarms.light ? packet.asset.alarms.light : [];
-        packet.asset.alarms.light.push(this.timestamp);
+.Implementation of applyAsset() and undoAsset()
+[source,js]
+----
+applyAsset(store) {
+    const errors = [];
 
-        store.account.set(packet.address, packet);
+    const packet = store.account.get(this.senderId);
 
-        return errors;
-    }
+    /**
+     * Update the Packet account:
+     * - set packet status to "alarm"
+     * - add current timestamp to light alarms list
+     */
+    packet.asset.status = 'alarm';
+    packet.asset.alarms = packet.asset.alarms ? packet.asset.alarms : {};
+    packet.asset.alarms.light = packet.asset.alarms.light ? packet.asset.alarms.light : [];
+    packet.asset.alarms.light.push(this.timestamp);
 
-    undoAsset(store) {
-        const errors = [];
+    store.account.set(packet.address, packet);
 
-        packet.asset.status = 'ongoing';
-        packet.asset.alarms.light.pop();
-
-        store.account.set(packet.address, packet);
-        return errors;
-    }
-
+    return errors;
 }
 
-module.exports = LightAlarmTransaction;
+undoAsset(store) {
+    const errors = [];
+
+    packet.asset.status = null;
+    packet.asset.alarms.light.pop();
+
+    store.account.set(packet.address, packet);
+    return errors;
+}
 ----
 
 Once we have created the new custom transaction type `LightAlarmTransaction`, it needs to be registered with the node application.
 Without this step, the nodes in the network wouldn't recognize the new transaction type and therefore wouldn't accept the transactions.
+
+TIP: After the registration of a new transaction type, the node needs to be restarted to apply the changes.
 
 [source,js]
 ----
