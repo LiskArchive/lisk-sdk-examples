@@ -1,0 +1,67 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:10-alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - lisk
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=lisk_dev
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=lisk
+
+  sdk-chown:
+    image: lisk-sdk
+    volumes:
+      - ./dev_environment:/home/$USER/dev_environment
+    depends_on:
+      - db
+    user: root
+    command: chown --verbose --recursive $USER:$USER /home/$USER/dev_environment
+
+  sdk-examples:
+    image: lisk-sdk
+    volumes:
+      - ./dev_environment:/home/$USER/dev_environment
+    depends_on:
+      - sdk-chown
+    user: root
+    command: >
+      sh -c "git clone https://github.com/LiskHQ/lisk-sdk-examples.git /home/$USER/dev_environment/lisk-sdk-examples &&
+             cd /home/$USER/dev_environment/lisk-sdk-examples &&
+             git checkout lisk-transport &&
+             rm -rf /home/$USER/dev_environment/lisk-sdk-examples/transport/node/index.js &&
+             cd /home/$USER &&
+             mv index.js /home/$USER/dev_environment/lisk-sdk-examples/transport/node/ &&
+             cd /home/$USER/dev_environment/lisk-sdk-examples/transport/node &&
+             npm install &&
+             cd /home/$USER/dev_environment/lisk-sdk-examples/transport/transactions &&
+             npm install &&
+             cd /home/$USER/dev_environment/lisk-sdk-examples/transport/client &&
+             npm install &&
+             cd /home/$USER/dev_environment/lisk-sdk-examples/transport/iot/package_alarm &&
+             npm install &&
+             cd /home/$USER/dev_environment/lisk-sdk-examples/transport/iot/temperature_and_humidity &&
+             npm install"
+
+  sdk:
+    image: lisk-sdk
+    volumes:
+      - ./dev_environment:/home/$USER/dev_environment
+    networks:
+      - lisk
+    depends_on:
+      - sdk-examples
+    stdin_open: true
+    tty: true
+    entrypoint: /bin/bash
+    user: $USER
+
+volumes:
+  db-data:
+
+networks:
+  lisk:
