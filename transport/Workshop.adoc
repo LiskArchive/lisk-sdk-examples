@@ -270,7 +270,7 @@ const {
  * Send a light alarm when the packet has been opened.
  * Signed by packet.
  */
-class LightAlarmTransaction extends BaseTransaction {
+class LightAlarmTransaction extends BaseTransaction { <0>
 
     static get TYPE () {
         return 23; <1>
@@ -310,12 +310,32 @@ class LightAlarmTransaction extends BaseTransaction {
 module.exports = LightAlarmTransaction;
 ----
 
+<0> Extend the new transaction type form the BaseTransaction interface.
 <1> Set the transaction type (this has to be unique in the network).
 <2> Set the transaction fee. This needs to be paid by the sender when posting the transaction to the network.
 Set it to `0` for now, so the packet doesn't need any funds to send an alarm transaction.
-<3> Cache the packet account. To be able to work on a consistent data set, cache the needed data from the database.
-For the `LightAlarmTransaction`, we only need the packet account data.
+<3> Cache the packet account. For the `LightAlarmTransaction`, we only need the packet account data.
 <4> Static checks for presence and correct datatype of `timestamp`, which holds the timestamp of when the alarm was triggered.
+
+prepare(store)::
+The `prepare` function caches relevant data from the database.
+This enables the application to work on a consistent data set, while applying the transaction logic.
+
+validateAsset()::
+Inside of `validateAsset`, the inputs are validated to ensure the required data is present and that is has the expected data type.
+
+applyAsset(store)::
+Calls `store.get` to get all of the relevant data.
+It applies all of the necessary changes from the received transaction to the affected account(s) by calling `store.set`.
+
+undoAsset(store)::
+Inverse of `applyAsset`.
+In case the transaction needs to be reverted, due to a network fork.
+Undoes all of the changes to the accounts applied by the `applyAsset` step.
+
+A possible solution for implementing the logic of `LightAlarmTransaction` is displayed below.
+In our very simple first version of the packet tracking, the transaction will add a new `status` field to the packet account and set its' value to `alarm`.
+Additionally, it will create a list `alarms.light` and push the current timestamp to this array.
 
 .Implementation of applyAsset() and undoAsset()
 [source,js]
@@ -351,6 +371,7 @@ undoAsset(store) {
 }
 ----
 
+Copy the snippet above and insert it in `light-alarm.js` to complete the implementation of the transaction type.
 Now, that we have created the new custom transaction type `LightAlarmTransaction`, it needs to be registered with the node application.
 Without this step, the nodes in the network wouldn't recognize the new transaction type and therefore wouldn't accept the transactions.
 
