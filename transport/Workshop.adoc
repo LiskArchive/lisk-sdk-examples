@@ -173,6 +173,7 @@ If something unexpected is detected by the IoT app, it will create a transaction
 The below steps describe how to create the initial files for this tutorial.
 The basic file structure looks as following:
 
+.contents of lisk-sdk-examples/transport
 ----
 .
 ├── README.adoc
@@ -248,18 +249,16 @@ If everything is running fine, you can stop the node by hitting kbd:[CTRL+C].
 
 === 1.1 Implement the LightAlarm transaction
 
-* Implementation of the LightAlarmTx
-* Registering it with the node application
-
 For the very simple version of the packet tracking, only one custom transaction type needs to be implemented: the `LightAlarmTransaction`.
 This transaction will be send by the IoT device inside of the packet, if it detects anomalies with its' connected photoresistor.
 
+.Navigate into transactions/
 [source,bash]
 ----
-cd transactions
+cd ../transactions
 ----
 
-.contents of light-alarm
+.contents of light-alarm.js
 [source,js]
 ----
 const {
@@ -352,11 +351,10 @@ undoAsset(store) {
 }
 ----
 
-Once we have created the new custom transaction type `LightAlarmTransaction`, it needs to be registered with the node application.
+Now, that we have created the new custom transaction type `LightAlarmTransaction`, it needs to be registered with the node application.
 Without this step, the nodes in the network wouldn't recognize the new transaction type and therefore wouldn't accept the transactions.
 
-TIP: After the registration of a new transaction type, the node needs to be restarted to apply the changes.
-
+.Update node/index.js
 [source,js]
 ----
 const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
@@ -376,6 +374,11 @@ app
     });
 
 ----
+
+TIP: After the registration of a new transaction type, the node needs to be restarted to apply the changes.
+
+The node application is now ready to accept and process the new transaction type `LightAlarmTransaction`.
+As next step, lets create a client application, that helps you explore the data on the blockchain.
 
 === 1.2 The client application
 
