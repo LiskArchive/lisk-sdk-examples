@@ -29,15 +29,12 @@ setInterval(() => {
 	let state = GPIO.read(4);
 	if(state === 1) {
 		console.log('Package has been opened! Send lisk transaction!');
-		console.log();
         let tx =  new LightAlarmTransaction({
             asset: {},
-            fee: '0',
-            recipientId: '10881167371402274308L', // dummy delegate_100 (receiver for package)
             timestamp: getTimestamp()
         });
 
-        tx.sign(packetCredentials.passphrase); // Signed and send by package
+        tx.sign(packetCredentials.passphrase); // Signed by package
 
         api.transactions.broadcast(tx.toJSON()).then(res => {
             console.log("++++++++++++++++ API Response +++++++++++++++++");
@@ -51,4 +48,4 @@ setInterval(() => {
 	} else {
 		console.log('Alles gut');
 	}
-}, 500);
+}, 1000);
