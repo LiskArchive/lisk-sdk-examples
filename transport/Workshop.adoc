@@ -194,10 +194,6 @@ The basic file structure looks as following:
 │       └── read_temperature_and_humidity.js
 ├── node <3>
 │   ├── index.js
-│   ├── logs
-│   │   └── devnet
-│   │       ├── lisk.log
-│   │       └── lisk_db.log
 │   └── package.json
 ├── transactions <4>
 │   ├── finish-transport.js
