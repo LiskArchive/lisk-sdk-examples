@@ -189,9 +189,6 @@ The basic file structure looks as following:
 │   ├── package_alarm
 │   │   ├── package.json
 │   │   └── packet_alarm.js
-│   └── temperature_and_humidity
-│       ├── package.json
-│       └── read_temperature_and_humidity.js
 ├── node <3>
 │   ├── index.js
 │   └── package.json
