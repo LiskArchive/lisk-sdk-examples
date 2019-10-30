@@ -59,6 +59,8 @@ services:
     tty: true
     entrypoint: /bin/bash
     user: $USER
+    ports:
+      - 4000:4000
 
 volumes:
   db-data:
