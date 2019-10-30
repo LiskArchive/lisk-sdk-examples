@@ -12,5 +12,4 @@
     "dependencies": {
       "@liskhq/lisk-transactions": "^2.3.1"
     }
-  }
-  
+}
