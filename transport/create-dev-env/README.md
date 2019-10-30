@@ -62,3 +62,10 @@ We need to modify the host as Postgres is running in this container with host `d
 Verify if the installation works by entering the lisk-sdk container with `docker exec -it <name_or_id_of_container_here> /bin/bash` and navigate inside the `/workshop` foldr.
 
 Run `node index.js | npx bunyan -o short` - if no errors are displayed the installation is working correctly.
+
+# Take Down Docker Containers
+You can simply take down the containers by executing the following command inside the `/transport/create-dev-env` folder.
+
+```sh
+docker-compose down
+```
