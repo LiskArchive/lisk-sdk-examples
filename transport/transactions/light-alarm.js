@@ -23,18 +23,6 @@ class LightAlarmTransaction extends BaseTransaction {
                 address: this.senderId, // Sent by packet (self-signed)
             }
         ]);
-        /**
-         * Get sender and recipient accounts of the packet
-         */
-        const pckt = store.account.get(this.senderId);
-        await store.account.cache([
-            {
-                address: pckt.asset.carrier,
-            },
-            {
-                address: pckt.asset.sender,
-            },
-        ]);
     }
 
     validateAsset() {
@@ -91,8 +79,11 @@ class LightAlarmTransaction extends BaseTransaction {
 
     undoAsset(store) {
         const errors = [];
+        /* --- Revert packet status --- */
+        packet.asset.status = 'ongoing';
+        packet.asset.alarms.light.pop();
 
-        // No changes to store -> no need for undo logic
+        store.account.set(packet.address, packet);
         return errors;
     }
 
