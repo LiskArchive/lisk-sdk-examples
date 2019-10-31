@@ -26,10 +26,8 @@ class LightAlarmTransaction extends BaseTransaction {
     }
 
     validateAsset() {
-        // Static checks for presence of `timestamp` which holds the timestamp of when the alarm was triggered
-        // `timestamp` is not used for further validation, we just use it for keeping track when the alarm has been fired.
-        // Currently, we do not care about the format of the timestamp (require type string)
         const errors = [];
+        /* Static checks for presence of `timestamp` which holds the timestamp of when the alarm was triggered */
         if (!this.timestamp || typeof this.timestamp !== 'number') {
             errors.push(
                 new TransactionError(
@@ -43,44 +41,12 @@ class LightAlarmTransaction extends BaseTransaction {
         return errors;
     }
 
-    applyAsset(store) {
-        const errors = [];
-
-        // Check status="ongoing" to accept the LightAlarmTransaction
-        const packet = store.account.get(this.senderId);
-        if (packet.asset.status !== 'ongoing' && packet.asset.status !== 'alarm') {
-            errors.push(
-                new TransactionError(
-                    'Transaction invalid because delivery is not "ongoing".',
-                    this.id,
-                    'packet.asset.status',
-                    packet.asset.status,
-                    `Expected status to be equal to "ongoing" or "alarm"`,
-                )
-            );
-
-            return errors;
-        }
-
-        /**
-         * Update the Packet account:
-         * - set packet status to "alarm"
-         * - add current timestamp to light alarms list
-         */
-        packet.asset.status = 'alarm';
-        packet.asset.alarms = packet.asset.alarms ? packet.asset.alarms : {};
-        packet.asset.alarms.light = packet.asset.alarms.light ? packet.asset.alarms.light : [];
-        packet.asset.alarms.light.push(this.timestamp);
-
-        store.account.set(packet.address, packet);
-
-        return errors;
-    }
+    applyAsset(store) { /* Write the logic for applyAsset() here */ }
 
     undoAsset(store) {
         const errors = [];
         /* --- Revert packet status --- */
-        packet.asset.status = 'ongoing';
+        packet.asset.status = null;
         packet.asset.alarms.light.pop();
 
         store.account.set(packet.address, packet);

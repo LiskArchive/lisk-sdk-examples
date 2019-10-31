@@ -89,12 +89,12 @@ This security cannot be accessed by the carrier, unless the transport has been f
 * add the `carrier` to the packet account.
 * set the `status` of the packet from `pending` to `ongoing`.
 
-==== Packet tracking
+==== Light alarm
 
 During the transportation of the packet, the packet will track itself with different sensors, to check if it gets manipulated during the travel.
 If a manipulation is detected, it will send a self-signed alarm transaction to the network.
 
-This transaction will:
+This `LightAlarmTransaction` will:
 
 * change the packets' `status` to `alarm`
 * Add the current `timestamp` to the list `asset.alarms.light` inside of the packet account.
@@ -134,9 +134,10 @@ This transaction will:
 ** MacOS 10.14 (Mojave)
 
 ==== Hardware provided
-* Raspberry Pi Zero W
-* SD card
-* Photoresistor
+* Raspberry Pi Zero W (running a headless Raspbian Buster lite)
+* 16GB class 10 SDCard
+* A DHT22 temperature and humidity sensor
+* A generic analog light sensor based on an LDR
 * Jumper cables
 * USB -> Micro-USB cable
 
@@ -144,7 +145,7 @@ This transaction will:
 * A code editor like Visual Studio Code
 * Node.js (`v10` or higher installed - use `nvm` for easy switching between versions)
 * Have `curl` installed
-* Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
+* Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup.html[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
 
 === Software
 
@@ -166,13 +167,38 @@ If something unexpected is detected by the IoT app, it will create a transaction
 
 == Part 1: Track a packet on the blockchain
 
+The goal of this Part is to implement a simple application that tracks sensor measurements on the blockchain.
+That means, once the IoT application will be started, it will immediately send an `LightAlarmTransaction` to the network, whenever the sensor detects light.
+
+You will learn here:
+
+* How to implement the `LightAlarmTransaction`
+* How to register the new transaction type with the node application
+* How to create a simple frontend for users to
+** Initialize a new packet account
+** Explore all posted alarm transactions
+
+NOTE: For Part 1 of the workshop, it is not needed to check any status of the packet before sending an alarm transaction.
+
 === 1.0 Setup
+
+Set up the needed software and hardware and installation of the dependencies.
 
 ==== Clone the repo and install the dependencies
 
 The below steps describe how to create the initial files for this tutorial.
-The basic file structure looks as following:
 
+["loweralpha"]
+. Clone https://github.com/LiskHQ/lisk-sdk-examples/[Lisk-SDK-Examples] repository locally.
++
+[source,bash]
+----
+git clone https://github.com/LiskHQ/lisk-sdk-examples.git
+cd lisk-sdk-examples
+----
+. Checkout branch `development` (by default active branch).
+The basic file structure looks as following:
++
 .contents of lisk-sdk-examples/transport
 ----
 .
@@ -193,28 +219,17 @@ The basic file structure looks as following:
 ├── node <3>
 │   ├── index.js
 │   └── package.json
-├── transactions <4>
-│   ├── finish-transport.js
-│   ├── light-alarm.js
-│   ├── register-packet.js
-│   └── start-transport.js
+└── transactions <4>
+    ├── finish-transport.js
+    ├── light-alarm.js
+    ├── register-packet.js
+    └── start-transport.js
 ----
-
++
 <1> Contains the code for the <<software, client application>>
 <2> Contains the code for the <<software, IoT application>>
 <3> Contains the code for the <<software, node application>>
 <4> Contains the <<general-procedure, custom transactions>>
-
-===== Steps to set up the project:
-
-. Clone https://github.com/LiskHQ/lisk-sdk-examples/[Lisk-SDK-Examples] repository locally.
-+
-[source,bash]
-----
-git clone https://github.com/LiskHQ/lisk-sdk-examples.git
-cd lisk-sdk-examples
-----
-. Checkout branch `development` (by default active branch).
 . Navigate inside `transport/node` folder and run `npm install` to install the required dependencies for the node application.
 +
 [source,bash]
@@ -243,16 +258,58 @@ If everything is running fine, you can stop the node by hitting kbd:[CTRL+C].
 
 ==== Prepare the IoT device
 
-* Connect the sensor
-* Install Node
-* Prepare to connect to ssh via USB
+[TIP]
+====
+These steps are already prepared for you before the workshop.
+
+For reference, see how the sensors can be connected, and the steps to set up the Raspberry Pi below.
+====
+
+Wire the sensors::
+image:iot/lisk_rpi_ldr_and_temperature_sensors_wiring.png[RPI Wiring, title="RPI Wiring"]
+
+Preparing the Operating System::
+The operating system for the Raspberry needs to be copied from a computer into an SD card for this we recommend using https://www.balena.io/etcher/ (good tutorial in https://medium.com/@ccarnino/backup-raspberry-pi-sd-card-on-macos-the-2019-simple-way-to-clone-1517af972ca5)
++
+For preparing the Raspberry for `ssh` and wifi access follow this guide: https://core-electronics.com.au/tutorials/raspberry-pi-zerow-headless-wifi-setup.html
++
+As we want to run the Raspberry in headless mode (i.e. no keyboard, mouse and monitor) we need to also enable `ssh` through USB.
+To do so follow this guide https://desertbot.io/blog/ssh-into-pi-zero-over-usb
+Once all those steps are followed the SD card can be unmounted and inserted into the Raspberry SD card reader.
+
+Booting the Raspberry Pi::
+Connect a micro usb cable with the Raspberry and then connect the other end to a computer.
+
+First create a new ssh keypair.
+Afterwards you should be able to log-in through ssh by running:
++
+[source, bash]
+----
+ssh-keygen -R raspberrypi.local
+ssh pi@raspberrypi.local
+----
++
+If the pi won't respond, press Ctrl-C and try the last command again
+If prompted with a warning just hit enter to accept the default (Yes)
++
+Type in the password -- by default this is `raspberry`
+
+Installing required libraries for accessing sensor data::
+The pins in the Raspberry need some libraries before they can be used for communicating with different sensors.
+For installing the required libraries run:
++
+* `sudo apt-get install wiringpi`
+* `sudo apt-get install pigpio`
+* NodeJS can be installed with `nvm`
 
 === 1.1 Implement the LightAlarm transaction
 
 For the very simple version of the packet tracking, only one custom transaction type needs to be implemented: the `LightAlarmTransaction`.
 This transaction will be send by the IoT device inside of the packet, if it detects anomalies with its' connected photoresistor.
 
-.Navigate into transactions/
+The only thing you need to insert yourself is the `applyAsset` function.
+
+.Navigate into the `transactions/` directory
 [source,bash]
 ----
 cd ../transactions
@@ -270,25 +327,25 @@ const {
  * Send a light alarm when the packet has been opened.
  * Signed by packet.
  */
-class LightAlarmTransaction extends BaseTransaction { <0>
+class LightAlarmTransaction extends BaseTransaction { <1>
 
     static get TYPE () {
-        return 23; <1>
+        return 23; <2>
     }
 
     static get FEE () {
-        return '0'; <2>
+        return '0'; <3>
     };
 
     async prepare(store) {
         await store.account.cache([
             {
-                address: this.senderId, <3>
+                address: this.senderId, <4>
             }
         ]);
     }
 
-    validateAsset() {
+    validateAsset() { <5>
         const errors = [];
         if (!this.timestamp || typeof this.timestamp !== 'number') {
             errors.push(
@@ -303,19 +360,27 @@ class LightAlarmTransaction extends BaseTransaction { <0>
         return errors;
     }
 
-    applyAsset(store) {} // insert implementation below
+    applyAsset(store) { /* Write the logic for applyAsset() here */ }
 
-    undoAsset(store) {} // insert implementation below
+    undoAsset(store) {
+        const errors = [];
+
+        packet.asset.status = null;
+        packet.asset.alarms.light.pop();
+
+        store.account.set(packet.address, packet);
+        return errors;
+    }
 }
 module.exports = LightAlarmTransaction;
 ----
 
-<0> Extend the new transaction type form the BaseTransaction interface.
-<1> Set the transaction type (this has to be unique in the network).
-<2> Set the transaction fee. This needs to be paid by the sender when posting the transaction to the network.
+<1> Extend the new transaction type from the `BaseTransaction` interface.
+<2> Set the transaction type (this has to be unique in the network).
+<3> Set the transaction fee. This needs to be paid by the sender when posting the transaction to the network.
 Set it to `0` for now, so the packet doesn't need any funds to send an alarm transaction.
-<3> Cache the packet account. For the `LightAlarmTransaction`, we only need the packet account data.
-<4> Static checks for presence and correct datatype of `timestamp`, which holds the timestamp of when the alarm was triggered.
+<4> Cache the packet account. For the `LightAlarmTransaction`, we only need the packet account data.
+<5> Static checks for presence and correct datatype of `timestamp`, which holds the timestamp of when the alarm was triggered.
 
 prepare(store)::
 The `prepare` function caches relevant data from the database.
@@ -337,7 +402,7 @@ A possible solution for implementing the logic of `LightAlarmTransaction` is dis
 In our very simple first version of the packet tracking, the transaction will add a new `status` field to the packet account and set its' value to `alarm`.
 Additionally, it will create a list `alarms.light` and push the current timestamp to this array.
 
-.Implementation of applyAsset() and undoAsset()
+.Implementation of applyAsset()
 [source,js]
 ----
 applyAsset(store) {
@@ -357,16 +422,6 @@ applyAsset(store) {
 
     store.account.set(packet.address, packet);
 
-    return errors;
-}
-
-undoAsset(store) {
-    const errors = [];
-
-    packet.asset.status = null;
-    packet.asset.alarms.light.pop();
-
-    store.account.set(packet.address, packet);
     return errors;
 }
 ----
