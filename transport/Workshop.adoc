@@ -198,7 +198,7 @@ cd lisk-sdk-examples
 . Checkout branch `development` (by default active branch).
 The basic file structure looks as following:
 +
-.contents of lisk-sdk-examples/transport
+.Contents of `lisk-sdk-examples/transport`
 ----
 .
 ├── README.adoc
@@ -346,16 +346,7 @@ class LightAlarmTransaction extends BaseTransaction { <1>
 
     validateAsset() { <5>
         const errors = [];
-        if (!this.timestamp || typeof this.timestamp !== 'number') {
-            errors.push(
-                new TransactionError(
-                    'Invalid ".timestamp" defined on transaction',
-                    this.id,
-                    '.timestamp',
-                    this.timestamp
-                )
-            );
-        }
+        /* Write logic for validateAsset() here */
         return errors;
     }
 
@@ -387,6 +378,24 @@ This enables the application to work on a consistent data set, while applying th
 
 validateAsset()::
 Inside of `validateAsset`, the inputs are validated to ensure the required data is present and that is has the expected data type.
+The `validateAsset` function is responsible for only performing static checks.
+This means the function is synchronous and cannot use data from the key-value `store` (which holds the data that has been cached in the `prepare` function).
++
+Therefore, we can only perform initial checks like validating the presence of the parameter and if the parameter has the correct type.
+In case the function returns an array that contains errors, the transaction will be discarded.
++
+To go deeper into the `TransactionError`, the function is exported by `@liskhq/lisk-transactions`. You can find the constructor [here](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/errors.ts#L22).
++
+[source,js]
+----
+public constructor(
+    message: string = '',
+    id: string = '',
+    dataPath: string = '',
+    actual?: string | number,
+    expected?: string | number,
+) { ... }
+----
 
 applyAsset(store)::
 Calls `store.get` to get all of the relevant data.
@@ -401,6 +410,14 @@ A possible solution for implementing the logic of `LightAlarmTransaction` is dis
 In our very simple first version of the packet tracking, the transaction will add a new `status` field to the packet account and set its' value to `alarm`.
 Additionally, it will create a list `alarms.light` and push the current timestamp to this array.
 
+==== Task: Implement `validateAsset()`
+
+Implement your own logic for the `validateAsset()` function.
+It shall validate the timestamp that got sent by the `LightAlarmTransaction`.
+Do do this, it needs to be checked, if the timestamp is present in the transaction ibject, and if it has the correct data type.
+In case that an error is found, push a new `TransactionError` into the `errors` array and return it in the function.
+
+==== Explanation: `applyAsset()`
 .Implementation of applyAsset()
 [source,js]
 ----

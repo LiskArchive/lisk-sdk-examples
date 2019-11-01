@@ -34,7 +34,8 @@ class LightAlarmTransaction extends BaseTransaction {
                     'Invalid ".timestamp" defined on transaction',
                     this.id,
                     '.timestamp',
-                    this.timestamp
+                    this.timestamp,
+                    'A timestamp in unix format'
                 )
             );
         }
