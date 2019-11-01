@@ -382,9 +382,11 @@ The `validateAsset` function is responsible for only performing static checks.
 This means the function is synchronous and cannot use data from the key-value `store` (which holds the data that has been cached in the `prepare` function).
 +
 Therefore, we can only perform initial checks like validating the presence of the parameter and if the parameter has the correct type.
+If validations fails, it shall create a new `TransactionError`, and push it into the `errors` array.
 In case the function returns an array that contains errors, the transaction will be discarded.
 +
-To go deeper into the `TransactionError`, the function is exported by `@liskhq/lisk-transactions`. You can find the constructor [here](https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/errors.ts#L22).
+The function for `TransactionError` is exported by `@liskhq/lisk-transactions`.
+You can find the constructor https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/errors.ts#L22[here].
 +
 [source,js]
 ----
@@ -414,10 +416,15 @@ Additionally, it will create a list `alarms.light` and push the current timestam
 
 Implement your own logic for the `validateAsset()` function.
 It shall validate the timestamp that got sent by the `LightAlarmTransaction`.
-Do do this, it needs to be checked, if the timestamp is present in the transaction ibject, and if it has the correct data type.
+Do do this, it needs to be checked, if the timestamp is present in the transaction object, and if it has the correct data type.
 In case that an error is found, push a new `TransactionError` into the `errors` array and return it in the function.
 
 ==== Explanation: `applyAsset()`
+
+A possible implementation of `applyAsset` for the `LightAlarmTransaction`. See detailed descriptions of the implementation below.
+
+Copy the snippet and insert it in `light-alarm.js` to complete the implementation of the transaction type.
+
 .Implementation of applyAsset()
 [source,js]
 ----
@@ -442,7 +449,21 @@ applyAsset(store) {
 }
 ----
 
-Copy the snippet above and insert it in `light-alarm.js` to complete the implementation of the transaction type.
+Inside of `applyAsset`, we can make use of the cached data from the `prepare` function, which is stored inside of the `store` parameter.
+
+With `store.account.get(ADDRESS)` we now get the account data of the packet account.
+We specify `this.senderId` as address, because the light alarm is always signed and sent by the packet itself.
+
+Once we have the data present, it is possible to manipulate it as desired.
+
+When all changes have been made, they are applied to the database by executing `store.account.set(ADDRESS, DATA);
+
+Unlike in `validateAsset`, the `store` parameter is present here.
+That means, inside of `applyAsset` it is possible to make dynamic checks against the existing data in the database.
+As we do not need to this here, an empty `errors` array is returned at the end of the function.
+
+==== Register the transaction with the node application
+
 Now, that we have created the new custom transaction type `LightAlarmTransaction`, it needs to be registered with the node application.
 Without this step, the nodes in the network wouldn't recognize the new transaction type and therefore wouldn't accept the transactions.
 
