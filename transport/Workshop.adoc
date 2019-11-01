@@ -297,7 +297,7 @@ The only thing you need to implement yourself is the `validateAsset` function.
 cd ../transactions
 ----
 
-.contents of light-alarm.js
+.Contents of `light-alarm.js`
 [source,js]
 ----
 const {
@@ -309,25 +309,25 @@ const {
  * Send a light alarm when the packet has been opened.
  * Signed by packet.
  */
-class LightAlarmTransaction extends BaseTransaction { <1>
+class LightAlarmTransaction extends BaseTransaction {                       <1>
 
     static get TYPE () {
-        return 23; <2>
+        return 23;                                                          <2>
     }
 
     static get FEE () {
-        return '0'; <3>
+        return '0';                                                         <3>
     };
 
     async prepare(store) {
         await store.account.cache([
             {
-                address: this.senderId, <4>
+                address: this.senderId,                                     <4>
             }
         ]);
     }
 
-    validateAsset() { <5>
+    validateAsset() {                                                       <5>
         const errors = [];
         /* Write your own logic for validateAsset() here */
         return errors;
@@ -354,6 +354,8 @@ module.exports = LightAlarmTransaction;
 Set it to `0` for now, so the packet doesn't need any funds to send an alarm transaction.
 <4> Cache the packet account. For the `LightAlarmTransaction`, we only need the packet account data.
 <5> Static checks for presence and correct datatype of `timestamp`, which holds the timestamp of when the alarm was triggered.
+
+==== Quick Overview: Required functions of a custom transaction type
 
 prepare(store)::
 The `prepare` function caches relevant data from the database.
@@ -439,7 +441,7 @@ We specify `this.senderId` as address, because the light alarm is always signed 
 
 Once we have the data present, it is possible to manipulate it as desired.
 
-When all changes have been made, they are applied to the database by executing `store.account.set(ADDRESS, DATA);
+When all changes have been made, they are applied to the database by executing `store.account.set(ADDRESS, DATA)`;
 
 Unlike in `validateAsset`, the `store` parameter is present here.
 That means, inside of `applyAsset` it is possible to make dynamic checks against the existing data in the database.
@@ -454,12 +456,13 @@ Without this step, the nodes in the network wouldn't recognize the new transacti
 [source,js]
 ----
 const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
-const LightAlarmTransaction = require('../transactions/light-alarm');
+const LightAlarmTransaction = require('../transactions/light-alarm');           <1>
 
 configDevnet.app.label = 'lisk-transport';
 
 const app = new Application(genesisBlockDevnet, configDevnet);
-app.registerTransaction(LightAlarmTransaction);
+
+app.registerTransaction(LightAlarmTransaction);                                 <2>
 
 app
     .run()
@@ -468,8 +471,10 @@ app
         console.error('Faced error in application', error);
         process.exit(1);
     });
-
 ----
+
+<1> Require the custom trasnaction type.
+<2> Register the custom transaction type with the application.
 
 TIP: After the registration of a new transaction type, the node needs to be restarted to apply the changes.
 
@@ -523,12 +528,12 @@ vim index.js
 ----
 const PIN = require("rpi-pins");
 const GPIO = new PIN.GPIO();
-GPIO.setPin(4, PIN.MODE.INPUT); <1>
+GPIO.setPin(4, PIN.MODE.INPUT);                                             <1>
 const LightAlarmTransaction = require('../../../transactions/light-alarm');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
 const { APIClient } = require('@liskhq/lisk-api-client');
 
-const api = new APIClient(['http://localhost:4000']); <2>
+const api = new APIClient(['http://localhost:4000']);                       <2>
 
 const getTimestamp = () => {
     const millisSinceEpoc = Date.now() - Date.parse(EPOCH_TIME);
@@ -538,7 +543,7 @@ const getTimestamp = () => {
 
 const packetCredentials = { /* Insert the credentials of the packet here */ } <3>
 
-setInterval(() => { <4>
+setInterval(() => {                                                          <4>
 	let state = GPIO.read(4);
 	if(state === 1) {
 		//console.log('Package has been opened! Send lisk transaction!');
@@ -546,7 +551,7 @@ setInterval(() => { <4>
             timestamp: getTimestamp()
         });
 
-        tx.sign(packetCredentials.passphrase); <5>
+        tx.sign(packetCredentials.passphrase);                               <5>
 
         api.transactions.broadcast(tx.toJSON()).then(res => {
             console.log("++++++++++++++++ API Response +++++++++++++++++");
