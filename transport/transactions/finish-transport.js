@@ -73,7 +73,7 @@ class FinishTransportTransaction extends BaseTransaction {
                 return errors;
             }
             // if the transport was a success
-            if ( this.asset.status === "success") {
+            if (this.asset.status === "success") {
                 /**
                  * Update the Carrier account:
                  * - Unlock security
