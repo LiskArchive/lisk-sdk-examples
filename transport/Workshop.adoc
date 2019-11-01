@@ -304,9 +304,9 @@ For installing the required libraries run:
 === 1.1 Implement the LightAlarm transaction
 
 For the very simple version of the packet tracking, only one custom transaction type needs to be implemented: the `LightAlarmTransaction`.
-This transaction will be send by the IoT device inside of the packet, if it detects anomalies with its' connected photoresistor.
+This transaction will be sent by the IoT device inside of the packet, if it detects anomalies with its' connected photoresistor.
 
-The only thing you need to insert yourself is the `applyAsset` function.
+The only thing you need to implement yourself is the `validateAsset` function.
 
 .Navigate into the `transactions/` directory
 [source,bash]
@@ -346,11 +346,11 @@ class LightAlarmTransaction extends BaseTransaction { <1>
 
     validateAsset() { <5>
         const errors = [];
-        /* Write logic for validateAsset() here */
+        /* Write your own logic for validateAsset() here */
         return errors;
     }
 
-    applyAsset(store) { /* Write the logic for applyAsset() here */ }
+    applyAsset(store) { /* Insert the logic for applyAsset() here */ }
 
     undoAsset(store) {
         const errors = [];
