@@ -17,18 +17,12 @@ Vendors and suppliers could benefit from a greater insight into the manufacturin
 For certain industries where high maintenance of goods in the supply chain is especially crucial, we can envision how blockchain can step in in order to ensure that quality targets are being met.
 For example, medical or aerospace science industries could easily utilise blockchain supply chain in order to ensure the parts and chemicals they use in their work come from a reputable source and have had all the necessary storage requirements met in the journey to its final destination.
 
-Retail giants on another hand, can be one of the primary examples of blockchain use cases if we consider how the immutable, trustless nature of a supply chain can be used to crack down on the ethical implications of how some of the raw foods are being sourced, but also improve quality and investigate where the spoiled food came from and how it got on the store shelf.
-Insights like these help today’s retailers improve storage and farming techniques in order to raise the food standard for the end customer as well as reduce the amount of food waste that does not meet contemporary health and safety regulation requirements.
-
 image::blockchain-supply-chain.jpg[Blockchain Supply Chain]
 
 === Conclusion
 
 To conclude, blockchain can benefit supply chain and transport industries by introducing a new level of data transparency and responsiveness that helps to improve processes and attracts potential clients.
 On another hand, applying blockchain to certain supply chains can benefit the end consumer, primary producer, and any other party inbetween, through better insights about how any product came to be.
-
-Supply chains of the future are poised to continue being more responsive, efficient and flexible than their contemporaries.
-With the global trade networks at stake, blockchain will help flesh out the correct pathways for goods to travel from continent to continent and from producer to end customer.
 
 == Idea
 
@@ -50,7 +44,7 @@ You find detailed descriptions of each step below.
 
 image::transport-uml.svg[Flow chart of Lisk Transport]
 
-==== Initliaze packet account
+==== Initialize packet account
 
 Before registering the packet on the network, the sender needs to create a new account for the packet and store the passphrase on the IoT device inside the packet.
 This is necessary, because the packet needs to sign the transactions it sends to the network, in order to communicate with it.
@@ -173,9 +167,8 @@ You will learn here:
 
 * How to implement the `LightAlarmTransaction`
 * How to register the new transaction type with the node application
-* How to create a simple frontend for users to
-** Initialize a new packet account
-** Explore all posted alarm transactions
+* How to create the iot script, and how to put it on the raspberry pi
+* How to use the client app to initialize the packet account and to track the alarm transactions in the network
 
 NOTE: For Part 1 of the workshop, it is not needed to check any status of the packet before sending an alarm transaction.
 
@@ -503,17 +496,15 @@ In this step we are going to implement the script that will run on the Raspberry
 
 Connect a micro usb cable with the Raspberry and then connect the other end to a computer.
 
-First create a new ssh keypair.
-Afterwards you should be able to log-in through `ssh` by running:
+You should be able to log-in through `ssh` by running:
 
 [source, bash]
 ----
-ssh-keygen -R raspberrypi.local
 ssh pi@raspberrypi.local
 ----
 
-If the pi won't respond, press Ctrl-C and try the last command again
-If prompted with a warning just hit enter to accept the default (Yes)
+If the pi won't respond, press kbd:[CTRL+C] and try the last command again.
+If prompted with a warning just hit enter to accept the default (Yes).
 
 Type in the password - by default this is `raspberry`
 
