@@ -136,7 +136,6 @@ This transaction will:
 ==== Hardware provided
 * Raspberry Pi Zero W (running a headless Raspbian Buster lite)
 * 16GB class 10 SDCard
-* A DHT22 temperature and humidity sensor
 * A generic analog light sensor based on an LDR
 * Jumper cables
 * USB -> Micro-USB cable
@@ -279,7 +278,7 @@ Once all those steps are followed the SD card can be unmounted and inserted into
 
 Booting the Raspberry Pi::
 Connect a micro usb cable with the Raspberry and then connect the other end to a computer.
-
++
 First create a new ssh keypair.
 Afterwards you should be able to log-in through ssh by running:
 +
