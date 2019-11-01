@@ -276,23 +276,6 @@ As we want to run the Raspberry in headless mode (i.e. no keyboard, mouse and mo
 To do so follow this guide https://desertbot.io/blog/ssh-into-pi-zero-over-usb
 Once all those steps are followed the SD card can be unmounted and inserted into the Raspberry SD card reader.
 
-Booting the Raspberry Pi::
-Connect a micro usb cable with the Raspberry and then connect the other end to a computer.
-+
-First create a new ssh keypair.
-Afterwards you should be able to log-in through ssh by running:
-+
-[source, bash]
-----
-ssh-keygen -R raspberrypi.local
-ssh pi@raspberrypi.local
-----
-+
-If the pi won't respond, press Ctrl-C and try the last command again
-If prompted with a warning just hit enter to accept the default (Yes)
-+
-Type in the password -- by default this is `raspberry`
-
 Installing required libraries for accessing sensor data::
 The pins in the Raspberry need some libraries before they can be used for communicating with different sensors.
 For installing the required libraries run:
@@ -505,6 +488,87 @@ As next step, lets create a client application, that helps you explore the data 
 * Read the sensor in a certain interval
 * Send LightAlarmTx, if light is detected
 * Make script start automatically after boot
+
+In this step we are going to implement the script that will run on the Raspberry Pi to track if the packet has been manipulated.
+
+==== Connect to the Raspberry Pi
+
+Connect a micro usb cable with the Raspberry and then connect the other end to a computer.
+
+First create a new ssh keypair.
+Afterwards you should be able to log-in through `ssh` by running:
+
+[source, bash]
+----
+ssh-keygen -R raspberrypi.local
+ssh pi@raspberrypi.local
+----
+
+If the pi won't respond, press Ctrl-C and try the last command again
+If prompted with a warning just hit enter to accept the default (Yes)
+
+Type in the password - by default this is `raspberry`
+
+Your terminal should now be connected to the Raspberry Pi.
+On the Raspberry, reate a new folder, which will hold the script for the IoT application.
+
+[source,bash]
+----
+mkdir light-alarm
+vim index.js
+----
+
+.Contents of `index.js`
+[source,js]
+----
+const PIN = require("rpi-pins");
+const GPIO = new PIN.GPIO();
+GPIO.setPin(4, PIN.MODE.INPUT); <1>
+const LightAlarmTransaction = require('../../../transactions/light-alarm');
+const { EPOCH_TIME } = require('@liskhq/lisk-constants');
+const { APIClient } = require('@liskhq/lisk-api-client');
+
+const api = new APIClient(['http://localhost:4000']); <2>
+
+const getTimestamp = () => {
+    const millisSinceEpoc = Date.now() - Date.parse(EPOCH_TIME);
+    const inSeconds = ((millisSinceEpoc) / 1000).toFixed(0);
+    return parseInt(inSeconds);
+};
+
+const packetCredentials = { /* Insert the credentials of the packet here */ } <3>
+
+setInterval(() => { <4>
+	let state = GPIO.read(4);
+	if(state === 1) {
+		//console.log('Package has been opened! Send lisk transaction!');
+        let tx =  new LightAlarmTransaction({
+            timestamp: getTimestamp()
+        });
+
+        tx.sign(packetCredentials.passphrase); <5>
+
+        api.transactions.broadcast(tx.toJSON()).then(res => {
+            console.log("++++++++++++++++ API Response +++++++++++++++++");
+            console.log(res.data);
+            console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
+            console.log(tx.stringify());
+            console.log("++++++++++++++++ End Script +++++++++++++++++");
+        }).catch(err => {
+            console.log(JSON.stringify(err.errors, null, 2));
+        });
+	} else {
+		//console.log('Alles gut');
+	}
+}, 1000);
+
+----
+
+<1> Rpi-pins uses the WiringPi pin numbering system (check https://pinout.xyz/pinout/pin16_gpio23)
+<2> Enter here the IP of the node you want to reach for API requests
+<3> Note: Always update to the package you are using
+<4> Check the status of the sensor in a certain intervall (here: 1 second)
+<5> Signed by package
 
 == Part 2: A simple supply chain tracking system
 
