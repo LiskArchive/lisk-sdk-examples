@@ -263,7 +263,9 @@ These steps are already prepared for you before the workshop.
 
 For reference, see how the sensors can be connected, and the steps to set up the Raspberry Pi below.
 ====
-
+.Steps to setup the Raspberry Pi
+[%collapsible]
+====
 Wire the sensors::
 image:iot/lisk_rpi_ldr_and_temperature_sensors_wiring.png[RPI Wiring, title="RPI Wiring"]
 
@@ -283,13 +285,14 @@ For installing the required libraries run:
 * `sudo apt-get install wiringpi`
 * `sudo apt-get install pigpio`
 * NodeJS can be installed with `nvm`
+====
 
 === 1.1 Implement the LightAlarm transaction
 
 For the very simple version of the packet tracking, only one custom transaction type needs to be implemented: the `LightAlarmTransaction`.
 This transaction will be sent by the IoT device inside of the packet, if it detects anomalies with its' connected photoresistor.
 
-The only thing you need to implement yourself is the `validateAsset` function.
+The only thing you need to implement in this step yourself is the `validateAsset` function.
 
 .Navigate into the `transactions/` directory
 [source,bash]
