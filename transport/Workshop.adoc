@@ -296,7 +296,7 @@ Type in the password -- by default this is `raspberry`
 Installing required libraries for accessing sensor data::
 The pins in the Raspberry need some libraries before they can be used for communicating with different sensors.
 For installing the required libraries run:
-+
+
 * `sudo apt-get install wiringpi`
 * `sudo apt-get install pigpio`
 * NodeJS can be installed with `nvm`
@@ -513,6 +513,17 @@ As next step, lets create a client application, that helps you explore the data 
 Describe how to implement the missing transaction types. Leave certain parts of the implementation up to the user.
 
 ==== a. Register the packet on the blockchain
+
+For the next step in our prototype, we need to implement the `RegisterPacket` transaction.
+This transaction will register a packet on the blockchain that is ready to be picked up by a delivery person. The transaction allows the package owner to define a couple of properties:
+
+* `packetID`: The ID of the packet account (registered on Raspberry Pi).
+* `postage`: The postage refers to a number of LSK tokens the carrier receives upon successful delivery of the packet. The postage is stored in the packet account's asset field.
+* `security`: The security refers to a number of LSK tokens that the carrier should lock as a "security" before he can accept the packet for delivery. Upon successful delivery, the security will be unlocked again to the carriers balance.
+* `minTrust`: This minimum trust property has been introduced to keep track of well-behaving/performing carriers. Whenever a carrier successfully delivers a packet, his trust will be increased by one. The package owner can set a minimal trust level for a carrier before he can accept the package for delivery. If a carrier has a lower trust than the minimal required trust level, he cannot accept the package for delivery.
+* `recipientId`: This is maybe the most important field as it sets the recipient for the package.
+
+For the `RegistePacketTransaction` we will guide you through the `undoAsset()` function and let you implement a small snippet of code yourself.
 
 ==== b. Start the Transport
 

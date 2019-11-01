@@ -144,11 +144,6 @@ class RegisterPacketTransaction extends BaseTransaction {
     undoAsset(store) {
         const errors = [];
 
-        /* --- Revert packet account --- */
-        const packet = store.account.get(this.asset.packetId);
-        const originalPacketAccount = { ...packet, balance: 0, asset: null };
-        store.account.set(packet.address, originalPacketAccount);
-
         /* --- Revert sender account --- */
         const sender = store.account.get(this.senderId);
         const senderBalanceWithPostage = new utils.BigNum(sender.balance).add(
@@ -159,6 +154,12 @@ class RegisterPacketTransaction extends BaseTransaction {
             balance: senderBalanceWithPostage.toString()
         };
         store.account.set(sender.address, updatedSender);
+
+        /* --- Revert packet account --- */
+        const packet = store.account.get(this.asset.packetId);
+        const originalPacketAccount = { ...packet, balance: 0, asset: null };
+        store.account.set(packet.address, originalPacketAccount);
+
         return errors;
     }
 
