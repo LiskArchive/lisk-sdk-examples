@@ -5,24 +5,10 @@ Mona Bärenfänger <mona@lightcurve.io>
 
 == Motivation
 
-One reason why the modern world is seeing more and more wealth created is because the economies and markets are connected via ever more sophisticated routes of global trade.
-Whether be it by air, sea, or road, billions worth of goods are being taken from continent to continent every single day, in order to satisfy demand and meet supply quotas.
-However, while new methods of storage and route tweaks are still developed in order to further propel this vital aspect of the global economy, the sheer volume of transport information processed on a daily basis means there is huge inaccuracy of data when trying to monitor an individual product’s journey.
-Major business leaders depending on physical supply chains have long pushed for more transparency, price-efficiency and data insight, starting at the creation of a product to its final destination.
-
-Applying blockchain to a supply chain could resolve these problems by creating a permanent history of a product.
-This can have many industry-spanning benefits - reducing costs, pinpointing human error and avoiding delays.
-All of this could potentially save years of time and billions of dollars in overhead.
-Vendors and suppliers could benefit from a greater insight into the manufacturing process of the goods they use, being able to use the decentralized supply ledger in order to investigate variables such as delivery or maintenance of products.
-For certain industries where high maintenance of goods in the supply chain is especially crucial, we can envision how blockchain can step in in order to ensure that quality targets are being met.
-For example, medical or aerospace science industries could easily utilise blockchain supply chain in order to ensure the parts and chemicals they use in their work come from a reputable source and have had all the necessary storage requirements met in the journey to its final destination.
+Blockchain can benefit supply chain and transport industries by introducing a new level of data transparency and responsiveness that helps to improve processes and attracts potential clients.
+On another hand, applying blockchain to certain supply chains can benefit the end consumer, primary producer, and any other party inbetween, through better insights about how any product came to be.
 
 image::blockchain-supply-chain.jpg[Blockchain Supply Chain]
-
-=== Conclusion
-
-To conclude, blockchain can benefit supply chain and transport industries by introducing a new level of data transparency and responsiveness that helps to improve processes and attracts potential clients.
-On another hand, applying blockchain to certain supply chains can benefit the end consumer, primary producer, and any other party inbetween, through better insights about how any product came to be.
 
 == Idea
 
@@ -205,9 +191,9 @@ The basic file structure looks as following:
 ├── iot <2>
 │   ├── README.md
 │   ├── lisk_rpi_ldr_and_temperature_sensors_wiring.png
-│   ├── package_alarm
+│   ├── light_alarm
 │   │   ├── package.json
-│   │   └── packet_alarm.js
+│   │   └── index.js
 ├── node <3>
 │   ├── index.js
 │   └── package.json
@@ -368,17 +354,6 @@ In case the function returns an array that contains errors, the transaction will
 +
 The function for `TransactionError` is exported by `@liskhq/lisk-transactions`.
 You can find the constructor https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/errors.ts#L22[here].
-+
-[source,js]
-----
-public constructor(
-    message: string = '',
-    id: string = '',
-    dataPath: string = '',
-    actual?: string | number,
-    expected?: string | number,
-) { ... }
-----
 
 applyAsset(store)::
 Calls `store.get` to get all of the relevant data.
@@ -417,11 +392,13 @@ new TransactionError(
 )
 ----
 
+TIP: In case you need some inspiration, how to implement the `validateAsset()` function, check out the other examples like `hello_world` inside of the `lisk-sdk-examples` repository, or check the https://lisk.io/documentation/lisk-sdk/tutorials/hello-world.html#_3_create_a_new_transaction_type[tutorials] in the Lisk Documentation.
+
 ==== Explanation: `applyAsset()`
 
 A possible implementation of `applyAsset` for the `LightAlarmTransaction`. See detailed descriptions of the implementation below.
 
-Copy the snippet and replace the àpplyAsset` function in `light-alarm.js` with it, to complete the implementation of the transaction type.
+Copy the snippet and replace the `applyAsset` function in `light-alarm.js` with it, to complete the implementation of the transaction type.
 
 .Implementation of applyAsset()
 [source,js]
@@ -519,7 +496,7 @@ On the Raspberry, reate a new folder, which will hold the script for the IoT app
 
 [source,bash]
 ----
-mkdir light-alarm							<1> 
+mkdir light_alarm							<1> 
 npm init								<2>
 npm i @liskhq/lisk-transactions @liskhq/lisk-api-client @liskhq/lisk-constants rpi-pins <3>
 vim light-alarm.js							<4>
@@ -538,7 +515,7 @@ vim index.js								<5>
 const PIN = require("rpi-pins");
 const GPIO = new PIN.GPIO();
 GPIO.setPin(4, PIN.MODE.INPUT);                                             <1>
-const LightAlarmTransaction = require('../../../transactions/light-alarm');
+const LightAlarmTransaction = require('./light-alarm');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
 const { APIClient } = require('@liskhq/lisk-api-client');
 
@@ -550,12 +527,12 @@ const getTimestamp = () => {
     return parseInt(inSeconds);
 };
 
-const packetCredentials = { /* Insert the credentials of the packet here */ }
+const packetCredentials = { /* Insert the credentials of the packet here in step 1.3 */ }
 
 setInterval(() => {                                                          <3>
 	let state = GPIO.read(4);
 	if(state === 1) {
-		//console.log('Package has been opened! Send lisk transaction!');
+		//console.log('Packet has been opened! Send lisk transaction!');
         let tx =  new LightAlarmTransaction({
             timestamp: getTimestamp()
         });
@@ -578,14 +555,14 @@ setInterval(() => {                                                          <3>
 
 ----
 
-<1> Rpi-pins uses the WiringPi pin numbering system (check https://pinout.xyz/pinout/pin16_gpio23)
-<2> Replace `localhost` with the IP of the node you want to reach for API requests
-<3> Check the status of the sensor in a certain intervall (here: 1 second)
-<4> Signed by the packet
+<1> Rpi-pins uses the WiringPi pin numbering system (check https://pinout.xyz/pinout/pin16_gpio23).
+<2> Replace `localhost` with the IP of the node you want to reach for API requests.
+<3> Check the status of the sensor in a certain intervall (here: 1 second).
+<4> The newly created transaction object signed by the packet.
 
 ==== Run the tracking script
 
-To check, if the script can read the sensor data, uncomment the `console.log`statements in the trakcing script and start the script by running:
+To check if the script can read the sensor data, uncomment the `console.log` statements in the trakcing script and start the script by running:
 
 [source, bash]
 ----
@@ -596,7 +573,7 @@ Now place the sensor in a dark place and then in a light place, and verify the c
 
 If no light is detected, it should log `Alles gut`, and if light is detected, it will log `Package has been opened! Send lisk transaction!`.
 
-=== 1.2 The client application
+=== 1.3 The client application
 
 * Initalize the packet account
 * Light-alarm explorer: Displaying the LightAlarmTxs + packetID
