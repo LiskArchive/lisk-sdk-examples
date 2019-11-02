@@ -583,6 +583,8 @@ setInterval(() => {                                                          <3>
 <3> Check the status of the sensor in a certain intervall (here: 1 second)
 <4> Signed by the packet
 
+==== Run the tracking script
+
 To check, if the script can read the sensor data, uncomment the `console.log`statements in the trakcing script and start the script by running:
 
 [source, bash]
@@ -592,7 +594,7 @@ node index.js
 
 Now place the sensor in a dark place and then in a light place, and verify the correct logs are shown in the console.
 
-If no light is detected, it should log `Alles gut, and if light is detected, it will log `Package has been opened! Send lisk transaction!`.
+If no light is detected, it should log `Alles gut`, and if light is detected, it will log `Package has been opened! Send lisk transaction!`.
 
 === 1.2 The client application
 
