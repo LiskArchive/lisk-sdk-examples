@@ -285,7 +285,7 @@ For installing the required libraries run:
 For the very simple version of the packet tracking, only one custom transaction type needs to be implemented: the `LightAlarmTransaction`.
 This transaction will be sent by the IoT device inside of the packet, if it detects anomalies with its' connected photoresistor.
 
-The only thing you need to implement in this step yourself is the `validateAsset` function.
+The only thing you need to implement in this step yourself is the `validateAsset` function. For more details how to do this, check the <<task-implement-validateasset, explanation below>>.
 
 .Navigate into the `transactions/` directory
 [source,bash]
@@ -397,8 +397,23 @@ Additionally, it will create a list `alarms.light` and push the current timestam
 
 Implement your own logic for the `validateAsset()` function.
 It shall validate the timestamp that got sent by the `LightAlarmTransaction`.
-Do do this, it needs to be checked, if the timestamp is present in the transaction object, and if it has the correct data type.
 In case that an error is found, push a new `TransactionError` into the `errors` array and return it in the function.
+
+TIP: All data, that is sent with the transaction is available through the `this` variable. So, to access the timestamp of the transaction, use `this.timestamp`.
+
+The snippet below describes how to create an `TransactionError` object. Try to add a fitting `TransactionError` to the `errors` list of `validateAsset()`, in case the timestamp is not present, or if it has the wrong format. 
+
+.Example: How to create a `TransactionError` object
+[source, js]
+----
+new TransactionError(
+	'Invalid "asset.hello" defined on transaction',
+	this.id,
+	'.asset.hello',
+	this.asset.hello,
+	'A string value no longer than 64 characters',
+)
+----
 
 ==== Explanation: `applyAsset()`
 
