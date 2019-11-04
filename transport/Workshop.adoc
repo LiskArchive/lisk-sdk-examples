@@ -468,7 +468,6 @@ app
 TIP: After the registration of a new transaction type, the node needs to be restarted to apply the changes.
 
 The node application is now ready to accept and process the new transaction type `LightAlarmTransaction`.
-As next step, lets create a client application, that helps you explore the data on the blockchain.
 
 === 1.2 The IoT application
 
