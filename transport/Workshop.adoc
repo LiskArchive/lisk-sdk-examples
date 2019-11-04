@@ -490,6 +490,8 @@ app
 
 TIP: After the registration of a new transaction type, the node needs to be restarted to apply the changes.
 
+// @TODO Mention that this file might look slightly different when you use Docker script
+
 The node application is now ready to accept and process the new transaction type `LightAlarmTransaction`.
 As next step, lets create a client application, that helps you explore the data on the blockchain.
 
@@ -524,6 +526,199 @@ This transaction will register a packet on the blockchain that is ready to be pi
 * `recipientId`: This is maybe the most important field as it sets the recipient for the package.
 
 For the `RegistePacketTransaction` we will guide you through the `undoAsset()` function and let you implement a small snippet of code yourself.
+
+.contents of register-packet.js
+[source,js]
+----
+const {
+    BaseTransaction,
+    TransactionError,
+    utils
+} = require('@liskhq/lisk-transactions');
+
+/**
+ * Register new package for sender and update package account.
+ */
+class RegisterPacketTransaction extends BaseTransaction {
+
+    static get TYPE () {
+        return 20;
+    }
+
+    static get FEE () {
+        return '0';
+    };
+
+    async prepare(store) { <1>
+        await store.account.cache([
+            {
+                address: this.asset.packetId,
+            },
+            {
+                address: this.senderId,
+            }
+        ]);
+    }
+
+    validateAsset() { <2>
+        // Static checks for presence of `packetId`, `postage`, `security`, and `minTrust`.
+        const errors = [];
+        if (!this.asset.packetId || typeof this.asset.packetId !== 'string') {
+            errors.push(
+                new TransactionError(
+                    'Invalid "asset.packetId" defined on transaction',
+                    this.id,
+                    '.asset.packetId',
+                    this.asset.packetId
+                )
+            );
+        }
+        if (!this.asset.postage || typeof this.asset.postage !== 'string') {
+			errors.push(
+				new TransactionError(
+					'Invalid "asset.postage" defined on transaction',
+					this.id,
+					'.asset.postage',
+					this.asset.postage,
+					'A string value',
+				)
+			);
+        }
+        if (!this.asset.security || typeof this.asset.security !== 'string') {
+			errors.push(
+				new TransactionError(
+					'Invalid "asset.security" defined on transaction',
+					this.id,
+					'.asset.security',
+					this.asset.security,
+					'A string value',
+				)
+			);
+        }
+        if (typeof this.asset.minTrust !== 'number' || isNaN(parseFloat(this.asset.minTrust)) || !isFinite(this.asset.minTrust)) {
+			errors.push(
+				new TransactionError(
+					'Invalid "asset.minTrust" defined on transaction',
+					this.id,
+					'.asset.minTrust',
+					this.asset.minTrust,
+					'A number value',
+				)
+			);
+		}
+        return errors;
+    }
+
+    applyAsset(store) {
+        const errors = [];
+        const packet = store.account.get(this.asset.packetId); <3>
+
+        if (!packet.asset.status) { <4>
+            /* --- Modify sender account --- */
+            /**
+             * Update the sender account:
+             * - Deduct the postage from senders' account balance
+             */
+            const sender = store.account.get(this.senderId);
+            const senderBalancePostageDeducted = new utils.BigNum(sender.balance).sub(   <5>
+                new utils.BigNum(this.asset.postage)
+            );
+            const updatedSender = {
+                ...sender,
+                balance: senderBalancePostageDeducted.toString(),    <6>
+            };
+            store.account.set(sender.address, updatedSender);
+
+             /* --- Modify packet account --- */
+            /**
+             * Update the packet account:
+             * - Add the postage to the packet account balance
+             * - Add all important data about the packet inside the asset field:
+             *   - recipient: ID of the packet recipient
+             *   - sender: ID of the packet sender
+             *   - carrier: ID of the packet carrier
+             *   - security: Number of tokens the carrier needs to lock during the transport of the packet
+             *   - postage: Number of tokens the sender needs to pay for transportation of the packet
+             *   - minTrust: Minimal trust that is needed to be carrier for the packet
+             *   - status: Status of the transport (pending|ongoing|success|fail)
+             */
+            const packetBalanceWithPostage = new utils.BigNum(packet.balance).add(   <7>
+                new utils.BigNum(this.asset.postage)
+            );
+
+            const updatedPacketAccount = {
+                ...packet,
+                ...{
+                    balance: packetBalanceWithPostage.toString(),
+                    asset: {
+                        recipient: this.recipientId,
+                        sender: this.senderId,
+                        security: this.asset.security,
+                        postage: this.asset.postage,
+                        minTrust: this.asset.minTrust,
+                        status: 'pending',
+                        carrier: null
+                    }
+                }
+            };
+            store.account.set(packet.address, updatedPacketAccount);
+        } else {
+            errors.push(
+                new TransactionError(
+                    'packet has already been registered',
+                    packet.asset.status
+                )
+            );
+        }
+        return errors;
+    }
+
+    undoAsset(store) {
+        const errors = [];
+
+        /* --- Revert sender account --- */    <8>
+        const sender = store.account.get(this.senderId);
+        const senderBalanceWithPostage = new utils.BigNum(sender.balance).add(
+            new utils.BigNum(this.asset.postage)
+        );
+        const updatedSender = {
+            ...sender,
+            balance: senderBalanceWithPostage.toString()
+        };
+        store.account.set(sender.address, updatedSender);
+
+        /* --- Revert packet account --- */
+        const packet = store.account.get(this.asset.packetId);
+        const originalPacketAccount = { ...packet, balance: 0, asset: null };
+        store.account.set(packet.address, originalPacketAccount);
+
+        return errors;
+    }
+
+}
+
+module.exports = RegisterPacketTransaction;
+----
+
+<1> Prepare function stores both sender and packet account in the cache so we can modify the accounts during the `applyAsset` and `undoAsset` steps.
+<2> Static checks for presence and correct datatypes of transaction parameters in asset field like `minTrust`, `security`, `postage`, etc.
+<3> Retrieve packet account from key-value store.
+<4> Check if packet account already has a status assigned. If it has, this means the package is already registered so we throw an error.
+<5> Deduct the defined postage from the sender's account balance.
+<6> Save the updated sender account with the new balance into the key-value store.
+<7> Add the postage now to the packet's account balance.
+<8> UndoAsset function tells the blockchain how to rollback changes made in the applyAsset function. We restore the original balance for both the sender and package account. Also, we reset the `asset` field for the package account to `null` as it didn't hold any data at first.
+
+
+undoAsset(store)::
+The `undoAsset` function is responsible for telling the blockchain how to revert changes that have been applied via the `applyAsset` function. This is very useful in case of a fork where we have to change to a different chain. In order to accomplish this, we have to roll back blocks and apply new blocks of a new chain. This means, when rolling back blocks we have to update the account state of the affected accounts. That's the reason why you should never skip writing logic for the `undoAsset` function.
+
+**TASK**: Read the implementation of the `undoAsset` function. You will notice a small part of the logic is missing where we reset the packet account to its original state. Copy paste the code below that resets the balance of the packet account to zero and assigns a null value to the asset field as it didn't exist when initially calling the `applyAsset` function.
+
+[source,js]
+----
+const originalPacketAccount = { ...packet, balance: 0, asset: null };
+----
 
 ==== b. Start the Transport
 
