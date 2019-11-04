@@ -621,6 +621,7 @@ node app.js
 ----
 . Put the sensor of your raspberry in a dark place.
 . Now, start the tracking script on your raspberry pi:
++
 [source, bash]
 ----
 node index.js
