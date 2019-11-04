@@ -8,7 +8,7 @@ Mona Bärenfänger <mona@lightcurve.io>
 Blockchain can benefit supply chain and transport industries by introducing a new level of data transparency and responsiveness that helps to improve processes and attracts potential clients.
 On another hand, applying blockchain to certain supply chains can benefit the end consumer, primary producer, and any other party inbetween, through better insights about how any product came to be.
 
-image::blockchain-supply-chain.jpg[Blockchain Supply Chain]
+image::assets/blockchain-supply-chain.jpg[Blockchain Supply Chain]
 
 == Idea
 
@@ -221,8 +221,8 @@ npm install
 +
 [source, bash]
 ----
-createdb lisk_dev --owner lisk
-psql -d lisk_dev -c "alter user lisk with password 'password';"
+sudo -u postgres -i createdb lisk_dev --owner lisk
+sudo -u postgres psql -d lisk_dev -c "alter user lisk with password 'password';"
 ----
 . To verify if the setup is correct, try to run the application with
 +
@@ -320,7 +320,7 @@ class LightAlarmTransaction extends BaseTransaction {                       <1>
     undoAsset(store) {
         const errors = [];
         const packet = store.account.get(this.senderId);
-	
+
         packet.asset.status = null;
         packet.asset.alarms.light.pop();
 
@@ -331,7 +331,7 @@ class LightAlarmTransaction extends BaseTransaction {                       <1>
 module.exports = LightAlarmTransaction;
 ----
 
-<1> The `LightAlarmTransactin`is extended from the `BaseTransaction` interface.
+<1> The `LightAlarmTransaction` is extended from the `BaseTransaction` interface.
 <2> Static property that defines the transaction type (has to be unique in the network).
 <3> The transaction fee. This needs to be paid by the sender when posting the transaction to the network.
 It is set to `0` for now, so the packet doesn't need any funds to send an alarm transaction.
@@ -470,8 +470,6 @@ As next step, lets create a client application, that helps you explore the data 
 
 === 1.2 The IoT application
 
-* Make script start automatically after boot
-
 In this step we are going to implement the script that will run on the Raspberry Pi to track if the packet has been manipulated.
 
 ==== Connect to the Raspberry Pi
@@ -497,7 +495,7 @@ On the Raspberry, reate a new folder, which will hold the script for the IoT app
 
 [source,bash]
 ----
-mkdir light_alarm							<1> 
+mkdir light_alarm							<1>
 npm init								<2>
 npm i @liskhq/lisk-transactions @liskhq/lisk-api-client @liskhq/lisk-constants rpi-pins <3>
 vim light-alarm.js							<4>
@@ -505,10 +503,10 @@ vim index.js								<5>
 ----
 
 <1> Create a folder to hold the tracking script.
-<2> Creates the `package.json`file.
+<2> Creates the `package.json` file.
 <3> Install dependencies.
 <4> Insert here the code of the `LightAlarmTransaction`, that we created in the step before and save the file.
-<5> Insert the below code snippet of the tracking script.
+<5> Insert the code snippet of the tracking script below.
 
 .Contents of `index.js`
 [source,js]
@@ -574,6 +572,12 @@ Now place the sensor in a dark place and then in a light place, and verify the c
 
 If no light is detected, it should log `Alles gut`, and if light is detected, it will log `Package has been opened! Send lisk transaction!`.
 
+It will also try to send the light alarm transaction in case it detects light.
+This will fail, as we didn't provide the passphrase of the packet in the script, which is needed to sign the `LightAlarmTransaction`.
+
+Let's use the client app in the next step 1.3 to initialize a new account for the packet.
+We can then store the passphrase on the raspberry pi and explore the send alarm transaction through the client app.
+
 === 1.3 The client application
 
 * Initalize the packet account
@@ -602,6 +606,8 @@ Add the following features to the web application from <<part-1-track-a-packet-o
 ==== Test run on local blockchain
 
 A full test run of the supply chain tracking workflow with the blockchain application
+
+* Make iot script start automatically after boot
 
 ==== Connecting multiple nodes
 
