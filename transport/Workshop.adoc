@@ -631,6 +631,10 @@ Nothing should be shown on the page, yet.
 . Now, shed some light on the sensor, and refresh the page again
 . You should see a list of light alarm transaction object, that just got sent by the raspberry pi.
 
+image:assets/1-3-light-alarm.png[List of Light Alarm transactions]
+
+The `senderId` is the ID of the packet, that sent the light alarm.
+
 If you see the alarm transactions incoming, you have successfully completed Part 1 of the workshop, congratz! \o/
 
 You are now able to detect a packet manipulation and to save a corresponding record on the blockchain.
