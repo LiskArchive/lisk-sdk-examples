@@ -721,8 +721,174 @@ const originalPacketAccount = { ...packet, balance: 0, asset: null };
 ----
 
 ==== b. Start the Transport
+For the next step in our prototype, we need to implement the `StartTransport` transaction.
+This transaction indicates the start of the transportation as the carrier picks up the package from the sender. 
 
-==== d. Finish the Transport
+When creating the `StartTransport` transaction, the carrier defines:
+
+* `packetID`: The ID of the packet that the carrier is going to transport. The `packetId` is not send in the asset field but is assigned to the `recipientId` property of the transaction.
+
+This transaction will:
+
+* Lock the specified `security` of the packet in the carriers' account. This security cannot be accessed by the carrier, unless the transport has been finished successfully.
+* Add the `carrier` to the packet account.
+* Set the `status` of the packet from `pending` to `ongoing`.
+
+For the `StartTransportTransaction` we will guide you through the `prepare()` and `undoAsset()` functions and let you implement the locking of the security in the carrier his account.
+
+.contents of start-transport.js
+[source,js]
+----
+const {
+    BaseTransaction,
+    TransactionError,
+    utils
+} = require('@liskhq/lisk-transactions');
+
+class StartTransportTransaction extends BaseTransaction {
+
+    static get TYPE () {
+        return 21;
+    }
+
+    static get FEE () {
+        //return `${10 ** 8}`;
+        return '0';
+    };
+
+    async prepare(store) {     <1>
+        await store.account.cache([
+            {
+                address: this.recipientId,
+            },
+            {
+                address: this.senderId,
+            }
+        ]);
+    }
+
+    validateAsset() {     <2>
+        const errors = [];
+
+        return errors;
+    }
+
+    applyAsset(store) {
+        const errors = [];
+        const packet = store.account.get(this.recipientId);
+        if (packet.asset.status === "pending"){
+            const carrier = store.account.get(this.senderId);
+            // If the carrier has the trust to transport the packet
+            const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
+            const carrierBalance = new utils.BigNum(carrier.balance);
+            const packetSecurity = new utils.BigNum(packet.asset.security);
+            if (packet.asset.minTrust <= carrierTrust && carrierBalance.gte(packetSecurity)) {           <3>
+                /**
+                 * Update the Carrier account:
+                 * - Lock security inside the account
+                 * - Remove the security form balance
+                 * - initialize carriertrust, if not present already
+                 */
+                const carrierBalanceWithoutSecurity = carrierBalance.sub(packetSecurity);
+                const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
+                const updatedCarrier = {
+                    ...carrier,
+                    ...{
+                        balance: carrierBalanceWithoutSecurity.toString(),
+                        asset: {
+                            trust: carrierTrust,
+                            lockedSecurity: packet.asset.security,
+                        }
+                    }
+                };
+                store.account.set(carrier.address, updatedCarrier);
+                /**
+                 * Update the Packet account:
+                 * - Set status to "ongoing"
+                 * - set carrier to ID of the carrier
+                 */
+                packet.asset.status = "ongoing";     <4>
+                packet.asset.carrier = carrier.address;
+                store.account.set(packet.address, packet);
+            } else {
+                errors.push(
+                    new TransactionError(
+                        'carrier has not enough trust to deliver the packet, or not enough balance to pay the security',
+                        packet.asset.minTrust,
+                        carrier.asset.trust,
+                        packet.asset.security,
+                        carrier.balance
+                    )
+                );
+            }
+        } else {
+            errors.push(
+                new TransactionError(
+                    'packet status needs to be "pending"',
+                    packet.asset.status
+                )
+            );
+        }
+
+        return errors;
+    }
+
+    undoAsset(store) {
+        const errors = [];
+        const packet = store.account.get(this.recipientId);
+        const carrier = store.account.get(this.senderId);
+        /* --- Revert carrier account --- */
+        const carrierBalanceWithSecurity = new utils.BigNum(carrier.balance).add(
+            new utils.BigNum(packet.assset.security)
+        );
+        const updatedCarrier = {
+            ...carrier,
+            balance: carrierBalanceWithSecurity.toString()   <5>
+        };
+        store.account.set(carrier.address, updatedCarrier);
+        /* --- Revert packet account --- */
+        const updatedData = {
+            asset: {
+                deliveryStatus: "pending",        <6>
+                carrier: null
+            }
+        };
+        const newObj = {
+            ...packet,
+            ...updatedData
+        };
+        store.account.set(packet.address, newObj);
+        return errors;
+    }
+
+}
+
+module.exports = StartTransportTransaction;
+----
+
+<1> We both cache the `senderId` which is the carrier account and the `recipientId` which is the packet account in the `prepare` function.
+<2> We don't need any static validation as there is no data being sent in the `asset` field.
+<3> Check if the carrier has the minimal trust required for accepting the package. Also, we check if the carrier his balance is larger than the required security as we need to lock this security from the carrier's account balance.
+<4> Next, we lock the defined security (number of LSK tokens) in the asset field under the property `lockedSecurity` and deducted this security from his `carrierBalance`.
+<5> For the `undoAsset` function, we need to revert the steps of `applyAsset` again. This means we need to remove the locked balance in the `asset` field and add this number again to the `balance` of the carrier's account.
+<6> For the packet account, we need to undo some items as well. First of all, we need to set the `deliveryStatus` again to `pending`.
+
+Lock Funds (applyAsset)::
+Locking funds is actually very straightforward. First, you deduct the number of tokens you want to lock from the account's balance. Next, you store the deducted number of tokens in a custom property in the asset field so we can later know how much tokens we had locked as a security. 
+
+Undoing the locked tokens can be done by removing the custom property in the `asset` field and adding the number of tokens again to the account's balance.
+
+**TASK**: There is some code missing for the `undoAsset` function where we reset the carrier's balance. Add the following snippet to the `const updatedCarrier` which sets the balance to the original balance.
+
+[source,js]
+----
+const updatedCarrier = {
+    ...carrier,
+    balance: carrierBalanceWithSecurity.toString()
+};
+----
+
+==== c. Finish the Transport
 
 === 2.2 Extend the client application
 Add the following features to the web application from <<part-1-track-a-packet-on-the-blockchain, Part 1: Track a packet on the blockchain>>
