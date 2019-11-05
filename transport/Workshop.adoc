@@ -862,6 +862,8 @@ That's the reason why you should never skip writing logic for the `undoAsset` fu
 ==== Task: Complete the implementation of the `undoAsset` function.
 You will notice a small part of the logic is missing where we reset the packet account to its original state.
 
+Try to implement the missing logic for `undoAsset` yourself by reverting the steps of the `applyAsset()` function.
+
 === 2.1 Start the Transport
 For the next step in our prototype, we need to implement the `StartTransport` transaction.
 This transaction indicates the start of the transportation as the carrier picks up the package from the sender.
@@ -880,7 +882,7 @@ This security cannot be accessed by the carrier, unless the transport has been f
 
 For the `StartTransportTransaction` we will guide you through the `prepare()` and `undoAsset()` functions and let you implement the locking of the security in the carrier his account.
 
-.contents of start-transport.js
+.Contents of start-transport.js
 [source,js]
 ----
 const {
@@ -935,16 +937,7 @@ class StartTransportTransaction extends BaseTransaction {
                  */
                 const carrierBalanceWithoutSecurity = carrierBalance.sub(packetSecurity);       <4>
                 const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
-                const updatedCarrier = {
-                    ...carrier,
-                    ...{
-                        balance: carrierBalanceWithoutSecurity.toString(),
-                        asset: {
-                            trust: carrierTrust,
-                            lockedSecurity: packet.asset.security,
-                        }
-                    }
-                };
+                const updatedCarrier = /* Insert the updated carrier account here*/
                 store.account.set(carrier.address, updatedCarrier);
                 /**
                  * Update the Packet account:
@@ -1021,7 +1014,7 @@ This means we need to remove the locked balance in the `asset` field and add thi
 First of all, we need to set the `deliveryStatus` again to `pending`.
 The `carrier` value need sto be nullified as well.
 
-==== Explanation: Lock Funds
+==== Task: Lock Funds
 Locking funds is actually very straightforward.
 First, you deduct the number of tokens you want to lock from the account's balance.
 
@@ -1030,35 +1023,18 @@ First, you deduct the number of tokens you want to lock from the account's balan
 const carrierBalanceWithoutSecurity = carrierBalance.sub(packetSecurity);
 ----
 
-Next, you store the deducted number of tokens in a custom property in the `asset` field so we can later know how much tokens we had locked as a security.
+Next, you store the deducted number of tokens in a custom property in the `asset` field.
+This ensures, we can later know how much tokens we had locked as a security.
 
-[source,js]
-----
-const updatedCarrier = {
-    ...carrier,
-    ...{
-        balance: carrierBalanceWithoutSecurity.toString(),
-        asset: {
-            trust: carrierTrust,
-            lockedSecurity: packet.asset.security,
-        }
-    }
-};
-----
+Try to implement this logic yourself:
+Create an updated object for the carrier account, that substracts the `security` from the carriers balance, and adds a new property `lockedSecurity` to the `asset` field of the carriers account.
+The `lockedSecurity` should equal exactly the amount, that you deducted from the carriers `balance`.
 
-NOTE: Undoing the locked tokens can be done by removing the custom property in the `asset` field and adding the number of tokens again to the account's `balance`.
+NOTE: Undoing the locked tokens can be done analog by removing the custom property in the `asset` field and adding the number of tokens again to the account's `balance`.
 
-==== Task: Complete the `undoAsset()` function
-There is some code missing for the `undoAsset` function where we reset the carrier's balance.
-Add the following snippet to the `const updatedCarrier` which sets the balance to the original balance.
+==== Explanation: `prepare()`
 
-[source,js]
-----
-const updatedCarrier = {
-    ...carrier,
-    balance: carrierBalanceWithSecurity.toString()
-};
-----
+// TODO: Reference to the explanation of the filters, short explanation of what `prepare()` is doing here
 
 === 2.2 Finish the Transport
 
