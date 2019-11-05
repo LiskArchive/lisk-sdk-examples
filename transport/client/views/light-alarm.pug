@@ -5,16 +5,12 @@ block content
 
   table(border='1')
     tr
-      th ID
+      th Packet ID
       th Timestamp
-      th SenderId
-      th RecipientId
-      th Asset
+      th Tx ID
 
     each transaction in transactions
       tr
-        td= transaction.id
-        td= transaction.timestamp
         td= transaction.senderId
-        td= transaction.recipientId
-        td= JSON.stringify(transaction.asset, null, 2) || '{}'
+        td= transaction.timestamp
+        td= transaction.id

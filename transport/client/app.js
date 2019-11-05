@@ -120,24 +120,6 @@ app.get('/post-finish-transport', async(req, res) => {
 });
 
 /**
- * Request RegisterPackage transactions
- */
-app.get('/register-packet', async(req, res) => {
-    const { data: transactions } = await api.transactions.get({ type: RegisterPacketTransaction.TYPE });
-
-    res.render('register-packet', { transactions });
-});
-
-/**
- * Request specific RegisterPackage transactions
- */
-app.get('/register-packet/:senderId', async(req, res) => {
-    const { data: transactions } = await api.transactions.get({ type: RegisterPacketTransaction.TYPE, senderId: req.params.senderId });
-
-    res.render('register-packet', { transactions });
-});
-
-/**
  * Request LightAlarmTransaction transactions
  */
 app.get('/light-alarm', async(req, res) => {
