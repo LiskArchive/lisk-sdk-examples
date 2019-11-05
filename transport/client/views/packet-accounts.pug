@@ -3,6 +3,8 @@ extends index.pug
 block content
     h2 Packet & Carrier Accounts
 
+    h3 Packet Color Legend
+
     p(class='pending') grey = "pending"
     p(class='ongoing') yellow = "ongoing"
     p(class='alarm') purple = "alarm"
@@ -13,6 +15,8 @@ block content
         tr
             th Address
             th Balance
+            th Sender
+            th Recipient
             th Asset
 
         each account in accounts
@@ -20,4 +24,7 @@ block content
             tr(class=account.asset.status)
                 td= account.address
                 td= account.balance
-                td= JSON.stringify(account.asset, null, 2)
+                td= account.asset.sender
+                td= account.asset.recipient
+                td
+                    pre= JSON.stringify(account.asset, null, 2)

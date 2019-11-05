@@ -79,6 +79,8 @@ class LightAlarmTransaction extends BaseTransaction {
 
     undoAsset(store) {
         const errors = [];
+        const packet = store.account.get(this.senderId);
+
         /* --- Revert packet status --- */
         packet.asset.status = 'ongoing';
         packet.asset.alarms.light.pop();
