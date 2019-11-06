@@ -16,41 +16,31 @@ services:
   sdk-chown:
     image: lisk-sdk
     volumes:
-      - ./dev_environment:/home/$USER/dev_environment
+      - ./dev_environment:/home/liskjs/dev_environment
     depends_on:
       - db
     user: root
-    command: chown --verbose --recursive $USER:$USER /home/$USER/dev_environment
+    command: chown --verbose --recursive liskjs:liskjs /home/liskjs/dev_environment
 
   sdk-examples:
     image: lisk-sdk
     volumes:
-      - ./dev_environment:/home/$USER/dev_environment
+      - ./dev_environment:/home/liskjs/dev_environment
     depends_on:
       - sdk-chown
     user: root
     command: >
-      sh -c "git clone https://github.com/LiskHQ/lisk-sdk-examples.git /home/$USER/dev_environment/lisk-sdk-examples &&
-             cd /home/$USER/dev_environment/lisk-sdk-examples &&
+      sh -c "git clone https://github.com/LiskHQ/lisk-sdk-examples.git /home/liskjs/dev_environment/lisk-sdk-examples &&
+             cd /home/liskjs/dev_environment/lisk-sdk-examples &&
              git checkout lisk-transport &&
-             rm -rf /home/$USER/dev_environment/lisk-sdk-examples/transport/node/index.js &&
-             cd /home/$USER &&
-             mv index.js /home/$USER/dev_environment/lisk-sdk-examples/transport/node/ &&
-             cd /home/$USER/dev_environment/lisk-sdk-examples/transport/node &&
-             npm install &&
-             cd /home/$USER/dev_environment/lisk-sdk-examples/transport/transactions &&
-             npm install &&
-             cd /home/$USER/dev_environment/lisk-sdk-examples/transport/client &&
-             npm install &&
-             cd /home/$USER/dev_environment/lisk-sdk-examples/transport/iot/package_alarm &&
-             npm install &&
-             cd /home/$USER/dev_environment/lisk-sdk-examples/transport/iot/temperature_and_humidity &&
-             npm install"
+             rm -rf /home/liskjs/dev_environment/lisk-sdk-examples/transport/node/index.js &&
+             cd /home/liskjs &&
+             mv index.js /home/liskjs/dev_environment/lisk-sdk-examples/transport/node/"
 
   sdk:
     image: lisk-sdk
     volumes:
-      - ./dev_environment:/home/$USER/dev_environment
+      - ./dev_environment:/home/liskjs/dev_environment
     networks:
       - lisk
     depends_on:
@@ -58,7 +48,7 @@ services:
     stdin_open: true
     tty: true
     entrypoint: /bin/bash
-    user: $USER
+    user: liskjs
     ports:
       - 4000:4000
 
