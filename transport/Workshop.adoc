@@ -1170,7 +1170,13 @@ applyAsset(store) {
 
 ==== Explanation: Caching data based on data from the db
 
-Sometimes it might be needed to cache accounts or other data from the database, that a
+Sometimes it might be needed to cache accounts or other data from the database, depending on other data that is stored in the database.
+
+To achieve this:
+
+. cache the data with `store.account.cache`
+. save the data as a constant with `store.account.get`
+. You can now use the newly created constand to cache the rest of the data, like shown in the code snippet below.
 
 .`prepare()` function of `finish-transport.js`
 [source,js]
