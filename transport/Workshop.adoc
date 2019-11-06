@@ -107,11 +107,23 @@ This transaction will:
 === Hardware
 
 ==== Hardware to bring yourself
-* Laptop with one of the following OS installed:
-** Ubuntu 16.04 (LTS) x86_64
-** Ubuntu 18.04 (LTS) x86_64
-** MacOS 10.13 (High Sierra)
-** MacOS 10.14 (Mojave)
+
+[%header,cols=2*]
+|===
+|Recommended
+|Alternative
+
+| Laptop with one of the following OS installed:
+
+* Ubuntu 16.04 (LTS) x86_64
+* Ubuntu 18.04 (LTS) x86_64
+* MacOS 10.13 (High Sierra)
+* MacOS 10.14 (Mojave)
+
+| Platforms that support:
+
+* Docker
+|===
 
 ==== Hardware provided
 * Raspberry Pi Zero W (running a headless Raspbian Buster lite)
