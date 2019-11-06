@@ -28,7 +28,7 @@ services:
       - ./dev_environment:/home/liskjs/dev_environment
     depends_on:
       - sdk-chown
-    user: root
+    user: liskjs
     command: >
       sh -c "git clone https://github.com/LiskHQ/lisk-sdk-examples.git /home/liskjs/dev_environment/lisk-sdk-examples &&
              cd /home/liskjs/dev_environment/lisk-sdk-examples &&
