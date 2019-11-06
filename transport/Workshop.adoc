@@ -224,7 +224,7 @@ The basic file structure looks as following:
 +
 [source,bash]
 ----
-cd transport/transactions
+cd transactions
 npm install
 cd ../node
 npm install
@@ -235,6 +235,7 @@ npm install
 +
 [source, bash]
 ----
+sudo -u postgres -i createuser --createdb lisk
 sudo -u postgres -i createdb lisk_dev --owner lisk
 sudo -u postgres psql -d lisk_dev -c "alter user lisk with password 'password';"
 ----
@@ -396,7 +397,7 @@ Additionally, it will create a list `alarms.light` and push the current timestam
 
 ==== Task: Implement `validateAsset()`
 
-Implement your own logic for the `validateAsset()` function xref:transactions/light-alarm.js#L45[here].
+Implement your own logic for the `validateAsset()` function xref:transactions/light-alarm.js#L31[here].
 It shall validate the timestamp that got sent by the `LightAlarmTransaction`.
 In case that an error is found, push a new `TransactionError` into the `errors` array and return it in the function.
 
