@@ -1033,8 +1033,23 @@ The `lockedSecurity` should equal exactly the amount, that you deducted from the
 NOTE: Undoing the locked tokens can be done analog by removing the custom property in the `asset` field and adding the number of tokens again to the account's `balance`.
 
 ==== Explanation: `prepare()`
+The prepare function here is caching both the carrier account through the `senderId` and the packet account through the `recipientId`.
 
-// TODO: Reference to the explanation of the filters, short explanation of what `prepare()` is doing here
+_Why can we cache two accounts at the same time?_ 
+Notice that the cache function accepts an array which allows to pass in multiple query objects. When we pass in an array to the cache function, it will try to find a result for each query object.
+
+It is also possible to pass in just one query object without surrounding array. In this case, only objects that exactly match this query object will be cached.
+
+[source,js]
+----
+async prepare(store) {
+    await store.account.cache({
+        address: this.recipientId,
+    });
+}
+----
+
+You can find a more detailed explanation in the custom transactions deep dive article which you can find on [our blog](https://lisk.io/blog/tutorial/custom-transactions-statestore-basetransaction-transfer-transaction#6658). Look out for the section `B/ Combining Filters`.
 
 === 2.2 Finish the Transport
 
