@@ -20,7 +20,7 @@ cd create-dev-env`
 
 To get started, create your docker image:
 ```bash
-docker build -t lisk-sdk --build-arg user_name=$USER --build-arg user_id=$UID .
+docker build -t lisk-sdk --build-arg user_name=liskjs --build-arg user_id=$UID .
 ```
 
 Now bring everything up using the Docker Compose file:
