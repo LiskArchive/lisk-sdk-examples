@@ -871,7 +871,7 @@ That's the reason why you should never skip writing logic for the `undoAsset` fu
 ==== Task: Complete the implementation of the `undoAsset` function.
 You will notice a small part of the logic is missing where we reset the packet account to its original state.
 
-Try to implement the xref:transactions/register-packet.js[missing logic] for `undoAsset()` yourself by reverting the steps of the `applyAsset()` function.
+Try to implement the xref:transactions/register-packet.js#L160[missing logic] for `undoAsset()` yourself by reverting the steps of the `applyAsset()` function.
 
 === 2.1 Start the Transport
 For the next step in our prototype, we need to implement the `StartTransport` transaction.
@@ -911,7 +911,7 @@ class StartTransportTransaction extends BaseTransaction {
         return '0';
     };
 
-    async prepare(store) {                                                      <1>
+    async prepare(store) {                                                                      <1>
         await store.account.cache([
             {
                 address: this.recipientId,
@@ -922,7 +922,7 @@ class StartTransportTransaction extends BaseTransaction {
         ]);
     }
 
-    validateAsset() {                                                           <2>
+    validateAsset() {                                                                           <2>
         const errors = [];
 
         return errors;
@@ -989,13 +989,13 @@ class StartTransportTransaction extends BaseTransaction {
         );
         const updatedCarrier = {
             ...carrier,
-            balance: carrierBalanceWithSecurity.toString()                           <5>
+            balance: carrierBalanceWithSecurity.toString()                                      <5>
         };
         store.account.set(carrier.address, updatedCarrier);
         /* --- Revert packet account --- */
         const updatedData = {
             asset: {
-                deliveryStatus: "pending",                                           <6>
+                deliveryStatus: "pending",                                                      <6>
                 carrier: null
             }
         };
@@ -1044,7 +1044,7 @@ NOTE: Undoing the locked tokens can be done analog by removing the custom proper
 ==== Explanation: `prepare()`
 The prepare function here is caching both the carrier account through the `senderId` and the packet account through the `recipientId`.
 
-_Why can we cache two accounts at the same time?_ 
+_Why can we cache two accounts at the same time?_
 Notice that the cache function accepts an array which allows to pass in multiple query objects. When we pass in an array to the cache function, it will try to find a result for each query object.
 
 It is also possible to pass in just one query object without surrounding array. In this case, only objects that exactly match this query object will be cached.
@@ -1085,7 +1085,7 @@ This transaction will:
 ** Decrease `trust` of carrier by -1
 ** Set packet `status` to `fail`
 
-Click here to see the xref:trasnactions/finish-transport.js[full code for FinishTransportTransaction]
+Click here to see the xref:transactions/finish-transport.js[full code for FinishTransportTransaction]
 
 .Snippet of `applyAsset()` of `finish-transport.js`
 [source, js]
@@ -1170,7 +1170,13 @@ applyAsset(store) {
 
 ==== Explanation: Caching data based on data from the db
 
-Sometimes it might be needed to cache accounts or other data from the database, that a
+Sometimes it might be needed to cache accounts or other data from the database, depending on other data that is stored in the database.
+
+To achieve this:
+
+. cache the data with `store.account.cache`
+. save the data as a constant with `store.account.get`
+. You can now use the newly created constand to cache the rest of the data, like shown in the code snippet below.
 
 .`prepare()` function of `finish-transport.js`
 [source,js]
@@ -1200,24 +1206,92 @@ async prepare(store) {
 ----
 
 ==== Task: Implement the logic in `applyAsset()` for a successful transport
-xref:transactions/finish-transport.js[Write your own logic here], for the case of a successful transport of the packet.
+xref:transactions/finish-transport.js#L83[Write your own logic or the case of a successful transport of the packet here.]
 
 When the recipient receives the packet from the carrier, the recipient would sign and send the `FinishTransportTransaction`.
 If the recipient consideres the transport successfull, the carrier should be rewarded accordngly, and the packet status should be updated to `success`
 
+=== 2.3 Test out the full workflow with the client app
 
+==== Check for status in the `lightAlarmTransaction`
 
-=== 2.3 Test out the full process with the client app
+Now that we implemented the whole workflow with different statuses for the packet, we actually only want to send an alarm, if the status of the packet is `ongoing` or `alarm`.
+
+Insert the snippet below in the `applyAsset()` function of xref:transactions/light-alarm.js#L39[light-alarm.js], before the code that applies the changes to the database accounts.
+
+If the status isn't `ongoing` or `alarm` it will create a new `TransactionError`, push it to the `errors` list, and return it.
+
+[source,js]
+----
+// Check status="ongoing" to accept the LightAlarmTransaction
+const packet = store.account.get(this.senderId);
+if (packet.asset.status !== 'ongoing' && packet.asset.status !== 'alarm') {
+    errors.push(
+        new TransactionError(
+            'Transaction invalid because delivery is not "ongoing".',
+            this.id,
+            'packet.asset.status',
+            packet.asset.status,
+            `Expected status to be equal to "ongoing" or "alarm"`,
+        )
+    );
+
+    return errors;
+}
+----
+
+==== Register all transaction types with the node app
+
+If you haven't done yet, uncomment now all the custom transactions, to register them with the node application.
+
+Restart the node, to apply the changes.
+
+[source, js]
+----
+const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
+const RegisterPacketTransaction = require('../transactions/register-packet');
+const StartTransportTransaction = require('../transactions/start-transport');
+const FinishTransportTransaction = require('../transactions/finish-transport');
+const LightAlarmTransaction = require('../transactions/light-alarm');
+
+configDevnet.app.label = 'lisk-transport';
+configDevnet.modules.http_api.access.public = true;
+
+const app = new Application(genesisBlockDevnet, configDevnet);
+app.registerTransaction(RegisterPacketTransaction);
+app.registerTransaction(StartTransportTransaction);
+app.registerTransaction(FinishTransportTransaction);
+app.registerTransaction(LightAlarmTransaction);
+
+app
+    .run()
+    .then(() => app.logger.info('App started...'))
+    .catch(error => {
+        console.error('Faced error in application', error);
+        process.exit(1);
+    });
+
+----
+
+==== Try it out in the client app
 
 Add some screenshots & explain how to explore data & how to post tx.
 
 === 2.4 Next steps (optional)
 
-* Make iot script start automatically after boot
+==== Make iot script start automatically after boot
+
+==== Add more sensors
+
+Connect the Temp/Humidity sensor to your Raspberry Pi and implement a `TemperatureAlarm` or `HumidityAlarm` analog to the `LightAlarm` transaction type.
 
 ==== Connecting multiple nodes
 
-This sections explains how to connect several nodes to your blockchain, and how to exchange the dummydelegates with real ones.
+This sections explains how to connect several nodes to your blockchain
+
+==== Replace dummy delgates with real ones
+
+How to exchange the dummydelegates with real delegates.
 
 ==== Writing unit tests for custom transactions
 
