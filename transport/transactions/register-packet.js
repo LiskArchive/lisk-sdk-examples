@@ -110,9 +110,26 @@ class RegisterPacketTransaction extends BaseTransaction {
              *   - minTrust: Minimal trust that is needed to be carrier for the packet
              *   - status: Status of the transport (pending|ongoing|success|fail)
              */
+            const packetBalanceWithPostage = new utils.BigNum(packet.balance).add(
+                new utils.BigNum(this.asset.postage)
+            );
 
-            /* Write the logic for the packet account here */
-
+            const updatedPacketAccount = {
+                ...packet,
+                ...{
+                    balance: packetBalanceWithPostage.toString(),
+                    asset: {
+                        recipient: this.recipientId,
+                        sender: this.senderId,
+                        security: this.asset.security,
+                        postage: this.asset.postage,
+                        minTrust: this.asset.minTrust,
+                        status: 'pending',
+                        carrier: null
+                    }
+                }
+            };
+            store.account.set(packet.address, updatedPacketAccount);
         } else {
             errors.push(
                 new TransactionError(
@@ -127,11 +144,6 @@ class RegisterPacketTransaction extends BaseTransaction {
     undoAsset(store) {
         const errors = [];
 
-        /* --- Revert packet account --- */
-        const packet = store.account.get(this.asset.packetId);
-        const originalPacketAccount = { ...packet, balance: 0, asset: null };
-        store.account.set(packet.address, originalPacketAccount);
-
         /* --- Revert sender account --- */
         const sender = store.account.get(this.senderId);
         const senderBalanceWithPostage = new utils.BigNum(sender.balance).add(
@@ -142,6 +154,12 @@ class RegisterPacketTransaction extends BaseTransaction {
             balance: senderBalanceWithPostage.toString()
         };
         store.account.set(sender.address, updatedSender);
+
+        /* --- Revert packet account --- */
+        const packet = store.account.get(this.asset.packetId);
+        const originalPacketAccount = /* Task: UndoAsset logic comes here */
+        store.account.set(packet.address, originalPacketAccount);
+
         return errors;
     }
 

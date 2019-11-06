@@ -100,10 +100,7 @@ class StartTransportTransaction extends BaseTransaction {
         const carrierBalanceWithSecurity = new utils.BigNum(carrier.balance).add(
             new utils.BigNum(packet.assset.security)
         );
-        const updatedCarrier = {
-            ...carrier,
-            balance: carrierBalanceWithSecurity.toString()
-        };
+        const updatedCarrier = /* Implement code here */
         store.account.set(carrier.address, updatedCarrier);
         /* --- Revert packet account --- */
         const updatedData = {
