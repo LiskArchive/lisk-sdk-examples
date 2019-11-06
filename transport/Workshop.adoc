@@ -290,17 +290,17 @@ const {
 } = require('@liskhq/lisk-transactions');
 
 /**
- * Send a light alarm when the packet has been opened.
- * Signed by packet.
+ * Send light alarm transaction when the packet has been opened (accepts timestamp).
+ * Self-signed by packet.
  */
 class LightAlarmTransaction extends BaseTransaction {                       <1>
 
-    static get TYPE () {
-        return 23;                                                          <2>
+    static get TYPE () {                                                    <2>
+        return 23;
     }
 
-    static get FEE () {
-        return '0';                                                         <3>
+    static get FEE () {                                                     <3>
+        return '0';
     };
 
     async prepare(store) {
@@ -313,29 +313,38 @@ class LightAlarmTransaction extends BaseTransaction {                       <1>
 
     validateAsset() {                                                       <5>
         const errors = [];
-        /* Write your own logic for validateAsset() here */
+        /*
+        Implement your own logic here.
+        Static checks for presence of `timestamp` which holds the timestamp of when the alarm was triggered
+        */
+
         return errors;
     }
 
-    applyAsset(store) { /* Insert the logic for applyAsset() here */ }
+    applyAsset(store) {
+        /* Insert the logic for applyAsset() here */
+    }
 
     undoAsset(store) {
         const errors = [];
         const packet = store.account.get(this.senderId);
 
+        /* --- Revert packet status --- */
         packet.asset.status = null;
         packet.asset.alarms.light.pop();
 
         store.account.set(packet.address, packet);
         return errors;
     }
+
 }
+
 module.exports = LightAlarmTransaction;
 ----
 
 <1> The `LightAlarmTransaction` is extended from the `BaseTransaction` interface.
-<2> Static property that defines the transaction type (has to be unique in the network).
-<3> The transaction fee. This needs to be paid by the sender when posting the transaction to the network.
+<2> Static property that defines the transaction `type` (has to be unique in the network).
+<3> The transaction `fee`. This needs to be paid by the sender when posting the transaction to the network.
 It is set to `0` for now, so the packet doesn't need any funds to send an alarm transaction.
 <4> Data from the packet account is cached from the databse.
 <5> Static checks for presence and correct datatype of `timestamp`, which holds the timestamp of when the alarm was triggered.
@@ -373,7 +382,7 @@ Additionally, it will create a list `alarms.light` and push the current timestam
 
 ==== Task: Implement `validateAsset()`
 
-Implement your own logic for the `validateAsset()` function.
+Implement your own logic for the `validateAsset()` function xref:transactions/light-alarm.js#L45[here].
 It shall validate the timestamp that got sent by the `LightAlarmTransaction`.
 In case that an error is found, push a new `TransactionError` into the `errors` array and return it in the function.
 
@@ -646,10 +655,10 @@ The goal of Part 2 is to implement a complete workflow of a very simple version 
 
 You will learn here how to:
 
+* implement the missing transactions types `RegisterPacket`, `StartTransport` and `FinishTransport`
 * cache multiple accounts in the `prepare` step
 * implement a simple trust system
 * lock funds in an account
-* implement `applyAsset()` and `undoAsset()`
 * do a first complete test-run of the supply chain tracking system
 
 NOTE: To get a good overview about the general workflow we are going to implement, take a look at the <<general-procedure, diagram>> above.
@@ -862,7 +871,7 @@ That's the reason why you should never skip writing logic for the `undoAsset` fu
 ==== Task: Complete the implementation of the `undoAsset` function.
 You will notice a small part of the logic is missing where we reset the packet account to its original state.
 
-Try to implement the missing logic for `undoAsset` yourself by reverting the steps of the `applyAsset()` function.
+Try to implement the xref:transactions/register-packet.js[missing logic] for `undoAsset()` yourself by reverting the steps of the `applyAsset()` function.
 
 === 2.1 Start the Transport
 For the next step in our prototype, we need to implement the `StartTransport` transaction.
@@ -1026,7 +1035,7 @@ const carrierBalanceWithoutSecurity = carrierBalance.sub(packetSecurity);
 Next, you store the deducted number of tokens in a custom property in the `asset` field.
 This ensures, we can later know how much tokens we had locked as a security.
 
-Try to implement this logic yourself:
+xref:transactions/start-transport.js#L103[Insert your own logic here]:
 Create an updated object for the carrier account, that substracts the `security` from the carriers balance, and adds a new property `lockedSecurity` to the `asset` field of the carriers account.
 The `lockedSecurity` should equal exactly the amount, that you deducted from the carriers `balance`.
 
@@ -1038,7 +1047,150 @@ NOTE: Undoing the locked tokens can be done analog by removing the custom proper
 
 === 2.2 Finish the Transport
 
-Implement the FinishTransport-Tx
+The last custom transaction type we need to implement is the `FinishTransportTransaction`, which will complete the transport of the packet.
+
+When reaching the recipient of the packet, the carrier passes the packet to the recipient.
+The recipient needs to sign the `FinishTransportTransaction`, that verifies that the packet has been passed on to the recipient.
+
+When sending the transaction, the recipient needs to specify:
+
+* `packetID`: The ID of the packet that the recipient received
+* `status`: The status of the transport, which has 2 options: `"success"` or `"fail"`
+
+This transaction will:
+
+* If `status="success"`
+** Send `postage` to carrier account
+** Unlock `security` in carrier account
+** Increase `trust` of carrier +1
+** Set packet `status` to `success`
+* If `status="fail"`
+** Send `postage` to sender account
+** Add `security` to the sender account, and nullify `lockedSecurity` from the account fo the carrier.
+** Decrease `trust` of carrier by -1
+** Set packet `status` to `fail`
+
+Click here to see the xref:trasnactions/finish-transport.js[full code for FinishTransportTransaction]
+
+.Snippet of `applyAsset()` of `finish-transport.js`
+[source, js]
+----
+applyAsset(store) {
+    const errors = [];
+    let packet = store.account.get(this.recipientId);
+    let carrier = store.account.get(packet.asset.carrier);
+    let sender = store.account.get(packet.asset.sender);
+    // if the transaction has been signed by the packet recipient
+    if (this.asset.senderId === packet.carrier) {
+        // if the packet status isnt "ongoing" or "alarm"
+        if (packet.asset.status !==  "ongoing" && packet.asset.status !== "alarm") {
+            errors.push(
+                new TransactionError(
+                    'FinishTransport can only be triggered, if packet status is "ongoing" or "alarm" ',
+                    this.id,
+                    'ongoing or alarm',
+                    this.asset.status
+                )
+            );
+            return errors;
+        }
+        // if the transport was a success
+        if (this.asset.status === "success") {
+            /**
+             * Update the Carrier account:
+             * - Unlock security
+             * - Add postage & security to balance
+             * - Earn 1 trustpoint
+             */
+            /* Write your own code here*/
+            /**
+             * Update the Packet account:
+             * - Remove postage from balance
+             * - Change status to "success"
+             */
+            /* Write your own code here */
+        }
+        // if the transport failed
+        /**
+         * Update the Sender account:
+         * - Add postage and security to balance
+         */
+        const senderBalanceWithSecurityAndPostage = new utils.BigNum(sender.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.postage));
+
+        sender.balance = senderBalanceWithSecurityAndPostage.toString();
+
+        store.account.set(sender.address, sender);
+        /**
+         * Update the Carrier account:
+         * - Reduce trust by 1
+         * - Set lockedSecurity to 0
+         */
+        carrier.asset.trust = carrier.asset.trust ? --carrier.asset.trust : -1;
+        carrier.asset.lockedSecurity = null;
+
+        store.account.set(carrier.address, carrier);
+        /**
+         * Update the Packet account:
+         * - set status to "fail"
+         * - Remove postage from balance
+         */
+        packet.balance = '0';
+        packet.asset.status = 'fail';
+
+        store.account.set(packet.address, packet);
+
+        return errors;
+    }
+    errors.push(
+        new TransactionError(
+            'FinishTransport transaction needs to be signed by the recipient of the packet',
+            this.id,
+            '.asset.recipient',
+            this.asset.recipient
+        )
+    );
+    return errors;
+}
+----
+
+==== Explanation: Caching data based on data from the db
+
+Sometimes it might be needed to cache accounts or other data from the database, that a
+
+.`prepare()` function of `finish-transport.js`
+[source,js]
+----
+async prepare(store) {
+    /**
+     * Get packet account
+     */
+    await store.account.cache([
+        {
+            address: this.recipientId,
+        }
+    ]);
+    /**
+     * Get sender and recipient accounts of the packet
+     */
+    const pckt = store.account.get(this.recipientId);
+    await store.account.cache([
+        {
+            address: pckt.asset.carrier,
+        },
+        {
+            address: pckt.asset.sender,
+        },
+    ]);
+}
+----
+
+==== Task: Implement the logic in `applyAsset()` for a successful transport
+xref:transactions/finish-transport.js[Write your own logic here], for the case of a successful transport of the packet.
+
+When the recipient receives the packet from the carrier, the recipient would sign and send the `FinishTransportTransaction`.
+If the recipient consideres the transport successfull, the carrier should be rewarded accordngly, and the packet status should be updated to `success`
+
+
 
 === 2.3 Test out the full process with the client app
 

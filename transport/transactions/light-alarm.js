@@ -20,29 +20,24 @@ class LightAlarmTransaction extends BaseTransaction {
     async prepare(store) {
         await store.account.cache([
             {
-                address: this.senderId, // Sent by packet (self-signed)
+                address: this.senderId,
             }
         ]);
     }
 
     validateAsset() {
         const errors = [];
-        /* Static checks for presence of `timestamp` which holds the timestamp of when the alarm was triggered */
-        if (!this.timestamp || typeof this.timestamp !== 'number') {
-            errors.push(
-                new TransactionError(
-                    'Invalid ".timestamp" defined on transaction',
-                    this.id,
-                    '.timestamp',
-                    this.timestamp,
-                    'A timestamp in unix format'
-                )
-            );
-        }
+        /*
+        Implement your own logic here.
+        Static checks for presence of `timestamp` which holds the timestamp of when the alarm was triggered
+        */
+
         return errors;
     }
 
-    applyAsset(store) { /* Write the logic for applyAsset() here */ }
+    applyAsset(store) {
+        /* Insert the logic for applyAsset() here */
+    }
 
     undoAsset(store) {
         const errors = [];
