@@ -236,6 +236,8 @@ This command will run the `index.js` file and pipe the outputted logs to our pre
 
 If everything is running fine, you can stop the node by hitting kbd:[CTRL+C].
 
+WARNING: In case the node crashes or doesn't work, follow the xref:create-dev-env/README.md[this guide] to set up a dedicated development environment using a simple Docker script. No need for customized installation.
+
 ==== Prepare the IoT device
 
 [NOTE]
@@ -463,11 +465,9 @@ app
 ----
 
 <1> Require the custom transaction type.
-<2> Register the custom transaction type with the application.
+<2> Register the custom transaction type with the application. This file might look slightly different if you have used the script from `/create-dev-env` folder. This script will add an extra line to change the host for the database. Don't worry if you haven't used this script.
 
-TIP: After the registration of a new transaction type, the node needs to be restarted to apply the changes.
-
-// @TODO Mention that this file might look slightly different when you use Docker script
+NOTE: After the registration of a new transaction type, the node needs to be restarted to apply the changes.
 
 The node application is now ready to accept and process the new transaction type `LightAlarmTransaction`.
 
@@ -1049,7 +1049,7 @@ async prepare(store) {
 }
 ----
 
-You can find a more detailed explanation in the custom transactions deep dive article which you can find on [our blog](https://lisk.io/blog/tutorial/custom-transactions-statestore-basetransaction-transfer-transaction#6658). Look out for the section `B/ Combining Filters`.
+You can find a more detailed explanation in the custom transactions deep dive article which you can find on https://lisk.io/blog/tutorial/custom-transactions-statestore-basetransaction-transfer-transaction#6658[our blog]. The link opens the section `B/ Combining Filters`.
 
 === 2.2 Finish the Transport
 
