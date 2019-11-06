@@ -60,7 +60,16 @@ At last, it is important to verify the installation.
 
 Verify if the installation works by entering the lisk-sdk container with `docker exec -it <container ID> /bin/bash` and navigate inside the `/transport/node` folder.
 
-Run `node index.js | npx bunyan -o short` - if no errors are displayed and the node starts running, the installation is working correctly.
+First, we need to install the dependencies. We both have to install the dependencies for `/transport/transactions` and `/transport/node`.
+
+```bash
+cd transport/transactions
+npm install
+cd ../node
+npm install
+```
+
+Next, now we are in the `/transport/node` folder, run `node index.js | npx bunyan -o short` - if no errors are displayed and the node starts running, the installation is working correctly.
 
 # Take Down Docker Containers
 You can simply take down the containers by executing the following command in the same folder `/transport/node`:

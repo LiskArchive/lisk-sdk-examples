@@ -236,7 +236,7 @@ This command will run the `index.js` file and pipe the outputted logs to our pre
 
 If everything is running fine, you can stop the node by hitting kbd:[CTRL+C].
 
-WARNING: In case the node crashes or doesn't work, follow the xref:create-dev-env/README.md[this guide] to set up a dedicated development environment using a simple Docker script. No need for customized installation.
+WARNING: In case the node crashes or doesn't work, follow the xref:create-dev-env/README.md[this guide] to set up a dedicated development environment using Docker and Docker-Compose. The script will set up the whole environment.
 
 ==== Prepare the IoT device
 
