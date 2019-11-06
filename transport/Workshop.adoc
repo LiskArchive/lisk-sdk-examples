@@ -1213,6 +1213,68 @@ If the recipient consideres the transport successfull, the carrier should be rew
 
 === 2.3 Test out the full workflow with the client app
 
+==== Check for status in the `lightAlarmTransaction`
+
+Now that we implemented the whole workflow with different statuses for the packet, we actually only want to send an alarm, if the status of the packet is `ongoing` or `alarm`.
+
+Insert the snippet below in the `applyAsset()` function of xref:transactions/light-alarm.js#L39[light-alarm.js], before the code that applies the changes to the database accounts.
+
+If the status isn't `ongoing` or `alarm` it will create a new `TransactionError`, push it to the `errors` list, and return it.
+
+[source,js]
+----
+// Check status="ongoing" to accept the LightAlarmTransaction
+const packet = store.account.get(this.senderId);
+if (packet.asset.status !== 'ongoing' && packet.asset.status !== 'alarm') {
+    errors.push(
+        new TransactionError(
+            'Transaction invalid because delivery is not "ongoing".',
+            this.id,
+            'packet.asset.status',
+            packet.asset.status,
+            `Expected status to be equal to "ongoing" or "alarm"`,
+        )
+    );
+
+    return errors;
+}
+----
+
+==== Register all transaction types with the node app
+
+If you haven't done yet, uncomment now all the custom transactions, to register them with the node application.
+
+Restart the node, to apply the changes.
+
+[source, js]
+----
+const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
+const RegisterPacketTransaction = require('../transactions/register-packet');
+const StartTransportTransaction = require('../transactions/start-transport');
+const FinishTransportTransaction = require('../transactions/finish-transport');
+const LightAlarmTransaction = require('../transactions/light-alarm');
+
+configDevnet.app.label = 'lisk-transport';
+configDevnet.modules.http_api.access.public = true;
+
+const app = new Application(genesisBlockDevnet, configDevnet);
+app.registerTransaction(RegisterPacketTransaction);
+app.registerTransaction(StartTransportTransaction);
+app.registerTransaction(FinishTransportTransaction);
+app.registerTransaction(LightAlarmTransaction);
+
+app
+    .run()
+    .then(() => app.logger.info('App started...'))
+    .catch(error => {
+        console.error('Faced error in application', error);
+        process.exit(1);
+    });
+
+----
+
+==== Try it out in the client app
+
 Add some screenshots & explain how to explore data & how to post tx.
 
 === 2.4 Next steps (optional)
