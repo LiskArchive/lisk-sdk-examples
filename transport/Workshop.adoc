@@ -419,7 +419,7 @@ new TransactionError(
 )
 ----
 
-TIP: In case you need some inspiration, how to implement the `validateAsset()` function, check out the other examples like `hello_world` inside of the `lisk-sdk-examples` repository, or check the https://lisk.io/documentation/lisk-sdk/tutorials/hello-world.html#_3_create_a_new_transaction_type[tutorials] in the Lisk Documentation.
+TIP: In case you need some inspiration how to implement the `validateAsset()` function, check out the other examples like `hello_world` inside of the `lisk-sdk-examples` repository, or check the https://lisk.io/documentation/lisk-sdk/tutorials/hello-world.html#_3_create_a_new_transaction_type[tutorials] in the Lisk Documentation.
 
 ==== Explanation: `applyAsset()`
 
@@ -540,16 +540,14 @@ const PIN = require("rpi-pins");
 const GPIO = new PIN.GPIO();
 GPIO.setPin(4, PIN.MODE.INPUT);                                             <1>
 const LightAlarmTransaction = require('./light-alarm');
-const { EPOCH_TIME } = require('@liskhq/lisk-constants');
 const { APIClient } = require('@liskhq/lisk-api-client');
 
 const api = new APIClient(['http://localhost:4000']);                       <2>
 
-const getTimestamp = () => {
-    const millisSinceEpoc = Date.now() - Date.parse(EPOCH_TIME);
-    const inSeconds = ((millisSinceEpoc) / 1000).toFixed(0);
-    return parseInt(inSeconds);
-};
+// Check config file or curl localhost:4000/api/node/constants to verify your epoc time (OK when using /transport/node/index.js)
+const dateToLiskEpochTimestamp = date => (
+    Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
+);
 
 const packetCredentials = { /* Insert the credentials of the packet here in step 1.3 */ }
 
@@ -558,7 +556,7 @@ setInterval(() => {                                                          <3>
 	if(state === 1) {
 		//console.log('Packet has been opened! Send lisk transaction!');
         let tx =  new LightAlarmTransaction({
-            timestamp: getTimestamp()
+            timestamp: dateToLiskEpochTimestamp(new Date())
         });
 
         tx.sign(packetCredentials.passphrase);                               <4>
