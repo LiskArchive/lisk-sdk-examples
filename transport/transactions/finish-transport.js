@@ -80,23 +80,13 @@ class FinishTransportTransaction extends BaseTransaction {
                  * - Add postage & security to balance
                  * - Earn 1 trustpoint
                  */
-                const carrierBalanceWithSecurityAndPostage = new utils.BigNum(carrier.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.postage));
-
-                carrier.balance = carrierBalanceWithSecurityAndPostage.toString();
-                carrier.asset.lockedSecurity = null;
-                carrier.asset.trust = carrier.asset.trust ? ++carrier.asset.trust : 1;
-
-                store.account.set(carrier.address, carrier);
+                /* Write your own code here*/
                 /**
                  * Update the Packet account:
                  * - Remove postage from balance
                  * - Change status to "success"
                  */
-                packet.balance = '0';
-                packet.asset.status = 'success';
-
-                store.account.set(packet.address, packet);
-                return errors;
+                /* Write your own code here */
             }
             // if the transport failed
             /**
