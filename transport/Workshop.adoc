@@ -1085,7 +1085,7 @@ This transaction will:
 ** Decrease `trust` of carrier by -1
 ** Set packet `status` to `fail`
 
-Click here to see the xref:trasnactions/finish-transport.js[full code for FinishTransportTransaction]
+Click here to see the xref:transactions/finish-transport.js[full code for FinishTransportTransaction]
 
 .Snippet of `applyAsset()` of `finish-transport.js`
 [source, js]
