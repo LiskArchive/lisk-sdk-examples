@@ -50,16 +50,7 @@ class StartTransportTransaction extends BaseTransaction {
                  */
                 const carrierBalanceWithoutSecurity = carrierBalance.sub(packetSecurity);
                 const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
-                const updatedCarrier = {
-                    ...carrier,
-                    ...{
-                        balance: carrierBalanceWithoutSecurity.toString(),
-                        asset: {
-                            trust: carrierTrust,
-                            lockedSecurity: packet.asset.security,
-                        }
-                    }
-                };
+                const updatedCarrier = { /* Write your code here */ };
                 store.account.set(carrier.address, updatedCarrier);
                 /**
                  * Update the Packet account:
@@ -100,7 +91,10 @@ class StartTransportTransaction extends BaseTransaction {
         const carrierBalanceWithSecurity = new utils.BigNum(carrier.balance).add(
             new utils.BigNum(packet.assset.security)
         );
-        const updatedCarrier = /* Implement code here */
+        const updatedCarrier = {
+            ...carrier,
+            balance: carrierBalanceWithSecurity.toString()
+        };
         store.account.set(carrier.address, updatedCarrier);
         /* --- Revert packet account --- */
         const updatedData = {

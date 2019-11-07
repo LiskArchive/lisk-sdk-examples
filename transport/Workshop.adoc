@@ -113,14 +113,12 @@ This transaction will:
 |Recommended
 |Alternative
 
-| Laptop with one of the following OS installed:
+a| Platforms that support:
 
-* Ubuntu 16.04 (LTS) x86_64
-* Ubuntu 18.04 (LTS) x86_64
-* MacOS 10.13 (High Sierra)
-* MacOS 10.14 (Mojave)
-
-| Platforms that support:
+* PostgreSQL
+* Node.JS v10 or higher
+* Python
+a| Platforms that support:
 
 * Docker
 |===
@@ -1046,7 +1044,7 @@ const carrierBalanceWithoutSecurity = carrierBalance.sub(packetSecurity);
 Next, you store the deducted number of tokens in a custom property in the `asset` field.
 This ensures, we can later know how much tokens we had locked as a security.
 
-xref:transactions/start-transport.js#L103[Insert your own logic here]:
+xref:transactions/start-transport.js#L53[Insert your own code here]:
 Create an updated object for the carrier account, that substracts the `security` from the carriers balance, and adds a new property `lockedSecurity` to the `asset` field of the carriers account.
 The `lockedSecurity` should equal exactly the amount, that you deducted from the carriers `balance`.
 
@@ -1098,7 +1096,7 @@ This transaction will:
 
 Click here to see the xref:transactions/finish-transport.js[full code for FinishTransportTransaction]
 
-.Snippet of `applyAsset()` of `finish-transport.js`
+.Code for `applyAsset()` of `finish-transport.js`
 [source, js]
 ----
 applyAsset(store) {
@@ -1108,7 +1106,7 @@ applyAsset(store) {
     let sender = store.account.get(packet.asset.sender);
     // if the transaction has been signed by the packet recipient
     if (this.asset.senderId === packet.carrier) {
-        // if the packet status isnt "ongoing" or "alarm"
+        // if the packet status isn't "ongoing" and not "alarm"
         if (packet.asset.status !==  "ongoing" && packet.asset.status !== "alarm") {
             errors.push(
                 new TransactionError(

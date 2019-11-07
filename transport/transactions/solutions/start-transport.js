@@ -103,6 +103,7 @@ class StartTransportTransaction extends BaseTransaction {
         const updatedCarrier = {
             ...carrier,
             balance: carrierBalanceWithSecurity.toString()
+
         };
         store.account.set(carrier.address, updatedCarrier);
         /* --- Revert packet account --- */

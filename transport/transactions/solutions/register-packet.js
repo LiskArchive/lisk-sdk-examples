@@ -157,7 +157,7 @@ class RegisterPacketTransaction extends BaseTransaction {
 
         /* --- Revert packet account --- */
         const packet = store.account.get(this.asset.packetId);
-        /* something is missing here */
+        const originalPacketAccount = { ...packet, balance: 0, asset: null };
         store.account.set(packet.address, originalPacketAccount);
 
         return errors;

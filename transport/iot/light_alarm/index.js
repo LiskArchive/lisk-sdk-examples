@@ -2,7 +2,7 @@ const PIN = require("rpi-pins");
 const GPIO = new PIN.GPIO();
 // Rpi-pins uses the WiringPi pin numbering system (check https://pinout.xyz/pinout/pin16_gpio23)
 GPIO.setPin(4, PIN.MODE.INPUT);
-const LightAlarmTransaction = require('../../../transactions/light-alarm');
+const LightAlarmTransaction = require('./light-alarm');
 const { APIClient } = require('@liskhq/lisk-api-client');
 
 // Enter here the IP of the node you want to reach for API requests

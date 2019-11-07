@@ -46,7 +46,6 @@ class LightAlarmTransaction extends BaseTransaction {
     applyAsset(store) {
         const errors = [];
 
-        // Check status="ongoing" to accept the LightAlarmTransaction
         const packet = store.account.get(this.senderId);
         if (packet.asset.status !== 'ongoing' && packet.asset.status !== 'alarm') {
             errors.push(
