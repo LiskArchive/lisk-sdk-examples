@@ -52,6 +52,17 @@ If something unexpected is detected by the IoT app, it will create a transaction
 * USB -> Micro-USB cable
 * Battery/Powerbank
 
+== Connecting to the Raspberry Pi
+
+To simplify the network setup for the workshop we're going to use ssh over USB. During the workshop the Raspberry Pi will also be connected 
+to the internet, thruough its own wifi, to be able to use npm. 
+
+Each Raspberry Pi has it's own hostname printed in the box and a password for the default `pi` user.
+
+==== Connecting
+- connect the micro-usb plug of the provided cable to the usb socket labeled `usb` (wait for about a minute and a half)
+- run the command `ssh pi@<the hostname of your Pi here>` and when asked enter the password for your Pi
+
 === Custom Transactions
 
 lightAlarmTransaction::
