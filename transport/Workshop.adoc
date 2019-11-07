@@ -1290,6 +1290,24 @@ app
 
 Add some screenshots & explain how to explore data & how to post tx.
 
+===== Fund the carrier account
+
+TIP: You find prepared account credentials in `accounts.json`.
+
+===== Register the packet
+
+image:assets/register-packet-step2.png[register-packet]
+
+image:assets/packet-account-1.png[register-packet]
+
+=====  Start transport
+
+image:assets/start-transport.png[register-packet]
+
+image:assets/packet-account-2.png[register-packet]
+
+===== Finish transport
+
 === 2.4 Next steps (optional)
 
 ==== Make iot script start automatically after boot
