@@ -13,12 +13,11 @@ You will learn here:
 
 NOTE: For Part 1 of the workshop, it is not needed to check any status of the packet before sending an alarm transaction.
 
-
 ****
 
 [TIP]
 ====
-xref:transactions/solutions[Check out the solutions], which hold the complete working code for the custom transaction types.
+xref:transactions/solutions/[Check out the solutions], which hold the complete working code for the custom transaction types.
 
 You can also require the solutions directly in your app, just change
 

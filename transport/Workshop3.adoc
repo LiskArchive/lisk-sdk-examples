@@ -32,7 +32,7 @@ To
 const LightAlarmTransaction = require('../transactions/solutions/light-alarm');
 ----
 
-But let's try not to cheat too much ;-)
+But again, let's try not to cheat too much ;-)
 ====
 
 == 2.0 Implement RegisterPacket
@@ -496,6 +496,7 @@ applyAsset(store) {
              * - Change status to "success"
              */
             /* Write your own code here */
+            return errors;
         }
         // if the transport failed
         /**
