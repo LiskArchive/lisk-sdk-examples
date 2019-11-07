@@ -1,4 +1,5 @@
 = Part 2: A simple supply chain tracking system
+:toc: preamble
 
 The goal of Part 2 is to implement a complete workflow of a very simple version of a supply chain tracking system.
 
@@ -10,7 +11,29 @@ You will learn here how to:
 * lock funds in an account
 * do a first complete test-run of the supply chain tracking system
 
-NOTE: To get a good overview about the general workflow we are going to implement, take a look at the <<general-procedure, diagram>> above.
+NOTE: To get a good overview about the general workflow we are going to implement, take a look at the xref:Workshop.adoc#general-procedure, diagram on the Introduction page>> of the workshop.
+
+[TIP]
+====
+"Got more of these... solutions?"::
+xref:transactions/solutions[Yes we have!], check out the fully working implementation of the other transactions in the `transactions/solutions/` folder.
+
+You can also require the solutions directly in your app, just change e.g.
+
+[source,js]
+----
+const LightAlarmTransaction = require('../transactions/light-alarm');
+----
+
+To
+
+[source,js]
+----
+const LightAlarmTransaction = require('../transactions/solutions/light-alarm');
+----
+
+But let's try not to cheat too much ;-)
+====
 
 == 2.0 Implement RegisterPacket
 

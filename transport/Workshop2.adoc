@@ -1,5 +1,5 @@
 = Workshop Part 1: Track a packet on the blockchain
-:toc:
+:toc: preamble
 
 The goal of this Part is to implement a simple application that tracks sensor measurements on the blockchain.
 That means, once the IoT application will be started, it will immediately send an `LightAlarmTransaction` to the network, whenever the sensor detects light.
@@ -13,12 +13,13 @@ You will learn here:
 
 NOTE: For Part 1 of the workshop, it is not needed to check any status of the packet before sending an alarm transaction.
 
-.Check the solutions if needed
+
 ****
-xref:transactions/solutions[Check out the solutions], which hold the complete working code for the custom transaction types.
 
 [TIP]
 ====
+xref:transactions/solutions[Check out the solutions], which hold the complete working code for the custom transaction types.
+
 You can also require the solutions directly in your app, just change
 
 [source,js]
