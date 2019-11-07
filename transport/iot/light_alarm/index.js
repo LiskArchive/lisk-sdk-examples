@@ -6,6 +6,7 @@ const LightAlarmTransaction = require('./light-alarm');
 const { APIClient } = require('@liskhq/lisk-api-client');
 
 // Enter here the IP of the node you want to reach for API requests
+// Check the IP by running `ifconfig` inside your local terminal
 const api = new APIClient(['http://localhost:4000']);
 
 // Check config file or curl localhost:4000/api/node/constants to verify your epoc time (OK when using /transport/node/index.js)
@@ -14,24 +15,18 @@ const dateToLiskEpochTimestamp = date => (
 );
 
 /* Note: Always update to the package you are using */
-const packetCredentials = { address: '5090763841295658446L',
-    passphrase:
-        'that cost affair hungry brain coil tiger similar van notable hen soup',
-    publicKey:
-        'a206204c9eedabb190a1759be2b816eb0934a18ebee70d9c014d2a55842f88f3',
-    privateKey:
-        '5a2e6d7fc3996f800a7385e23e6243210193eeb73c83d4636d1aad157386a477a206204c9eedabb190a1759be2b816eb0934a18ebee70d9c014d2a55842f88f3'
-};
+const packetCredentials = { /* Insert packet credentials here (retrieved from "Initialize" page of the client app) */};
 
 setInterval(() => {
 	let state = GPIO.read(4);
-	if(state === 1) {
+	if(state === 0) {
 		console.log('Package has been opened! Send lisk transaction!');
-        let tx =  new LightAlarmTransaction({
+		// Uncomment the below code in step 1.3 of the workshop
+        /*let tx =  new LightAlarmTransaction({
             timestamp: dateToLiskEpochTimestamp(new Date())
         });
 
-        tx.sign(packetCredentials.passphrase); // Signed by package
+        tx.sign(packetCredentials.passphrase);
 
         api.transactions.broadcast(tx.toJSON()).then(res => {
             console.log("++++++++++++++++ API Response +++++++++++++++++");
@@ -41,7 +36,7 @@ setInterval(() => {
             console.log("++++++++++++++++ End Script +++++++++++++++++");
         }).catch(err => {
             console.log(JSON.stringify(err.errors, null, 2));
-        });
+        });*/
 	} else {
 		console.log('Alles gut');
 	}

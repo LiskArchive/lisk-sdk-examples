@@ -80,13 +80,14 @@ class FinishTransportTransaction extends BaseTransaction {
                  * - Add postage & security to balance
                  * - Earn 1 trustpoint
                  */
-                /* Write your own code here*/
+                /* Write your own code here */
                 /**
                  * Update the Packet account:
                  * - Remove postage from balance
                  * - Change status to "success"
                  */
                 /* Write your own code here */
+                return errors;
             }
             // if the transport failed
             /**
