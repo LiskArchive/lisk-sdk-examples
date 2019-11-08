@@ -17,7 +17,7 @@ NOTE: To get a good overview about the general workflow we are going to implemen
 [TIP]
 ====
 "Got more of those... solutions?"::
-xref:./transactions/solutions[Yes we have!], check out the fully working implementation of the other transactions in the `transactions/solutions/` folder.
+https://github.com/LiskHQ/lisk-sdk-examples/tree/lisk-transport/transport/transactions/solutions[Yes we have!], check out the fully working implementation of the other transactions in the `transactions/solutions/` folder.
 
 You can also require the solutions directly in your app, just change e.g.
 
