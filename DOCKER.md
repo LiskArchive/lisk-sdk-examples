@@ -12,15 +12,9 @@ This mount allows you to open up the code from inside the Docker container with 
 Note: In order to restart the node, you have to login into the container and restart the node there. This is the only disadvantage and will be explained later on in the `Installation` section.
 
 # Installation
-First of all, navigate with your terminal inside the `/create-dev-env` folder.
-
-```bash
-cd create-dev-env`
-```
-
 To get started, create your docker image:
 ```bash
-docker build -t lisk-sdk --build-arg user_name=liskjs --build-arg user_id=$UID .
+docker build -t lisk-sdk --build-arg user_id=$UID .
 ```
 
 Now bring everything up using the Docker Compose file:
@@ -33,7 +27,7 @@ docker-compose up -d
 You'll now have Postgres running and a development environment container running
 To see: `docker ps` and copy the ID of the `lisk-sdk` container.
 
-You can enter the environment with `docker exec -it <container ID> /bin/bash`
+You can enter the environment with `docker-compose exec sdk /bin/bash`
 
 And you should be able to access Postgres from within the environment:
 ```
@@ -58,7 +52,7 @@ configDevnet.components.storage.host = 'db';
 # Verify Installation
 At last, it is important to verify the installation.
 
-Verify if the installation works by entering the lisk-sdk container with `docker exec -it <container ID> /bin/bash` and navigate inside the `/transport/node` folder.
+Verify if the installation works by entering the lisk-sdk container with `docker-compose exec sdk /bin/bash` and navigate inside the `/transport/node` folder.
 
 First, we need to install the dependencies. We both have to install the dependencies for `/transport/transactions` and `/transport/node`.
 
@@ -75,5 +69,5 @@ Next, now we are in the `/transport/node` folder, run `node index.js | npx bunya
 You can simply take down the containers by executing the following command in the same folder `/transport/node`:
 
 ```sh
-docker-compose down
+docker-compose down --volumes
 ```
