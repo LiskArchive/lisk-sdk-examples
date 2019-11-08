@@ -69,5 +69,5 @@ Next, now we are in the `/transport/node` folder, run `node index.js | npx bunya
 You can simply take down the containers by executing the following command in the same folder `/transport/node`:
 
 ```sh
-docker-compose down
+docker-compose down --volumes
 ```
