@@ -314,7 +314,7 @@ class StartTransportTransaction extends BaseTransaction {
                 /**
                  * Update the Carrier account:
                  * - Lock security inside the account
-                 * - Remove the security form balance
+                 * - Remove the security from balance
                  * - initialize carriertrust, if not present already
                  */
                 const carrierBalanceWithoutSecurity = carrierBalance.sub(packetSecurity);       <4>

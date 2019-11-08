@@ -456,7 +456,7 @@ npm init --yes #Creates the `package.json` file.
 npm i @liskhq/lisk-transactions @liskhq/lisk-api-client @liskhq/lisk-constants rpi-pins #Install dependencies.							<5>
 ----
 
-Now, create a new file `light-alarm.js` and copy the code of `transport/transactions/light-alarm.js` form your local computer.
+Now, create a new file `light-alarm.js` and copy the code of `transport/transactions/light-alarm.js` from your local computer.
 
 NOTE: You should have completed the implementation of `light-alarm.js` in <<1-1-implement-the-lightalarm-transaction, step 1.1>>, before copying the code over to the raspberry pi.
 
