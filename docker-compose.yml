@@ -16,7 +16,7 @@ services:
   sdk:
     image: lisk-sdk
     volumes:
-      - .:/home/liskjs
+      - .:/home/node
     networks:
       - lisk
     depends_on:
@@ -24,7 +24,7 @@ services:
     stdin_open: true
     tty: true
     entrypoint: /bin/bash
-    user: liskjs
+    user: node
     ports:
       - 4000:4000
 
