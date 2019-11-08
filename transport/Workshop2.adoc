@@ -52,13 +52,14 @@ But let's try not to cheat too much ;-)
 
 a| Platforms that support:
 
-* PostgreSQL
-* Node.JS v10 or higher
-* Python
+* Linux
+* macOS
 a| Platforms that support:
 
 * Docker
 |===
+
+IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:../DOCKER.md[how to setup a development environment with Docker].
 
 ==== Hardware provided
 * Raspberry Pi Zero W (running a headless Raspbian Buster lite)
@@ -72,6 +73,7 @@ a| Platforms that support:
 * Node.js (`v10` or higher installed - use `nvm` for easy switching between versions)
 * Have `curl` installed
 * Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup.html[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
+* Git
 
 == Software
 
@@ -94,6 +96,8 @@ If something unexpected is detected by the IoT app, it will create a transaction
 == 1.0 Setup
 
 Set up the needed software and hardware and installation of the dependencies.
+
+IMPORTANT: If you run into troubles during the setup, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:../DOCKER.md[how to setup a development environment with Docker].
 
 === Clone the repo and install the dependencies
 
