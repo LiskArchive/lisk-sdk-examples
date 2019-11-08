@@ -37,9 +37,7 @@ psql -d lisk_dev -h db -U lisk
 # Open Code in Editor
 By default, the storage of the `lisk-sdk` container is mounted where you have exeucted the docker build command.
 
-Open up this location and navigate inside `/dev_environment`.
-Inside this folder, you will find a folder `/lisk-sdk-examples` which holds the full code for the workshop. 
-By default, the script also installs all dependencies with `npm install`.
+// TODO update!
 
 **Note: In order to make this setup work, we've added a simple line to the `/transport/node/index.js` file for starting the node.**
 
