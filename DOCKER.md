@@ -22,7 +22,7 @@ Now bring everything up using the Docker Compose file:
 docker-compose up -d
 ```
 
-**Note: If you are running this on Windows, Docker might ask you to give permisson to mount a volume to your host machine.
+**Note: If you are running this on Windows, Docker might ask you to give permisson to mount a volume to your host machine.**
 
 You'll now have Postgres running and a development environment container running
 To see: `docker ps` and copy the ID of the `lisk-sdk` container.
