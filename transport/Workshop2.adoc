@@ -73,7 +73,7 @@ IMPORTANT: If you run a Windows machine, or just want a straight-forward setup o
 * Node.js (`v10` or higher installed - use `nvm` for easy switching between versions)
 * Have `curl` installed
 * Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup.html[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
-* Git
+* Git (Git Bash for Windows)
 
 == Software
 
@@ -109,7 +109,9 @@ The below steps describe how to create the initial files for this tutorial.
 [source,bash]
 ----
 git clone https://github.com/LiskHQ/lisk-sdk-examples.git
-cd lisk-sdk-examples/transport
+cd lisk-sdk-examples
+git checkout lisk-transport
+cd transport
 ----
 +
 The basic file structure looks as following:
