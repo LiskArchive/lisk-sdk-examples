@@ -670,6 +670,8 @@ image:assets/packet-account-2.png[packet account 2]
 
 ==== Finish transport
 
+image:assets/finish-transport.png[finish transport]
+
 == 2.4 Next steps (optional)
 
 === Make iot script start automatically after boot
@@ -680,7 +682,7 @@ Connect the Temp/Humidity sensor to your Raspberry Pi and implement a `Temperatu
 
 === Connecting multiple nodes
 
-This sections explains how to connect several nodes to your blockchain
+Explains how to connect several nodes to your blockchain
 
 === Replace dummy delgates with real ones
 
