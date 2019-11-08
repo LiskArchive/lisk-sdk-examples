@@ -1,5 +1,6 @@
 = Workshop Part 1: Track a packet on the blockchain
 :toc: preamble
+:experimental:
 
 The goal of this Part is to implement a simple application that tracks sensor measurements on the blockchain.
 That means, once the IoT application will be started, it will immediately send an `LightAlarmTransaction` to the network, whenever the sensor detects light.
@@ -17,7 +18,7 @@ NOTE: For Part 1 of the workshop, it is not needed to check any status of the pa
 
 [TIP]
 ====
-xref:transactions/solutions/[Check out the solutions], which hold the complete working code for the custom transaction types.
+xref:transactions/solutions/light-alarm.js[Check out the solutions], which hold the complete working code for the custom transaction types.
 
 You can also require the solutions directly in your app, just change
 
@@ -182,7 +183,7 @@ For reference, see how the sensors can be connected, and the steps to set up the
 .Steps to setup the Raspberry Pi
 [%collapsible]
 ====
-Wire the sensors::
+Sensor wiring::
 image:iot/lisk_rpi_ldr_and_temperature_sensors_wiring.png[RPI Wiring, title="RPI Wiring"]
 
 Preparing the Operating System::
@@ -194,7 +195,7 @@ As we want to run the Raspberry in headless mode (i.e. no keyboard, mouse and mo
 To do so follow this guide https://desertbot.io/blog/ssh-into-pi-zero-over-usb
 Once all those steps are followed the SD card can be unmounted and inserted into the Raspberry SD card reader.
 
-Installing required libraries for accessing sensor data::
+Already isntalled libraries for accessing sensor data::
 The pins in the Raspberry need some libraries before they can be used for communicating with different sensors.
 For installing the required libraries run:
 
@@ -341,6 +342,8 @@ new TransactionError(
 
 TIP: In case you need some inspiration how to implement the `validateAsset()` function, check out the other examples like `hello_world` inside of the `lisk-sdk-examples` repository, or check the https://lisk.io/documentation/lisk-sdk/tutorials/hello-world.html#_3_create_a_new_transaction_type[tutorials] in the Lisk Documentation.
 
+IMPORTANT: To verify your implementation of `validateAsset()`, compare it with the xref:transactions/solutions/light-alarm.js[Solution for 1.1].
+
 === Explanation: `applyAsset()`
 
 A possible implementation of `applyAsset` for the `LightAlarmTransaction`. See detailed descriptions of the implementation below.
@@ -350,36 +353,34 @@ Copy the snippet and replace the `applyAsset` function in `light-alarm.js` with 
 .Implementation of applyAsset()
 [source,js]
 ----
-applyAsset(store) {									<1>
+/*Inside of `applyAsset`, we can make use of the cached data from the `prepare` function,
+ * which is stored inside of the `store` parameter.*/
+applyAsset(store) {
     const errors = [];
 
-    const packet = store.account.get(this.senderId);					<2>
+    /* With `store.account.get(ADDRESS)` we now get the account data of the packet account.
+     * We specify `this.senderId` as address, because the light alarm is always signed and sent by the packet itself. */
+    const packet = store.account.get(this.senderId);
 
     /**
      * Update the Packet account:
      * - set packet status to "alarm"
      * - add current timestamp to light alarms list
      */
-    packet.asset.status = 'alarm';							<3>
+    packet.asset.status = 'alarm';
     packet.asset.alarms = packet.asset.alarms ? packet.asset.alarms : {};
     packet.asset.alarms.light = packet.asset.alarms.light ? packet.asset.alarms.light : [];
     packet.asset.alarms.light.push(this.timestamp);
 
-    store.account.set(packet.address, packet);						<4>
+    /* When all changes have been made, they are applied to the database by executing `store.account.set(ADDRESS, DATA)`; */
+    store.account.set(packet.address, packet);
 
-    return errors;									<5>
+    /* Unlike in `validateAsset`, the `store` parameter is present here.
+     * That means, inside of `applyAsset` it is possible to make dynamic checks against the existing data in the database.
+     *  As we do not need to this here, an empty `errors` array is returned at the end of the function. */
+    return errors;
 }
 ----
-
-<1> Inside of `applyAsset`, we can make use of the cached data from the `prepare` function, which is stored inside of the `store` parameter.
-<2> With `store.account.get(ADDRESS)` we now get the account data of the packet account.
-We specify `this.senderId` as address, because the light alarm is always signed and sent by the packet itself.
-<3> Once we have the data present, it is possible to manipulate it as desired.
-<4> When all changes have been made, they are applied to the database by executing `store.account.set(ADDRESS, DATA)`;
-<5> Unlike in `validateAsset`, the `store` parameter is present here.
-That means, inside of `applyAsset` it is possible to make dynamic checks against the existing data in the database.
-As we do not need to this here, an empty `errors` array is returned at the end of the function.
-
 
 === Register the transaction with the node application
 
@@ -416,26 +417,30 @@ The node application is now ready to accept and process the new transaction type
 
 == 1.2 The IoT application
 
-In this step we are going to implement the script that will run on the Raspberry Pi to track if the packet has been manipulated.
+In this step we are going to create the script that will run on the Raspberry Pi to track if the packet has been manipulated.
 
 === Connect to the Raspberry Pi
 
 Connect a micro usb cable with the Raspberry and then connect the other end to a computer.
 
+image:assets/usb-port.jpg[How to connect to your Pi]
+
 You should be able to log-in through `ssh` by running:
 
 [source, bash]
 ----
-ssh pi@raspberrypi.local
+ssh pi@10.10.10.10
 ----
 
 If the pi won't respond, press kbd:[CTRL+C] and try the last command again.
 If prompted with a warning just hit enter to accept the default (Yes).
 
-Type in the password - by default this is `raspberry`
+Type in the password.
+
+TIP: The password to ssh into your pi is written on the box that contained the pi.
 
 Your terminal should now be connected to the Raspberry Pi.
-On the Raspberry, reate a new folder, which will hold the script for the IoT application.
+On the Raspberry, create a new folder, which will hold the script for the IoT application:
 
 === Create the tracking script
 
@@ -443,7 +448,7 @@ On the Raspberry, reate a new folder, which will hold the script for the IoT app
 ----
 mkdir light_alarm #Create a folder to hold the tracking script.
 cd light_alarm
-npm init #Creates the `package.json` file.
+npm init --yes #Creates the `package.json` file.
 npm i @liskhq/lisk-transactions @liskhq/lisk-api-client @liskhq/lisk-constants rpi-pins #Install dependencies.							<5>
 ----
 
@@ -461,11 +466,13 @@ Create a new file `indexjs` that shall hold our trakcing script, insert the code
 ----
 const PIN = require("rpi-pins");
 const GPIO = new PIN.GPIO();
-GPIO.setPin(4, PIN.MODE.INPUT);                                             <1>
+// Rpi-pins uses the WiringPi pin numbering system (check https://pinout.xyz/pinout/pin16_gpio23).
+GPIO.setPin(4, PIN.MODE.INPUT);
 const LightAlarmTransaction = require('./light-alarm');
 const { APIClient } = require('@liskhq/lisk-api-client');
 
-const api = new APIClient(['http://localhost:4000']);                       <2>
+// Replace `localhost` with the IP of the node you want to reach for API requests.
+const api = new APIClient(['http://localhost:4000']);
 
 // Check config file or curl localhost:4000/api/node/constants to verify your epoc time (OK when using /transport/node/index.js)
 const dateToLiskEpochTimestamp = date => (
@@ -474,7 +481,8 @@ const dateToLiskEpochTimestamp = date => (
 
 const packetCredentials = { /* Insert the credentials of the packet here in step 1.3 */ }
 
-setInterval(() => {                                                          <3>
+// Check the status of the sensor in a certain intervall (here: 1 second).
+setInterval(() => {
 	let state = GPIO.read(4);
 	if(state === 0) {
 		console.log('Package has been opened! Send lisk transaction!');
@@ -500,10 +508,6 @@ setInterval(() => {                                                          <3>
 }, 1000);
 
 ----
-
-<1> Rpi-pins uses the WiringPi pin numbering system (check https://pinout.xyz/pinout/pin16_gpio23).
-<2> Replace `localhost` with the IP of the node you want to reach for API requests.
-<3> Check the status of the sensor in a certain intervall (here: 1 second).
 
 === Run the tracking script
 
