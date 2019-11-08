@@ -12,7 +12,7 @@ You will learn here how to:
 * lock funds in an account
 * do a first complete test-run of the supply chain tracking system
 
-NOTE: To get a good overview about the general workflow we are going to implement, take a look at the xref:Workshop.adoc#general-procedure, diagram on the Introduction page>> of the workshop.
+NOTE: To get a good overview about the general workflow we are going to implement, take a look at the xref:Workshop.adoc#general-procedure[diagram on the Introduction page] of the workshop.
 
 [TIP]
 ====
