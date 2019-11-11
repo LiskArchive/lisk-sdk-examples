@@ -39,26 +39,6 @@ But let's try not to cheat too much ;-)
 
 ****
 
-== Requirements
-
-=== Hardware
-Bring your own laptop.
-The tutorial supports both Mac, Linux, and Windows.
-
-=== Software Prerequisites
-Basic requirements for all machines:
-
-* A code editor like Visual Studio Code
-* Have `curl` installed
-* Git
-
-IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker].
-
-Otherwise, you have to manually install:
-
-* Node.js (`v10` or higher installed - use `nvm` for easy switching between versions)
-* Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup.html[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
-
 == Project Architecture
 
 Three different kind of applications need to be developed, to create the decentralized supply chain system:
@@ -77,27 +57,6 @@ which is stored on a microcontroller/raspberry pi. This application will track t
 To do this, certain sensors will be connected to it, that track information like light, temperature and/or humidity inside of the packet.
 If something unexpected is detected by the IoT app, it will create a transaction object, sign it, and send it to the network.
 
-== 1.0 Setup
-
-Set up the needed software and hardware and installation of the dependencies.
-
-IMPORTANT: If you run into troubles during the setup, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:../DOCKER.md[how to setup a development environment with Docker].
-
-=== Clone the repo and install the dependencies
-
-The below steps describe how to create the initial files for this tutorial.
-
-["loweralpha"]
-. Clone https://github.com/LiskHQ/lisk-sdk-examples/[Lisk-SDK-Examples] repository locally.
-+
-[source,bash]
-----
-git clone https://github.com/LiskHQ/lisk-sdk-examples.git
-cd lisk-sdk-examples
-git checkout lisk-transport
-cd transport
-----
-+
 The basic file structure looks as following:
 +
 .Contents of `lisk-sdk-examples/transport`
@@ -126,75 +85,11 @@ The basic file structure looks as following:
     ├── register-packet.js
     └── start-transport.js
 ----
-+
-<1> Contains the code for the <<software, client application>>
-<2> Contains the code for the <<software, IoT application>>
-<3> Contains the code for the <<software, node application>>
+
+<1> Contains the code for the <<project-architecture, client application>>
+<2> Contains the code for the <<project-architecture, IoT application>>
+<3> Contains the code for the <<project-architecture, node application>>
 <4> Contains the custom transactions, that are used by the node and client app.
-. Navigate inside `transport/transactions` and `transport/node` folders and run `npm install` to install the required dependencies for the node application.
-+
-[source,bash]
-----
-cd transactions
-npm install
-cd ../node
-npm install
-----
-. Setup the database:
-.. In case you have experimented before with Lisk, it is possible you have to first drop your database and recreate it with: `dropdb lisk_dev && createdb lisk_dev --owner lisk`.
-.. If you set up the Lisk SDK for the first time, run the following three commands:
-+
-[source, bash]
-----
-sudo -u postgres -i createuser --createdb lisk
-sudo -u postgres -i createdb lisk_dev --owner lisk
-sudo -u postgres psql -d lisk_dev -c "alter user lisk with password 'password';"
-----
-. To verify if the setup is correct, try to run the application with
-+
-[source,bash]
-----
-node index.js | npx bunyan -o short
-----
-This command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan.
-Starting the node for the first time might require some time (up to 3 minutes)!
-
-If everything is running fine, you can stop the node by hitting kbd:[CTRL+C].
-
-WARNING: In case the node crashes or doesn't work, follow the xref:create-dev-env/README.md[this guide] to set up a dedicated development environment using Docker and Docker-Compose. The script will set up the whole environment.
-
-=== Prepare the IoT device
-
-[IMPORTANT]
-====
-You don't need to do this in the workshop! These steps are already prepared for you before the workshop.
-
-For reference, see how the sensors can be connected, and the steps to set up the Raspberry Pi below.
-====
-
-.Steps to setup the Raspberry Pi
-[%collapsible]
-====
-Sensor wiring::
-image:iot/lisk_rpi_ldr_and_temperature_sensors_wiring.png[RPI Wiring, title="RPI Wiring"]
-
-Preparing the Operating System::
-The operating system for the Raspberry needs to be copied from a computer into an SD card for this we recommend using https://www.balena.io/etcher/ (good tutorial in https://medium.com/@ccarnino/backup-raspberry-pi-sd-card-on-macos-the-2019-simple-way-to-clone-1517af972ca5)
-+
-For preparing the Raspberry for `ssh` and wifi access follow this guide: https://core-electronics.com.au/tutorials/raspberry-pi-zerow-headless-wifi-setup.html
-+
-As we want to run the Raspberry in headless mode (i.e. no keyboard, mouse and monitor) we need to also enable `ssh` through USB.
-To do so follow this guide https://desertbot.io/blog/ssh-into-pi-zero-over-usb
-Once all those steps are followed the SD card can be unmounted and inserted into the Raspberry SD card reader.
-
-Already isntalled libraries for accessing sensor data::
-The pins in the Raspberry need some libraries before they can be used for communicating with different sensors.
-For installing the required libraries run:
-
-* `sudo apt-get install wiringpi`
-* `sudo apt-get install pigpio`
-* NodeJS can be installed with `nvm`
-====
 
 == 1.1 Implement the LightAlarm transaction
 
@@ -383,7 +278,7 @@ In this step we are going to create the script that will run on the Raspberry Pi
 
 === Connect to the Raspberry Pi
 
-Connect a micro usb cable with the Raspberry and then connect the other end to a computer.
+Connect a micro usb cable with the Raspberry and then connect the other end to a computer. Make sure you connect the micro usb cable to the port that has a small label `usb` above it.
 
 image:assets/usb-port.jpg[How to connect to your Pi]
 
@@ -436,7 +331,7 @@ const { APIClient } = require('@liskhq/lisk-api-client');
 // Replace `localhost` with the IP of the node you want to reach for API requests.
 const api = new APIClient(['http://localhost:4000']);
 
-// Check config file or curl localhost:4000/api/node/constants to verify your epoc time (OK when using /transport/node/index.js)
+// Check config file or visit localhost:4000/api/node/constants to verify your epoc time (OK when using /transport/node/index.js)
 const dateToLiskEpochTimestamp = date => (
     Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
 );

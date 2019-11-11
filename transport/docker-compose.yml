@@ -27,6 +27,7 @@ services:
     user: node
     ports:
       - 4000:4000
+      - 3000:3000
 
 volumes:
   db-data:
