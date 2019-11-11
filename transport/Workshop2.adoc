@@ -167,7 +167,7 @@ WARNING: In case the node crashes or doesn't work, follow the xref:create-dev-en
 
 [NOTE]
 ====
-These steps are already prepared for you before the workshop. **No work needed here!**
+These steps are already prepared for you before the workshop. **No work needed here! Skip to 1.1 section.**
 
 For reference, see how the sensors can be connected, and the steps to set up the Raspberry Pi below.
 ====
