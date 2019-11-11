@@ -47,6 +47,7 @@ The tutorial supports both Mac, Linux, and Windows.
 
 === Software Prerequisites
 Basic requirements for all machines:
+
 * A code editor like Visual Studio Code
 * Have `curl` installed
 * Git
@@ -54,6 +55,7 @@ Basic requirements for all machines:
 IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:../DOCKER.md[how to setup a development environment with Docker].
 
 Otherwise, you have to manually install:
+
 * Node.js (`v10` or higher installed - use `nvm` for easy switching between versions)
 * Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup.html[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
 
