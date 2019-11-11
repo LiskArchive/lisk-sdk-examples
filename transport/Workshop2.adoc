@@ -52,14 +52,14 @@ Basic requirements for all machines:
 * Have `curl` installed
 * Git
 
-IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:../DOCKER.md[how to setup a development environment with Docker].
+IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker].
 
 Otherwise, you have to manually install:
 
 * Node.js (`v10` or higher installed - use `nvm` for easy switching between versions)
 * Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup.html[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
 
-== Software
+== Project Architecture
 
 Three different kind of applications need to be developed, to create the decentralized supply chain system:
 
@@ -142,7 +142,7 @@ npm install
 ----
 . Setup the database:
 .. In case you have experimented before with Lisk, it is possible you have to first drop your database and recreate it with: `dropdb lisk_dev && createdb lisk_dev --owner lisk`.
-.. If you set up the Lisk SDK for the first time, run the following 2 commands:
+.. If you set up the Lisk SDK for the first time, run the following three commands:
 +
 [source, bash]
 ----
@@ -157,6 +157,7 @@ sudo -u postgres psql -d lisk_dev -c "alter user lisk with password 'password';"
 node index.js | npx bunyan -o short
 ----
 This command will run the `index.js` file and pipe the outputted logs to our preferred log formatting tool Bunyan.
+Starting the node for the first time might require some time (up to 3 minutes)!
 
 If everything is running fine, you can stop the node by hitting kbd:[CTRL+C].
 
@@ -166,7 +167,7 @@ WARNING: In case the node crashes or doesn't work, follow the xref:create-dev-en
 
 [NOTE]
 ====
-These steps are already prepared for you before the workshop.
+These steps are already prepared for you before the workshop. **No work needed here!**
 
 For reference, see how the sensors can be connected, and the steps to set up the Raspberry Pi below.
 ====
