@@ -16,7 +16,7 @@ Basic requirements for all machines:
 * A code editor like Visual Studio Code
 * Git
 
-IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker].
+IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker]. If you decide to follow this guide, you can skip the rest of this document.
 
 Otherwise, you have to manually install:
 
