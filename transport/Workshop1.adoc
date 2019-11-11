@@ -21,7 +21,7 @@ IMPORTANT: If you run a Windows machine, or just want a straight-forward setup o
 Otherwise, you have to manually install:
 
 * Node.js `v10` (use `nvm` for easy switching between versions in case you have a different version installed)
-* Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup.html[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
+* Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup.html[Installation guide by Lisk]).
 
 == 1.0 Setup
 
