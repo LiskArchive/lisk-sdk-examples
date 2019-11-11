@@ -34,7 +34,7 @@ IMPORTANT: If you run into troubles during the setup, or just want a straight-fo
 The below steps describe how to create the initial files for this tutorial.
 
 ["loweralpha"]
-. Clone https://github.com/LiskHQ/lisk-sdk-examples/[Lisk-SDK-Examples] repository locally.
+. Clone the Lisk-SDK-Examples repository locally.
 +
 [source,bash]
 ----
