@@ -11,7 +11,6 @@ class FinishTransportTransaction extends BaseTransaction {
     }
 
     static get FEE () {
-        //return `${10 ** 8}`;
         return '0';
     };
 

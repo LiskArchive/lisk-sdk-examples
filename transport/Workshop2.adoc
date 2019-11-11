@@ -232,26 +232,32 @@ const {
 /**
  * Send light alarm transaction when the packet has been opened (accepts timestamp).
  * Self-signed by packet.
+ * The `LightAlarmTransaction` is extended from the `BaseTransaction` interface.
  */
-class LightAlarmTransaction extends BaseTransaction {                       <1>
+class LightAlarmTransaction extends BaseTransaction {
 
-    static get TYPE () {                                                    <2>
+    /* Static property that defines the transaction `type` (has to be unique in the network). */
+    static get TYPE () {
         return 23;
     }
 
-    static get FEE () {                                                     <3>
+    /* The transaction `fee`. This needs to be paid by the sender when posting the transaction to the network.
+       It is set to `0`, so the packet doesn't need any funds to send an alarm transaction. */
+    static get FEE () {
         return '0';
     };
 
+    /* Data from the packet account is cached from the databse. */
     async prepare(store) {
         await store.account.cache([
             {
-                address: this.senderId,                                     <4>
+                address: this.senderId,
             }
         ]);
     }
 
-    validateAsset() {                                                       <5>
+    /* Static checks for presence and correct datatype of `timestamp`, which holds the timestamp of when the alarm was triggered. */
+    validateAsset() {
         const errors = [];
         /*
         Implement your own logic here.
@@ -281,13 +287,6 @@ class LightAlarmTransaction extends BaseTransaction {                       <1>
 
 module.exports = LightAlarmTransaction;
 ----
-
-<1> The `LightAlarmTransaction` is extended from the `BaseTransaction` interface.
-<2> Static property that defines the transaction `type` (has to be unique in the network).
-<3> The transaction `fee`. This needs to be paid by the sender when posting the transaction to the network.
-It is set to `0` for now, so the packet doesn't need any funds to send an alarm transaction.
-<4> Data from the packet account is cached from the databse.
-<5> Static checks for presence and correct datatype of `timestamp`, which holds the timestamp of when the alarm was triggered.
 
 === Quick Overview: Required functions of a custom transaction type
 
@@ -584,8 +583,6 @@ Nothing should be shown on the page, yet.
 . You should see a list of light alarm transaction object, that just got sent by the raspberry pi.
 
 image:assets/light-alarm-step1.png[List of Light Alarm transactions]
-
-The `senderId` is the ID of the packet, that sent the light alarm.
 
 If you see the alarm transactions incoming, you have successfully completed Part 1 of the workshop, congratz! \o/
 

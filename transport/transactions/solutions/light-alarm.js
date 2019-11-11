@@ -27,8 +27,6 @@ class LightAlarmTransaction extends BaseTransaction {
 
     validateAsset() {
         // Static checks for presence of `timestamp` which holds the timestamp of when the alarm was triggered
-        // `timestamp` is not used for further validation, we just use it for keeping track when the alarm has been fired.
-        // Currently, we do not care about the format of the timestamp (require type string)
         const errors = [];
         if (!this.timestamp || typeof this.timestamp !== 'number') {
             errors.push(
