@@ -5,18 +5,31 @@
 
 # Usage
 This script is used for setting up all needed dependencies for participating in the workshop. 
-The script will spin up a Postgres database and a separate ubuntu image on which the `lisk-sdk-examples` are cloned.
-All of this happens with Docker. The ubuntu image (called `lisk-sdk`) will be mounted to this folder called `dev_environment`.
-This mount allows you to open up the code from inside the Docker container with your preferred editor on your local machine.
+The script will spin up a Postgres database and a separate lisk-sdk image on which the `lisk-sdk-examples` are cloned.
 
 Note: In order to restart the node, you have to login into the container and restart the node there. This is the only disadvantage and will be explained later on in the `Installation` section.
 
 # Installation
-To get started, create your docker image:
+To get started, make sure your terminal is set to the `/transport` folder as it holds the Dockerfile:
+
+```bash
+cd transport
+```
+
+## Build Docker Image for Windows
+Next, we want to build the Docker image.
+Make sure to use the normal Windows terminal, not the Git Bash terminal.
+```bash
+docker build -t lisk-sdk --build-arg user_id=1000 .
+```
+
+## Build Docke Image for Other Operation Systems
+Next, we want to build the Docker image:
 ```bash
 docker build -t lisk-sdk --build-arg user_id=$UID .
 ```
 
+## Spin up with Docker-Compose
 Now bring everything up using the Docker Compose file:
 ```bash
 docker-compose up -d
@@ -24,48 +37,60 @@ docker-compose up -d
 
 **Note: If you are running this on Windows, Docker might ask you to give permisson to mount a volume to your host machine.**
 
-You'll now have Postgres running and a development environment container running
-To see: `docker ps` and copy the ID of the `lisk-sdk` container.
+## Verify Docker Containers 
+You'll now have `Postgres` container and a `lisk-sdk` container running.
+To verify, execute the following command and look for `transport_sdk_1` and `transport_db_1` container names.
 
-You can enter the environment with `docker-compose exec sdk /bin/bash`
-
-And you should be able to access Postgres from within the environment:
+```bash
+docker ps
 ```
-psql -d lisk_dev -h db -U lisk
+
+## Verify Lisk-SDK Container
+You can enter the terminal of the lisk-sdk container with:
+
+```bash
+docker-compose exec sdk /bin/bash
+```
+
+Try to execute the `ls` command. The `/transport` folder of the `lisk-sdk-examples` should be mounted.
+Therefore, you should see folders like `node`, `iot`, `transactions`, ...
+```bash
+ls
+```
+
+### Check Postgres connection
+We need to be able to access the Postgres database from the lisk-sdk container.
+When executing the below command, your terminal should change and display the psql terminal of the Postgres container.
+```
+PGPASSWORD=password psql -d lisk_dev -h db -U lisk
+```
+
+You can exit this terminal with:
+```
+\q
+```
+This will bring you back to the terminal of the lisk-sdk container.
+
+### Verify Running Node
+On the lisk-sdk container, navigate inside the `/node` folder. Notice that all `node_modules` have been installed already.
+You can start the node with the below command. The node will start to run and print logs.
+In case the node crashes, make sure to ask for help! Be aware, spinning up the node can take some time (up to 3min).
+
+```bash
+node index.js | npx bunyan -o short
 ```
 
 # Open Code in Editor
-By default, the storage of the `lisk-sdk` container is mounted where you have exeucted the docker build command.
+In order to modify the code, you can open your favourite editor on your **host machine**.
+Open the `/lisk-sdk-examples/transport` file in your editor.
 
-// TODO update!
-
-**Note: In order to make this setup work, we've added a simple line to the `/transport/node/index.js` file for starting the node.**
-
-As we asigned the database Docker container a virtual address called `db`, we have to tell our node that it needs to use `db` as the host name for connecting to our Dockerized Postgres database: 
-
-```js
-configDevnet.components.storage.host = 'db';
-```
-
-# Verify Installation
-At last, it is important to verify the installation.
-
-Verify if the installation works by entering the lisk-sdk container with `docker-compose exec sdk /bin/bash` and navigate inside the `/transport/node` folder.
-
-First, we need to install the dependencies. We both have to install the dependencies for `/transport/transactions` and `/transport/node`.
-
-```bash
-cd transport/transactions
-npm install
-cd ../node
-npm install
-```
-
-Next, now we are in the `/transport/node` folder, run `node index.js | npx bunyan -o short` - if no errors are displayed and the node starts running, the installation is working correctly.
+**Remember: In order to stop/start the node whenever you make changes, you have to use the `docker-compose exec sdk /bin/bash` command to access the terminal of the lisk-sdk container.**
 
 # Take Down Docker Containers
-You can simply take down the containers by executing the following command in the same folder `/transport/node`:
+You can simply take down the containers by executing the following command on your **host machine** inside the `/lisk-sdk-examples/transport` folder.
 
 ```sh
 docker-compose down --volumes
 ```
+
+You are all set to continue with the Lisk Transport workshop! :)
