@@ -58,6 +58,31 @@ Therefore, you should see folders like `node`, `iot`, `transactions`, ...
 ls
 ```
 
+### Change Postgres Host
+In order to be able to connect to the Postgres container, we have to add one configuration line to the `index.js` file inside the `/node` folder. Navigate inside the `/node` folder.
+
+```bash
+cd node
+```
+
+Next, open the `index.js` file in vim editor.
+
+```bash
+vim index.js
+```
+
+In order to change text with vim, we have to hit `i`.
+You can exit the editing mode by hitting the `esc` key.
+In order to save and exit the file, type `:wq` and hit enter.
+
+Now, uncomment the following line in the `index.js` file.
+
+```js
+configDevnet.components.storage.host = 'db';
+```
+
+Save and exit the file with `:wq`.
+
 ### Check Postgres connection
 We need to be able to access the Postgres database from the lisk-sdk container.
 When executing the below command, your terminal should change and display the psql terminal of the Postgres container.
