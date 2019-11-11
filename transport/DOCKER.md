@@ -23,7 +23,7 @@ Make sure to use the normal Windows terminal, not the Git Bash terminal.
 docker build -t lisk-sdk --build-arg user_id=1000 .
 ```
 
-## Build Docke Image for Other Operation Systems
+## Build Docker Image for Other Operation Systems
 Next, we want to build the Docker image:
 ```bash
 docker build -t lisk-sdk --build-arg user_id=$UID .
@@ -93,4 +93,4 @@ You can simply take down the containers by executing the following command on yo
 docker-compose down --volumes
 ```
 
-You are all set to continue with the Lisk Transport workshop! :)
+You are all set to continue with the [Lisk Transport workshop](./Workshop2.adoc)! :)
