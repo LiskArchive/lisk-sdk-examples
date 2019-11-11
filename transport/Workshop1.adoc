@@ -7,7 +7,7 @@ This document will explain how to prepare your computer for the workshop.
 == Requirements
 
 === Hardware
-Bring your own laptop.
+**Bring your own laptop.**
 The tutorial supports both Mac, Linux, and Windows.
 
 === Software Prerequisites
