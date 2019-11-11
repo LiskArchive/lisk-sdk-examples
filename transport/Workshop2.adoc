@@ -85,7 +85,7 @@ The basic file structure looks as following:
     ├── register-packet.js
     └── start-transport.js
 ----
-+
+
 <1> Contains the code for the <<project-architecture, client application>>
 <2> Contains the code for the <<project-architecture, IoT application>>
 <3> Contains the code for the <<project-architecture, node application>>
