@@ -42,38 +42,20 @@ But let's try not to cheat too much ;-)
 == Requirements
 
 === Hardware
+Bring your own laptop.
+The tutorial supports both Mac, Linux, and Windows.
 
-==== Hardware to bring yourself
-
-[%header,cols=2*]
-|===
-|Recommended
-|Alternative
-
-a| Platforms that support:
-
-* Linux
-* macOS
-a| Platforms that support:
-
-* Docker
-|===
+=== Software Prerequisites
+Basic requirements for all machines:
+* A code editor like Visual Studio Code
+* Have `curl` installed
+* Git
 
 IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:../DOCKER.md[how to setup a development environment with Docker].
 
-==== Hardware provided
-* Raspberry Pi Zero W (running a headless Raspbian Buster lite)
-* 16GB class 10 SDCard
-* A generic analog light sensor based on an LDR
-* Jumper cables
-* USB -> Micro-USB cable
-
-=== Software Prerequisites
-* A code editor like Visual Studio Code
+Otherwise, you have to manually install:
 * Node.js (`v10` or higher installed - use `nvm` for easy switching between versions)
-* Have `curl` installed
 * Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup.html[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
-* Git
 
 == Software
 
@@ -109,7 +91,9 @@ The below steps describe how to create the initial files for this tutorial.
 [source,bash]
 ----
 git clone https://github.com/LiskHQ/lisk-sdk-examples.git
-cd lisk-sdk-examples/transport
+cd lisk-sdk-examples
+git checkout lisk-transport
+cd transport
 ----
 +
 The basic file structure looks as following:

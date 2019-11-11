@@ -103,3 +103,10 @@ This transaction will:
 ** Set packet `status` to `fail`
 
 NOTE: xref:Workshop2.adoc[Click here to start the Lisk Transport tutorial]
+
+==== Hardware provided
+* Raspberry Pi Zero W (running a headless Raspbian Buster lite)
+* 16GB class 10 SDCard
+* A generic analog light sensor based on an LDR
+* Jumper cables
+* USB -> Micro-USB cable

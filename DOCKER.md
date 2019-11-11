@@ -22,7 +22,7 @@ Now bring everything up using the Docker Compose file:
 docker-compose up -d
 ```
 
-**Note: If you are running this on Windows, Docker might ask you to give permisson to mount a volume to your host machine.
+**Note: If you are running this on Windows, Docker might ask you to give permisson to mount a volume to your host machine.**
 
 You'll now have Postgres running and a development environment container running
 To see: `docker ps` and copy the ID of the `lisk-sdk` container.
@@ -37,9 +37,7 @@ psql -d lisk_dev -h db -U lisk
 # Open Code in Editor
 By default, the storage of the `lisk-sdk` container is mounted where you have exeucted the docker build command.
 
-Open up this location and navigate inside `/dev_environment`.
-Inside this folder, you will find a folder `/lisk-sdk-examples` which holds the full code for the workshop. 
-By default, the script also installs all dependencies with `npm install`.
+// TODO update!
 
 **Note: In order to make this setup work, we've added a simple line to the `/transport/node/index.js` file for starting the node.**
 
