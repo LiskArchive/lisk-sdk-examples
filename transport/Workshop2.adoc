@@ -162,12 +162,13 @@ WARNING: In case the node crashes or doesn't work, follow the xref:create-dev-en
 
 === Prepare the IoT device
 
-[NOTE]
+[IMPORTANT]
 ====
-These steps are already prepared for you before the workshop.
+You don't need to do this! These steps are already prepared for you before the workshop.
 
 For reference, see how the sensors can be connected, and the steps to set up the Raspberry Pi below.
 ====
+
 .Steps to setup the Raspberry Pi
 [%collapsible]
 ====
@@ -272,36 +273,7 @@ class LightAlarmTransaction extends BaseTransaction {
 module.exports = LightAlarmTransaction;
 ----
 
-=== Quick Overview: Required functions of a custom transaction type
-
-prepare(store)::
-The `prepare` function caches relevant data from the database.
-This enables the application to work on a consistent data set, while applying the transaction logic.
-
-validateAsset()::
-Inside of `validateAsset`, the inputs are validated to ensure the required data is present and that is has the expected data type.
-The `validateAsset` function is responsible for only performing static checks.
-This means the function is synchronous and cannot use data from the key-value `store` (which holds the data that has been cached in the `prepare` function).
-+
-Therefore, we can only perform initial checks like validating the presence of the parameter and if the parameter has the correct type.
-If validations fails, it shall create a new `TransactionError`, and push it into the `errors` array.
-In case the function returns an array that contains errors, the transaction will be discarded.
-+
-The function for `TransactionError` is exported by `@liskhq/lisk-transactions`.
-You can find the constructor https://github.com/LiskHQ/lisk-sdk/blob/development/elements/lisk-transactions/src/errors.ts#L22[here].
-
-applyAsset(store)::
-Calls `store.get` to get all of the relevant data.
-It applies all of the necessary changes from the received transaction to the affected account(s) by calling `store.set`.
-
-undoAsset(store)::
-Inverse of `applyAsset`.
-In case the transaction needs to be reverted, due to a network fork.
-Undoes all of the changes to the accounts applied by the `applyAsset` step.
-
-A possible solution for implementing the logic of `LightAlarmTransaction` is displayed below.
-In our very simple first version of the packet tracking, the transaction will add a new `status` field to the packet account and set its' value to `alarm`.
-Additionally, it will create a list `alarms.light` and push the current timestamp to this array.
+TIP: Go to the Lisk Documentation, to get an https://lisk.io/documentation/lisk-sdk/customize.html#_the_basetransaction_interface[overview about the required methods for custom transactions]
 
 === Task: Implement `validateAsset()`
 

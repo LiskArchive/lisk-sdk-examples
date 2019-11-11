@@ -19,19 +19,7 @@ NOTE: To get a good overview about the general workflow we are going to implemen
 "Got more of those... solutions?"::
 https://github.com/LiskHQ/lisk-sdk-examples/tree/lisk-transport/transport/transactions/solutions[Yes we have!], check out the fully working implementation of the other transactions in the `transactions/solutions/` folder.
 
-You can also require the solutions directly in your app, just change e.g.
-
-[source,js]
-----
-const LightAlarmTransaction = require('../transactions/light-alarm');
-----
-
-To
-
-[source,js]
-----
-const LightAlarmTransaction = require('../transactions/solutions/light-alarm');
-----
+After completing a task, check
 
 But again, let's try not to cheat too much ;-)
 ====
@@ -71,7 +59,9 @@ class RegisterPacketTransaction extends BaseTransaction {
         return '0';
     };
 
-    async prepare(store) {                                                         <1>
+    /* Prepare function stores both sender and packet account in the cache so we can
+       modify the accounts during the `applyAsset` and `undoAsset` steps. */
+    async prepare(store) {
         await store.account.cache([
             {
                 address: this.asset.packetId,
@@ -82,8 +72,9 @@ class RegisterPacketTransaction extends BaseTransaction {
         ]);
     }
 
-    validateAsset() {                                                              <2>
-        // Static checks for presence of `packetId`, `postage`, `security`, and `minTrust`.
+    /* Static checks for presence and correct datatypes of transaction parameters in
+       asset field like `minTrust`, `security`, `postage`, etc. */
+    validateAsset() {
         const errors = [];
         if (!this.asset.packetId || typeof this.asset.packetId !== 'string') {
             errors.push(
@@ -133,21 +124,25 @@ class RegisterPacketTransaction extends BaseTransaction {
 
     applyAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.asset.packetId);                     <3>
-
-        if (!packet.asset.status) {                                                <4>
+        /* Retrieve packet account from key-value store. */
+        const packet = store.account.get(this.asset.packetId);
+        /* Check if packet account already has a status assigned.
+           If it has, this means the package is already registered so we throw an error. */
+        if (!packet.asset.status) {
             /* --- Modify sender account --- */
             /**
              * Update the sender account:
              * - Deduct the postage from senders' account balance
              */
             const sender = store.account.get(this.senderId);
-            const senderBalancePostageDeducted = new utils.BigNum(sender.balance).sub(  <5>
+            /* Deduct the defined postage from the sender's account balance. */
+            const senderBalancePostageDeducted = new utils.BigNum(sender.balance).sub(
                 new utils.BigNum(this.asset.postage)
             );
+            /* Save the updated sender account with the new balance into the key-value store. */
             const updatedSender = {
                 ...sender,
-                balance: senderBalancePostageDeducted.toString(),                   <6>
+                balance: senderBalancePostageDeducted.toString(),
             };
             store.account.set(sender.address, updatedSender);
 
@@ -164,7 +159,8 @@ class RegisterPacketTransaction extends BaseTransaction {
              *   - minTrust: Minimal trust that is needed to be carrier for the packet
              *   - status: Status of the transport (pending|ongoing|success|fail)
              */
-            const packetBalanceWithPostage = new utils.BigNum(packet.balance).add(  <7>
+            /* Add the postage now to the packet's account balance. */
+            const packetBalanceWithPostage = new utils.BigNum(packet.balance).add(
                 new utils.BigNum(this.asset.postage)
             );
 
@@ -198,6 +194,9 @@ class RegisterPacketTransaction extends BaseTransaction {
     undoAsset(store) {
         const errors = [];
 
+        /* UndoAsset function tells the blockchain how to rollback changes made in the applyAsset function.
+           We restore the original balance for both the sender and package account.
+           Also, we reset the `asset` field for the package account to `null` as it didn't hold any data at first.*/
         /* --- Revert sender account --- */                                         <8>
         const sender = store.account.get(this.senderId);
         const senderBalanceWithPostage = new utils.BigNum(sender.balance).add(
@@ -222,17 +221,10 @@ class RegisterPacketTransaction extends BaseTransaction {
 module.exports = RegisterPacketTransaction;
 ----
 
-<1> Prepare function stores both sender and packet account in the cache so we can modify the accounts during the `applyAsset` and `undoAsset` steps.
-<2> Static checks for presence and correct datatypes of transaction parameters in asset field like `minTrust`, `security`, `postage`, etc.
-<3> Retrieve packet account from key-value store.
-<4> Check if packet account already has a status assigned.
-If it has, this means the package is already registered so we throw an error.
-<5> Deduct the defined postage from the sender's account balance.
-<6> Save the updated sender account with the new balance into the key-value store.
-<7> Add the postage now to the packet's account balance.
-<8> UndoAsset function tells the blockchain how to rollback changes made in the applyAsset function.
-We restore the original balance for both the sender and package account.
-Also, we reset the `asset` field for the package account to `null` as it didn't hold any data at first.
+=== Task: Complete the implementation of the `undoAsset` function.
+You will notice a small part of the logic is missing where we reset the packet account to its original state.
+
+Try to implement the xref:transactions/register-packet.js#L160[missing logic] for `undoAsset()` yourself by reverting the steps of the `applyAsset()` function.
 
 === Explanation: `undoAsset(store)`
 The `undoAsset` function is responsible for telling the blockchain how to revert changes that have been applied via the `applyAsset` function.
@@ -240,11 +232,6 @@ This is very useful in case of a fork where we have to change to a different cha
 In order to accomplish this, we have to roll back blocks and apply new blocks of a new chain.
 This means, when rolling back blocks we have to update the account state of the affected accounts.
 That's the reason why you should never skip writing logic for the `undoAsset` function.
-
-=== Task: Complete the implementation of the `undoAsset` function.
-You will notice a small part of the logic is missing where we reset the packet account to its original state.
-
-Try to implement the xref:transactions/register-packet.js#L160[missing logic] for `undoAsset()` yourself by reverting the steps of the `applyAsset()` function.
 
 == 2.1 Start the Transport
 For the next step in our prototype, we need to implement the `StartTransport` transaction.
@@ -280,11 +267,12 @@ class StartTransportTransaction extends BaseTransaction {
     }
 
     static get FEE () {
-        //return `${10 ** 8}`;
         return '0';
     };
 
-    async prepare(store) {                                                                      <1>
+    /* We both cache the `senderId` which is the carrier account and
+       the `recipientId` which is the packet account in the `prepare` function. */
+    async prepare(store) {
         await store.account.cache([
             {
                 address: this.recipientId,
@@ -295,7 +283,8 @@ class StartTransportTransaction extends BaseTransaction {
         ]);
     }
 
-    validateAsset() {                                                                           <2>
+    /* We don't need any static validation as there is no data being sent in the `asset` field. */
+    validateAsset() {
         const errors = [];
 
         return errors;
@@ -310,14 +299,19 @@ class StartTransportTransaction extends BaseTransaction {
             const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
             const carrierBalance = new utils.BigNum(carrier.balance);
             const packetSecurity = new utils.BigNum(packet.asset.security);
-            if (packet.asset.minTrust <= carrierTrust && carrierBalance.gte(packetSecurity)) {  <3>
+            /* Check if the carrier has the minimal trust required for accepting the package.
+               Also, we check if the carrier his balance is larger than the required security
+               as we need to lock this security from the carrier's account balance. */
+            if (packet.asset.minTrust <= carrierTrust && carrierBalance.gte(packetSecurity)) {
                 /**
                  * Update the Carrier account:
                  * - Lock security inside the account
                  * - Remove the security from balance
                  * - initialize carriertrust, if not present already
                  */
-                const carrierBalanceWithoutSecurity = carrierBalance.sub(packetSecurity);       <4>
+                /* Next, we lock the defined security (number of LSK tokens) in the asset field
+                   under the property `lockedSecurity` and deducted this security from his `carrierBalance`. */
+                const carrierBalanceWithoutSecurity = carrierBalance.sub(packetSecurity);
                 const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
                 const updatedCarrier = /* Insert the updated carrier account here*/
                 store.account.set(carrier.address, updatedCarrier);
@@ -360,15 +354,21 @@ class StartTransportTransaction extends BaseTransaction {
         const carrierBalanceWithSecurity = new utils.BigNum(carrier.balance).add(
             new utils.BigNum(packet.assset.security)
         );
+        /* For the `undoAsset` function, we need to revert the steps of `applyAsset` again.
+           This means we need to remove the locked balance in the `asset` field and add this
+           number again to the `balance` of the carrier's account. */
         const updatedCarrier = {
             ...carrier,
-            balance: carrierBalanceWithSecurity.toString()                                      <5>
+            balance: carrierBalanceWithSecurity.toString()
         };
         store.account.set(carrier.address, updatedCarrier);
         /* --- Revert packet account --- */
+        /* For the packet account, we need to undo some items as well.
+           First of all, we need to set the `deliveryStatus` again to `pending`.
+           The `carrier` value need sto be nullified as well. */
         const updatedData = {
             asset: {
-                deliveryStatus: "pending",                                                      <6>
+                deliveryStatus: "pending",
                 carrier: null
             }
         };
@@ -384,17 +384,6 @@ class StartTransportTransaction extends BaseTransaction {
 
 module.exports = StartTransportTransaction;
 ----
-
-<1> We both cache the `senderId` which is the carrier account and the `recipientId` which is the packet account in the `prepare` function.
-<2> We don't need any static validation as there is no data being sent in the `asset` field.
-<3> Check if the carrier has the minimal trust required for accepting the package.
-Also, we check if the carrier his balance is larger than the required security as we need to lock this security from the carrier's account balance.
-<4> Next, we lock the defined security (number of LSK tokens) in the asset field under the property `lockedSecurity` and deducted this security from his `carrierBalance`.
-<5> For the `undoAsset` function, we need to revert the steps of `applyAsset` again.
-This means we need to remove the locked balance in the `asset` field and add this number again to the `balance` of the carrier's account.
-<6> For the packet account, we need to undo some items as well.
-First of all, we need to set the `deliveryStatus` again to `pending`.
-The `carrier` value need sto be nullified as well.
 
 === Task: Lock Funds
 Locking funds is actually very straightforward.
@@ -412,7 +401,7 @@ xref:transactions/start-transport.js#L53[Insert your own code here]:
 Create an updated object for the carrier account, that substracts the `security` from the carriers balance, and adds a new property `lockedSecurity` to the `asset` field of the carriers account.
 The `lockedSecurity` should equal exactly the amount, that you deducted from the carriers `balance`.
 
-NOTE: Undoing the locked tokens can be done analog by removing the custom property in the `asset` field and adding the number of tokens again to the account's `balance`.
+NOTE: To unlock locked tokens remove or nullify the custom property in the `asset` field and add the number of tokens again to the account's `balance`.
 
 === Explanation: `prepare()`
 The prepare function here is caching both the carrier account through the `senderId` and the packet account through the `recipientId`.
@@ -650,7 +639,7 @@ app
 
 === Try it out in the client app
 
-Add some screenshots & explain how to explore data & how to post tx.
+If they are not already running, start the `node` and the `client` application, like you did in xref:Workshop2.adoc#13-the-client-application[Step 1.3 in Part 1] of the workshop.
 
 ==== Fund the carrier account
 

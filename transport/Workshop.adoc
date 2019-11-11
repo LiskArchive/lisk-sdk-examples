@@ -23,19 +23,19 @@ The carrier will be rewarded upon successful transportation, and penalized if th
 
 For convenient usage of the system, a client application will be provided, that visualizes all relevant information about the supply chain tracking system, and that let's users interact with the system by posting custom transactions.
 
-=== General procedure
+== General procedure
 
 This diagram shows the general workflow of the supply chain tracking system.
 You find detailed descriptions of each step below.
 
 image::transport-uml.svg[Flow chart of Lisk Transport]
 
-==== Initialize packet account
+=== Initialize packet account
 
 Before registering the packet on the network, the sender needs to create a new account for the packet and store the passphrase on the IoT device inside the packet.
 This is necessary, because the packet needs to sign the transactions it sends to the network, in order to communicate with it.
 
-==== Register packet
+=== Register packet
 
 The packets are registered on the blockchain network by the packet sender.
 
@@ -69,7 +69,7 @@ This security cannot be accessed by the carrier, unless the transport has been f
 * add the `carrier` to the packet account.
 * set the `status` of the packet from `pending` to `ongoing`.
 
-==== Light alarm
+=== Light alarm
 
 During the transportation of the packet, the packet will track itself with different sensors, to check if it gets manipulated during the travel.
 If a manipulation is detected, it will send a self-signed alarm transaction to the network.
@@ -79,7 +79,7 @@ This `LightAlarmTransaction` will:
 * change the packets' `status` to `alarm`
 * Add the current `timestamp` to the list `asset.alarms.light` inside of the packet account.
 
-==== Finish transport
+=== Finish transport
 
 When reaching the recipient of the packet, the carrier passes the packet to the recipient.
 The recipient needs to sign the `FinishTransportTransaction`, that verifies that the packet has been passed on to the recipient.
@@ -102,11 +102,11 @@ This transaction will:
 ** Decrease `trust` of carrier by -1
 ** Set packet `status` to `fail`
 
-NOTE: xref:Workshop2.adoc[Click here to start the Lisk Transport tutorial]
-
-==== Hardware provided
+== Hardware provided
 * Raspberry Pi Zero W (running a headless Raspbian Buster lite)
 * 16GB class 10 SDCard
 * A generic analog light sensor based on an LDR
 * Jumper cables
 * USB -> Micro-USB cable
+
+NOTE: xref:Workshop2.adoc[Click here to start the Lisk Transport tutorial]
