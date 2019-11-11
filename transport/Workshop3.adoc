@@ -641,15 +641,35 @@ app
 
 If they are not already running, start the `node` and the `client` application, like you did in xref:Workshop2.adoc#13-the-client-application[Step 1.3 in Part 1] of the workshop.
 
-==== Fund the carrier account
+Go to http://localhost:3000 to access the client app through your web browser.
 
-TIP: You find prepared account credentials in `accounts.json`.
+[TIP]
+====
+You find prepared account credentials for sender, recipient and carrier in `client/accounts.json`.
+
+These credentials are already prefilled for you in the different forms in the client app.
+====
 
 ==== Register the packet
+
+First, head to the `Register Packet` page and fill out the form to register your packet in the network.
+
+IMPORTANT: Use as packet ID the address of the packet credentials that you stored on the raspberry pi in Part 1.
+
+TIP: Set mintrust to `0` or lower, because you don't have any carrier in the system yet, that has more than `0` trustpoints.
 
 image:assets/register-packet-step2.png[register-packet]
 
 image:assets/packet-account-1.png[packet account 1]
+
+==== Fund the carrier account
+
+At before we can start the transport of the packet, we first need to transfer some tokens to the carrier account, which doesn't have any tokens initially.
+This is necessary, because the carrier needs to lock the `security` in the carriers account.
+
+To do this, go to the http://localhost:3000/faucet[Faucet page] and enter the carrier address and the amount of tokens that shall e transferred to this account.
+
+Just make sure, it's enough so the carrier can afford to lock the `security` of the packet,
 
 ====  Start transport
 
