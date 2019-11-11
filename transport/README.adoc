@@ -1,110 +1,452 @@
-= Lisk Transport
-Mona Bärenfänger <mona@lightcurve.io>
-:toc:
+= Workshop Part 1: Track a packet on the blockchain
+:toc: preamble
+:experimental:
 
-Lisk Transport is a PoC (Proof of Concept) blockchain application, to showcase the features and capabilities of the Lisk SDK (alpha).
+The goal of this Part is to implement a simple application that tracks sensor measurements on the blockchain.
+That means, once the IoT application will be started, it will immediately send an `LightAlarmTransaction` to the network, whenever the sensor detects light.
 
-== Idea
+You will learn here:
 
-The goal is to create a simple decentralized supply chain tracking system.
+* How to implement the `LightAlarmTransaction`
+* How to register the new transaction type with the node application
+* How to create the iot script, and how to put it on the raspberry pi
+* How to use the client app to initialize the packet account and to track the alarm transactions in the network
 
-Before registering the packet on the network, the sender needs to create a new account for the packet and store the passphrase on the IoT device inside the packet.
-This is necessary, because the packet needs to sign the transactions it sends to the network, in order to communicate with it.
-The packets are registered on the blockchain network by the packet sender.
+NOTE: For Part 1 of the workshop, it is not needed to check any status of the packet before sending an alarm transaction.
 
-As next step, a carrier would go to the packet senders' address, receive the packet and start the delivery to the recipient.
-The carrier needs to sign a transaction, that verifies that the packet has been passed on to the carrier.
-With this transaction, the Carrier will lock a certain amount of tokens in his account, that was defined by the packet sender when registering the packet on the network.
+****
 
-During the transportation of the packet, the packet will track itself, to check if it gets manipulated during the travel.
-If a manipulation is detected, it will send a self-signed alarm transaction to the network.
+[TIP]
+====
+xref:transactions/solutions/light-alarm.js[Check out the solutions], which hold the complete working code for the custom transaction types.
 
-When reaching the recipient of the packet, the carrier passes the packet to the recipient.
-The recipient needs to sign a transaction, that verifies that the packet has been passed on to the recipient.
+You can also require the solutions directly in your app, just change
 
-image::transport-uml.svg[Flow chart of Lisk Transport]
+[source,js]
+----
+const LightAlarmTransaction = require('../transactions/light-alarm');
+----
 
-== Requirements
+To
 
-=== Software
+[source,js]
+----
+const LightAlarmTransaction = require('../transactions/solutions/light-alarm');
+----
 
-To achieve this, 3 different kind of applications need to be developed:
+But let's try not to cheat too much ;-)
+====
 
-A blockchain application::
-which accepts the application-specific <<_custom_transactions, transaction types>>.
+****
+
+== Project Architecture
+
+Three different kind of applications need to be developed, to create the decentralized supply chain system:
+
+A node application::
+which accepts the application-specific transaction types.
 This application needs to be installed on different independent nodes and will setup and maintain the blockchain which is used to store the data about the packets, carrier and users.
+
 A client application::
 which is displaying information from the blockchain to the user.
 It needs a frontend, which should be listing at least a list of packetIDs, the carrier, sender, recipient, and a status field (`pending | ongoing | alarm | success | fail`).
 It should also provide an easy way to create and send the different transaction types to the network.
+
 An IoT application::
 which is stored on a microcontroller/raspberry pi. This application will track that the packet is not manipulated during the delivery.
 To do this, certain sensors will be connected to it, that track information like light, temperature and/or humidity inside of the packet.
 If something unexpected is detected by the IoT app, it will create a transaction object, sign it, and send it to the network.
 
-=== Hardware
+The basic file structure looks as following:
++
+.Contents of `lisk-sdk-examples/transport`
+----
+.
+├── README.adoc
+├── Workshop.adoc
+├── client                                          <1>
+│   ├── accounts.json
+│   ├── app.js
+│   ├── package.json
+│   ├── scripts
+│   └── views
+├── iot                                             <2>
+│   ├── README.md
+│   ├── lisk_rpi_ldr_and_temperature_sensors_wiring.png
+│   ├── light_alarm
+│   │   ├── package.json
+│   │   └── index.js
+├── node                                            <3>
+│   ├── index.js
+│   └── package.json
+└── transactions                                    <4>
+    ├── finish-transport.js
+    ├── light-alarm.js
+    ├── register-packet.js
+    └── start-transport.js
+----
++
+<1> Contains the code for the <<project-architecture, client application>>
+<2> Contains the code for the <<project-architecture, IoT application>>
+<3> Contains the code for the <<project-architecture, node application>>
+<4> Contains the custom transactions, that are used by the node and client app.
 
-* https://buyzero.de/collections/raspberry-pi-zero-kits/products/raspberry-pi-zero-w?variant=38399156114[Raspberry Pi Zero W]
-* https://www.raspberrypi.org/documentation/installation/sd-cards.md[SD card]
-* https://www.amazon.de/PEMENOL-Fotowiderstand-Anschl%C3%BCsse-Photodetektor-Comperator/dp/B07DP1YM5X/ref=sr_1_1?keywords=ldr+modul&qid=1569485546&s=gateway&sr=8-1[Photoresistor]
-* https://www.amazon.de/Female-Female-Male-Female-Male-Male-Steckbr%C3%BCcken-Drahtbr%C3%BCcken-bunt/dp/B01EV70C78/ref=sr_1_5?keywords=dupont+kabel&qid=1569485735&s=gateway&sr=8-5[Jumper cables]
-* https://www.amazon.de/AZDelivery-AM2302-Temperatursensor-Luftfeuchtigkeitssensor-Arduino/dp/B06XF4TNT9/ref=sr_1_1_sspa?crid=35G9VO3PY15BQ&keywords=dht22&qid=1569485584&s=gateway&sprefix=dht%2Caps%2C153&sr=8-1-spons&psc=1&smid=A1X7QLRQH87QA3&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzOE1YSzU4WlBZUDdVJmVuY3J5cHRlZElkPUEwODAwMjUwMUNNRkdEQUNQUTJYUCZlbmNyeXB0ZWRBZElkPUEwNzEwNjA5VTJNSlFXNjM5RzAzJndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ==[Temp/Humidity sensor]
-* USB -> Micro-USB cable
-* Battery/Powerbank
+== 1.1 Implement the LightAlarm transaction
 
-== Connecting to the Raspberry Pi
+For the very simple version of the packet tracking, only one custom transaction type needs to be implemented: the `LightAlarmTransaction`.
+This transaction will be sent by the IoT device inside of the packet, if it detects anomalies with its' connected photoresistor.
 
-To simplify the network setup for the workshop we're going to use ssh over USB. During the workshop the Raspberry Pi will also be connected 
-to the internet, thruough its own wifi, to be able to use npm. 
+The only thing you need to implement in this step yourself is the `validateAsset` function. For more details how to do this, check the <<task-implement-validateasset, explanation below>>.
 
-Each Raspberry Pi has it's own hostname printed in the box and a password for the default `pi` user.
+.Navigate into the `transactions/` directory
+[source,bash]
+----
+cd ../transactions
+----
 
-==== Connecting
-- connect the micro-usb plug of the provided cable to the usb socket labeled `usb` (wait for about a minute and a half)
-- run the command `ssh pi@<the hostname of your Pi here>` and when asked enter the password for your Pi
+.Contents of `light-alarm.js`
+[source,js]
+----
+const {
+    BaseTransaction,
+    TransactionError,
+} = require('@liskhq/lisk-transactions');
 
-=== Custom Transactions
+/**
+ * Send light alarm transaction when the packet has been opened (accepts timestamp).
+ * Self-signed by packet.
+ * The `LightAlarmTransaction` is extended from the `BaseTransaction` interface.
+ */
+class LightAlarmTransaction extends BaseTransaction {
 
-lightAlarmTransaction::
-* Signed by: Packet
-* Required data: timestamp
-* Description: If light is detected by the photoresistor inside the packet, the packet sends this transaction to the network.
-This transaction should only go off, when the packet is traveling (status should be `ongoing` or `alarm`).
-It will save the current timestamp to the packet accounts' alarms list ad change the status to `alarm`.
+    /* Static property that defines the transaction `type` (has to be unique in the network). */
+    static get TYPE () {
+        return 23;
+    }
 
-registerPacketTransaction::
-* Signed by: Sender
-* Required data: packetID, receiverID, postage, security, minTrust
-* Altered data: `status="pending"`, describes the current status of the transport inside the packet account.
-* Description: Register packet on the network.
-A separate account for the packet will be created.
-** `status`: the status of the transport
-** `recipient` the ID of the recipient in the network (to verify succesful delivery later).
-** `postage` needs to be paid by the sender, and is stored in the account of the packet.
-The `postage` will be paid to the carriers account, after successful delivery of the packet.
-** `security` is the number of tokens a carrier has to lock as a security, before carrying the packet.
-Will be unlocked on successful delivery of the packet.
-** `minTrust` is the minimum trust that is needed, to register as a carrier for this packet.
+    /* The transaction `fee`. This needs to be paid by the sender when posting the transaction to the network.
+       It is set to `0`, so the packet doesn't need any funds to send an alarm transaction. */
+    static get FEE () {
+        return '0';
+    };
 
-startTransportTransaction::
-* Signed by: Carrier
-* Required data: packetID
-* Altered data: `status="ongoing"`, describes the current status of the delivery inside the packet account.
-* Description: Defines start time of the packet delivery.
-`security` will get deducted form the carrier account and added to the packet account.
-The `carrierID` is added to the packet account.
-This transaction should fail, if the Carrier does not fulfill the requirements in terms of trust and security, that the sender defined as a minimum in the `registerPackageTransaction`.
+    /* Data from the packet account is cached from the databse. */
+    async prepare(store) {
+        await store.account.cache([
+            {
+                address: this.senderId,
+            }
+        ]);
+    }
 
-finishTransportTransaction::
-* Signed by: Recipient
-* Required data: packetID, status="success"|"fail"
-* Altered data: `deliveryStatus="successful|failed"`, describes the status of the delivery inside the packet account.
-** `successful` if packet was delivered in estimated timespan.
-** `failed`, if the packet does not arrive.
-* Description: Defines the end of the packet transport.
-** If the delivery is successful:
-*** The Carrier receives the postage tokens on successful transportation of the packet.
-*** The Carrier receives a certain amount of trust-points.
-** If the delivery fails, the Carrier can be punished:
-*** Security tokens and Postage will be transferred to packet Sender
-*** Deduction of trust points from the Carrier
+    /* Static checks for presence and correct datatype of `timestamp`, which holds the timestamp of when the alarm was triggered. */
+    validateAsset() {
+        const errors = [];
+        /*
+        Implement your own logic here.
+        Static checks for presence of `timestamp` which holds the timestamp of when the alarm was triggered
+        */
+
+        return errors;
+    }
+
+    applyAsset(store) {
+        /* Insert the logic for applyAsset() here */
+    }
+
+    undoAsset(store) {
+        const errors = [];
+        const packet = store.account.get(this.senderId);
+
+        /* --- Revert packet status --- */
+        packet.asset.status = null;
+        packet.asset.alarms.light.pop();
+
+        store.account.set(packet.address, packet);
+        return errors;
+    }
+
+}
+
+module.exports = LightAlarmTransaction;
+----
+
+TIP: Go to the Lisk Documentation, to get an https://lisk.io/documentation/lisk-sdk/customize.html#_the_basetransaction_interface[overview about the required methods for custom transactions]
+
+=== Task: Implement `validateAsset()`
+
+Implement your own logic for the `validateAsset()` function xref:transactions/light-alarm.js#L31[here].
+It shall validate the timestamp that got sent by the `LightAlarmTransaction`.
+In case that an error is found, push a new `TransactionError` into the `errors` array and return it in the function.
+
+TIP: All data, that is sent with the transaction is available through the `this` variable. So, to access the timestamp of the transaction, use `this.timestamp`.
+
+The snippet below describes how to create an `TransactionError` object. Try to add a fitting `TransactionError` to the `errors` list of `validateAsset()`, in case the timestamp is not present, or if it has the wrong format.
+
+NOTE: The expected data type for the timestamp is `number`.
+
+.Example: How to create a `TransactionError` object
+[source, js]
+----
+new TransactionError(
+	'Invalid "asset.hello" defined on transaction',
+	this.id,
+	'.asset.hello',
+	this.asset.hello,
+	'A string value no longer than 64 characters',
+)
+----
+
+TIP: In case you need some inspiration how to implement the `validateAsset()` function, check out the other examples like `hello_world` inside of the `lisk-sdk-examples` repository, or check the https://lisk.io/documentation/lisk-sdk/tutorials/hello-world.html#_3_create_a_new_transaction_type[tutorials] in the Lisk Documentation.
+
+IMPORTANT: To verify your implementation of `validateAsset()`, compare it with the xref:transactions/solutions/light-alarm.js[Solution for 1.1].
+
+=== Explanation: `applyAsset()`
+
+A possible implementation of `applyAsset` for the `LightAlarmTransaction`. See detailed descriptions of the implementation below.
+
+Copy the snippet and replace the `applyAsset` function in `light-alarm.js` with it, to complete the implementation of the transaction type.
+
+.Implementation of applyAsset()
+[source,js]
+----
+/*Inside of `applyAsset`, we can make use of the cached data from the `prepare` function,
+ * which is stored inside of the `store` parameter.*/
+applyAsset(store) {
+    const errors = [];
+
+    /* With `store.account.get(ADDRESS)` we now get the account data of the packet account.
+     * We specify `this.senderId` as address, because the light alarm is always signed and sent by the packet itself. */
+    const packet = store.account.get(this.senderId);
+
+    /**
+     * Update the Packet account:
+     * - set packet status to "alarm"
+     * - add current timestamp to light alarms list
+     */
+    packet.asset.status = 'alarm';
+    packet.asset.alarms = packet.asset.alarms ? packet.asset.alarms : {};
+    packet.asset.alarms.light = packet.asset.alarms.light ? packet.asset.alarms.light : [];
+    packet.asset.alarms.light.push(this.timestamp);
+
+    /* When all changes have been made, they are applied to the database by executing `store.account.set(ADDRESS, DATA)`; */
+    store.account.set(packet.address, packet);
+
+    /* Unlike in `validateAsset`, the `store` parameter is present here.
+     * That means, inside of `applyAsset` it is possible to make dynamic checks against the existing data in the database.
+     *  As we do not need to this here, an empty `errors` array is returned at the end of the function. */
+    return errors;
+}
+----
+
+=== Register the transaction with the node application
+
+Now, that we have created the new custom transaction type `LightAlarmTransaction`, it needs to be registered with the node application.
+Without this step, the nodes in the network wouldn't recognize the new transaction type and therefore wouldn't accept the transactions.
+
+.Update node/index.js
+[source,js]
+----
+const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
+const LightAlarmTransaction = require('../transactions/light-alarm');           <1>
+
+configDevnet.app.label = 'lisk-transport';
+
+const app = new Application(genesisBlockDevnet, configDevnet);
+
+app.registerTransaction(LightAlarmTransaction);                                 <2>
+
+app
+    .run()
+    .then(() => app.logger.info('App started...'))
+    .catch(error => {
+        console.error('Faced error in application', error);
+        process.exit(1);
+    });
+----
+
+<1> Require the custom transaction type.
+<2> Register the custom transaction type with the application. This file might look slightly different if you have used the script from `/create-dev-env` folder. This script will add an extra line to change the host for the database. Don't worry if you haven't used this script.
+
+NOTE: After the registration of a new transaction type, the node needs to be restarted to apply the changes.
+
+The node application is now ready to accept and process the new transaction type `LightAlarmTransaction`.
+
+== 1.2 The IoT application
+
+In this step we are going to create the script that will run on the Raspberry Pi to track if the packet has been manipulated.
+
+=== Connect to the Raspberry Pi
+
+Connect a micro usb cable with the Raspberry and then connect the other end to a computer.
+
+image:assets/usb-port.jpg[How to connect to your Pi]
+
+You should be able to log-in through `ssh` by running:
+
+[source, bash]
+----
+ssh pi@10.10.10.10
+----
+
+If the pi won't respond, press kbd:[CTRL+C] and try the last command again.
+If prompted with a warning just hit enter to accept the default (Yes).
+
+Type in the password.
+
+TIP: The password to ssh into your pi is written on the box that contained the pi.
+
+Your terminal should now be connected to the Raspberry Pi.
+On the Raspberry, create a new folder, which will hold the script for the IoT application:
+
+=== Create the tracking script
+
+[source,bash]
+----
+mkdir light_alarm #Create a folder to hold the tracking script.
+cd light_alarm
+npm init --yes #Creates the `package.json` file.
+npm i @liskhq/lisk-transactions @liskhq/lisk-api-client @liskhq/lisk-constants rpi-pins #Install dependencies.							<5>
+----
+
+Now, create a new file `light-alarm.js` and copy the code of `transport/transactions/light-alarm.js` from your local computer.
+
+NOTE: You should have completed the implementation of `light-alarm.js` in <<1-1-implement-the-lightalarm-transaction, step 1.1>>, before copying the code over to the raspberry pi.
+
+Insert here the code of the `LightAlarmTransaction`, that we created in <<1-1-implement-the-lightalarm-transaction, step 1.1>> and save the file.
+
+The second file you need to create is the actual tracking script.
+Create a new file `indexjs` that shall hold our trakcing script, insert the code snippet below and save the file.
+
+.Contents of `index.js`
+[source,js]
+----
+const PIN = require("rpi-pins");
+const GPIO = new PIN.GPIO();
+// Rpi-pins uses the WiringPi pin numbering system (check https://pinout.xyz/pinout/pin16_gpio23).
+GPIO.setPin(4, PIN.MODE.INPUT);
+const LightAlarmTransaction = require('./light-alarm');
+const { APIClient } = require('@liskhq/lisk-api-client');
+
+// Replace `localhost` with the IP of the node you want to reach for API requests.
+const api = new APIClient(['http://localhost:4000']);
+
+// Check config file or visit localhost:4000/api/node/constants to verify your epoc time (OK when using /transport/node/index.js)
+const dateToLiskEpochTimestamp = date => (
+    Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
+);
+
+const packetCredentials = { /* Insert the credentials of the packet here in step 1.3 */ }
+
+// Check the status of the sensor in a certain intervall (here: 1 second).
+setInterval(() => {
+	let state = GPIO.read(4);
+	if(state === 0) {
+		console.log('Package has been opened! Send lisk transaction!');
+        // Uncomment the below code in step 1.3 of the workshop
+        /*let tx =  new LightAlarmTransaction({
+            timestamp: dateToLiskEpochTimestamp(new Date())
+        });
+
+        tx.sign(packetCredentials.passphrase);
+
+        api.transactions.broadcast(tx.toJSON()).then(res => {
+            console.log("++++++++++++++++ API Response +++++++++++++++++");
+            console.log(res.data);
+            console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
+            console.log(tx.stringify());
+            console.log("++++++++++++++++ End Script +++++++++++++++++");
+        }).catch(err => {
+            console.log(JSON.stringify(err.errors, null, 2));
+        });*/
+	} else {
+		console.log('Alles gut');
+	}
+}, 1000);
+
+----
+
+=== Run the tracking script
+
+To check if the script can read the sensor data, uncomment the `console.log` statements in the trakcing script and start the script by running:
+
+[source, bash]
+----
+node index.js
+----
+
+Now place the sensor in a dark place and then in a light place, and verify the correct logs are shown in the console.
+
+If no light is detected, it should log `Alles gut`, and if light is detected, it will log `Package has been opened! Send lisk transaction!`.
+
+It will also try to send the light alarm transaction in case it detects light.
+This will fail, as we didn't provide the passphrase of the packet in the script, which is needed to sign the `LightAlarmTransaction`.
+
+Let's use the client app in the next step 1.3 to initialize a new account for the packet.
+We can then store the passphrase on the raspberry pi and explore the send alarm transaction through the client app.
+
+== 1.3 The client application
+
+While your Raspberry Pi is still connected, open a local terminal window and navigate into the `client` app.
+
+[NOTE]
+====
+The complete implementation of the client is prepared for you before the workshop.
+In Part 1, we will only make use of the `Initialize`, `LightAlarm` and `Packet&Carrier` pages.
+====
+
+[source, bash]
+----
+cd ../client
+npm i
+node app.js
+----
+
+.Navigate to the `Initialize` page to create a new packet account
+image:assets/initialize-step1.png[Initialization of the packet account]
+
+Every time that you refresh the page, new packet credentials are created and initialized in the network.
+
+Copy the object with the credentials and past it as `packetCredentials` in your <<create-the-tracking-script, tracking script>> on the Raspberry Pi.
+The Raspberry has now the power to identify itself with the network, by signing the transaction with it's secret passphrase, before sending it to the network.
+
+To now track the light alarm with the client application, do the following:
+
+. To start the node application, run this inside of the `node` folder:
++
+[source, bash]
+----
+node index.js | npx bunyan -o short
+----
+. to start the client, run this inside the `client` folder:
++
+[source, bash]
+----
+node app.js
+----
+. Put the sensor of your raspberry in a dark place.
+. Now, start the tracking script on your raspberry pi:
++
+[source, bash]
+----
+node index.js
+----
+. Go to the `LightAlarm` page and refresh.
+Nothing should be shown on the page, yet.
+. Now, shed some light on the sensor, and refresh the page again
+. You should see a list of light alarm transaction object, that just got sent by the raspberry pi.
+
+image:assets/light-alarm-step1.png[List of Light Alarm transactions]
+
+If you see the alarm transactions incoming, you have successfully completed Part 1 of the workshop, congratz! \o/
+
+TIP: To see the data inside the packet account, check the `Packet&Carrier` page, which lists the accounts of all packets and carriers in the network.
+
+image:assets/packet-carrier-step1.png[packet account]
+
+[NOTE]
+====
+You are now able to detect a packet manipulation and to save a corresponding record on the blockchain.
+
+xref:Workshop3.adoc[Click here to continue with Part 2: Create a simple supply chain system]
+====
