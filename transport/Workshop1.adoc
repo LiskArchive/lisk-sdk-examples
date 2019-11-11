@@ -27,7 +27,7 @@ Otherwise, you have to manually install:
 
 Set up the needed software and hardware and installation of the dependencies.
 
-IMPORTANT: If you run into troubles during the setup, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker].
+IMPORTANT: If you run into troubles during the setup, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker] If you decide to follow this guide, you can skip the rest of this document.
 
 === Clone the repo and install the dependencies
 
@@ -99,7 +99,7 @@ Starting the node for the first time might require some time (up to 3 minutes)!
 
 If everything is running fine, you can stop the node by hitting kbd:[CTRL+C].
 
-WARNING: In case the node crashes or doesn't work, follow the xref:./DOCKER.md[this guide] to set up a dedicated development environment using Docker and Docker-Compose. The script will set up the whole environment.
+WARNING: In case the node crashes or doesn't work, follow the xref:./DOCKER.md[this guide] to set up a dedicated development environment using Docker and Docker-Compose. The script will set up the whole environment. If you decide to follow this guide, you can skip the rest of this document
 
 === Prepare the IoT device
 
