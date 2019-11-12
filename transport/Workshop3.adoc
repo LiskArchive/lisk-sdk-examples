@@ -775,17 +775,42 @@ TIP: Move on to the next section to find out about advanced knowledge and possib
 
 === Start the tracking script automatically
 
+`pm2` provides an easy way to let your script start automatically after boot.
+This is in
+
+[source, bash]
+----
+npm install pm2 -g
+pm2 start --name light-alarm index.js
+pm2 startup
+----
+
+This should print a fitting command for you in the terminal.
+Copy it and paste it in the temrinal again to complete the setup of the `pm2` startup script.
+
+While your tracking script is started and running with `pm2`, execute:
+
+[source, bash]
+----
+pm2 save
+----
+
+To save the process in the list of processes, that will be started autmatically when staring the raspberry pi.
+
+Now log out from your Raspberry Pi, disconnect it from your machine, and connect it to a portable energy source, like a power bank.
+After 1-2 minutes of booting, the tracking script will start running and it will check the light sensor every second.
+
 === Add more sensors
 
 Connect the Temp/Humidity sensor to your Raspberry Pi and implement a `TemperatureAlarm` or `HumidityAlarm` analog to the `LightAlarm` transaction type.
 
 === Connecting multiple nodes
 
-Explains how to connect several nodes to your blockchain
+Connect several nodes to your blockchain network
 
 === Replace dummy delegates with real ones
 
-How to exchange the dummy delegates with real delegates.
+Exchange the dummy delegates with real delegates.
 
 === Writing unit tests for custom transactions
 
