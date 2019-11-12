@@ -18,8 +18,14 @@ const PORT = 3000;
 const app = express();
 const api = new APIClient([API_BASEURL]);
 
+app.locals.payload = {
+    tx: null,
+    res: null,
+};
+
 // Configure Express
-app.set('view engine', 'pug')
+app.set('view engine', 'pug');
+app.use(express.static('public'));
 
 // parse application/json
 app.use(bodyParser.json());
@@ -113,10 +119,17 @@ app.get('/post-start-transport', async(req, res) => {
 });
 
 /**
- * Request page for sending finish transporttransaction
+ * Request page for sending finish transport transaction
  */
 app.get('/post-finish-transport', async(req, res) => {
     res.render('post-finish-transport');
+});
+
+/**
+ * Page for displaying responses
+ */
+app.get('/payload', async(req, res) => {
+    res.render('payload', { transaction: res.app.locals.payload.tx, response: res.app.locals.payload.res });
 });
 
 /**
@@ -192,8 +205,6 @@ app.get('/initialize', async(req, res) => {
         console.log(JSON.stringify(err.errors, null, 2));
     });
 
-
-
     res.end()
 });
 
@@ -218,17 +229,25 @@ app.post('/post-register-packet', function (req, res) {
 
     registerPackageTransaction.sign(passphrase);
 
-    api.transactions.broadcast(registerPackageTransaction.toJSON()).then(res => {
+    api.transactions.broadcast(registerPackageTransaction.toJSON()).then(response => {
+        res.app.locals.payload = {
+            res: response.data,
+            tx: registerPackageTransaction.toJSON(),
+        };
         console.log("++++++++++++++++ API Response +++++++++++++++++");
-        console.log(res.data);
+        console.log(response.data);
         console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
         console.log(registerPackageTransaction.stringify());
         console.log("++++++++++++++++ End Script +++++++++++++++++");
+        res.redirect('/payload');
     }).catch(err => {
         console.log(JSON.stringify(err.errors, null, 2));
+        res.app.locals.payload = {
+            res: err,
+            tx: registerPackageTransaction.toJSON(),
+        };
+        res.redirect('/payload');
     });
-
-    res.redirect('/post-register-packet');
 });
 
 app.post('/post-start-transport', function (req, res) {
@@ -243,17 +262,25 @@ app.post('/post-start-transport', function (req, res) {
 
     startTransportTransaction.sign(passphrase);
 
-    api.transactions.broadcast(startTransportTransaction.toJSON()).then(res => {
+    api.transactions.broadcast(startTransportTransaction.toJSON()).then(response => {
+        res.app.locals.payload = {
+            res: response.data,
+            tx: startTransportTransaction.toJSON(),
+        };
         console.log("++++++++++++++++ API Response +++++++++++++++++");
-        console.log(res.data);
+        console.log(response.data);
         console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
         console.log(startTransportTransaction.stringify());
         console.log("++++++++++++++++ End Script +++++++++++++++++");
+        res.redirect('/payload');
     }).catch(err => {
         console.log(JSON.stringify(err.errors, null, 2));
+        res.app.locals.payload = {
+            res: err,
+            tx: startTransportTransaction.toJSON(),
+        };
+        res.redirect('/payload');
     });
-
-    res.redirect('/post-start-transport');
 });
 
 app.post('/faucet', function (req, res) {
@@ -266,17 +293,25 @@ app.post('/faucet', function (req, res) {
     });
 
     fundTransaction.sign(accounts.sender.passphrase); // Genesis account
-    api.transactions.broadcast(fundTransaction.toJSON()).then(res => {
+    api.transactions.broadcast(fundTransaction.toJSON()).then(response => {
+        res.app.locals.payload = {
+            res: response.data,
+            tx: fundTransaction.toJSON(),
+        };
         console.log("++++++++++++++++ API Response +++++++++++++++++");
-        console.log(res.data);
+        console.log(response.data);
         console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
         console.log(fundTransaction.stringify());
         console.log("++++++++++++++++ End Script +++++++++++++++++");
+        res.redirect('/payload');
     }).catch(err => {
         console.log(JSON.stringify(err.errors, null, 2));
+        res.app.locals.payload = {
+            res: err,
+            tx: fundTransaction.toJSON(),
+        };
+        res.redirect('/payload');
     });
-
-    res.redirect('/faucet');
 });
 
 app.post('/post-finish-transport', function (req, res) {
@@ -294,17 +329,25 @@ app.post('/post-finish-transport', function (req, res) {
 
     finishTransportTransaction.sign(passphrase);
 
-    api.transactions.broadcast(finishTransportTransaction.toJSON()).then(res => {
+    api.transactions.broadcast(finishTransportTransaction.toJSON()).then(response => {
+        res.app.locals.payload = {
+            res: response.data,
+            tx: finishTransportTransaction.toJSON(),
+        };
         console.log("++++++++++++++++ API Response +++++++++++++++++");
-        console.log(res.data);
+        console.log(response.data);
         console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
         console.log(finishTransportTransaction.stringify());
         console.log("++++++++++++++++ End Script +++++++++++++++++");
+        res.redirect('/payload');
     }).catch(err => {
         console.log(JSON.stringify(err.errors, null, 2));
+        res.app.locals.payload = {
+            res: err,
+            tx: finishTransportTransaction.toJSON(),
+        };
+        res.redirect('/payload');
     });
-
-    res.redirect('/post-finish-transport');
 });
 
 app.listen(PORT, () => console.info(`Explorer app listening on port ${PORT}!`));
