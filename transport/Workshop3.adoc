@@ -639,7 +639,7 @@ app
 
 === Try it out in the client app
 
-If they are not already running, start the `node` and the `client` application, like you did in xref:Workshop2.adoc#13-the-client-application[Step 1.3 in Part 1] of the workshop.
+If they are not already running, start the `node`, `client` and the `iot` application, like you did in xref:Workshop2.adoc#13-the-client-application[Step 1.3 in Part 1] of the workshop.
 
 Go to http://localhost:3000 to access the client app through your web browser.
 
@@ -650,57 +650,120 @@ You find prepared account credentials for sender, recipient and carrier in `clie
 These credentials are already prefilled for you in the different forms in the client app.
 ====
 
+.The accounts of the different actors in Lisk Transport
+[source,json]
+----
+{
+  "carrier": {
+    "address": "6795425954908428407L",
+    "passphrase": "coach pupil shock error defense outdoor tube love action exist search idea",
+    "encryptedPassphrase": "iterations=1&salt=4ba0d3869948e39a7f9a096679674655&cipherText=f0a1f0009ded34c79a0af40f12fcf35071a88de0778abea2a1f07861386a4b5c6b13f308f1ebf1af9098b66ed77cb22fc8bd872fa71ff71f3dbed1194928b7e447cb4089359a8be64093f9c1c8a3dca8&iv=e0f1fb7574873142c672a565&tag=ad56e67c5115e9a211c3907c400b9458&version=1",
+    "publicKey": "7b97ac4819515de345570181642d975590154e434f86ece578c91bbfa2e4e1e7",
+    "privateKey": "c7723897eaaf4462dc0b914af2b1e4905e42a548866e0ddfb09efdfdd4d2df507b97ac4819515de345570181642d975590154e434f86ece578c91bbfa2e4e1e7"
+  },
+  "recipient": {
+    "name": "delegate_100",
+    "address": "10881167371402274308L",
+    "passphrase": "jump bicycle member exist glare hip hero burger volume cover route rare",
+    "encryptedPassphrase": "iterations=1&salt=7ea547604c978413b57cec9cbbe091c1&cipherText=f337705e4a7987fe83c0aaf3bb45931cbf9a4973201849493612e08f59c87682d68303d9370f9c8e7190ef8d370a4b88b874aa6c052f3ec5111b18078aa91788351126c100fafb&iv=214dfb8da1a51a83bf1fa09d&tag=56ae2bd0357cdeebc8e3166da13a8d50&version=1",
+    "publicKey": "904c294899819cce0283d8d351cb10febfa0e9f0acd90a820ec8eb90a7084c37"
+  },
+  "sender": {
+    "address": "16313739661670634666L",
+    "passphrase": "wagon stock borrow episode laundry kitten salute link globe zero feed marble"
+  }
+}
+----
+
+==== Initialize a new packet account
+
+Go to http://localhost:3000/initialize and copy the packet credentials https://github.com/LiskHQ/lisk-sdk-examples/blob/lisk-transport/transport/iot/light_alarm/index.js#L18[in your tracking script] on the Raspberry Pi.
+
+.Create new packet credentials
+image:assets/1-initialize.png[Initialize packet account]
+
 ==== Register the packet
 
-First, head to the `Register Packet` page and fill out the form to register your packet in the network.
+First, head to the http://localhost:3000/post-register-packet[Register Packet] page and fill out the form to register your packet in the network.
 
 IMPORTANT: Use as packet ID the address of the packet credentials that you stored on the Raspberry Pi in Part 1.
 
 TIP: Set `minTrust` to `0` or lower, because you don't have any carrier in the system yet, that has more than `0` trustpoints.
 
 .Sender posts the `RegisterPacket` transaction to register the packet on the network
-image:assets/register-packet-step2.png[register-packet]
+image:assets/2-register.png[register packet]
 
 .Check the `Packet & Carrier` page to see if the packet status is now "pending"
-image:assets/packet-account-1.png[packet account 1]
+image:assets/3-pending.png[packet pending]
+
+If you open the packet at this point, the light alarm transaction should fail, because the packet has the wrong `status`.
+It should display the following error in the terminal, where your `iot` application is running:
+
+[source, js]
+----
+[
+  {
+    "message": "Transaction invalid because delivery is not \"ongoing\".",
+    "name": "TransactionError",
+    "id": "5902807582253136271",
+    "dataPath": "packet.asset.status",
+    "actual": "pending",
+    "expected": "Expected status to be equal to \"ongoing\" or \"alarm\""
+  }
+]
+----
 
 ==== Fund the carrier account
 
 Before the transport of the packet starts, we first need to transfer some tokens to the carrier account, which doesn't have any tokens initially.
-This is necessary, because the carrier needs to lock the `security` in the carriers account.
+This is necessary, because the carrier needs to lock the `security` in the carriers account, in order to start the transport.
 
-To do this, go to the http://localhost:3000/faucet[Faucet page] and enter the carrier address and the amount of tokens that shall be transferred to this account.
+To do this, go to the http://localhost:3000/faucet[Faucet page] and enter the carrier address(`6795425954908428407L`) and the amount of tokens that shall be transferred to this account.
 
 Just make sure, it's enough so the carrier can afford to lock the `security` of the packet, that was defined in the step before, where you registered the packet in the network.
 
-====  Start transport
+TIP: You can check on the `Accounts` page, if the carrier received the tokens successfully.
 
-The carrier needs to post the transaction on the `Start Transport` page, to start the transport.
+image:assets/4-faucet.png[Fund carrier]
 
-The only thing the carrier needs to specify here, is the packetID.
+==== Start transport
+
+The carrier needs to post the transaction on the http://localhost:3000/post-start-transport[Start Transport] page, to start the transport.
+
+The only thing the carrier needs to specify here, is the `packetId`.
 
 The transaction will only be accepted, if the carrier has enough `trust` and `security`, for the specified packet.
 
 .Carrier posts the `StartTransport` transaction, and then receives the packet from the sender
-image:assets/start-transport.png[start transport]
+image:assets/5-start.png[start transport]
 
 .Check the `Packet & Carrier` page to see if the packet status has changed to "ongoing"
-image:assets/packet-account-2.png[packet account 2]
+image:assets/6-ongoing.png[packet account 2]
+
+IMPORTANT: The light alarm will only go off after posting `StartTransport` and before posting `FinishTransport`, because of the status check that we added in <<Check for status in the lightAlarmTransaction, #check-for-status-in-the-lightalarmtransaction>>
+
+image:assets/7-alarm.png[packet alarm]
 
 ==== Finish transport
 
-When the carrier passes the packet to the recipient, the recipient will sign the final `FinishTransport` transaction, which will complete the transport of the packet.
+When the carrier passes the packet to the recipient, the recipient will sign the final http://localhost:3000/post-finish-transport[FinishTransport] transaction, which will complete the transport of the packet.
 
-The only thing the recipient needs to specify here are the packetID and the `status`, which can be `fail` or success.
+The only thing the recipient needs to specify here are the `packetId` and the `status`, which can be `fail` or `success`.
 
 To help with the decision of the final status, the recipient can inspect the packet after receiving it.
 But that's not all!
 Because of the IoT device inside the packet, the recipient can also check in the client app, if the packet triggered any alarm.
 
-NOTE: In case the recipient doesn't receive the packet after a reasonable amount of time, the recipient can and should send the `FinishTransport` transaction (most likely with `status=fail`).
+NOTE: In case the recipient doesn't receive the packet after a reasonable amount of time, the recipient can and should send the `FinishTransport` transaction, too (most likely with `status=fail`).
 
 .Recipient posts the `FinishTransport` transaction, once he/she received the packet from the carrier
-image:assets/finish-transport.png[finish transport]
+image:assets/8-finish.png[finish transport]
+
+.Transport fail
+image:assets/9-fail.png[finish transport]
+
+.Transport success
+image:assets/92-success.png[finish transport]
 
 == 2.4 Next steps (optional)
 
