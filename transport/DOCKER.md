@@ -61,6 +61,15 @@ Therefore, you should see folders like `node`, `iot`, `transactions`, ...
 ls
 ```
 
+### Install Dependencies
+Next, we have to install the required dependencies:
+```bash
+cd transactions
+npm install
+cd ../node
+npm install
+```
+
 ### Change Postgres Host
 In order to be able to connect to the Postgres container, we have to add one configuration line to the `index.js` file inside the `/node` folder. Navigate inside the `/node` folder.
 
