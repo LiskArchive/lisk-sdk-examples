@@ -392,7 +392,7 @@ While your Raspberry Pi is still connected, open a local terminal window and nav
 [NOTE]
 ====
 The complete implementation of the client is prepared for you before the workshop.
-In Part 1, we will only make use of the `Initialize`, `LightAlarm` and `Packet&Carrier` pages.
+In Part 1, we will only make use of the `Initialize` and `Packet&Carrier` pages.
 ====
 
 [source, bash]
@@ -431,16 +431,12 @@ node app.js
 ----
 node index.js
 ----
-. Go to the `LightAlarm` page and refresh.
+. Go to the `Packet&Carrier` page and refresh.
 Nothing should be shown on the page, yet.
 . Now, shed some light on the sensor, and refresh the page again
-. You should see a list of light alarm transaction object, that just got sent by the raspberry pi.
+. If you refresh again, you should see a list of light alarm transaction object, that just got sent by the Raspberry Pi.
 
-image:assets/light-alarm-step1.png[List of Light Alarm transactions]
-
-If you see the alarm transactions incoming, you have successfully completed Part 1 of the workshop, congratz! \o/
-
-TIP: To see the data inside the packet account, check the `Packet&Carrier` page, which lists the accounts of all packets and carriers in the network.
+If you see the timestamps are added to `asset.alarms.light` of the packet account, you have successfully completed Part 1 of the workshop, congratz! \o/
 
 image:assets/packet-carrier-step1.png[packet account]
 
