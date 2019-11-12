@@ -19,9 +19,7 @@ NOTE: To get a good overview about the general workflow we are going to implemen
 "Got more of those... solutions?"::
 https://github.com/LiskHQ/lisk-sdk-examples/tree/lisk-transport/transport/transactions/solutions[Yes we have!], check out the fully working implementation of the other transactions in the `transactions/solutions/` folder.
 
-After completing a task, check
-
-But again, let's try not to cheat too much ;-)
+After completing a task, compare with the solutions, to verify if you completed the task successfully. But be aware, there is not only one valid solution, how to write the code. In step 2.3 we will try out the actual code, to verify it works as expected.
 ====
 
 == 2.0 Implement RegisterPacket
@@ -414,10 +412,15 @@ It is also possible to pass in just one query object without surrounding array. 
 [source,js]
 ----
 async prepare(store) {
-    await store.account.cache({
-        address: this.recipientId,
-    });
-}
+        await store.account.cache([
+            {
+                address: this.recipientId,
+            },
+            {
+                address: this.senderId,
+            }
+        ]);
+    }
 ----
 
 You can find a more detailed explanation in the custom transactions deep dive article which you can find on https://lisk.io/blog/tutorial/custom-transactions-statestore-basetransaction-transfer-transaction#6658[our blog]. The link opens the section `B/ Combining Filters`.
@@ -471,7 +474,7 @@ applyAsset(store) {
             );
             return errors;
         }
-        // if the transport was a success
+        // if the transport was a SUCCESS
         if (this.asset.status === "success") {
             /**
              * Update the Carrier account:
@@ -488,7 +491,7 @@ applyAsset(store) {
             /* Write your own code here */
             return errors;
         }
-        // if the transport failed
+        // if the transport FAILED
         /**
          * Update the Sender account:
          * - Add postage and security to balance
@@ -572,7 +575,9 @@ async prepare(store) {
 xref:transactions/finish-transport.js#L83[Write your own logic or the case of a successful transport of the packet here.]
 
 When the recipient receives the packet from the carrier, the recipient would sign and send the `FinishTransportTransaction`.
-If the recipient consideres the transport successfull, the carrier should be rewarded accordngly, and the packet status should be updated to `success`
+If the recipient consideres the transport successfull, the carrier should be rewarded accordngly, and the packet status should be updated to `success`.
+
+TIP: Find more information about what exactly to do in the code comments of `finish-transport.js`
 
 == 2.3 Test out the full workflow with the client app
 
@@ -584,7 +589,7 @@ Insert the snippet below in the `applyAsset()` function of xref:transactions/lig
 
 If the status isn't `ongoing` or `alarm` it will create a new `TransactionError`, push it to the `errors` list, and return it.
 
-IMPORTANT: You have to insert this snippet twice: Once in `transaction/light-alarm.js` on your local mahcine, and in the `light-alarm.js` on your raspberry pi.
+IMPORTANT: You have to insert this snippet twice: Once in `transaction/light-alarm.js` on your local macine, and in the `light-alarm.js` on your raspberry pi.h
 
 [source,js]
 ----
@@ -607,8 +612,6 @@ if (packet.asset.status !== 'ongoing' && packet.asset.status !== 'alarm') {
 === Register all transaction types with the node app
 
 If you haven't done yet, uncomment now all the custom transactions, to register them with the node application.
-
-Restart the node, to apply the changes.
 
 [source, js]
 ----
@@ -639,7 +642,7 @@ app
 
 === Try it out in the client app
 
-If they are not already running, start the `node`, `client` and the `iot` application, like you did in xref:Workshop2.adoc#13-the-client-application[Step 1.3 in Part 1] of the workshop.
+Start or restart the `node`, `client` and `iot` application, like you did in xref:Workshop2.adoc#13-the-client-application[Step 1.3 in Part 1] of the workshop.
 
 Go to http://localhost:3000 to access the client app through your web browser.
 
@@ -686,9 +689,9 @@ image:assets/1-initialize.png[Initialize packet account]
 
 First, head to the http://localhost:3000/post-register-packet[Register Packet] page and fill out the form to register your packet in the network.
 
-IMPORTANT: Use as packet ID the address of the packet credentials that you stored on the Raspberry Pi in Part 1.
+IMPORTANT: Use as packet ID the address of the packet credentials that you created in the previous step.
 
-TIP: Set `minTrust` to `0` or lower, because you don't have any carrier in the system yet, that has more than `0` trustpoints.
+TIP: Set `minTrust` to `0`, because you don't have any carrier in the system yet, that has more than `0` trustpoints.
 
 .Sender posts the `RegisterPacket` transaction to register the packet on the network
 image:assets/2-register.png[register packet]
@@ -697,7 +700,7 @@ image:assets/2-register.png[register packet]
 image:assets/3-pending.png[packet pending]
 
 If you open the packet at this point, the light alarm transaction should fail, because the packet has the wrong `status`.
-It should display the following error in the terminal, where your `iot` application is running:
+It should display the following error:
 
 [source, js]
 ----
@@ -769,33 +772,37 @@ With all of the above steps completed, you have a very simple, but fully working
 
 IMPORTANT: Time to celebrate! \o/
 
-TIP: Move on to the next section to find out about advanced knowledge and possible next step.
+TIP: Move on to the next section to find additional explanations and possible next steps.
 
 == 2.4 Next steps (optional)
 
 === Start the tracking script automatically
 
 `pm2` provides an easy way to let your script start automatically after boot.
-This is in
+On your Raspberry Pi, install `pm2` globally:
 
 [source, bash]
 ----
 npm install pm2 -g
-pm2 start --name light-alarm index.js
 pm2 startup
 ----
 
 This should print a fitting command for you in the terminal.
 Copy it and paste it in the temrinal again to complete the setup of the `pm2` startup script.
 
-While your tracking script is started and running with `pm2`, execute:
+Start your tracking script with `pm2`:
 
+.Run this inside the `light_alarm` folder on the Raspberry Pi
+[source, bash]
+----
+pm2 start --name light-alarm index.js
+----
+
+.Add the tracking script to the list of processes, that will be started autmatically when the raspberry pi is started.
 [source, bash]
 ----
 pm2 save
 ----
-
-To save the process in the list of processes, that will be started autmatically when staring the raspberry pi.
 
 Now log out from your Raspberry Pi, disconnect it from your machine, and connect it to a portable energy source, like a power bank.
 After 1-2 minutes of booting, the tracking script will start running and it will check the light sensor every second.
