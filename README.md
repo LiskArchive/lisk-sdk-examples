@@ -13,3 +13,4 @@ The example of a simple but valid use-case - cashback. On top of the regular bal
 
 ### Interacting with a network
 In the [scripts](./scripts) directory you can find implementation of the creating, signing and sending custom transactions to the network. 
+
