@@ -740,7 +740,7 @@ image:assets/5-start.png[start transport]
 .Check the `Packet & Carrier` page to see if the packet status has changed to "ongoing"
 image:assets/6-ongoing.png[packet account 2]
 
-IMPORTANT: The light alarm will only go off after posting `StartTransport` and before posting `FinishTransport`, because of the status check that we added in <<Check for status in the lightAlarmTransaction, #check-for-status-in-the-lightalarmtransaction>>
+IMPORTANT: The light alarm will only go off after posting `StartTransport` and before posting `FinishTransport`, because of the status check that we added in <<Check for status in the lightAlarmTransaction, check-for-status-in-the-lightalarmtransaction>>
 
 image:assets/7-alarm.png[packet alarm]
 
@@ -764,6 +764,12 @@ image:assets/9-fail.png[finish transport]
 
 .Transport success
 image:assets/92-success.png[finish transport]
+
+With all of the above steps completed, you have a very simple, but fully working proof of concept of a decentralised supply chain tracking system running on your machine.
+
+IMPORTANT: Time to celebrate! \o/
+
+TIP: Move on to the next section to find out about advanced knowledge and possible next step.
 
 == 2.4 Next steps (optional)
 
