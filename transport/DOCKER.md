@@ -10,9 +10,12 @@ The script will spin up a Postgres database and a separate lisk-sdk image on whi
 Note: In order to restart the node, you have to login into the container and restart the node there. This is the only disadvantage and will be explained later on in the `Installation` section.
 
 # Installation
-To get started, make sure your terminal is set to the `/transport` folder as it holds the Dockerfile:
+Clone the Lisk-SDK-Examples respository locally for this tutorial and checkout the `lisk-transport` branch.
 
 ```bash
+git clone https://github.com/LiskHQ/lisk-sdk-examples.git
+cd lisk-sdk-examples
+git checkout lisk-transport
 cd transport
 ```
 

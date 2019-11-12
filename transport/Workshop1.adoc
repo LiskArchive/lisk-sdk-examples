@@ -7,7 +7,7 @@ This document will explain how to prepare your computer for the workshop.
 == Requirements
 
 === Hardware
-Bring your own laptop.
+**Bring your own laptop.**
 The tutorial supports both Mac, Linux, and Windows.
 
 === Software Prerequisites
@@ -16,25 +16,25 @@ Basic requirements for all machines:
 * A code editor like Visual Studio Code
 * Git
 
-IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker].
+IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker]. If you decide to follow this guide, you can skip the rest of this document.
 
 Otherwise, you have to manually install:
 
 * Node.js `v10` (use `nvm` for easy switching between versions in case you have a different version installed)
-* Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup.html[Installation guide by Lisk]). Notice, we also talk about creating a lisk user on your system, for MacOS this is not needed.
+* Have Postgres installed (https://lisk.io/documentation/lisk-sdk/setup.html[Installation guide by Lisk]).
 
 == 1.0 Setup
 
 Set up the needed software and hardware and installation of the dependencies.
 
-IMPORTANT: If you run into troubles during the setup, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker].
+IMPORTANT: If you run into troubles during the setup, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker] If you decide to follow this guide, you can skip the rest of this document.
 
 === Clone the repo and install the dependencies
 
 The below steps describe how to create the initial files for this tutorial.
 
 ["loweralpha"]
-. Clone https://github.com/LiskHQ/lisk-sdk-examples/[Lisk-SDK-Examples] repository locally.
+. Clone the Lisk-SDK-Examples repository locally.
 +
 [source,bash]
 ----
@@ -99,7 +99,7 @@ Starting the node for the first time might require some time (up to 3 minutes)!
 
 If everything is running fine, you can stop the node by hitting kbd:[CTRL+C].
 
-WARNING: In case the node crashes or doesn't work, follow the xref:./DOCKER.md[this guide] to set up a dedicated development environment using Docker and Docker-Compose. The script will set up the whole environment.
+WARNING: In case the node crashes or doesn't work, follow the xref:./DOCKER.md[this guide] to set up a dedicated development environment using Docker and Docker-Compose. The script will set up the whole environment. If you decide to follow this guide, you can skip the rest of this document
 
 === Prepare the IoT device
 
