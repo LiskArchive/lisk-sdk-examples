@@ -87,7 +87,17 @@ The basic file structure looks as following (contents of `lisk-sdk-examples/tran
 <3> Contains the code for the <<project-architecture, node application>>
 <4> Contains the custom transactions, that are used by the node and client app.
 
-== 1.1 Implement the LightAlarm transaction
+== 1.0 Pull Latest Changes
+To make sure you have the latest version of the code, pull the `lisk-transport` branch:
+
+[source,bash]
+----
+git pull origin lisk-transport
+----
+
+If you had made changes, you can stash with `git stash`, pull the changes, and put the changes back `git stash pop`.
+
+== 1.1 Implement the LightAlarm Transaction
 
 For the very simple version of the packet tracking, only one custom transaction type needs to be implemented: the `LightAlarmTransaction`.
 This transaction will be sent by the IoT device inside of the packet when it detects anomalies with its connected photoresistor (light detection).
@@ -383,7 +393,15 @@ node index.js
 
 Now place the sensor in a dark place and then in a light place, and verify the correct logs are shown in the console.
 
-If no light is detected, it should log `Alles gut`, and if light is detected, it will log `Package has been opened! Send lisk transaction!`.
+If no light is detected, it should log:
+```
+Alles gut
+```
+
+and if light is detected, it will log:
+```
+Package has been opened! Send lisk transaction!
+```
 
 The code will also try to send the `LightAlarmTransaction` in case it detects light.
 This will fail, as we didn't provide the passphrase of the packet in the script, which is needed to sign the `LightAlarmTransaction`.
@@ -426,7 +444,7 @@ node index.js | npx bunyan -o short
 
 === 1.3.2 Create New Package Credentials
 
-.Navigate to the `Initialize` page to create a new packet account. Every time that you refresh the page, new packet credentials are created and initialized on the network.
+.Navigate to the `Initialize` page (web app running at localhost:3000) to create a new packet account. Every time that you refresh the page, new packet credentials are created and initialized on the network.
 
 image:assets/initialize-step1.png[Initialization of the packet account]
 
@@ -462,7 +480,7 @@ node app.js
 ----
 node index.js
 ----
-. Go to the `Packet&Carrier` page and refresh.
+. Go to the `Packet&Carrier` page in the client which is running at localhost:3000 and refresh.
 Nothing should be shown on the page, yet.
 . Now, shed some light on the sensor, and refresh the page again.
 . If you refresh again, you should see a list of timestamps at which `LightAlarmTransactions` have been fired, sent by the Raspberry Pi.
