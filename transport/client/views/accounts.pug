@@ -3,14 +3,17 @@ extends index.pug
 block content
   h2 Accounts
 
-  table(border='1')
-    tr
-      th Address
-      th Balance
-      th Asset
+  pre
+    table.table.table-striped
+      thead
+        tr
+          th(scope='col') Address
+          th(scope='col') Balance
+          th(scope='col') Asset
 
-    each account in accounts
-      tr
-        td= account.address
-        td= account.balance
-        td= JSON.stringify(account.asset, null, 2)
+      tbody
+        each account in accounts
+          tr
+            td= account.address
+            td= account.balance
+            td= JSON.stringify(account.asset, null, 2)

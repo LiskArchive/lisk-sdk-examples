@@ -1,0 +1,119 @@
+
+@font-face {
+    font-family: "BasierCircle";
+    font-style: normal;
+    font-weight: 400;
+    src:
+            local("BasierCircle"),
+            local("BasierCircleRegular"),
+            url(basiercircle-regular.woff) format("woff");
+}
+
+@font-face {
+    font-family: "BasierCircleBold";
+    font-style: normal;
+    font-weight: 400;
+    src:
+            local("BasierCircleBold"),
+            url(basiercircle-bold.woff) format("woff");
+}
+
+@font-face {
+    font-family: "BasierCircleMedium";
+    font-style: normal;
+    font-weight: 400;
+    src:
+            local("BasierCircleMedium"),
+            url(basiercircle-semibold.woff) format("woff");
+}
+
+:root {
+    --color-text: #222;
+    --color-navbar-bg: #0C152E;
+    --color-navbar-bg-focus: #000;
+    --color-navbar-text: #fff;
+    --color-right-menu-bg: #fff;
+    --height-navbar: 105px;
+    --height-drawer: 2.5rem;
+    --height-toolbar: 2.5rem;
+    --height-to-body: var(--height-navbar);
+    --height-min-body: calc(100vh - var(--height-to-body));
+    --height-nav: var(--height-min-body);
+    --height-nav-mobile: calc(var(--height-min-body) - var(--height-toolbar));
+    --height-nav-panel: calc(var(--height-nav) - var(--height-drawer));
+    --height-nav-panel-mobile: calc(var(--height-nav-mobile) - var(--height-drawer));
+    --width-nav: 16rem;
+    --width-doc: 54rem;
+    --width-doc-mobile: 40rem;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+html {
+    box-sizing: border-box;
+    font-family: "BasierCircle", sans-serif;
+    text-size-adjust: 100%;
+}
+
+body {
+    font-family: "BasierCircle", sans-serif;
+    color: var(--color-text);
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+b,
+dt,
+strong {
+    font-weight: 500;
+}
+
+.jumbotron {
+    background-color: #f5f2f0
+}
+
+.form-control::-webkit-input-placeholder, .form-control::placeholder, .form-control::-moz-placeholder {
+    color: #bbb;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+.pending, .pending pre {
+    background-color: darkgrey;
+    color: white;
+}
+
+.ongoing, .ongoing pre {
+    background-color: darkgoldenrod;
+    color: white;
+}
+.alarm, .alarm pre {
+    background-color: purple;
+    color: white;
+}
+.success, .success pre {
+    background-color: darkgreen;
+    color: white;
+}
+.fail, .fail pre {
+    background-color: darkred;
+    color: white;
+}
