@@ -165,15 +165,15 @@ TIP: Go to the Lisk Documentation, to get an https://lisk.io/documentation/lisk-
 
 === Task: Implement `validateAsset()`
 
-Implement your own logic for the `validateAsset()` function xref:transactions/light-alarm.js#L31[here].
-It shall validate the timestamp that got sent by the `LightAlarmTransaction`.
-In case that an error is found, push a new `TransactionError` into the `errors` array and return it in the function.
+Implement your own logic for the `validateAsset()` function xref:transactions/light-alarm.js#L31[here at line 31].
+The code will validate the timestamp that has been sent by the `LightAlarmTransaction`.
+In case an error is found, push a new `TransactionError` into the `errors` array and return it at the end of the function.
 
 TIP: All data, that is sent with the transaction is available through the `this` variable. So, to access the timestamp of the transaction, use `this.timestamp`.
 
 The snippet below describes how to create an `TransactionError` object. Try to add a fitting `TransactionError` to the `errors` list of `validateAsset()`, in case the timestamp is not present, or if it has the wrong format.
 
-NOTE: The expected data type for the timestamp is `number`.
+NOTE: The expected data type for the timestamp is `number`!
 
 .Example: How to create a `TransactionError` object
 [source, js]
@@ -187,9 +187,9 @@ new TransactionError(
 )
 ----
 
-TIP: In case you need some inspiration how to implement the `validateAsset()` function, check out the other examples like `hello_world` inside of the `lisk-sdk-examples` repository, or check the https://lisk.io/documentation/lisk-sdk/tutorials/hello-world.html#_3_create_a_new_transaction_type[tutorials] in the Lisk Documentation.
+TIP: In case you need some inspiration how to implement the `validateAsset()` function, check out the other examples like `hello_world` inside of the `lisk-sdk-examples` repository, or check the https://lisk.io/documentation/lisk-sdk/tutorials/hello-world.html#_3_create_a_new_transaction_type[tutorials] in the Lisk documentation.
 
-IMPORTANT: To verify your implementation of `validateAsset()`, compare it with the xref:transactions/solutions/light-alarm.js[Solution for 1.1].
+**Important: To verify your implementation of `validateAsset()`, compare it with the xref:transactions/solutions/light-alarm.js[Solution for this task].**
 
 === Explanation: `applyAsset()`
 
