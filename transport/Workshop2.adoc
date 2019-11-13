@@ -372,9 +372,9 @@ setInterval(() => {
 
 ----
 
-=== Run the tracking script
+=== 1.2.3 Run the tracking script
 
-To check if the script can read the sensor data, uncomment the `console.log` statements in the trakcing script and start the script by running:
+To check if the script can read the sensor data, start the script by running:
 
 [source, bash]
 ----
@@ -385,22 +385,23 @@ Now place the sensor in a dark place and then in a light place, and verify the c
 
 If no light is detected, it should log `Alles gut`, and if light is detected, it will log `Package has been opened! Send lisk transaction!`.
 
-It will also try to send the light alarm transaction in case it detects light.
+The code will also try to send the `LightAlarmTransaction` in case it detects light.
 This will fail, as we didn't provide the passphrase of the packet in the script, which is needed to sign the `LightAlarmTransaction`.
 
-Let's use the client app in the next step 1.3 to initialize a new account for the packet.
-We can then store the passphrase on the raspberry pi and explore the send alarm transaction through the client app.
+Next up, let's use the client app in step 1.3 to initialize a new account for the packet.
 
 == 1.3 The client application
+In this step, we have to store the passphrase of the packet on the Raspberry Pi so it can sign and broadcast the `LightAlarmTransaction`. After that, we will start the `client` application to explore the sent `LightAlarmTransaction's`.
 
 While your Raspberry Pi is still connected, open a local terminal window and navigate into the `client` app.
 
 [NOTE]
 ====
 The complete implementation of the client is prepared for you before the workshop.
-In Part 1, we will only make use of the `Initialize` and `Packet&Carrier` pages.
+In this part 1 of the workshop, we will only make use of the `Initialize` and `Packet&Carrier` pages.
 ====
 
+Let's start the client application with the following commands:
 [source, bash]
 ----
 cd ../client
@@ -411,7 +412,7 @@ node app.js
 .Navigate to the `Initialize` page to create a new packet account
 image:assets/initialize-step1.png[Initialization of the packet account]
 
-Every time that you refresh the page, new packet credentials are created and initialized in the network.
+Every time that you refresh the page, new packet credentials are created and initialized on the network.
 
 Copy the object with the credentials and past it as `packetCredentials` in your <<create-the-tracking-script, tracking script>> on the Raspberry Pi.
 The Raspberry has now the power to identify itself with the network, by signing the transaction with it's secret passphrase, before sending it to the network.
