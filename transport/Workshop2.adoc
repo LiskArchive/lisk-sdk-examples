@@ -388,7 +388,14 @@ If no light is detected, it should log `Alles gut`, and if light is detected, it
 The code will also try to send the `LightAlarmTransaction` in case it detects light.
 This will fail, as we didn't provide the passphrase of the packet in the script, which is needed to sign the `LightAlarmTransaction`.
 
-Next up, let's use the client app in step 1.3 to initialize a new account for the packet.
+You can cancel the script for now by stopping its execution with:
+
+[source, bash]
+----
+CTRL + C
+----
+
+Next up, let's use the client app in `step 1.3` to initialize a new account for the packet.
 
 == 1.3 The client application
 In this step, we have to store the passphrase of the packet on the Raspberry Pi so it can sign and broadcast the `LightAlarmTransaction`. After that, we will start the `client` application to explore the sent `LightAlarmTransaction's`.
@@ -419,30 +426,37 @@ node index.js | npx bunyan -o short
 
 === 1.3.2 Create New Package Credentials
 
-.Navigate to the `Initialize` page to create a new packet account.
-Every time that you refresh the page, new packet credentials are created and initialized on the network.
+.Navigate to the `Initialize` page to create a new packet account. Every time that you refresh the page, new packet credentials are created and initialized on the network.
 
 image:assets/initialize-step1.png[Initialization of the packet account]
 
-Copy the object with the credentials and past it as `packetCredentials` in your <<create-the-tracking-script, tracking script>> on the Raspberry Pi.
-The Raspberry has now the power to identify itself with the network, by signing the transaction with it's secret passphrase, before sending it to the network.
+Copy the object with the credentials and paste it as `packetCredentials` in your <<122-create-the-tracking-script, tracking script>> on the Raspberry Pi. You have to paste it in the `index.js` file on the Raspberry Pi at the following line of code:
+
+[source, bash]
+----
+const packetCredentials = { /* Insert the credentials of the packet here in step 1.3 */ }
+----
+
+Ok, we are all set to check all elements together.
+
+=== 1.3.3 Validating all components
 
 To now track the light alarm with the client application, do the following:
 
-. To start the node application, run this inside of the `node` folder:
+. Make sure your blockchain node is running on your machine (`/node` folder):
 +
 [source, bash]
 ----
 node index.js | npx bunyan -o short
 ----
-. to start the client, run this inside the `client` folder:
+. Make sure the client from the `client` folder is running:
 +
 [source, bash]
 ----
 node app.js
 ----
 . Put the sensor of your raspberry in a dark place.
-. Now, start the tracking script on your raspberry pi:
+. Now, start the tracking script on your Raspberry Pi:
 +
 [source, bash]
 ----
@@ -450,10 +464,10 @@ node index.js
 ----
 . Go to the `Packet&Carrier` page and refresh.
 Nothing should be shown on the page, yet.
-. Now, shed some light on the sensor, and refresh the page again
-. If you refresh again, you should see a list of light alarm transaction object, that just got sent by the Raspberry Pi.
+. Now, shed some light on the sensor, and refresh the page again.
+. If you refresh again, you should see a list of timestamps at which `LightAlarmTransactions` have been fired, sent by the Raspberry Pi.
 
-If you see the timestamps are added to `asset.alarms.light` of the packet account, you have successfully completed Part 1 of the workshop, congratz! \o/
+If you see the timestamps are added to `asset.alarms.light` of the packet account, you have successfully completed `part 1 `of the workshop, congratz! \o/
 
 image:assets/packet-carrier-step1.png[packet account]
 
