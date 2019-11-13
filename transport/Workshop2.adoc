@@ -278,9 +278,7 @@ ssh pi@10.10.10.10
 If the pi won't respond, press kbd:[CTRL+C] and try the last command again.
 If prompted with a warning just hit enter to accept the default (Yes).
 
-Type in the password.
-
-TIP: The password to ssh into your pi is written on the box that contained the pi.
+Following, it will ask for the password. Type in the password **which is printed on the box of your Raspberry Pi.**
 
 Your terminal should now be connected to the Raspberry Pi.
 On the Raspberry, create a new folder, which will hold the script for the IoT application:
