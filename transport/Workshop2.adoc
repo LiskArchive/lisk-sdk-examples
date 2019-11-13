@@ -377,9 +377,9 @@ setInterval(() => {
             console.log(JSON.stringify(err.errors, null, 2));
         });
         */
-	} else {
-		console.log('Alles gut');
-	}
+    } else {
+        console.log('Alles gut');
+    }
 }, 1000);
 
 ----
