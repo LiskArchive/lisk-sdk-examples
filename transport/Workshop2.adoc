@@ -299,7 +299,7 @@ Now, create a new file called `light-alarm.js`.
 touch light-alarm.js
 ----
 
-Next, **copy the code from your local computer** at `transport/transactions/light-alarm.js` (which we prepared in <<1-1-implement-the-lightalarm-transaction, step 1.1>>) to the Raspberry Pi. First, let's open the file with `nano`.
+Next, **copy the code from your local computer** at `transport/transactions/light-alarm.js` (which we prepared in <<1-1-implement-the-lightalarm-transaction, step 1.1>>) to the Raspberry Pi. First, let's open the file with the `nano` editor.
 
 [source,bash]
 ----
@@ -316,10 +316,15 @@ ENTER
 CMD + X
 ----
 
-The second file you need to create is the actual tracking script.
-Create a new file `indexjs` that shall hold our trakcing script, insert the code snippet below and save the file.
+The second file you need to create is the actual tracking script. Create a new file `index.js` that will hold our tracking script.
 
-.Contents of `index.js`
+[source,bash]
+----
+touch index.js
+----
+
+Next, **insert the code snippet below** and save the `index.js` file. You can reuse the above commands with the `nano` editor.
+
 [source,js]
 ----
 const PIN = require("rpi-pins");
