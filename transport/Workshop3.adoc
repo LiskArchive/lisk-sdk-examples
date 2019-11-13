@@ -740,7 +740,7 @@ image:assets/5-start.png[start transport]
 .Check the `Packet & Carrier` page to see if the packet status has changed to "ongoing"
 image:assets/6-ongoing.png[packet account 2]
 
-IMPORTANT: The light alarm will only go off after posting `StartTransport` and before posting `FinishTransport`, because of the status check that we added in <<Check for status in the lightAlarmTransaction, check-for-status-in-the-lightalarmtransaction>>
+IMPORTANT: The light alarm will only go off after posting `StartTransport` and before posting `FinishTransport`, because of the status check that we added in <<check-for-status-in-the-lightalarmtransaction, Check for status in the lightAlarmTransaction>>
 
 image:assets/7-alarm.png[packet alarm]
 
