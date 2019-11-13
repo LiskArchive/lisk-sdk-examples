@@ -6,4 +6,5 @@ block content
     p
         | Refresh page to get new Credentials
 
-    pre= JSON.stringify(packetCredentials, null, 2)
+    pre
+        code(class='language-json')= JSON.stringify(packetCredentials, null, 2)

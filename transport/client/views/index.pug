@@ -2,7 +2,6 @@ doctype html
 html(lang="en")
   head
     title Lisk Transport Explorer
-
     link(href='favicon-32x32.png', rel='icon', type='image/png')
     link(href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', rel='stylesheet')
     link(href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css', rel='stylesheet')
@@ -15,29 +14,25 @@ html(lang="en")
         include css/base.css
         include css/header.css
 
-  body
+    body
     block menu
-      nav.navbar.navbar-expand-lg.navbar-light.bg-light
-        img(src='lisk-logo-white.png' style='width:65px;').navbar-brand
-        a(href='/').navbar-brand
-            | Home
-
-        nav.collapse.navbar-collapse
-          ul.navbar-nav.mr-auto
-            li.nav-item
-              a(href='/accounts').nav-link Accounts
-            li.nav-item
-              a(href='/packet-accounts').nav-link Packet&amp;Carrier
-            li.nav-item
-              a(href='/faucet').nav-link |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Faucet
-            li.nav-item
-              a(href='/initialize').nav-link Initialize
-            li.nav-item
-              a(href='/post-register-packet').nav-link Register Packet
-            li.nav-item
-              a(href='/post-start-transport').nav-link Start Transport
-            li.nav-item
-              a(href='/post-finish-transport').nav-link Finish Transport
+        header.header
+            nav.navbar
+                div.navbar-content
+                    div.navbar-brand
+                        a(href='/').lisk-logo
+                        span.nav-brand__name-area
+                            strong.nav-brand__name-area__title Transport
+                    div#topbar-nav.navbar-menu
+                        div.navbar-end
+                            a(href='/accounts').navbar-item Accounts
+                            a(href='/packet-accounts').navbar-item Packet &amp; Carrier
+                            a.divider-vertical
+                            a(href='/faucet').navbar-item Faucet
+                            a(href='/initialize').navbar-item Initialize
+                            a(href='/post-register-packet').navbar-item Register Packet
+                            a(href='/post-start-transport').navbar-item Start Transport
+                            a(href='/post-finish-transport').navbar-item Finish Transport
 
     .container
       block content
@@ -45,52 +40,38 @@ html(lang="en")
           h1 Lisk Transport Explorer
           p.lead
             | Browse transactions for Lisk Transport Proof of Concept
+    //
+    //style.
+    //    @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+    //    body {
+    //        background: #287ae2;
+    //        width: 100%;
+    //        min-height: 100vh;
+    //    }
+    //    h1, .lead, .nav-link {
+    //        font-family: 'Poppins', sans-serif;
+    //    }
+    //    .navbar-expand-lg {
+    //        background-color: #001a3e !important;
+    //    }
+    //    .nav-link, .navbar-brand {
+    //        color: white !important;
+    //    }
+    //    .navbar-brand {
+    //        font-weight: bold;
+    //    }
+    //    h2 {
+    //        color: white;
+    //        padding-top: 50px;
+    //        padding-bottom: 15px;
+    //        font-family: 'Poppins', sans-serif;
+    //        font-weight: bold;
+    //    }
+    //    th, td {
+    //        padding: 6px;
+    //    }
+    //    table td, table th {
+    //        border: 2px solid white;
+    //        color: white;
+    //    }
 
-    style.
-        @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
-        body {
-            background: #287ae2;
-            width: 100%;
-            min-height: 100vh;
-        }
-        h1, .lead, .nav-link {
-            font-family: 'Poppins', sans-serif;
-        }
-        .navbar-expand-lg {
-            background-color: #001a3e !important;
-        }
-        .nav-link, .navbar-brand {
-            color: white !important;
-        }
-        .navbar-brand {
-            font-weight: bold;
-        }
-        h2 {
-            color: white;
-            padding-top: 50px;
-            padding-bottom: 15px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: bold;
-        }
-        th, td {
-            padding: 6px;
-        }
-        table td, table th {
-            border: 2px solid white;
-            color: white;
-        }
-        .pending {
-            background-color: darkgrey;
-        }
-        .ongoing {
-            background-color: darkgoldenrod;
-        }
-        .alarm {
-            background-color: purple;
-        }
-        .success {
-            background-color: darkgreen;
-        }
-        .fail {
-            background-color: darkred;
-        }
