@@ -485,7 +485,7 @@ Nothing should be shown on the page, yet.
 . Now, shed some light on the sensor, and refresh the page again.
 . If you refresh again, you should see a list of timestamps at which `LightAlarmTransactions` have been fired, sent by the Raspberry Pi.
 
-If you see the timestamps are added to `asset.alarms.light` of the packet account, you have successfully completed `part 1 `of the workshop, congratz! \o/
+If you see the timestamps are added to `asset.alarms.light` of the packet account, you have successfully completed `part 1` of the workshop, congratz! \o/
 
 image:assets/packet-carrier-step1.png[packet account]
 
