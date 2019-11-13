@@ -197,7 +197,6 @@ The `applyAsset` function tells the blockchain what changes it should make and h
 
 **TASK: Copy the snippet below and replace the `applyAsset` function in `light-alarm.js` with it in order to complete the implementation of the lightAlarmTransaction.**
 
-.Implementation of applyAsset()
 [source,js]
 ----
 /*Inside of `applyAsset`, we can make use of the cached data from the `prepare` function,
