@@ -262,7 +262,7 @@ NOTE: After the registration of a new transaction type, the node needs to be res
 
 In this step we are going to create the script that will run on the Raspberry Pi to track if the packet has been manipulated.
 
-=== Connect to the Raspberry Pi
+=== 1.2.1 Connect to the Raspberry Pi
 
 Connect a micro usb cable with the Raspberry and then connect the other end to a computer. **Make sure you connect the micro usb cable to the port that has a small label `usb` above it.**
 
@@ -280,11 +280,10 @@ If prompted with a warning just hit enter to accept the default (Yes).
 
 Following, it will ask for the password. Type in the password **which is printed on the box of your Raspberry Pi.**
 
-Your terminal should now be connected to the Raspberry Pi.
-On the Raspberry, create a new folder, which will hold the script for the IoT application:
+Your terminal should now be connected to the Raspberry Pi. In the next step, we will be working on the Raspberry Pi in order to prepare the device.
 
-=== Create the tracking script
-
+=== 1.2.2 Create the tracking script
+Execute the below commands for creating the tracking script:
 [source,bash]
 ----
 mkdir light_alarm #Create a folder to hold the tracking script.
@@ -293,11 +292,29 @@ npm init --yes #Creates the `package.json` file.
 npm i @liskhq/lisk-transactions @liskhq/lisk-api-client @liskhq/lisk-constants rpi-pins #Install dependencies.							<5>
 ----
 
-Now, create a new file `light-alarm.js` and copy the code of `transport/transactions/light-alarm.js` from your local computer.
+Now, create a new file called `light-alarm.js`.
 
-NOTE: You should have completed the implementation of `light-alarm.js` in <<1-1-implement-the-lightalarm-transaction, step 1.1>>, before copying the code over to the raspberry pi.
+[source,bash]
+----
+touch light-alarm.js
+----
 
-Insert here the code of the `LightAlarmTransaction`, that we created in <<1-1-implement-the-lightalarm-transaction, step 1.1>> and save the file.
+Next, **copy the code from your local computer** at `transport/transactions/light-alarm.js` (which we prepared in <<1-1-implement-the-lightalarm-transaction, step 1.1>>) to the Raspberry Pi. First, let's open the file with `nano`.
+
+[source,bash]
+----
+nano light-alarm.js
+----
+
+Next, insert here the code of the `LightAlarmTransaction`. You can use `CMD + V` to paste the contents in the file.
+In order to save and exit `nano`, use:
+
+[source,bash]
+----
+CMD + O
+ENTER
+CMD + X
+----
 
 The second file you need to create is the actual tracking script.
 Create a new file `indexjs` that shall hold our trakcing script, insert the code snippet below and save the file.
