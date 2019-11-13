@@ -109,7 +109,7 @@ These steps are already prepared for you before the workshop. **No work needed h
 
 For reference, see how the sensors can be connected, and the steps to set up the Raspberry Pi below.
 ====
-.Reference: Steps to setup the Raspberry Pi
+.Reference: Read about how we've set up the Raspberry Pi
 [%collapsible]
 ====
 Sensor wiring::

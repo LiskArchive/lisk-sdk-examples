@@ -2,23 +2,21 @@
 :toc: preamble
 :experimental:
 
-The goal of this Part is to implement a simple application that tracks sensor measurements on the blockchain.
+The goal of this part is to implement a simple application that tracks sensor measurements on the blockchain.
 That means, once the IoT application will be started, it will immediately send an `LightAlarmTransaction` to the network, whenever the sensor detects light.
 
 You will learn here:
 
 * How to implement the `LightAlarmTransaction`
 * How to register the new transaction type with the node application
-* How to create the iot script, and how to put it on the raspberry pi
+* How to create the IoT script, and how to put it on the Raspberry Pi
 * How to use the client app to initialize the packet account and to track the alarm transactions in the network
-
-NOTE: For Part 1 of the workshop, it is not needed to check any status of the packet before sending an alarm transaction.
 
 ****
 
 [TIP]
 ====
-xref:transactions/solutions/light-alarm.js[Check out the solutions], which hold the complete working code for the custom transaction types.
+xref:transactions/solutions/light-alarm.js[You can always checkout the solutions at /transactions/solutions] for the custom transaction types.
 
 You can also require the solutions directly in your app, just change
 
@@ -57,9 +55,7 @@ which is stored on a microcontroller/raspberry pi. This application will track t
 To do this, certain sensors will be connected to it, that track information like light, temperature and/or humidity inside of the packet.
 If something unexpected is detected by the IoT app, it will create a transaction object, sign it, and send it to the network.
 
-The basic file structure looks as following:
-+
-.Contents of `lisk-sdk-examples/transport`
+The basic file structure looks as following (contents of `lisk-sdk-examples/transport`):
 ----
 .
 ├── README.adoc
