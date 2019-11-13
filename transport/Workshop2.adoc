@@ -422,7 +422,7 @@ node index.js | npx bunyan -o short
 .Navigate to the `Initialize` page to create a new packet account.
 Every time that you refresh the page, new packet credentials are created and initialized on the network.
 
-image:assets/initialize-step1.png[Initialization of the packet account
+image:assets/initialize-step1.png[Initialization of the packet account]
 
 Copy the object with the credentials and past it as `packetCredentials` in your <<create-the-tracking-script, tracking script>> on the Raspberry Pi.
 The Raspberry has now the power to identify itself with the network, by signing the transaction with it's secret passphrase, before sending it to the network.
