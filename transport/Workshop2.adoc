@@ -264,7 +264,7 @@ In this step we are going to create the script that will run on the Raspberry Pi
 
 === Connect to the Raspberry Pi
 
-Connect a micro usb cable with the Raspberry and then connect the other end to a computer. Make sure you connect the micro usb cable to the port that has a small label `usb` above it.
+Connect a micro usb cable with the Raspberry and then connect the other end to a computer. **Make sure you connect the micro usb cable to the port that has a small label `usb` above it.**
 
 image:assets/usb-port.jpg[How to connect to your Pi]
 
