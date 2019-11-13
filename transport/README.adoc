@@ -278,9 +278,9 @@ In this step we are going to create the script that will run on the Raspberry Pi
 
 === Connect to the Raspberry Pi
 
-For simplifying the network topology for the workshop we configured a DHCP server in the Raspberry Pi that will assign an IP address to your computer using a virtual ethernet through USB. The Raspberry Pi will have the IP address `10.10.10.10` and will assign to your computer and address of that family. 
+For simplifying the network topology for the workshop we configured a DHCP server in the Raspberry Pi that will assign an IP address to your computer using a virtual ethernet through USB. The Raspberry Pi will have the IP address `10.10.10.10` and will assign to your computer an address of that family. 
 
-To be able to log-in using ssh first plug the Raspberry Pi by following the documentation for the workshop and then from a terminal run `ping 10.10.10.10` this will start pinging the Raspberry Pi and you'll eventually get responses back.
+To be able to log-in using ssh first plug the Raspberry Pi by following the instructions below and then from a terminal run `ping 10.10.10.10` this will start pinging the Raspberry Pi and you'll eventually get responses back.
 
 Example output from pinging the Raspberry Pi:
 
