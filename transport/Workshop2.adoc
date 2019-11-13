@@ -473,7 +473,7 @@ image:assets/packet-carrier-step1.png[packet account]
 
 [NOTE]
 ====
-You are now able to detect a packet manipulation and to save a corresponding record on the blockchain.
+You are now able to detect a packet manipulation and save the corresponding timestamp on the blockchain.
 
 xref:Workshop3.adoc[Click here to continue with Part 2: Create a simple supply chain system]
 ====
