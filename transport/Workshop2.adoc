@@ -175,7 +175,7 @@ The snippet below describes how to create an `TransactionError` object. Try to a
 
 NOTE: The expected data type for the timestamp is `number`!
 
-.Example: How to create a `TransactionError` object
+.Example: How to create a `TransactionError` object:
 [source, js]
 ----
 new TransactionError(
@@ -189,13 +189,13 @@ new TransactionError(
 
 TIP: In case you need some inspiration how to implement the `validateAsset()` function, check out the other examples like `hello_world` inside of the `lisk-sdk-examples` repository, or check the https://lisk.io/documentation/lisk-sdk/tutorials/hello-world.html#_3_create_a_new_transaction_type[tutorials] in the Lisk documentation.
 
-**Important: To verify your implementation of `validateAsset()`, compare it with the xref:transactions/solutions/light-alarm.js[Solution for this task].**
+**Important: To verify your implementation of `validateAsset()`, compare it with the xref:transactions/solutions/light-alarm.js[solution].**
 
-=== Explanation: `applyAsset()`
+=== Task: Implement `applyAsset()`
 
-A possible implementation of `applyAsset` for the `LightAlarmTransaction`. See detailed descriptions of the implementation below.
+The `applyAsset` function tells the blockchain what changes it should make and how to change a user's account. Basically, it holds the core business logic of your custom transaction. The magic happens here! You can find a possible implementation of `applyAsset` for the `LightAlarmTransaction` below. 
 
-Copy the snippet and replace the `applyAsset` function in `light-alarm.js` with it, to complete the implementation of the transaction type.
+**TASK: Copy the snippet below and replace the `applyAsset` function in `light-alarm.js` with it in order to complete the implementation of the lightAlarmTransaction.**
 
 .Implementation of applyAsset()
 [source,js]
