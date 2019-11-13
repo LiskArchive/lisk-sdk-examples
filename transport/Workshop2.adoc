@@ -359,6 +359,7 @@ setInterval(() => {
 	let state = GPIO.read(4);
     if(state === 0) {
         console.log('Package has been opened! Send lisk transaction!');
+
         // Uncomment the below code in step 1.3 of the workshop
         /*
         let tx = new LightAlarmTransaction({
