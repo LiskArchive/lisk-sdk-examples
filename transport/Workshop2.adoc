@@ -419,7 +419,7 @@ CTRL + C
 Next up, let's use the client app in `step 1.3` to initialize a new account for the packet.
 
 == 1.3 The client application
-In this step, we have to store the passphrase of the packet on the Raspberry Pi so it can sign and broadcast the `LightAlarmTransaction`. After that, we will start the `client` application to explore the sent `LightAlarmTransaction's`.
+In this step, we have to store the passphrase of the packet on the Raspberry Pi so it can sign and broadcast the `LightAlarmTransaction`. After that, we will start the `client` application to explore the sent transactions.
 
 While your Raspberry Pi is still connected, open a local terminal window and navigate into the `client` app.
 
