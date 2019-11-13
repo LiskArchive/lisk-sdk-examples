@@ -90,17 +90,11 @@ The basic file structure looks as following (contents of `lisk-sdk-examples/tran
 == 1.1 Implement the LightAlarm transaction
 
 For the very simple version of the packet tracking, only one custom transaction type needs to be implemented: the `LightAlarmTransaction`.
-This transaction will be sent by the IoT device inside of the packet, if it detects anomalies with its' connected photoresistor.
+This transaction will be sent by the IoT device inside of the packet when it detects anomalies with its connected photoresistor (light detection).
 
-The only thing you need to implement in this step yourself is the `validateAsset` function. For more details how to do this, check the <<task-implement-validateasset, explanation below>>.
+The only thing you need to implement in this step yourself is the `validateAsset` function. For more details how to do this, check the <<task-implement-validateasset, explanation below>>. The code you see below represents the current state for which you'll have to implement the `validateAsset()` function.
 
-.Navigate into the `transactions/` directory
-[source,bash]
-----
-cd ../transactions
-----
-
-.Contents of `light-alarm.js`
+.Contents of `/transactions/light-alarm.js`
 [source,js]
 ----
 const {
