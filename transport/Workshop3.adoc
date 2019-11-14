@@ -776,7 +776,13 @@ TIP: Move on to the next section to find additional explanations and possible ne
 
 == 2.4 Next steps (optional)
 
-=== Start the tracking script automatically
+=== Make it portable
+
+Currently the packet is not really portable, because it is connected via USB to your machine in order to get power.
+
+To make it portable, all you need is a portable power source, like a battery, that provides the Raspberry Pi with enough power to track the packet for at least a few hours.
+
+The second thing that needs to be done is making the tracking script start automatically after the boot process of the Pi.
 
 `pm2` provides an easy way to let your script start automatically after boot.
 On your Raspberry Pi, install `pm2` globally:
@@ -811,7 +817,7 @@ After 1-2 minutes of booting, the tracking script will start running and it will
 
 Connect the Temp/Humidity sensor to your Raspberry Pi and implement a `TemperatureAlarm` or `HumidityAlarm` analog to the `LightAlarm` transaction type.
 
-=== Connecting multiple nodes
+=== Connect more nodes
 
 Connect several nodes to your blockchain network
 
@@ -819,6 +825,6 @@ Connect several nodes to your blockchain network
 
 Exchange the dummy delegates with real delegates.
 
-=== Writing unit tests for custom transactions
+=== Write unit tests for custom transactions
 
 How to test `undoAsset` functions
