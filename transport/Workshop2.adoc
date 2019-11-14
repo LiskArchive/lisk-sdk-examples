@@ -175,7 +175,7 @@ TIP: Go to the Lisk Documentation, to get an https://lisk.io/documentation/lisk-
 
 === 1.1.1 Task: Implement `validateAsset()`
 
-Implement your own logic for the `validateAsset()` function xref:transactions/light-alarm.js#L31[here at line 31].
+**Implement your own logic for the `validateAsset()` function** xref:transactions/light-alarm.js#L31[here at line 31].
 The code will validate the timestamp that has been sent by the `LightAlarmTransaction`.
 In case an error is found, push a new `TransactionError` into the `errors` array and return it at the end of the function.
 
@@ -205,7 +205,7 @@ TIP: In case you need some inspiration how to implement the `validateAsset()` fu
 
 The `applyAsset` function tells the blockchain what changes it should make and how to change a user's account. Basically, it holds the core business logic of your custom transaction. The magic happens here! You can find a possible implementation of `applyAsset` for the `LightAlarmTransaction` below. 
 
-**Copy the snippet below and replace the `applyAsset` function in `light-alarm.js` with it in order to complete the implementation of the lightAlarmTransaction.**
+**TASK: Copy the snippet below and replace the `applyAsset` function in `light-alarm.js` with it in order to complete the implementation of the lightAlarmTransaction.**
 
 [source,js]
 ----
