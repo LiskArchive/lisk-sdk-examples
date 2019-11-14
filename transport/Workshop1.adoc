@@ -103,13 +103,11 @@ WARNING: In case the node crashes or doesn't work, follow the xref:./DOCKER.md[t
 
 === Prepare the IoT device
 
-[NOTE]
+[INFO]
 ====
-These steps are already prepared for you before the workshop. **No work needed here! Skip to 1.1 section.**
-
-For reference, see how the sensors can be connected, and the steps to set up the Raspberry Pi below.
+The IoT device has already been prepared for you before the workshop. **No work needed here!** You can expand the section below if you want to learn about how we have set up the Raspbery Pi. Note that we won't be using the Temperature and Humidity sensors during the workshop.
 ====
-.Reference: Read about how we've set up the Raspberry Pi
+.Reference: Raspberry Pi set up
 [%collapsible]
 ====
 Sensor wiring::
@@ -132,5 +130,6 @@ For installing the required libraries run:
 * `sudo apt-get install pigpio`
 * NodeJS can be installed with `nvm`
 ====
+
 
 NOTE: xref:Workshop2.adoc[Click here to go to the workshop tutorial]

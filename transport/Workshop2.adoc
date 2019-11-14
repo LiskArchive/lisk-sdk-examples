@@ -175,7 +175,7 @@ TIP: Go to the Lisk Documentation, to get an https://lisk.io/documentation/lisk-
 
 === 1.1.1 Task: Implement `validateAsset()`
 
-Implement your own logic for the `validateAsset()` function xref:transactions/light-alarm.js#L31[here at line 31].
+**Implement your own logic for the `validateAsset()` function** xref:transactions/light-alarm.js#L31[here at line 31].
 The code will validate the timestamp that has been sent by the `LightAlarmTransaction`.
 In case an error is found, push a new `TransactionError` into the `errors` array and return it at the end of the function.
 
@@ -205,7 +205,7 @@ TIP: In case you need some inspiration how to implement the `validateAsset()` fu
 
 The `applyAsset` function tells the blockchain what changes it should make and how to change a user's account. Basically, it holds the core business logic of your custom transaction. The magic happens here! You can find a possible implementation of `applyAsset` for the `LightAlarmTransaction` below. 
 
-**Copy the snippet below and replace the `applyAsset` function in `light-alarm.js` with it in order to complete the implementation of the lightAlarmTransaction.**
+**TASK: Copy the snippet below and replace the `applyAsset` function in `light-alarm.js` with it in order to complete the implementation of the lightAlarmTransaction.**
 
 [source,js]
 ----
@@ -274,13 +274,19 @@ In this step we are going to create the script that will run on the Raspberry Pi
 
 === 1.2.1 Connect to the Raspberry Pi
 
-For simplifying the network topology for the workshop we configured a DHCP server in the Raspberry Pi that will assign an IP address to your computer using a virtual ethernet through USB. The Raspberry Pi will have the IP address `10.10.10.10` and will assign to your computer and address of that family.
+For simplifying the network topology for the workshop we configured a DHCP server in the Raspberry Pi that will assign an IP address to your computer using a virtual ethernet through USB. The Raspberry Pi will have the IP address `10.10.10.10` and will assign to your computer an address of that family.
 
 TASK: Connect a micro usb cable with the Raspberry and then connect the other end to a computer. **Make sure you connect the micro usb cable to the port that has a small label `usb` above it.**
 
 image:assets/usb-port.jpg[How to connect to your Pi]
 
-Next, to be able to log in using `ssh` from a terminal run `ping 10.10.10.10` this will start pinging the Raspberry Pi and you'll eventually get responses back.
+Next, to be able to log in using `ssh` from a terminal run the below `ping` command.
+This will start pinging the Raspberry Pi and you'll eventually get responses back.
+
+[source, bash]
+----
+ping 10.10.10.10
+----
 
 Example output from pinging the Raspberry Pi:
 
@@ -304,9 +310,8 @@ ssh pi@10.10.10.10
 ----
 
 If prompted with a warning just hit enter to accept the default (Yes).
-Following it will prompt for a password, **enter the password in the label of the box of your Raspberry.** 
 
-Save the IP address as you will need it during the workshop!
+Following, it will prompt for a password, **enter the password in the label of the box of your Raspberry.** 
 
 Once logged in you will see a message similar to (IP address will be probably be different): 
 
@@ -316,6 +321,8 @@ Once logged in you will see a message similar to (IP address will be probably be
 Welcome to the LiskJS IoT device! You connected from: '10.10.10.93'. Save this address as you will use it later.
 -----------------------------------------------------------------------------------------------------------------
 ----
+
+**Save the IP address** as you will need it during the workshop!
 
 Your terminal should now be connected to the Raspberry Pi. In the next step, we will be working on the Raspberry Pi in order to prepare the device.
 
@@ -440,7 +447,7 @@ You can cancel the script for now by stopping its execution with:
 
 [source, bash]
 ----
-CTRL + C
+CMD + C
 ----
 
 Next up, let's use the client app in `step 1.3` to initialize a new account for the packet.
@@ -515,7 +522,7 @@ Nothing should be shown on the page, yet.
 . Now, shed some light on the sensor, and refresh the page again.
 . If you refresh again, you should see a list of timestamps at which `LightAlarmTransactions` have been fired, sent by the Raspberry Pi.
 
-If you see the timestamps are added to `asset.alarms.light` of the packet account, you have successfully completed `part 1` of the workshop, congratz! \o/
+**If you see the timestamps are added to `asset.alarms.light` of the packet account, you have successfully completed `part 1` of the workshop, congratz! \o/ **
 
 image:assets/packet-carrier-step1.png[packet account]
 
