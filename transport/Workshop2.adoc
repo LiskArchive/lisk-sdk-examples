@@ -447,7 +447,7 @@ You can cancel the script for now by stopping its execution with:
 
 [source, bash]
 ----
-CTRL + C
+CMD + C
 ----
 
 Next up, let's use the client app in `step 1.3` to initialize a new account for the packet.
