@@ -105,9 +105,9 @@ WARNING: In case the node crashes or doesn't work, follow the xref:./DOCKER.md[t
 
 [INFO]
 ====
-The IoT device has already been prepared for you before the workshop. **No work needed here!**
+The IoT device has already been prepared for you before the workshop. **No work needed here!** You can expand the section below if you want to learn about how we have set up the Raspbery Pi.
 ====
-.Reference: Read about how we've set up the Raspberry Pi
+.Reference: Raspberry Pi set up
 [%collapsible]
 ====
 Sensor wiring::
@@ -130,5 +130,6 @@ For installing the required libraries run:
 * `sudo apt-get install pigpio`
 * NodeJS can be installed with `nvm`
 ====
+
 
 NOTE: xref:Workshop2.adoc[Click here to go to the workshop tutorial]
