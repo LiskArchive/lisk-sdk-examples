@@ -274,7 +274,7 @@ In this step we are going to create the script that will run on the Raspberry Pi
 
 === 1.2.1 Connect to the Raspberry Pi
 
-For simplifying the network topology for the workshop we configured a DHCP server in the Raspberry Pi that will assign an IP address to your computer using a virtual ethernet through USB. The Raspberry Pi will have the IP address `10.10.10.10` and will assign to your computer and address of that family.
+For simplifying the network topology for the workshop we configured a DHCP server in the Raspberry Pi that will assign an IP address to your computer using a virtual ethernet through USB. The Raspberry Pi will have the IP address `10.10.10.10` and will assign to your computer an address of that family.
 
 TASK: Connect a micro usb cable with the Raspberry and then connect the other end to a computer. **Make sure you connect the micro usb cable to the port that has a small label `usb` above it.**
 
@@ -306,8 +306,6 @@ ssh pi@10.10.10.10
 If prompted with a warning just hit enter to accept the default (Yes).
 Following it will prompt for a password, **enter the password in the label of the box of your Raspberry.** 
 
-Save the IP address as you will need it during the workshop!
-
 Once logged in you will see a message similar to (IP address will be probably be different): 
 
 [source,bash]
@@ -316,6 +314,8 @@ Once logged in you will see a message similar to (IP address will be probably be
 Welcome to the LiskJS IoT device! You connected from: '10.10.10.93'. Save this address as you will use it later.
 -----------------------------------------------------------------------------------------------------------------
 ----
+
+**Save the IP address** as you will need it during the workshop!
 
 Your terminal should now be connected to the Raspberry Pi. In the next step, we will be working on the Raspberry Pi in order to prepare the device.
 
