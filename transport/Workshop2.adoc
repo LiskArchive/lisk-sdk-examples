@@ -310,7 +310,8 @@ ssh pi@10.10.10.10
 ----
 
 If prompted with a warning just hit enter to accept the default (Yes).
-Following it will prompt for a password, **enter the password in the label of the box of your Raspberry.** 
+
+Following, it will prompt for a password, **enter the password in the label of the box of your Raspberry.** 
 
 Once logged in you will see a message similar to (IP address will be probably be different): 
 
