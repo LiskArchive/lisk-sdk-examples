@@ -105,7 +105,7 @@ WARNING: In case the node crashes or doesn't work, follow the xref:./DOCKER.md[t
 
 [INFO]
 ====
-The IoT device has already been prepared for you before the workshop. **No work needed here!** You can expand the section below if you want to learn about how we have set up the Raspbery Pi.
+The IoT device has already been prepared for you before the workshop. **No work needed here!** You can expand the section below if you want to learn about how we have set up the Raspbery Pi. Note that we won't be using the Temperature and Humidity sensors during the workshop.
 ====
 .Reference: Raspberry Pi set up
 [%collapsible]
