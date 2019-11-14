@@ -274,21 +274,48 @@ In this step we are going to create the script that will run on the Raspberry Pi
 
 === 1.2.1 Connect to the Raspberry Pi
 
-Connect a micro usb cable with the Raspberry and then connect the other end to a computer. **Make sure you connect the micro usb cable to the port that has a small label `usb` above it.**
+For simplifying the network topology for the workshop we configured a DHCP server in the Raspberry Pi that will assign an IP address to your computer using a virtual ethernet through USB. The Raspberry Pi will have the IP address `10.10.10.10` and will assign to your computer and address of that family.
+
+TASK: Connect a micro usb cable with the Raspberry and then connect the other end to a computer. **Make sure you connect the micro usb cable to the port that has a small label `usb` above it.**
 
 image:assets/usb-port.jpg[How to connect to your Pi]
 
-You should be able to log-in through `ssh` by running:
+Next, to be able to log in using `ssh` from a terminal run `ping 10.10.10.10` this will start pinging the Raspberry Pi and you'll eventually get responses back.
+
+Example output from pinging the Raspberry Pi:
+
+[source,bash]
+----
+Request timeout for icmp_seq 79
+Request timeout for icmp_seq 80
+Request timeout for icmp_seq 81
+Request timeout for icmp_seq 82
+Request timeout for icmp_seq 83
+Request timeout for icmp_seq 84
+64 bytes from 10.10.10.10: icmp_seq=85 ttl=64 time=0.952 ms
+64 bytes from 10.10.10.10: icmp_seq=86 ttl=64 time=0.677 ms
+----
+
+When you start to get lines like the last one you can execute:
 
 [source, bash]
 ----
 ssh pi@10.10.10.10
 ----
 
-If the pi won't respond, press kbd:[CTRL+C] and try the last command again.
 If prompted with a warning just hit enter to accept the default (Yes).
+Following it will prompt for a password, **enter the password in the label of the box of your Raspberry.** 
 
-Following, it will ask for the password. Type in the password **which is printed on the box of your Raspberry Pi.**
+Save the IP address as you will need it during the workshop!
+
+Once logged in you will see a message similar to (IP address will be probably be different): 
+
+[source,bash]
+----
+-----------------------------------------------------------------------------------------------------------------
+Welcome to the LiskJS IoT device! You connected from: '10.10.10.93'. Save this address as you will use it later.
+-----------------------------------------------------------------------------------------------------------------
+----
 
 Your terminal should now be connected to the Raspberry Pi. In the next step, we will be working on the Raspberry Pi in order to prepare the device.
 
