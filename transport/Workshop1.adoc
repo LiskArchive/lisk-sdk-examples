@@ -103,7 +103,7 @@ WARNING: In case the node crashes or doesn't work, follow the xref:./DOCKER.md[t
 
 === Prepare the IoT device
 
-[NOTE]
+[INFO]
 ====
 The IoT device has already been prepared for you before the workshop. **No work needed here!**
 ====
