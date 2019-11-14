@@ -14,3 +14,11 @@ The actual workshop starts at `Workshop Part 1`, good luck!
 * [Workshop Part 0](./Workshop1.adoc): Installation and Setup
 * [Workshop Part 1](./Workshop2.adoc): Start of workshop how to track packet on blockchain
 * [Workshop Part 2](./Workshop3.adoc): Second part of workshop implementing supply chain tracking system
+
+_Before starting the workshop, make sure to pull the latest changes to your local repository with:_
+
+```bash
+git pull origin lisk-transport
+```
+
+Let's get started!
