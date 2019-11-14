@@ -224,6 +224,8 @@ You will notice a small part of the logic is missing where we reset the packet a
 
 Try to implement the xref:transactions/register-packet.js#L160[missing logic] for `undoAsset()` yourself by reverting the steps of the `applyAsset()` function.
 
+**Important: To verify your implementation of `undoAsset()`, compare it with the xref:transactions/solutions/register-packet.js[solution].**
+
 === Explanation: `undoAsset(store)`
 The `undoAsset` function is responsible for telling the blockchain how to revert changes that have been applied via the `applyAsset` function.
 This is very useful in case of a fork where we have to change to a different chain.
@@ -400,6 +402,8 @@ Create an updated object for the carrier account, that substracts the `security`
 The `lockedSecurity` should equal exactly the amount, that you deducted from the carriers `balance`.
 
 NOTE: To unlock locked tokens remove or nullify the custom property in the `asset` field and add the number of tokens again to the account's `balance`.
+
+**Important: To verify your implementation, compare it with the xref:transactions/solutions/start-transport.js[solution].**
 
 === Explanation: `prepare()`
 The prepare function here is caching both the carrier account through the `senderId` and the packet account through the `recipientId`.
@@ -578,6 +582,8 @@ When the recipient receives the packet from the carrier, the recipient would sig
 If the recipient consideres the transport successfull, the carrier should be rewarded accordngly, and the packet status should be updated to `success`.
 
 TIP: Find more information about what exactly to do in the code comments of `finish-transport.js`
+
+**Important: To verify your implementation of `applyAsset()`, compare it with the xref:transactions/solutions/finish-transport.js[solution].**
 
 == 2.3 Test out the full workflow with the client app
 
