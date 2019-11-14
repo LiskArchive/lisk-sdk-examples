@@ -280,7 +280,13 @@ TASK: Connect a micro usb cable with the Raspberry and then connect the other en
 
 image:assets/usb-port.jpg[How to connect to your Pi]
 
-Next, to be able to log in using `ssh` from a terminal run `ping 10.10.10.10` this will start pinging the Raspberry Pi and you'll eventually get responses back.
+Next, to be able to log in using `ssh` from a terminal run the below `ping` command.
+This will start pinging the Raspberry Pi and you'll eventually get responses back.
+
+[source, bash]
+----
+ping 10.10.10.10
+----
 
 Example output from pinging the Raspberry Pi:
 
