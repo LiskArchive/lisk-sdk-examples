@@ -363,7 +363,9 @@ You can use kbd:[CMD+V] to paste the contents in the file.
 In order to save and exit `nano`, use:
 
 kbd:[CMD+O]
+
 kbd:[ENTER]
+
 kbd:[CMD+X]
 
 The second file you need to create is the actual tracking script.
