@@ -746,6 +746,9 @@ The transaction will only be accepted, if the carrier has enough `trust` and `se
 .Carrier posts the `StartTransport` transaction, and then receives the packet from the sender
 image:assets/5-start.png[start transport]
 
+.API response
+image:assets/22-register-response.png[finish transport]
+
 .Check the `Packet & Carrier` page to see if the packet status has changed to "ongoing"
 image:assets/6-ongoing.png[packet account 2]
 
@@ -765,13 +768,16 @@ Because of the IoT device inside the packet, the recipient can also check in the
 
 NOTE: In case the recipient doesn't receive the packet after a reasonable amount of time, the recipient can and should send the `FinishTransport` transaction, too (most likely with `status=fail`).
 
-.Recipient posts the `FinishTransport` transaction, once he/she received the packet from the carrier
+.Recipient posts the `FinishTransport` transaction, once he*she received the packet from the carrier
 image:assets/8-finish.png[finish transport]
+
+Decide yourself if the transport is successful or not.
+Verify the expected changes in the accounts on the `Packet&Carrier` page.
 
 .Transport fail
 image:assets/9-fail.png[finish transport]
 
-.Transport success
+.API response
 image:assets/92-success.png[finish transport]
 
 With all of the above steps completed, you have a very simple, but fully working proof of concept of a decentralised supply chain tracking system running on your machine.
