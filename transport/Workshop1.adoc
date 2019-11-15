@@ -16,7 +16,8 @@ Basic requirements for all machines:
 * A code editor like Visual Studio Code
 * Git
 
-IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker]. If you decide to follow this guide, you can skip the rest of this document.
+IMPORTANT: If you run a Windows machine, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker].
+If you decide to follow this guide, you can skip the rest of this document.
 
 Otherwise, you have to manually install:
 
@@ -27,7 +28,8 @@ Otherwise, you have to manually install:
 
 Set up the needed software and hardware and installation of the dependencies.
 
-IMPORTANT: If you run into troubles during the setup, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker] If you decide to follow this guide, you can skip the rest of this document.
+IMPORTANT: If you run into troubles during the setup, or just want a straight-forward setup of all required dependencies to get started with the workshop, follow our guide xref:./DOCKER.md[how to setup a development environment with Docker].
+If you decide to follow this guide, you can skip the rest of this document.
 
 === Clone the repo and install the dependencies
 
@@ -99,13 +101,17 @@ Starting the node for the first time might require some time (up to 3 minutes)!
 
 If everything is running fine, you can stop the node by hitting kbd:[CTRL+C].
 
-WARNING: In case the node crashes or doesn't work, follow the xref:./DOCKER.md[this guide] to set up a dedicated development environment using Docker and Docker-Compose. The script will set up the whole environment. If you decide to follow this guide, you can skip the rest of this document
+WARNING: In case the node crashes or doesn't work, follow the xref:./DOCKER.md[this guide] to set up a dedicated development environment using Docker and Docker-Compose.
+The script will set up the whole environment.
+If you decide to follow this guide, you can skip the rest of this document
 
 === Prepare the IoT device
 
 [INFO]
 ====
-The IoT device has already been prepared for you before the workshop. **No work needed here!** You can expand the section below if you want to learn about how we have set up the Raspbery Pi. Note that we won't be using the Temperature and Humidity sensors during the workshop.
+The IoT device has already been prepared for you before the workshop.
+**No work needed here!** You can expand the section below if you want to learn about how we have set up the Raspbery Pi.
+Note that we won't be using the Temperature and Humidity sensors during the workshop.
 ====
 .Reference: Raspberry Pi set up
 [%collapsible]

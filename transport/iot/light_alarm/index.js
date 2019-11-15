@@ -35,7 +35,7 @@ setInterval(() => {
             console.log(tx.stringify());
             console.log("++++++++++++++++ End Script +++++++++++++++++");
         }).catch(err => {
-            console.log(JSON.stringify(err.errors, null, 2));
+            console.dir(err);
         });*/
 	} else {
 		console.log('Alles gut');
