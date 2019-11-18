@@ -340,7 +340,7 @@ Execute the below commands for creating the tracking script:
 mkdir light_alarm #Create a folder to hold the tracking script.
 cd light_alarm
 npm init --yes #Creates the `package.json` file.
-npm i @liskhq/lisk-transactions @liskhq/lisk-api-client @liskhq/lisk-constants rpi-pins #Install dependencies.							<5>
+npm i @liskhq/lisk-transactions @liskhq/lisk-api-client @liskhq/lisk-constants rpi-pins #Install dependencies.
 ----
 
 Now, create a new file called `light-alarm.js`.
