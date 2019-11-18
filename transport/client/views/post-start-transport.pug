@@ -1,0 +1,13 @@
+extends index.pug
+
+block content
+    h2 Start Transport (Type: 21)
+
+    form(method='POST' action='/post-start-transport')
+        div.form-group
+            label(for='recipient') Recipient (packet ID):
+            input#recipient.form-control(type='text', placeholder='10881167371402274308L' name='recipient')
+        div.form-group
+            label(for='passphrase') Passphrase of carrier:
+            input#recipient.form-control(type='text', value='coach pupil shock error defense outdoor tube love action exist search idea' name='passphrase')
+        button.btn.btn-warning(type='submit') Start transport

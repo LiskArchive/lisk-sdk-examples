@@ -1,0 +1,38 @@
+extends index.pug
+
+block content
+    h2 Packet & Carrier Accounts
+
+    pre
+        fieldset.border.p-2
+            legend.w-auto Legend
+            pre
+                div.legend.pending &nbsp;Pending
+            pre
+                div.legend.ongoing &nbsp;Ongoing
+            pre
+                div.legend.alarm &nbsp;Alarm
+            pre
+                div.legend.success &nbsp;Success
+            pre
+                div.legend.fail &nbsp;Fail
+
+    pre
+        table.table
+            thead
+                tr
+                    th(scope='col') Address
+                    th(scope='col') Balance
+                    th(scope='col') Sender
+                    th(scope='col') Recipient
+                    th(scope='col') Asset
+
+            tbody
+                each account in accounts
+                    tr(class=account.asset.status)
+                        td= account.address
+                        td= account.balance
+                        td= account.asset.sender
+                        td= account.asset.recipient
+                        td
+                            pre= JSON.stringify(account.asset, null, 2)
