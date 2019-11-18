@@ -53,7 +53,7 @@ This transaction will:
  * set the `status` of the packet to `pending`.
  * transfer the postage from the senders' account to the packet account.
 
-==== Start transport
+=== Start transport
 
 As next step, a carrier would go to the packet senders' address, receive the packet and start the delivery to the recipient.
 The carrier needs to sign a transaction `StartTransportTransaction`, that verifies that the packet has been passed on to the carrier.
