@@ -88,11 +88,11 @@ The basic file structure looks as following (contents of `lisk-sdk-examples/tran
 <4> Contains the custom transactions, that are used by the node and client app.
 
 == 1.0 Pull Latest Changes
-To make sure you have the latest version of the code, pull the `lisk-transport` branch:
+To make sure you have the latest version of the code, pull the `development` branch:
 
 [source,bash]
 ----
-git pull origin lisk-transport
+git pull origin development
 ----
 
 If you had made changes, you can stash with `git stash`, pull the changes, and put the changes back `git stash pop`.

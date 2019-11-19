@@ -17,7 +17,7 @@ NOTE: To get a good overview about the general workflow we are going to implemen
 [TIP]
 ====
 "Got more of those... solutions?"::
-https://github.com/LiskHQ/lisk-sdk-examples/tree/lisk-transport/transport/transactions/solutions[Yes we have!], check out the fully working implementation of the other transactions in the `transactions/solutions/` folder.
+https://github.com/LiskHQ/lisk-sdk-examples/tree/development/transport/transactions/solutions[Yes we have!], check out the fully working implementation of the other transactions in the `transactions/solutions/` folder.
 
 After completing a task, compare with the solutions, to verify if you completed the task successfully. But be aware, there is not only one valid solution, how to write the code. In step 2.3 we will try out the actual code, to verify it works as expected.
 ====
@@ -686,7 +686,7 @@ These credentials are already prefilled for you in the different forms in the cl
 
 ==== Initialize a new packet account
 
-Go to http://localhost:3000/initialize and copy the packet credentials https://github.com/LiskHQ/lisk-sdk-examples/blob/lisk-transport/transport/iot/light_alarm/index.js#L18[in your tracking script] on the Raspberry Pi.
+Go to http://localhost:3000/initialize and copy the packet credentials https://github.com/LiskHQ/lisk-sdk-examples/blob/development/transport/iot/light_alarm/index.js#L18[in your tracking script] on the Raspberry Pi.
 
 .Create new packet credentials
 image:assets/1-initialize.png[Initialize packet account]

@@ -18,7 +18,7 @@ The actual workshop starts at `Workshop Part 1`, good luck!
 _Before starting the workshop, make sure to pull the latest changes to your local repository with:_
 
 ```bash
-git pull origin lisk-transport
+git pull origin development
 ```
 
 Let's get started!
