@@ -518,7 +518,11 @@ const api = new APIClient(['http://localhost:4000']);
 
 Ok, we are all set to check all elements together.
 
-=== 1.3.4 Validating all components
+=== 1.3.4 Uncomment code that sends the light alarm transaction
+
+Now uncomment the xref:iot/light_alarm/index.js#L25[code snippet that creates and sends the light alarm transaction object].
+
+=== 1.3.5 Validating all components
 
 To now track the light alarm with the client application, do the following:
 
