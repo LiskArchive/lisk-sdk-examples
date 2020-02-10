@@ -31,4 +31,4 @@ const tx = new HelloTransaction({
 tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble');
 
 console.log(tx.stringify());
-process.exit(1);
+process.exit(0);
