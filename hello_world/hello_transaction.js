@@ -10,7 +10,8 @@ class HelloTransaction extends BaseTransaction {
 	};
 
 	static get FEE () {
-		return `${10 ** 8}`;
+		//return `${10 ** 8}`;
+		return `0`;
 	};
 
 	applyAsset(store) {

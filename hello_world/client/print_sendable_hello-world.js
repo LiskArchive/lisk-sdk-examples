@@ -1,7 +1,11 @@
 const HelloTransaction = require('../hello_transaction');
 const transactions = require('@liskhq/lisk-transactions');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
-
+const {getNetworkIdentifier} = require('@liskhq/lisk-cryptography');
+const networkIdentifier = getNetworkIdentifier(
+    "23ce0366ef0a14a91e5fd4b1591fc880ffbef9d988ff8bebf8f3666b0c09597d",
+    "Lisk",
+);
 
 /**
  *  To directly send the printed transaction:
@@ -20,8 +24,7 @@ const tx = new HelloTransaction({
     asset: {
         hello: 'world',
     },
-    fee: `${transactions.utils.convertLSKToBeddows('1')}`,
-    recipientId: '10881167371402274308L', //delegate genesis_100
+    networkIdentifier: networkIdentifier,
     timestamp: getTimestamp(),
 });
 
