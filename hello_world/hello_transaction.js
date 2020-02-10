@@ -6,7 +6,7 @@ const {
 class HelloTransaction extends BaseTransaction {
 
 	static get TYPE () {
-		return 10;
+		return 20;
 	};
 
 	static get FEE () {
