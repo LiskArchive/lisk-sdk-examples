@@ -14,6 +14,30 @@ class HelloTransaction extends BaseTransaction {
 		return `0`;
 	};
 
+	async prepare(store) {
+		await store.account.cache([
+			{
+				address: this.senderId,
+			},
+		]);
+	}
+
+	validateAsset() {
+		const errors = [];
+		if (!this.asset.hello || typeof this.asset.hello !== 'string' || this.asset.hello.length > 64) {
+			errors.push(
+				new TransactionError(
+					'Invalid "asset.hello" defined on transaction',
+					this.id,
+					'.asset.hello',
+					this.asset.hello,
+					'A string value no longer than 64 characters',
+				)
+			);
+		}
+		return errors;
+	}
+
 	applyAsset(store) {
         const errors = [];
         const sender = store.account.get(this.senderId);
@@ -39,31 +63,6 @@ class HelloTransaction extends BaseTransaction {
 		store.account.set(sender.address, oldObj);
 		return [];
 	}
-
-	validateAsset() {
-		const errors = [];
-		if (!this.asset.hello || typeof this.asset.hello !== 'string' || this.asset.hello.length > 64) {
-			errors.push(
-				new TransactionError(
-					'Invalid "asset.hello" defined on transaction',
-					this.id,
-					'.asset.hello',
-					this.asset.hello,
-					'A string value no longer than 64 characters',
-				)
-			);
-		}
-		return errors;
-	}
-	// Server
-	async prepare(store) {
-		await store.account.cache([
-			{
-				address: this.senderId,
-			},
-		]);
-	}
-
 }
 
 module.exports = HelloTransaction;
