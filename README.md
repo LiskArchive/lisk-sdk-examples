@@ -1,6 +1,6 @@
 # Lisk SDK examples
 
-This project contains example applications using the latest Lisk SDK.
+This project contains example blockchain applications using the latest Lisk SDK.
 Each example project represents an industry use case in which we showcase the potential of the Lisk SDK and how it can transform this industry.
 
 Currently, we have two projects ready:
