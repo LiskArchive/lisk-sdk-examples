@@ -10,8 +10,7 @@ class HelloTransaction extends BaseTransaction {
 	};
 
 	static get FEE () {
-		//return `${10 ** 8}`;
-		return `0`;
+		return `${10 ** 8}`;
 	};
 
 	async prepare(store) {

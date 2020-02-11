@@ -28,7 +28,7 @@ const tx = new HelloTransaction({
     timestamp: getTimestamp(),
 });
 
-tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble');
+tx.sign('creek own stem final gate scrub live shallow stage host concert they');
 
 console.log(tx.stringify());
 process.exit(0);
