@@ -1,5 +1,4 @@
 const HelloTransaction = require('../hello_transaction');
-const transactions = require('@liskhq/lisk-transactions');
 const { EPOCH_TIME } = require('@liskhq/lisk-constants');
 const {getNetworkIdentifier} = require('@liskhq/lisk-cryptography');
 const networkIdentifier = getNetworkIdentifier(
