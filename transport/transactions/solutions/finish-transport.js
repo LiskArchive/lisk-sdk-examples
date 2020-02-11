@@ -20,13 +20,13 @@ class FinishTransportTransaction extends BaseTransaction {
          */
         await store.account.cache([
             {
-                address: this.recipientId,
+                address: this.asset.recipientId,
             }
         ]);
         /**
          * Get sender and recipient accounts of the packet
          */
-        const pckt = store.account.get(this.recipientId);
+        const pckt = store.account.get(this.asset.recipientId);
         await store.account.cache([
             {
                 address: pckt.asset.carrier,
@@ -39,13 +39,13 @@ class FinishTransportTransaction extends BaseTransaction {
 
     validateAsset() {
         const errors = [];
-        if (!this.recipientId || typeof this.recipientId !== 'string') {
+        if (!this.asset.recipientId || typeof this.asset.recipientId !== 'string') {
             errors.push(
                 new TransactionError(
                     'Invalid "asset.packetId" defined on transaction',
                     this.id,
                     '.asset.packetId',
-                    this.recipientId
+                    this.asset.recipientId
                 )
             );
         }
@@ -54,7 +54,7 @@ class FinishTransportTransaction extends BaseTransaction {
 
     applyAsset(store) {
         const errors = [];
-        let packet = store.account.get(this.recipientId);
+        let packet = store.account.get(this.asset.recipientId);
         let carrier = store.account.get(packet.asset.carrier);
         let sender = store.account.get(packet.asset.sender);
         // if the transaction has been signed by the packet recipient
@@ -141,7 +141,7 @@ class FinishTransportTransaction extends BaseTransaction {
 
     undoAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.recipientId);
+        const packet = store.account.get(this.asset.recipientId);
         const carrier = store.account.get(packet.carrier);
         const sender = store.account.get(packet.sender);
         /* --- Revert successful transport --- */

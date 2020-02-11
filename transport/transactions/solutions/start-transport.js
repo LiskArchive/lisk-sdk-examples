@@ -18,7 +18,7 @@ class StartTransportTransaction extends BaseTransaction {
     async prepare(store) {
         await store.account.cache([
             {
-                address: this.recipientId,
+                address: this.asset.recipientId,
             },
             {
                 address: this.senderId,
@@ -34,7 +34,7 @@ class StartTransportTransaction extends BaseTransaction {
 
     applyAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.recipientId);
+        const packet = store.account.get(this.asset.recipientId);
         if (packet.asset.status === "pending"){
             const carrier = store.account.get(this.senderId);
             // If the carrier has the trust to transport the packet
@@ -94,7 +94,7 @@ class StartTransportTransaction extends BaseTransaction {
 
     undoAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.recipientId);
+        const packet = store.account.get(this.asset.recipientId);
         const carrier = store.account.get(this.senderId);
         /* --- Revert carrier account --- */
         const carrierBalanceWithSecurity = new utils.BigNum(carrier.balance).add(
