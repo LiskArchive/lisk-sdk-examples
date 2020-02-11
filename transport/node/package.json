@@ -1,5 +1,5 @@
 {
-  "name": "lisk-delivery-node",
+  "name": "lisk-transport-node",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lisk-sdk": "^2.3.6"
+    "lisk-sdk": "^3.0.1"
   }
 }
