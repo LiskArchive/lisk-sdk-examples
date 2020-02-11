@@ -335,8 +335,8 @@ app.post('/post-finish-transport', function (req, res) {
     const passphrase = req.body.passphrase;
 
     const finishTransportTransaction = new FinishTransportTransaction({
-        recipientId: recipient,
         asset: {
+            recipientId: recipient,
             status,
         },
         networkIdentifier: networkIdentifier,
