@@ -4,7 +4,12 @@ const GPIO = new PIN.GPIO();
 GPIO.setPin(4, PIN.MODE.INPUT);
 const LightAlarmTransaction = require('./light-alarm');
 const { APIClient } = require('@liskhq/lisk-api-client');
+const {getNetworkIdentifier} = require('@liskhq/lisk-cryptography');
 
+const networkIdentifier = getNetworkIdentifier(
+	"23ce0366ef0a14a91e5fd4b1591fc880ffbef9d988ff8bebf8f3666b0c09597d",
+	"Lisk",
+);
 // Enter here the IP of the node you want to reach for API requests
 // Check the IP by running `ifconfig` inside your local terminal
 const api = new APIClient(['http://localhost:4000']);
@@ -23,7 +28,8 @@ setInterval(() => {
 		console.log('Package has been opened! Send lisk transaction!');
 		// Uncomment the below code in step 1.3 of the workshop
         /*let tx =  new LightAlarmTransaction({
-            timestamp: dateToLiskEpochTimestamp(new Date())
+            timestamp: dateToLiskEpochTimestamp(new Date()),
+            networkIdentifier: networkIdentifier
         });
 
         tx.sign(packetCredentials.passphrase);
