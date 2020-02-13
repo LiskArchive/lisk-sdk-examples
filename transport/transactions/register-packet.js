@@ -119,7 +119,7 @@ class RegisterPacketTransaction extends BaseTransaction {
                 ...{
                     balance: packetBalanceWithPostage.toString(),
                     asset: {
-                        recipient: this.recipientId,
+                        recipient: this.asset.recipientId,
                         sender: this.senderId,
                         security: this.asset.security,
                         postage: this.asset.postage,

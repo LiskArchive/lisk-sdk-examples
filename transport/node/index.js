@@ -19,5 +19,5 @@ app
     .then(() => app.logger.info('App started...'))
     .catch(error => {
         console.error('Faced error in application', error);
-        process.exit(1);
+        process.exit(0);
     });

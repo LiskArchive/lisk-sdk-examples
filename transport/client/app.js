@@ -10,6 +10,11 @@ const transactions = require('@liskhq/lisk-transactions');
 const cryptography = require('@liskhq/lisk-cryptography');
 const { Mnemonic } = require('@liskhq/lisk-passphrase');
 
+const networkIdentifier = cryptography.getNetworkIdentifier(
+    "23ce0366ef0a14a91e5fd4b1591fc880ffbef9d988ff8bebf8f3666b0c09597d",
+    "Lisk",
+);
+
 // Constants
 const API_BASEURL = 'http://localhost:4000';
 const PORT = 3000;
@@ -186,11 +191,14 @@ app.get('/initialize', async(req, res) => {
     const packetCredentials = getPacketCredentials();
 
     let tx = new transactions.TransferTransaction({
-        amount: '1',
-        recipientId: packetCredentials.address,
+        asset: {
+            amount: '1',
+            recipientId: packetCredentials.address,
+        },
+        networkIdentifier: networkIdentifier,
     });
 
-    tx.sign('wagon stock borrow episode laundry kitten salute link globe zero feed marble'); // Genesis account with address: 16313739661670634666L
+    tx.sign('creek own stem final gate scrub live shallow stage host concert they'); // Genesis account with address: 11237980039345381032L
     res.render('initialize', { packetCredentials });
 
     api.transactions.broadcast(tx.toJSON()).then(res => {
@@ -222,8 +230,9 @@ app.post('/post-register-packet', function (req, res) {
             minTrust,
             postage: transactions.utils.convertLSKToBeddows(postage),
             packetId,
+            recipientId,
         },
-        recipientId,
+        networkIdentifier: networkIdentifier,
         timestamp: dateToLiskEpochTimestamp(new Date()),
     });
 
@@ -256,7 +265,10 @@ app.post('/post-start-transport', function (req, res) {
 
     // Send start transport transaction
     const startTransportTransaction = new StartTransportTransaction({
-        recipientId,
+        asset: {
+            recipientId,
+        },
+        networkIdentifier: networkIdentifier,
         timestamp: dateToLiskEpochTimestamp(new Date()),
     });
 
@@ -288,8 +300,11 @@ app.post('/faucet', function (req, res) {
     const amount = req.body.amount;
 
     const fundTransaction = new transactions.TransferTransaction({
-        amount: transactions.utils.convertLSKToBeddows(amount),
-        recipientId: address,
+        asset: {
+            recipientId: address,
+            amount: transactions.utils.convertLSKToBeddows(amount),
+        },
+        networkIdentifier: networkIdentifier,
     });
 
     fundTransaction.sign(accounts.sender.passphrase); // Genesis account
@@ -320,10 +335,11 @@ app.post('/post-finish-transport', function (req, res) {
     const passphrase = req.body.passphrase;
 
     const finishTransportTransaction = new FinishTransportTransaction({
-        recipientId: recipient,
         asset: {
+            recipientId: recipient,
             status,
         },
+        networkIdentifier: networkIdentifier,
         timestamp: dateToLiskEpochTimestamp(new Date()),
     });
 

@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@liskhq/lisk-transactions": "^2.3.1"
+    "@liskhq/lisk-transactions": "^3.0.1"
   },
   "devDependencies": {
     "jest": "^24.9.0",
