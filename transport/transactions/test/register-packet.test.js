@@ -1,4 +1,4 @@
-const RegisterPacketTransaction = require('../register-packet');
+const RegisterPacketTransaction = require('../solutions/register-packet');
 const transactions = require('@liskhq/lisk-transactions');
 const { when } = require('jest-when');
 
