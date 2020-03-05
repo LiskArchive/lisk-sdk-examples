@@ -20,11 +20,13 @@ describe('RegisterPacket Transaction', () => {
     test('it should undo the state for register packet correctly', async () => {
         // Arrange
         const senderId = 'senderXYZ';
+        const senderPublicKey = 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f';
         const asset = {
             security: transactions.utils.convertLSKToBeddows('10'),
             minTrust: 0,
             postage: transactions.utils.convertLSKToBeddows('10'),
             packetId: 'not important',
+            recipientId: 'xyzL',
         };
 
         const mockedPacketAccount = {
@@ -46,8 +48,8 @@ describe('RegisterPacket Transaction', () => {
         // Act
         const tx = new RegisterPacketTransaction({
             senderId,
+            senderPublicKey,
             asset,
-            recipientId: 'xyzL',
             timestamp: dateToLiskEpochTimestamp(new Date()),
         });
         tx.undoAsset(storeStub);
