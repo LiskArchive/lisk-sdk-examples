@@ -19,7 +19,7 @@ describe('RegisterPacket Transaction', () => {
 
     test('it should undo the state for register packet correctly', async () => {
         // Arrange
-        const senderId = 'senderXYZ';
+        const senderId = '16313739661670634666L';
         const senderPublicKey = 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f';
         const asset = {
             security: transactions.utils.convertLSKToBeddows('10'),
@@ -53,26 +53,26 @@ describe('RegisterPacket Transaction', () => {
             timestamp: dateToLiskEpochTimestamp(new Date()),
         });
         tx.undoAsset(storeStub);
-        
+
         // Assert
         expect(storeStub.account.set).toHaveBeenNthCalledWith(
             1,
-            mockedPacketAccount.address,
-            {
-                address: mockedPacketAccount.address,
-                balance: 0,
-                asset: null,
-            }
-        );
-
-        expect(storeStub.account.set).toHaveBeenNthCalledWith(
-            2,
             mockedSenderAccount.address,
             {
                 address: mockedSenderAccount.address,
                 balance: new transactions.utils.BigNum(mockedSenderAccount.balance).add(
                     new transactions.utils.BigNum(asset.postage)
                 ).toString()
+            }
+        );
+
+        expect(storeStub.account.set).toHaveBeenNthCalledWith(
+            2,
+            mockedPacketAccount.address,
+            {
+                address: mockedPacketAccount.address,
+                balance: 0,
+                asset: null,
             }
         );
     });
