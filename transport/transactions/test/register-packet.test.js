@@ -47,7 +47,6 @@ describe('RegisterPacket Transaction', () => {
 
         // Act
         const tx = new RegisterPacketTransaction({
-            senderId,
             senderPublicKey,
             asset,
             timestamp: dateToLiskEpochTimestamp(new Date()),
