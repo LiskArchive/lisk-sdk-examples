@@ -1,0 +1,13 @@
+extends index.pug
+
+block content
+    h2 Create new Hello
+
+    form(method='POST' action='/post-hello')
+        div.form-group
+            label(for='hello') Hello value:
+            input#recipient.form-control(type='text', placeholder='Your personal hello statement' name='hello')
+        div.form-group
+            label(for='passphrase') Passphrase:
+            input#recipient.form-control(type='text', placeholder='coach pupil shock error defense outdoor tube love action exist search idea' name='passphrase')
+        button.btn.btn-warning(type='submit') Send

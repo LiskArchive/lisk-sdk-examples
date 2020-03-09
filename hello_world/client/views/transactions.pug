@@ -1,0 +1,19 @@
+extends index.pug
+
+block content
+    h2 Transactions
+
+    pre
+        table.table.table-striped
+            thead
+                tr
+                    th(scope='col') ID
+                    th(scope='col') Height
+                    th(scope='col') Data
+
+            tbody
+                each tx in transactions
+                    tr
+                        td= tx.id
+                        td= tx.height
+                        td= JSON.stringify(tx, null, 2)

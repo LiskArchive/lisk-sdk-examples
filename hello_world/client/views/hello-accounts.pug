@@ -1,0 +1,20 @@
+extends index.pug
+
+block content
+    h2 Hello Accounts
+
+    pre
+        table.table
+            thead
+                tr
+                    th(scope='col') Address
+                    th(scope='col') Balance
+                    th(scope='col') Hello
+
+            tbody
+                each account in accounts
+                    tr
+                        td= account.address
+                        td= account.balance
+                        td
+                            pre= JSON.stringify(account.asset, null, 2)
