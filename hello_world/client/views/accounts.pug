@@ -7,13 +7,15 @@ block content
         table.table.table-striped
             thead
                 tr
+                    th(scope='col') Index
                     th(scope='col') Address
                     th(scope='col') Balance
                     th(scope='col') Data
 
             tbody
-                each account in accounts
+                each account, index in accounts
                     tr
+                        td= index
                         td= account.address
                         td= account.balance
                         td= JSON.stringify(account, null, 2)
