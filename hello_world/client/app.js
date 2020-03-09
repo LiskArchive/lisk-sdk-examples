@@ -197,24 +197,6 @@ app.get('/hello-transactions', async(req, res) => {
     res.render('hello-transactions', { transactions });
 });
 
-/**
- * Request specific HelloTransaction transactions
- */
-app.get('/hello-transactions/:senderId', async(req, res) => {
-    const { data: transactions } = await api.transactions.get({ type: HelloTransaction.TYPE, senderId: req.params.senderId });
-
-    // Sort desc
-    transactions.sort((a, b) => {
-        if (a.timestamp > b.timestamp) return -1;
-
-        if (a.timestamp < b.timestamp) return 1;
-
-        if (a.timestamp === b.timestamp) return 0;
-    });
-
-    res.render('hello', { transactions });
-});
-
 app.get('/create', async(req, res) => {
     const getPacketCredentials = () => {
         const passphrase = Mnemonic.generateMnemonic();
@@ -323,7 +305,6 @@ app.post('/transfer', function (req, res) {
         timestamp: dateToLiskEpochTimestamp(new Date()),
     });
 
-    //The TransferTransaction is signed by the Genesis account
     transferTransaction.sign(req.body.passphrase);
     api.transactions.broadcast(transferTransaction.toJSON()).then(response => {
         res.app.locals.payload = {
