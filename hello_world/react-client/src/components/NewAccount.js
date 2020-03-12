@@ -35,7 +35,7 @@ class NewAccount extends Component {
         return (
             <div>
                 <h2>Create new account</h2>
-                <div>{this.state.credentials}</div>
+                <div>{JSON.stringify(this.state.credentials)}</div>
             </div>
         );
     }
