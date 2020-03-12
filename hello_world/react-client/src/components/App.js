@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import NewAccount from './NewAccount';
 import Accounts from './Accounts';
+import Faucet from './Faucet';
 
 // The pages of this site are rendered dynamically
 // in the browser (not server rendered).
@@ -89,17 +90,6 @@ function Home() {
         </div>
     );
 }
-
-
-
-function Faucet() {
-    return (
-        <div>
-            <h2>Faucet</h2>
-        </div>
-    );
-}
-
 
 function SendTransfer() {
     return (

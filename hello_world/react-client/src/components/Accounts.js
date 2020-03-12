@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
+const { APIClient } = require('@liskhq/lisk-api-client');
+
+// Constants
+const API_BASEURL = 'http://localhost:4000';
+
+// Initialize
+const api = new APIClient([API_BASEURL]);
 
 class Accounts extends Component {
 
     constructor(props) {
         super(props);
 
-        this.state = { credentials: getPacketCredentials() };
+        this.state = { data: [] };
     }
 
-    componentDidMount() {
-           // const response = await fetch(`https://api.coinmarketcap.com/v1/ticker/?limit=10`);
-            //const json = await response.json();
-            //this.setState({ data: json });
+    async componentDidMount() {
         let offset = 0;
         let accounts = [];
         const accountsArray = [];
