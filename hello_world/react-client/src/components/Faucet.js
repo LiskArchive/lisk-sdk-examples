@@ -20,7 +20,7 @@ const dateToLiskEpochTimestamp = date => (
     Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
 );
 
-class Accounts extends Component {
+class Faucet extends Component {
 
     constructor(props) {
         super(props);
@@ -28,7 +28,7 @@ class Accounts extends Component {
         this.state = {
             address: '',
             amount: '',
-            response: {},
+            response: { meta: { status: false }},
             transaction: {},
         };
     }
@@ -55,14 +55,17 @@ class Accounts extends Component {
         //The TransferTransaction is signed by the Genesis account
         fundTransaction.sign(accounts.genesis.passphrase);
         api.transactions.broadcast(fundTransaction.toJSON()).then(response => {
-            console.log("++++++++++++++++ API Response +++++++++++++++++");
             this.setState({response:response});
-            console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
             this.setState({transaction:fundTransaction});
-            console.log("++++++++++++++++ End Script +++++++++++++++++");
         }).catch(err => {
             console.log(JSON.stringify(err.errors, null, 2));
         });
+    }
+
+    Response = (props) => {
+        const apiResponse = props.apiResponse;
+
+        return <div></div>
     }
 
     render() {
@@ -79,14 +82,14 @@ class Accounts extends Component {
                     </label>
                     <input type="submit" value="Submit" />
                 </form>
-                <div>
-                    <p>Transaction: {JSON.stringify(this.state.transaction)}</p>
-                    <p>Response: {JSON.stringify(this.state.response)}</p>
-                </div>
+                {this.state.response.meta.status &&
+                    <div>
+                        <p>Transaction: {JSON.stringify(this.state.transaction)}</p>
+                        <p>Response: {JSON.stringify(this.state.response)}</p>
+                    </div>
+                }
             </div>
-
-
         );
     }
 }
-export default Accounts; // Don’t forget to use export default!
+export default Faucet; // Don’t forget to use export default!
