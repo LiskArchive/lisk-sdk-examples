@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import NewAccount from './NewAccount';
 import Accounts from './Accounts';
+import HelloAccounts from './HelloAccounts';
 import Faucet from './Faucet';
 
 // The pages of this site are rendered dynamically
@@ -29,9 +30,9 @@ export default function App() {
                     <h3> Explore </h3>
                     <li><Link to="/accounts">Accounts</Link></li>
                     <li><Link to="/hello-accounts">Hello accounts</Link></li>
-                    <li><Link to="/blocks">Blocks</Link></li>
-                    <li><Link to="/transactions">Transaction</Link></li>
+                    <li><Link to="/transactions">Transactions</Link></li>
                     <li><Link to="/hello-transactions">Hello transactions</Link></li>
+                    <li><Link to="/blocks">Blocks</Link></li>
                 </ul>
 
                 <hr />
@@ -103,15 +104,6 @@ function SendHello() {
     return (
         <div>
             <h2>Send a Hello transaction</h2>
-        </div>
-    );
-}
-
-
-function HelloAccounts() {
-    return (
-        <div>
-            <h2>List of all Hello-accounts</h2>
         </div>
     );
 }
