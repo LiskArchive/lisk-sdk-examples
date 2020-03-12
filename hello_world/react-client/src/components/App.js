@@ -6,6 +6,7 @@ import {
     Link
 } from "react-router-dom";
 import NewAccount from './NewAccount';
+import Accounts from './Accounts';
 
 // The pages of this site are rendered dynamically
 // in the browser (not server rendered).
@@ -25,9 +26,7 @@ export default function App() {
                     <li><Link to="/send-hello">Send Hello</Link></li>
                     <hr />
                     <h3> Explore </h3>
-{/*
                     <li><Link to="/accounts">Accounts</Link></li>
-*/}
                     <li><Link to="/hello-accounts">Hello accounts</Link></li>
                     <li><Link to="/blocks">Blocks</Link></li>
                     <li><Link to="/transactions">Transaction</Link></li>
@@ -59,9 +58,9 @@ export default function App() {
                     <Route path="/send-hello">
                         <SendHello />
                     </Route>
-                    {/*<Route path="/accounts">
+                    <Route path="/accounts">
                         <Accounts />
-                    </Route>*/}
+                    </Route>
                     <Route path="/hello-accounts">
                         <HelloAccounts />
                     </Route>
