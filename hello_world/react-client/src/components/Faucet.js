@@ -41,7 +41,6 @@ class Faucet extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        //const data = new FormData(event.target);
 
         const fundTransaction = new transactions.TransferTransaction({
             asset: {
@@ -86,4 +85,4 @@ class Faucet extends Component {
         );
     }
 }
-export default Faucet; // Don’t forget to use export default!
+export default Faucet;

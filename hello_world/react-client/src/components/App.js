@@ -10,6 +10,10 @@ import Accounts from './Accounts';
 import HelloAccounts from './HelloAccounts';
 import Faucet from './Faucet';
 import SendTransfer from './Transfer';
+import SendHello from './Hello';
+import Transactions from './Transactions';
+import HelloTransactions from './HelloTransactions';
+import Blocks from './Blocks';
 
 // The pages of this site are rendered dynamically
 // in the browser (not server rendered).
@@ -82,45 +86,12 @@ export default function App() {
     );
 }
 
-// You can think of these components as "pages"
-// in your app.
+/* Functional components */
 
 function Home() {
     return (
         <div>
             <h2>Home</h2>
-        </div>
-    );
-}
-
-function SendHello() {
-    return (
-        <div>
-            <h2>Send a Hello transaction</h2>
-        </div>
-    );
-}
-
-function Blocks() {
-    return (
-        <div>
-            <h2>Block explorer</h2>
-        </div>
-    );
-}
-
-function Transactions() {
-    return (
-        <div>
-            <h2>Transaction explorer</h2>
-        </div>
-    );
-}
-
-function HelloTransactions() {
-    return (
-        <div>
-            <h2>Displays all Hello transactions</h2>
         </div>
     );
 }

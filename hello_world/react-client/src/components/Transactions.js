@@ -7,7 +7,7 @@ const API_BASEURL = 'http://localhost:4000';
 // Initialize
 const api = new APIClient([API_BASEURL]);
 
-class Accounts extends Component {
+class Transactions extends Component {
 
     constructor(props) {
         super(props);
@@ -17,29 +17,29 @@ class Accounts extends Component {
 
     async componentDidMount() {
         let offset = 0;
-        let accounts = [];
-        const accountsArray = [];
+        let transactions = [];
+        const transactionsArray = [];
 
         do {
-            const retrievedAccounts = await api.accounts.get({ limit: 100, offset });
-            accounts = retrievedAccounts.data;
-            accountsArray.push(...accounts);
+            const retrievedTransactions = await api.transactions.get({ limit: 100, offset });
+            transactions = retrievedTransactions.data;
+            transactionsArray.push(...transactions);
 
-            if (accounts.length === 100) {
+            if (transactions.length === 100) {
                 offset += 100;
             }
-        } while (accounts.length === 100);
+        } while (transactions.length === 100);
 
-        this.setState({ data: accountsArray });
+        this.setState({ data: transactionsArray });
     }
 
     render() {
         return (
             <div>
-                <h2>All accounts</h2>
+                <h2>All Transaction</h2>
                 <div>{JSON.stringify(this.state.data)}</div>
             </div>
         );
     }
 }
-export default Accounts;
+export default Transactions;

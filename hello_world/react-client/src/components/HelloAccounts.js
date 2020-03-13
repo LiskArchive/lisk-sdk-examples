@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 const { APIClient } = require('@liskhq/lisk-api-client');
-const HelloTransaction = require('../transactions/hello_transaction');
 
 // Constants
 const API_BASEURL = 'http://localhost:4000';
@@ -45,7 +44,7 @@ class HelloAccounts extends Component {
     render() {
         return (
             <div>
-                <h2>List of all Hello accounts</h2>
+                <h2>All Hello accounts</h2>
                 <div>{JSON.stringify(this.state.data)}</div>
             </div>
         );

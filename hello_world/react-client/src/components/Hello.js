@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import HelloTransaction from '../transactions/hello_transaction';
 const { APIClient } = require('@liskhq/lisk-api-client');
-const transactions = require('@liskhq/lisk-transactions');
 const cryptography = require('@liskhq/lisk-cryptography');
 
 const networkIdentifier = cryptography.getNetworkIdentifier(
@@ -25,8 +25,7 @@ class Transfer extends Component {
         super(props);
 
         this.state = {
-            address: '',
-            amount: '',
+            hello: '',
             passphrase: '',
             response: { meta: { status: false }},
             transaction: {},
@@ -42,21 +41,20 @@ class Transfer extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        const transferTransaction = new transactions.TransferTransaction({
+        const helloTransaction = new HelloTransaction({
             asset: {
-                recipientId: this.state.address,
-                amount: transactions.utils.convertLSKToBeddows(this.state.amount),
+                hello: this.state.hello,
             },
             networkIdentifier: networkIdentifier,
             timestamp: dateToLiskEpochTimestamp(new Date()),
         });
 
-        transferTransaction.sign(this.state.passphrase);
-        api.transactions.broadcast(transferTransaction.toJSON()).then(response => {
+        helloTransaction.sign(this.state.passphrase);
+        api.transactions.broadcast(helloTransaction.toJSON()).then(response => {
             this.setState({response:response});
-            this.setState({transaction:transferTransaction});
+            this.setState({transaction:helloTransaction});
         }).catch(err => {
-            console.log(JSON.stringify(err.errors, null, 2));
+            console.log(JSON.stringify(err, null, 2));
         });
     }
 
@@ -65,12 +63,8 @@ class Transfer extends Component {
             <div>
                 <form onSubmit={this.handleSubmit}>
                     <label>
-                        Address:
-                        <input type="text" id="address" name="address" onChange={this.handleChange} />
-                    </label>
-                    <label>
-                        Amount (1 = 10^8 tokens):
-                        <input type="text" id="amount" name="amount" onChange={this.handleChange} />
+                        Hello message:
+                        <input type="text" id="hello" name="hello" onChange={this.handleChange} />
                     </label>
                     <label>
                         Passphrase:
