@@ -8,13 +8,10 @@ const networkIdentifier = cryptography.getNetworkIdentifier(
     "Lisk",
 );
 
-// Constants
 const API_BASEURL = 'http://localhost:4000';
 
-// Initialize
 const api = new APIClient([API_BASEURL]);
 
-/* Utils */
 const dateToLiskEpochTimestamp = date => (
     Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
 );
@@ -61,6 +58,8 @@ class Transfer extends Component {
     render() {
         return (
             <div>
+                <h2>Hello</h2>
+                <p>Send a Hello transaction.</p>
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         Hello message:

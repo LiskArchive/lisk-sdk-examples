@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 const { APIClient } = require('@liskhq/lisk-api-client');
 
-// Constants
 const API_BASEURL = 'http://localhost:4000';
 
-// Initialize
 const api = new APIClient([API_BASEURL]);
 
 class Accounts extends Component {

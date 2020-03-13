@@ -36,7 +36,7 @@ class Transactions extends Component {
     render() {
         return (
             <div>
-                <h2>All Transaction</h2>
+                <h2>All Transactions</h2>
                 <div>{JSON.stringify(this.state.data)}</div>
             </div>
         );

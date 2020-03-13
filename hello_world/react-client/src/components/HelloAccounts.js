@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 const { APIClient } = require('@liskhq/lisk-api-client');
 
-// Constants
 const API_BASEURL = 'http://localhost:4000';
 
-// Initialize
 const api = new APIClient([API_BASEURL]);
 
 class HelloAccounts extends Component {
@@ -50,4 +48,4 @@ class HelloAccounts extends Component {
         );
     }
 }
-export default HelloAccounts; // Don’t forget to use export default!
+export default HelloAccounts;

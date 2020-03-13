@@ -9,13 +9,10 @@ const networkIdentifier = cryptography.getNetworkIdentifier(
     "Lisk",
 );
 
-// Constants
 const API_BASEURL = 'http://localhost:4000';
 
-// Initialize
 const api = new APIClient([API_BASEURL]);
 
-/* Utils */
 const dateToLiskEpochTimestamp = date => (
     Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
 );
@@ -64,6 +61,8 @@ class Faucet extends Component {
     render() {
         return (
             <div>
+                <h2>Faucet</h2>
+                <p>The faucet transfers tokens from the genesis account to another.</p>
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         Address:

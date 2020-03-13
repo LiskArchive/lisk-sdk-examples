@@ -63,9 +63,11 @@ class Transfer extends Component {
     render() {
         return (
             <div>
+                <h2>Transfer</h2>
+                <p>Send tokens from one account to another.</p>
                 <form onSubmit={this.handleSubmit}>
                     <label>
-                        Address:
+                        Recipient:
                         <input type="text" id="address" name="address" onChange={this.handleChange} />
                     </label>
                     <label>
