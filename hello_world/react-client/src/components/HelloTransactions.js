@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-const { APIClient } = require('@liskhq/lisk-api-client');
-const HelloTransaction = require('../transactions/hello_transaction');
+import { APIClient } from '@liskhq/lisk-api-client';
+import HelloTransaction from '../transactions/hello_transaction';
 
 const API_BASEURL = 'http://localhost:4000';
 

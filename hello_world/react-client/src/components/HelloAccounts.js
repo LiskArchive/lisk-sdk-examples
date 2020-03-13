@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-const { APIClient } = require('@liskhq/lisk-api-client');
+import { APIClient } from '@liskhq/lisk-api-client';
 
 const API_BASEURL = 'http://localhost:4000';
 
