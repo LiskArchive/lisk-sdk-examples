@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 const { APIClient } = require('@liskhq/lisk-api-client');
-const accounts = require('../accounts.json');
 const transactions = require('@liskhq/lisk-transactions');
 const cryptography = require('@liskhq/lisk-cryptography');
 
@@ -20,7 +19,7 @@ const dateToLiskEpochTimestamp = date => (
     Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
 );
 
-class Faucet extends Component {
+class Transfer extends Component {
 
     constructor(props) {
         super(props);
@@ -28,6 +27,7 @@ class Faucet extends Component {
         this.state = {
             address: '',
             amount: '',
+            passphrase: '',
             response: { meta: { status: false }},
             transaction: {},
         };
@@ -43,7 +43,7 @@ class Faucet extends Component {
         event.preventDefault();
         //const data = new FormData(event.target);
 
-        const fundTransaction = new transactions.TransferTransaction({
+        const transferTransaction = new transactions.TransferTransaction({
             asset: {
                 recipientId: this.state.address,
                 amount: transactions.utils.convertLSKToBeddows(this.state.amount),
@@ -53,10 +53,10 @@ class Faucet extends Component {
         });
 
         //The TransferTransaction is signed by the Genesis account
-        fundTransaction.sign(accounts.genesis.passphrase);
-        api.transactions.broadcast(fundTransaction.toJSON()).then(response => {
+        transferTransaction.sign(this.state.passphrase);
+        api.transactions.broadcast(transferTransaction.toJSON()).then(response => {
             this.setState({response:response});
-            this.setState({transaction:fundTransaction});
+            this.setState({transaction:transferTransaction});
         }).catch(err => {
             console.log(JSON.stringify(err.errors, null, 2));
         });
@@ -74,16 +74,20 @@ class Faucet extends Component {
                         Amount (1 = 10^8 tokens):
                         <input type="text" id="amount" name="amount" onChange={this.handleChange} />
                     </label>
+                    <label>
+                        Passphrase:
+                        <input type="text" id="passphrase" name="passphrase" onChange={this.handleChange} />
+                    </label>
                     <input type="submit" value="Submit" />
                 </form>
                 {this.state.response.meta.status &&
-                    <div>
-                        <p>Transaction: {JSON.stringify(this.state.transaction)}</p>
-                        <p>Response: {JSON.stringify(this.state.response)}</p>
-                    </div>
+                <div>
+                    <p>Transaction: {JSON.stringify(this.state.transaction)}</p>
+                    <p>Response: {JSON.stringify(this.state.response)}</p>
+                </div>
                 }
             </div>
         );
     }
 }
-export default Faucet; // Don’t forget to use export default!
+export default Transfer; // Don’t forget to use export default!

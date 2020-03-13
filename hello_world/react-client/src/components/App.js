@@ -9,6 +9,7 @@ import NewAccount from './NewAccount';
 import Accounts from './Accounts';
 import HelloAccounts from './HelloAccounts';
 import Faucet from './Faucet';
+import SendTransfer from './Transfer';
 
 // The pages of this site are rendered dynamically
 // in the browser (not server rendered).
@@ -88,14 +89,6 @@ function Home() {
     return (
         <div>
             <h2>Home</h2>
-        </div>
-    );
-}
-
-function SendTransfer() {
-    return (
-        <div>
-            <h2>Send a transfer transaction</h2>
         </div>
     );
 }
