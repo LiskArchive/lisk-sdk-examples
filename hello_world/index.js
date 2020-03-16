@@ -1,5 +1,5 @@
 const { Application, genesisBlockDevnet, configDevnet} = require('lisk-sdk');
-const HelloTransaction = require('./hello_transaction');
+const HelloTransaction = require('./transactions/hello_transaction');
 
 configDevnet.app.label = 'HelloWorld-blockchain-app';
 

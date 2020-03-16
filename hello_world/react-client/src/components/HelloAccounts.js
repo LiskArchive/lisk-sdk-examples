@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import { APIClient } from '@liskhq/lisk-api-client';
-
-const API_BASEURL = 'http://localhost:4000';
-
-const api = new APIClient([API_BASEURL]);
+import { api } from '../api.js';
 
 class HelloAccounts extends Component {
 
@@ -43,7 +39,7 @@ class HelloAccounts extends Component {
         return (
             <div>
                 <h2>All Hello accounts</h2>
-                <div>{JSON.stringify(this.state.data)}</div>
+                <pre>{JSON.stringify(this.state.data, null, 2)}</pre>
             </div>
         );
     }

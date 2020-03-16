@@ -29,7 +29,7 @@ class NewAccount extends Component {
             <div>
                 <h2>Create new account</h2>
                 <p>Refresh page to get new credentials.</p>
-                <div>{JSON.stringify(this.state.credentials)}</div>
+                <pre>{JSON.stringify(this.state.credentials, null, 2)}</pre>
             </div>
         );
     }

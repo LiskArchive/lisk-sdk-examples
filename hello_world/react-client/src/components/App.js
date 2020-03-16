@@ -90,7 +90,8 @@ export default function App() {
 function Home() {
     return (
         <div>
-            <h2>Home</h2>
+            <h2>Hello Lisk!</h2>
+            <p>A simple frontend for blockchain applications built with the Lisk SDK.</p>
         </div>
     );
 }

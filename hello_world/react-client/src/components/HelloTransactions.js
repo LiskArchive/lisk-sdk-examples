@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { APIClient } from '@liskhq/lisk-api-client';
-import HelloTransaction from '../transactions/hello_transaction';
-
-const API_BASEURL = 'http://localhost:4000';
-
-const api = new APIClient([API_BASEURL]);
+import { api } from '../api.js';
+//import HelloTransaction from '../transactions/hello_transaction';
+import {
+    HelloTransaction,
+} from 'lisk-hello-transactions';
 
 class HelloTransactions extends Component {
 
@@ -24,7 +23,7 @@ class HelloTransactions extends Component {
         return (
             <div>
                 <h2>All Hello Transactions</h2>
-                <div>{JSON.stringify(this.state.data)}</div>
+                <pre>{JSON.stringify(this.state.data, null, 2)}</pre>
             </div>
         );
     }

@@ -9,10 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@liskhq/lisk-constants": "^1.3.0",
-    "@liskhq/lisk-cryptography": "^2.4.1",
     "@liskhq/lisk-transactions": "^3.0.1",
-    "@liskhq/lisk-validator": "^0.3.0",
     "lisk-sdk": "3.0.1"
   }
 }

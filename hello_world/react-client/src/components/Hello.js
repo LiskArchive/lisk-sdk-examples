@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import HelloTransaction from '../transactions/hello_transaction';
-import { APIClient } from '@liskhq/lisk-api-client';
+import {
+    HelloTransaction,
+} from 'lisk-hello-transactions';
+import { api } from '../api.js';
 import * as cryptography from '@liskhq/lisk-cryptography';
+import {utils} from "@liskhq/lisk-transactions";
 
 const networkIdentifier = cryptography.getNetworkIdentifier(
     "23ce0366ef0a14a91e5fd4b1591fc880ffbef9d988ff8bebf8f3666b0c09597d",
     "Lisk",
 );
-
-const API_BASEURL = 'http://localhost:4000';
-
-const api = new APIClient([API_BASEURL]);
 
 const dateToLiskEpochTimestamp = date => (
     Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
@@ -43,7 +42,7 @@ class Transfer extends Component {
                 hello: this.state.hello,
             },
             networkIdentifier: networkIdentifier,
-            timestamp: dateToLiskEpochTimestamp(new Date()),
+            timestamp: utils.getTimeFromBlockchainEpoch(new Date()),
         });
 
         helloTransaction.sign(this.state.passphrase);
@@ -73,8 +72,8 @@ class Transfer extends Component {
                 </form>
                 {this.state.response.meta.status &&
                 <div>
-                    <p>Transaction: {JSON.stringify(this.state.transaction)}</p>
-                    <p>Response: {JSON.stringify(this.state.response)}</p>
+                    <pre>Transaction: {JSON.stringify(this.state.transaction, null, 2)}</pre>
+                    <p>Response: {JSON.stringify(this.state.response, null, 2)}</p>
                 </div>
                 }
             </div>
