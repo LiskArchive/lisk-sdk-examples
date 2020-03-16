@@ -9,10 +9,6 @@ const networkIdentifier = cryptography.getNetworkIdentifier(
     "Lisk",
 );
 
-const dateToLiskEpochTimestamp = date => (
-    Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
-);
-
 class Faucet extends Component {
 
     constructor(props) {
@@ -41,7 +37,7 @@ class Faucet extends Component {
                 amount: utils.convertLSKToBeddows(this.state.amount),
             },
             networkIdentifier: networkIdentifier,
-            timestamp: dateToLiskEpochTimestamp(new Date()),
+            timestamp: utils.getTimeFromBlockchainEpoch(new Date()),
         });
 
         //The TransferTransaction is signed by the Genesis account
