@@ -1,0 +1,12 @@
+extends index.pug
+
+block content
+    h2 Transaction Response
+
+    pre
+        code(class='language-json')= JSON.stringify(response, null, 2)
+
+    h2 Transaction JSON
+
+    pre
+        code(class='language-json')= JSON.stringify(transaction, null, 2)

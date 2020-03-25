@@ -1,0 +1,18 @@
+extends index.pug
+
+block content
+    h2 Transfer tokens
+    p
+        | Send funds from one account to another.
+
+    form(method='POST' action='/transfer')
+        div.form-group
+            label(for='address') Address:
+            input.form-control(type='text', placeholder='address' name='address' id='address')
+        div.form-group
+            label(for='amount') Amount (LSK):
+            input#amount.form-control(type='text', placeholder='200' name='amount')
+        div.form-group
+            label(for='passphrase') Passphrase:
+            input#passphrase.form-control(type='text', placeholder='coach pupil shock error defense outdoor tube love action exist search idea' name='passphrase')
+        button.btn.btn-warning(type='submit') Send
