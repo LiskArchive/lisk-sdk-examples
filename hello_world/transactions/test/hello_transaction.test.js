@@ -13,18 +13,6 @@ describe('Hello Transaction', () => {
         };
     });
 
-    /*
-    const helloTransaction = new HelloTransaction({
-        asset: {
-            hello: this.state.hello,
-        },
-        networkIdentifier: networkIdentifier,
-        timestamp: utils.getTimeFromBlockchainEpoch(new Date()),
-    });
-
-    helloTransaction.sign(this.state.passphrase);
-    * */
-
     test('it should save the hello string in the senders account assets', async () => {
         // Arrange
         const asset = {
