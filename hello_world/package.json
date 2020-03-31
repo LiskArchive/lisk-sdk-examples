@@ -11,5 +11,9 @@
   "dependencies": {
     "@liskhq/lisk-transactions": "^3.0.1",
     "lisk-sdk": "3.0.1"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "jest-when": "^2.7.0"
   }
 }

@@ -44,9 +44,9 @@ class HelloTransaction extends BaseTransaction {
             errors.push(
                 new TransactionError(
                     'You cannot send a hello transaction multiple times',
-                    this.id,
+	                sender.asset.hello,
                     '.asset.hello',
-                    this.amount.toString()
+                    this.asset.hello
                 )
             );
         } else {
