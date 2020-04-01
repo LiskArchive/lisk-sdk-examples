@@ -1,12 +1,16 @@
 {
   "name": "hello_world",
   "version": "1.0.0",
-  "description": "Hello World application of Alpha SDK",
+  "description": "Hello world application of the Lisk SDK",
   "main": "./server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Lisk Foundation <admin@lisk.io>, lightcurve GmbH <admin@lightcurve.io>",
+  "keywords": [
+    "lisk",
+    "blockchain"
+  ],
   "license": "Apache-2.0",
   "dependencies": {
     "@liskhq/lisk-transactions": "^3.0.1",
