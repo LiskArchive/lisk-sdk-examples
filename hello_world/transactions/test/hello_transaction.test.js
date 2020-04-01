@@ -13,7 +13,7 @@ describe('Hello Transaction', () => {
         };
     });
 
-    test('it should save the hello string in the senders account assets', async () => {
+    it('should save the hello string in the senders account assets', async () => {
         // Arrange
         const asset = {
             hello: "my hello message",
