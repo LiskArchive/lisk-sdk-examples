@@ -50,7 +50,7 @@ describe('Hello Transaction', () => {
         );
     });
 
-    test('it should reject the transaction, if the sender has already a hello string in their account.', async () => {
+    it('should reject the transaction, if the sender has already a hello string in their account.', async () => {
         // Arrange
         const asset = {
             hello: "my hello message",
