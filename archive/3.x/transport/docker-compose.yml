@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:10-alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - lisk
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=lisk_dev
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=lisk
+
+  sdk:
+    image: lisk-sdk
+    volumes:
+      - .:/home/node
+    networks:
+      - lisk
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+    entrypoint: /bin/bash
+    user: node
+    ports:
+      - 4000:4000
+      - 3000:3000
+
+volumes:
+  db-data:
+
+networks:
+  lisk:

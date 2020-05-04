@@ -1,0 +1,22 @@
+{
+  "name": "lisk-delivery-transactions",
+  "version": "1.0.0",
+  "description": "Custom transaction types for the supply chain app.",
+  "main": "finish-delivery.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Lisk Foundation <admin@lisk.io>, lightcurve GmbH <admin@lightcurve.io>",
+  "keywords": [
+    "lisk",
+    "blockchain"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@liskhq/lisk-transactions": "^3.0.1"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "jest-when": "^2.7.0"
+  }
+}

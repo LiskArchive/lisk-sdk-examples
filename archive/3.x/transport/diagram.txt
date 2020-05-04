@@ -1,0 +1,134 @@
+# PlantUML Editor
+
+1. select template
+2. write uml diagram
+
+@startuml
+
+actor Sender
+actor Recipient
+actor Carrier
+
+node emptynode [
+<b>Packet
+----
+Account
+  ....
+
+----
+IoT
+....
+Lightsensor
+Raspberry Pi
+
+]
+
+node initnode [
+<b>Packet
+----
+Account
+  ....
+  ID
+
+----
+IoT
+....
+Lightsensor
+Raspberry Pi
+Secret passphrase
+
+]
+
+
+node node [
+<b>Packet
+----
+Account
+  ....
+  ID
+  Sender
+  Recipient
+  minTrust
+  Security
+  Postage
+
+----
+IoT
+....
+Lightsensor
+Raspberry Pi
+Secret passphrase
+]
+
+node node2 [
+<b>Packet
+----
+Account
+  ....
+  ID
+  Sender
+  Recipient
+  Carrier
+  minTrust
+  Security
+  Postage
+
+----
+IoT
+....
+Lightsensor
+Raspberry Pi
+Secret passphrase
+]
+
+emptynode --> Sender
+Sender -> initnode : Initialize the packet account\nStore passphrase on IoT device
+initnode -> node : Register packet transaction
+node -> Carrier : Gives packet to
+Carrier -> node2 : Start transport transaction
+node2 --> (LightAlarmTransaction!) : If packet is opened
+node2 -> Recipient : Receives packet
+Recipient --> (Transport failed) : FinishTransport: fail
+Recipient --> (Transport success) : FinishTransport: success
+
+note right of emptynode
+  A packet with precious cargo.
+
+  Additional to the cargo, a small IoT device with
+  different sensors is stored inside the packet.
+end note
+
+note bottom of (LightAlarmTransaction!)
+  status: alarm
+
+  Save current timestamp to alarms-list.
+end note
+
+note bottom of (Transport failed)
+  status: fail
+
+  Send Postage + Security to Sender balance.
+  Reduce trust of Carrier by -1.
+end note
+
+note bottom of (Transport success)
+  status: success
+
+  Send Postage + Security to Carrier balance.
+  Increase trust of Carrier by +1.
+end note
+
+note bottom of node
+  status: pending
+
+  Transfer postage from the  senders account to packet balance.
+end note
+
+note bottom of node2
+  status: ongoing
+
+  Add carrier to packet account.
+  Lock Security in carrier account.
+end note
+
+@enduml

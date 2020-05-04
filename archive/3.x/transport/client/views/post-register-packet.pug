@@ -1,0 +1,26 @@
+extends index.pug
+
+block content
+    h2 Register a new packet (Type: 20)
+
+    form(method='POST' action='/post-register-packet')
+        div.form-group
+            label(for='packetid') PacketID:
+            input.form-control(type='text', placeholder='packet ID' name='packetid')
+        div.form-group
+            label(for='postage') Postage:
+            input#postage.form-control(type='text', placeholder='15' name='postage')
+        div.form-group
+            label(for='security') Security:
+            input#security.form-control(type='text', placeholder='300' name='security')
+        div.form-group
+            label(for='mintrust') Min trust:
+            input#mintrust.form-control(type='text', placeholder='8' name='mintrust')
+        div.form-group
+            label(for='recipient') Recipient:
+            input#recipient.form-control(type='text', value='10881167371402274308L' name='recipient')
+        div.form-group
+            label(for='passphrase') Passphrase of sender:
+            input#recipient.form-control(type='text', value='wagon stock borrow episode laundry kitten salute link globe zero feed marble' name='passphrase')
+        button.btn.btn-warning(type='submit') Register
+

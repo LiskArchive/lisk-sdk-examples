@@ -1,0 +1,41 @@
+{
+  "name": "react-client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@liskhq/lisk-api-client": "^3.0.1",
+    "@liskhq/lisk-cryptography": "^2.4.2",
+    "@liskhq/lisk-passphrase": "^3.0.0",
+    "@liskhq/lisk-transactions": "^3.0.2",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "lisk-hello-transactions": "file:../transactions",
+    "bootstrap": "^4.4.1",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

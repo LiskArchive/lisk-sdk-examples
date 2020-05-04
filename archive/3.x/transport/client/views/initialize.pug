@@ -1,0 +1,10 @@
+extends index.pug
+
+block content
+    h2 Initialize a new packet account
+
+    p
+        | Refresh page to get new Credentials
+
+    pre
+        code(class='language-json')= JSON.stringify(packetCredentials, null, 2)

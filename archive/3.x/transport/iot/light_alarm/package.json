@@ -1,0 +1,17 @@
+{
+  "name": "light_sensor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@liskhq/lisk-api-client": "^3.0.1",
+    "@liskhq/lisk-transactions": "^3.0.1",
+    "@liskhq/lisk-cryptography": "^2.4.1",
+    "rpi-pins": "1.1.2"
+  }
+}
