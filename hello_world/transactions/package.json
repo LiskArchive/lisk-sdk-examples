@@ -13,7 +13,7 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@liskhq/lisk-transactions": "^3.0.1"
+    "@liskhq/lisk-transactions": "^4.0.0-alpha.0"
   },
   "devDependencies": {
     "jest": "^25.1.0",
