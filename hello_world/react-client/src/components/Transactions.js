@@ -1,6 +1,24 @@
 import React, { Component } from 'react';
 import { api } from '../api.js';
 
+const getData = async () => {
+    let offset = 0;
+    let transactions = [];
+    const transactionsArray = [];
+
+    do {
+        const retrievedTransactions = await api.transactions.get({ limit: 100, offset });
+        transactions = retrievedTransactions.data;
+        transactionsArray.push(...transactions);
+
+        if (transactions.length === 100) {
+            offset += 100;
+        }
+    } while (transactions.length === 100);
+
+    return transactionsArray;
+}
+
 class Transactions extends Component {
 
     constructor(props) {
@@ -9,22 +27,10 @@ class Transactions extends Component {
         this.state = { data: [] };
     }
 
-    async componentDidMount() {
-        let offset = 0;
-        let transactions = [];
-        const transactionsArray = [];
-
-        do {
-            const retrievedTransactions = await api.transactions.get({ limit: 100, offset });
-            transactions = retrievedTransactions.data;
-            transactionsArray.push(...transactions);
-
-            if (transactions.length === 100) {
-                offset += 100;
-            }
-        } while (transactions.length === 100);
-
-        this.setState({ data: transactionsArray });
+    componentDidMount() {
+        getData().then((data) => {
+            this.setState({ data });
+        });
     }
 
     render() {

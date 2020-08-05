@@ -5,6 +5,7 @@ import {
     Route,
     Link
 } from "react-router-dom";
+import "regenerator-runtime/runtime.js";
 import NewAccount from './NewAccount';
 import Accounts from './Accounts';
 import HelloAccounts from './HelloAccounts';
@@ -87,11 +88,41 @@ export default function App() {
 
 /* Functional components */
 
-function Home() {
-    return (
-        <div>
-            <h2>Hello Lisk!</h2>
-            <p>A simple frontend for blockchain applications built with the Lisk SDK.</p>
-        </div>
-    );
+const getData = async () => {
+    await setTimeout(() => {}, 1000);
+    return ['A', 'B'];
+}
+
+class Home extends React.Component {
+    constructor() {
+        super();
+
+        this.state = {
+            list: [],
+        };
+    }
+
+    componentDidMount() {
+        getData().then((list) => {
+            this.setState({ list });
+        });
+    }
+
+    render() {
+        return (
+            <div>
+                <h2>Hello Lisk!</h2>
+                <p>A simple frontend for blockchain applications built with the Lisk SDK.</p>
+
+                <ul>
+                    <li>First item</li>
+                    {
+                        this.state.list.map((item, index) => (
+                            <li key={item}>{item}</li>
+                        ))
+                    }
+                </ul>
+            </div>
+        );
+    }
 }

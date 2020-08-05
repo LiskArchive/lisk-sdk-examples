@@ -13,10 +13,10 @@ class HelloTransactions extends Component {
         this.state = { data: [] };
     }
 
-    async componentDidMount() {
-        const transactions  = await api.transactions.get({ type: HelloTransaction.TYPE });
-
-        this.setState({ data: transactions });
+    componentDidMount() {
+        api.transactions.get({ type: HelloTransaction.TYPE }).then((data) => {
+            this.setState({ data });
+        });
     }
 
     render() {

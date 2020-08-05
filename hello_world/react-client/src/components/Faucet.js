@@ -37,7 +37,7 @@ class Faucet extends Component {
                 amount: utils.convertLSKToBeddows(this.state.amount),
             },
             networkIdentifier: networkIdentifier,
-            timestamp: utils.getTimeFromBlockchainEpoch(new Date()),
+            nonce: 1000,
         });
 
         //The TransferTransaction is signed by the Genesis account
@@ -51,6 +51,7 @@ class Faucet extends Component {
     }
 
     render() {
+        console.log(TransferTransaction, utils);
         return (
             <div>
                 <h2>Faucet</h2>

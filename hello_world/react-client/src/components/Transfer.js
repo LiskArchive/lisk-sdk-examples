@@ -37,8 +37,7 @@ class Transfer extends Component {
                 amount: utils.convertLSKToBeddows(this.state.amount),
             },
             networkIdentifier: networkIdentifier,
-            //timestamp: dateToLiskEpochTimestamp(new Date()),
-            timestamp: utils.getTimeFromBlockchainEpoch(new Date()),
+            nonce: 1000,
         });
 
         transferTransaction.sign(this.state.passphrase);
