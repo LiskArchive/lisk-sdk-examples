@@ -5,8 +5,8 @@ import{ transfer, utils } from '@liskhq/lisk-transactions';
 import * as cryptography from '@liskhq/lisk-cryptography';
 
 const networkIdentifier = cryptography.getNetworkIdentifier(
-    "23ce0366ef0a14a91e5fd4b1591fc880ffbef9d988ff8bebf8f3666b0c09597d",
-    "Lisk",
+    "19074b69c97e6f6b86969bb62d4f15b888898b499777bda56a3a2ee642a7f20a", //payloadHash
+    "Lisk", //Community Identifier
 );
 
 class Faucet extends Component {
@@ -37,7 +37,7 @@ class Faucet extends Component {
             passphrase: accounts.genesis.passphrase,
             networkIdentifier,
             fee: utils.convertLSKToBeddows('0.1'),
-            nonce: '103',
+            nonce: '104', // you need to increment
         });
 
         //The TransferTransaction is signed by the Genesis account
