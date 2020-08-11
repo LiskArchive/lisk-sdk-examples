@@ -37,7 +37,23 @@ class Accounts extends Component {
         return (
             <div>
                 <h2>All accounts</h2>
-                <pre>{JSON.stringify(this.state.data, null, 2)}</pre>
+                <section>
+                    <ul>
+                        {
+                            this.state.data.map(item => (
+                                <li>
+                                    <span>{item.address}</span>
+                                    <small>{item.username}</small>
+
+                                    <span>{`Balance: ${item.balance}`}</span>
+                                    <span>{`Nonce: ${item.nonce}`}</span>
+                                    {/* <pre>{JSON.stringify(this.state.data, null, 2)}</pre> */}
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </section>
+                
             </div>
         );
     }
