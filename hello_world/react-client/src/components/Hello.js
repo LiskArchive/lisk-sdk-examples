@@ -3,7 +3,7 @@ import {
     HelloTransaction,
 } from 'lisk-hello-transactions';
 import { api } from '../api.js';
-import * as cryptography from '@liskhq/lisk-cryptography';
+import { cryptography } from '@liskhq/lisk-client';
 import {utils} from "@liskhq/lisk-transactions";
 
 const networkIdentifier = cryptography.getNetworkIdentifier(
