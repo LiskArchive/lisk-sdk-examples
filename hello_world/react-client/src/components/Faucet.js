@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { api } from '../api.js';
 import accounts from '../accounts.json';
-import{ TransferTransaction, utils } from '@liskhq/lisk-transactions';
+import{ transfer, utils } from '@liskhq/lisk-transactions';
 import * as cryptography from '@liskhq/lisk-cryptography';
 
 const networkIdentifier = cryptography.getNetworkIdentifier(
@@ -31,18 +31,17 @@ class Faucet extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        const fundTransaction = new TransferTransaction({
-            asset: {
-                recipientId: this.state.address,
-                amount: utils.convertLSKToBeddows(this.state.amount),
-            },
-            networkIdentifier: networkIdentifier,
-            nonce: 1000,
+        const fundTransaction = transfer({
+            amount: utils.convertLSKToBeddows(this.state.amount),
+            recipientId: this.state.address,
+            passphrase: accounts.genesis.passphrase,
+            networkIdentifier,
+            fee: utils.convertLSKToBeddows('0.1'),
+            nonce: '103',
         });
 
         //The TransferTransaction is signed by the Genesis account
-        fundTransaction.sign(accounts.genesis.passphrase);
-        api.transactions.broadcast(fundTransaction.toJSON()).then(response => {
+        api.transactions.broadcast(fundTransaction).then(response => {
             this.setState({response:response});
             this.setState({transaction:fundTransaction});
         }).catch(err => {
@@ -51,7 +50,6 @@ class Faucet extends Component {
     }
 
     render() {
-        console.log(TransferTransaction, utils);
         return (
             <div>
                 <h2>Faucet</h2>
