@@ -15,6 +15,7 @@ import SendHello from './Hello';
 import Transactions from './Transactions';
 import HelloTransactions from './HelloTransactions';
 import Blocks from './Blocks';
+import Home from './home';
 
 // The pages of this site are rendered dynamically
 // in the browser (not server rendered).
@@ -23,24 +24,24 @@ export default function App() {
     return (
         <Router>
             <div>
-                <ul>
-                    <li><Link to="/">Home</Link></li>
-                    <hr />
-                    <h3> Interact </h3>
-                    <li><Link to="/new-account">New Account</Link></li>
-                    <li><Link to="/faucet">Faucet</Link></li>
-                    <li><Link to="/send-transfer">Send tokens</Link></li>
-                    <li><Link to="/send-hello">Send Hello</Link></li>
-                    <hr />
-                    <h3> Explore </h3>
-                    <li><Link to="/accounts">Accounts</Link></li>
-                    <li><Link to="/hello-accounts">Hello accounts</Link></li>
-                    <li><Link to="/transactions">Transactions</Link></li>
-                    <li><Link to="/hello-transactions">Hello transactions</Link></li>
-                    <li><Link to="/blocks">Blocks</Link></li>
-                </ul>
-
-                <hr />
+                <Route>
+                    <ul>
+                        <li><Link to="/">Home</Link></li>
+                        <hr />
+                        <h3> Interact </h3>
+                        <li><Link to="/new-account">New Account</Link></li>
+                        <li><Link to="/faucet">Faucet</Link></li>
+                        <li><Link to="/send-transfer">Send tokens</Link></li>
+                        <li><Link to="/send-hello">Send Hello</Link></li>
+                        <hr />
+                        <h3> Explore </h3>
+                        <li><Link to="/accounts">Accounts</Link></li>
+                        <li><Link to="/hello-accounts">Hello accounts</Link></li>
+                        <li><Link to="/transactions">Transactions</Link></li>
+                        <li><Link to="/hello-transactions">Hello transactions</Link></li>
+                        <li><Link to="/blocks">Blocks</Link></li>
+                    </ul>
+                </Route>
 
                 {/*
                   A <Switch> looks through all its children <Route>
@@ -84,45 +85,4 @@ export default function App() {
             </div>
         </Router>
     );
-}
-
-/* Functional components */
-
-const getData = async () => {
-    await setTimeout(() => {}, 1000);
-    return ['A', 'B'];
-}
-
-class Home extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            list: [],
-        };
-    }
-
-    componentDidMount() {
-        getData().then((list) => {
-            this.setState({ list });
-        });
-    }
-
-    render() {
-        return (
-            <div>
-                <h2>Hello Lisk!</h2>
-                <p>A simple frontend for blockchain applications built with the Lisk SDK.</p>
-
-                <ul>
-                    <li>First item</li>
-                    {
-                        this.state.list.map((item, index) => (
-                            <li key={item}>{item}</li>
-                        ))
-                    }
-                </ul>
-            </div>
-        );
-    }
 }
