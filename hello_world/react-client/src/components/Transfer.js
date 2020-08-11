@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { api } from '../api.js';
-import{ TransferTransaction, utils } from '@liskhq/lisk-transactions';
-import * as cryptography from '@liskhq/lisk-cryptography';
+import { cryptography, transactions } from '@liskhq/lisk-client';
 
 const networkIdentifier = cryptography.getNetworkIdentifier(
     "23ce0366ef0a14a91e5fd4b1591fc880ffbef9d988ff8bebf8f3666b0c09597d",
@@ -31,10 +30,10 @@ class Transfer extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        const transferTransaction = new TransferTransaction({
+        const transferTransaction = new transactions.TransferTransaction({
             asset: {
                 recipientId: this.state.address,
-                amount: utils.convertLSKToBeddows(this.state.amount),
+                amount: transactions.utils.convertLSKToBeddows(this.state.amount),
             },
             networkIdentifier: networkIdentifier,
             nonce: 1000,
