@@ -31,21 +31,28 @@ class Faucet extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        const fundTransaction = transfer({
-            amount: utils.convertLSKToBeddows(this.state.amount),
-            recipientId: this.state.address,
-            passphrase: accounts.genesis.passphrase,
-            networkIdentifier,
-            fee: utils.convertLSKToBeddows('0.1'),
-            nonce: '104', // you need to increment
-        });
 
-        //The TransferTransaction is signed by the Genesis account
-        api.transactions.broadcast(fundTransaction).then(response => {
-            this.setState({response:response});
-            this.setState({transaction:fundTransaction});
-        }).catch(err => {
-            console.log(JSON.stringify(err.errors, null, 2));
+        api.accounts.get({address: accounts.genesis.address}).then(response1 => {
+
+            console.log("=========response1=========");
+            console.dir(response1);
+            let nonce = parseInt(response1.data[0].nonce);
+            const fundTransaction = transfer({
+                amount: utils.convertLSKToBeddows(this.state.amount),
+                recipientId: this.state.address,
+                passphrase: accounts.genesis.passphrase,
+                networkIdentifier,
+                fee: utils.convertLSKToBeddows('0.1'),
+                nonce: (++nonce).toString(), // you need to increment
+            });
+
+            //The TransferTransaction is signed by the Genesis account
+            api.transactions.broadcast(fundTransaction).then(response2 => {
+                this.setState({response:response2});
+                this.setState({transaction:fundTransaction});
+            }).catch(err => {
+                console.log(JSON.stringify(err.errors, null, 2));
+            });
         });
     }
 
