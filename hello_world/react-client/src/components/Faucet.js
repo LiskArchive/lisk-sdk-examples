@@ -43,7 +43,7 @@ class Faucet extends Component {
                 passphrase: accounts.genesis.passphrase,
                 networkIdentifier,
                 fee: utils.convertLSKToBeddows('0.1'),
-                nonce: (++nonce).toString(), // you need to increment
+                nonce: nonce.toString(),
             });
 
             //The TransferTransaction is signed by the Genesis account
