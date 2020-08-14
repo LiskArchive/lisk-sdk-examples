@@ -42,6 +42,7 @@ class Hello extends Component {
             nonce: this.state.nonce,
         });
 
+
         helloTransaction.sign(this.state.passphrase);
         api.transactions.broadcast(helloTransaction.toJSON()).then(response => {
             this.setState({response:response});

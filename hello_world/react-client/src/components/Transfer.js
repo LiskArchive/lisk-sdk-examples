@@ -3,7 +3,7 @@ import { api } from '../api.js';
 import { cryptography, transactions } from '@liskhq/lisk-client';
 
 const networkIdentifier = cryptography.getNetworkIdentifier(
-    "23ce0366ef0a14a91e5fd4b1591fc880ffbef9d988ff8bebf8f3666b0c09597d",
+    "19074b69c97e6f6b86969bb62d4f15b888898b499777bda56a3a2ee642a7f20a",
     "Lisk",
 );
 
