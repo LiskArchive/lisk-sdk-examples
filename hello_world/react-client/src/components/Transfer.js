@@ -41,8 +41,11 @@ class Transfer extends Component {
             fee: utils.convertLSKToBeddows('0.1'),
             nonce: this.state.nonce,
         });
-
+        console.log("=========  HELLO  ========");
+        console.dir(transferTransaction);
         transferTransaction.sign(networkIdentifier,this.state.passphrase);
+        console.dir(transferTransaction);
+
         api.transactions.broadcast(transferTransaction.toJSON()).then(response => {
             this.setState({response:response});
             this.setState({transaction:transferTransaction});
