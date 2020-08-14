@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { api } from '../api.js';
 import { cryptography, transactions } from '@liskhq/lisk-client';
+import {transfer, utils} from "@liskhq/lisk-transactions";
+import accounts from "../accounts";
 
 const networkIdentifier = cryptography.getNetworkIdentifier(
     "19074b69c97e6f6b86969bb62d4f15b888898b499777bda56a3a2ee642a7f20a",
@@ -31,17 +33,26 @@ class Transfer extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        const transferTransaction = new transactions.TransferTransaction({
+/*        const transferTransaction = new transactions.TransferTransaction({
             asset: {
                 recipientId: this.state.address,
                 amount: transactions.utils.convertLSKToBeddows(this.state.amount),
             },
             networkIdentifier: networkIdentifier,
             nonce: this.state.nonce,
+        });*/
+
+        const transferTransaction = transfer({
+            amount: utils.convertLSKToBeddows(this.state.amount),
+            recipientId: this.state.address,
+            passphrase: this.state.passphrase,
+            networkIdentifier,
+            fee: utils.convertLSKToBeddows('0.1'),
+            nonce: this.state.nonce,
         });
 
-        transferTransaction.sign(this.state.passphrase);
-        api.transactions.broadcast(transferTransaction.toJSON()).then(response => {
+        //transferTransaction.sign(this.state.passphrase);
+        api.transactions.broadcast(transferTransaction).then(response => {
             this.setState({response:response});
             this.setState({transaction:transferTransaction});
         }).catch(err => {
