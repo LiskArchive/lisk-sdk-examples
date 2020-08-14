@@ -50,9 +50,9 @@ class HelloTransaction extends BaseTransaction {
 		return errors;
 	}
 
-	applyAsset(store) {
+	async applyAsset(store) {
         const errors = [];
-        const sender = store.account.get(this.senderId);
+        const sender = await store.account.get(this.senderId);
         if (sender.asset && sender.asset.hello) {
             errors.push(
                 new TransactionError(
@@ -63,16 +63,16 @@ class HelloTransaction extends BaseTransaction {
                 )
             );
         } else {
-            const newObj = { ...sender, asset: { hello: this.asset.hello } };
-            store.account.set(sender.address, newObj);
+	        sender.asset = { hello: this.asset.hello };
+            store.account.set(sender.address, sender);
         }
         return errors; // array of TransactionErrors, returns empty array if no errors are thrown
 	}
 
 	undoAsset(store) {
 		const sender = store.account.get(this.senderId);
-		const oldObj = { ...sender, asset: null };
-		store.account.set(sender.address, oldObj);
+		sender.asset = null;
+		store.account.set(sender.address, sender);
 		return [];
 	}
 }

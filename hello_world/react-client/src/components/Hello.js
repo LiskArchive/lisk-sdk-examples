@@ -42,10 +42,7 @@ class Hello extends Component {
             nonce: this.state.nonce.toString(),
         });
 
-        console.log("=========  HELLO  ========");
-        console.dir(helloTransaction);
         helloTransaction.sign(networkIdentifier,this.state.passphrase);
-        console.dir(helloTransaction);
 
         api.transactions.broadcast(helloTransaction.toJSON()).then(response => {
             this.setState({response:response});
