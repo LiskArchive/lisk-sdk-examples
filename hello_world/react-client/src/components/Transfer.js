@@ -33,26 +33,17 @@ class Transfer extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-/*        const transferTransaction = new transactions.TransferTransaction({
+        const transferTransaction = new transactions.TransferTransaction({
             asset: {
                 recipientId: this.state.address,
                 amount: transactions.utils.convertLSKToBeddows(this.state.amount),
             },
-            networkIdentifier: networkIdentifier,
-            nonce: this.state.nonce,
-        });*/
-
-        const transferTransaction = transfer({
-            amount: utils.convertLSKToBeddows(this.state.amount),
-            recipientId: this.state.address,
-            passphrase: this.state.passphrase,
-            networkIdentifier,
             fee: utils.convertLSKToBeddows('0.1'),
             nonce: this.state.nonce,
         });
 
-        //transferTransaction.sign(this.state.passphrase);
-        api.transactions.broadcast(transferTransaction).then(response => {
+        transferTransaction.sign(networkIdentifier,this.state.passphrase);
+        api.transactions.broadcast(transferTransaction.toJSON()).then(response => {
             this.setState({response:response});
             this.setState({transaction:transferTransaction});
         }).catch(err => {

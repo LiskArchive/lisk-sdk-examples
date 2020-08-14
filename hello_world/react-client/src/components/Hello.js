@@ -38,12 +38,12 @@ class Hello extends Component {
             asset: {
                 hello: this.state.hello,
             },
-            networkIdentifier: networkIdentifier,
+            fee: utils.convertLSKToBeddows('0.1'),
             nonce: this.state.nonce,
         });
 
+        helloTransaction.sign(networkIdentifier,this.state.passphrase);
 
-        helloTransaction.sign(this.state.passphrase);
         api.transactions.broadcast(helloTransaction.toJSON()).then(response => {
             this.setState({response:response});
             this.setState({transaction:helloTransaction});
