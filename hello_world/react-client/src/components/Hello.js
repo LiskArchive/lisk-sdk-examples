@@ -7,7 +7,7 @@ import { cryptography } from '@liskhq/lisk-client';
 import {utils} from "@liskhq/lisk-transactions";
 
 const networkIdentifier = cryptography.getNetworkIdentifier(
-    "23ce0366ef0a14a91e5fd4b1591fc880ffbef9d988ff8bebf8f3666b0c09597d",
+    "19074b69c97e6f6b86969bb62d4f15b888898b499777bda56a3a2ee642a7f20a",
     "Lisk",
 );
 
@@ -18,6 +18,7 @@ class Hello extends Component {
 
         this.state = {
             hello: '',
+            nonce: '',
             passphrase: '',
             response: { meta: { status: false }},
             transaction: {},
@@ -38,7 +39,7 @@ class Hello extends Component {
                 hello: this.state.hello,
             },
             networkIdentifier: networkIdentifier,
-            timestamp: utils.getTimeFromBlockchainEpoch(new Date()),
+            nonce: this.state.nonce,
         });
 
         helloTransaction.sign(this.state.passphrase);
@@ -59,6 +60,10 @@ class Hello extends Component {
                     <label>
                         Hello message:
                         <input type="text" id="hello" name="hello" onChange={this.handleChange} />
+                    </label>
+                    <label>
+                        Nonce:
+                        <input type="text" id="nonce" name="nonce" onChange={this.handleChange} />
                     </label>
                     <label>
                         Passphrase:

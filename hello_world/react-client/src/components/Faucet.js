@@ -34,9 +34,7 @@ class Faucet extends Component {
 
         api.accounts.get({address: accounts.genesis.address}).then(response1 => {
 
-            console.log("=========response1=========");
-            console.dir(response1);
-            let nonce = parseInt(response1.data[0].nonce);
+            const nonce = parseInt(response1.data[0].nonce);
             const fundTransaction = transfer({
                 amount: utils.convertLSKToBeddows(this.state.amount),
                 recipientId: this.state.address,

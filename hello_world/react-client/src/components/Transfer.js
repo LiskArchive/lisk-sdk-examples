@@ -15,6 +15,7 @@ class Transfer extends Component {
         this.state = {
             address: '',
             amount: '',
+            nonce: '',
             passphrase: '',
             response: { meta: { status: false }},
             transaction: {},
@@ -36,7 +37,7 @@ class Transfer extends Component {
                 amount: transactions.utils.convertLSKToBeddows(this.state.amount),
             },
             networkIdentifier: networkIdentifier,
-            nonce: 1000,
+            nonce: this.state.nonce,
         });
 
         transferTransaction.sign(this.state.passphrase);
@@ -61,6 +62,10 @@ class Transfer extends Component {
                     <label>
                         Amount (1 = 10^8 tokens):
                         <input type="text" id="amount" name="amount" onChange={this.handleChange} />
+                    </label>
+                    <label>
+                        Nonce:
+                        <input type="text" id="nonce" name="nonce" onChange={this.handleChange} />
                     </label>
                     <label>
                         Passphrase:
