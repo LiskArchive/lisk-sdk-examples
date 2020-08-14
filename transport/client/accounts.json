@@ -20,12 +20,18 @@
     "publicKey": "d8685de16147583d1b9f2e06eb43c6af9ba03844df30e20f3cda0b681c14fb05"
   },
   "sender": {
-    "address": "11237980039345381032L",
-    "passphrase": "creek own stem final gate scrub live shallow stage host concert they"
+    "address": "5059876081639179984L",
+    "passphrase": "peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready"
   },
   "packet": {
     "address": "9025619417563078965L",
     "passphrase": "adjust action diet glass science team glow media assist butter observe wish",
     "publicKey": "fc6045a2a158c97103f6c9e6afbc024e56d12c22dd9d0119dd132f10a9b65e5b",
-    "privateKey": "f9d18ffe6df6e4d0838ea55e711750d349fd4cd99f36ce372d11b0037b68d2bdfc6045a2a158c97103f6c9e6afbc024e56d12c22dd9d0119dd132f10a9b65e5b" }
+    "privateKey": "f9d18ffe6df6e4d0838ea55e711750d349fd4cd99f36ce372d11b0037b68d2bdfc6045a2a158c97103f6c9e6afbc024e56d12c22dd9d0119dd132f10a9b65e5b"
+  },
+  "genesis": {
+    "passphrase": "peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready",
+    "publicKey": "0fe9a3f1a21b5530f27f87a414b549e79a940bf24fdf2b2f05e7f22aeeecc86a",
+    "address": "5059876081639179984L"
+  }
 }

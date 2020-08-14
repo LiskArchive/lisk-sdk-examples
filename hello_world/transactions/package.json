@@ -14,5 +14,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@liskhq/lisk-transactions": "^4.0.0-alpha.0"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "jest-when": "^2.7.0"
   }
 }

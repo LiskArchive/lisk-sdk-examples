@@ -1,8 +1,8 @@
 {
   "name": "hello_world",
   "version": "1.0.0",
-  "description": "Hello world application of the Lisk SDK",
-  "main": "./server/index.js",
+  "description": "A Hello world application built with the Lisk SDK",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

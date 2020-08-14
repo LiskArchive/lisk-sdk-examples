@@ -4,7 +4,7 @@ const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
 //const FinishTransportTransaction = require('../transactions/finish-transport');
 const LightAlarmTransaction = require('../transactions/light-alarm');
 
-configDevnet.app.label = 'lisk-transport';
+configDevnet.label = 'lisk-transport';
 configDevnet.modules.http_api.access.public = true;
 // configDevnet.components.storage.host = 'db';
 

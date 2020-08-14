@@ -11,7 +11,7 @@ const cryptography = require('@liskhq/lisk-cryptography');
 const { Mnemonic } = require('@liskhq/lisk-passphrase');
 
 const networkIdentifier = cryptography.getNetworkIdentifier(
-    "23ce0366ef0a14a91e5fd4b1591fc880ffbef9d988ff8bebf8f3666b0c09597d",
+    "19074b69c97e6f6b86969bb62d4f15b888898b499777bda56a3a2ee642a7f20a",
     "Lisk",
 );
 
@@ -35,11 +35,6 @@ app.use(express.static('public'));
 // parse application/json
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-/* Utils */
-const dateToLiskEpochTimestamp = date => (
-    Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
-);
 
 /* Routes */
 app.get('/', (req, res) => {
@@ -187,33 +182,35 @@ app.get('/initialize', async(req, res) => {
         };
         return credentials;
     };
+    api.accounts.get({address: accounts.genesis.address}).then(response1 => {
+        const packetCredentials = getPacketCredentials();
+        const nonce = parseInt(response1.data[0].nonce);
 
-    const packetCredentials = getPacketCredentials();
-
-    let tx = new transactions.TransferTransaction({
-        asset: {
-            amount: '1',
-            recipientId: packetCredentials.address,
-        },
-        networkIdentifier: networkIdentifier,
+        let tx = new transactions.TransferTransaction({
+            asset: {
+                amount: transactions.utils.convertLSKToBeddows('1'),
+                recipientId: packetCredentials.address,
+            },
+            fee: transactions.utils.convertLSKToBeddows('0.1'),
+            nonce: nonce.toString(),
+        });
+        tx.sign(networkIdentifier,accounts.genesis.passphrase);
+        console.log("====== tx.toJSON() =====");
+        console.log(tx.toJSON());
+        res.render('initialize', { packetCredentials });
+        api.transactions.broadcast(tx.toJSON()).then(resp => {
+            console.log("++++++++++++++++ API Response +++++++++++++++++");
+            console.log(resp.data);
+            console.log("++++++++++++++++ Credentials +++++++++++++++++");
+            console.dir(packetCredentials);
+            console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
+            console.log(tx.stringify());
+            console.log("++++++++++++++++ End Script +++++++++++++++++");
+        }).catch(err => {
+            console.log(JSON.stringify(err.errors, null, 2));
+        })
+        res.end()
     });
-
-    tx.sign('creek own stem final gate scrub live shallow stage host concert they'); // Genesis account with address: 11237980039345381032L
-    res.render('initialize', { packetCredentials });
-
-    api.transactions.broadcast(tx.toJSON()).then(res => {
-        console.log("++++++++++++++++ API Response +++++++++++++++++");
-        console.log(res.data);
-        console.log("++++++++++++++++ Credentials +++++++++++++++++");
-        console.dir(packetCredentials);
-        console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
-        console.log(tx.stringify());
-        console.log("++++++++++++++++ End Script +++++++++++++++++");
-    }).catch(err => {
-        console.log(JSON.stringify(err.errors, null, 2));
-    });
-
-    res.end()
 });
 
 app.post('/post-register-packet', function (req, res) {
@@ -303,11 +300,10 @@ app.post('/faucet', function (req, res) {
         asset: {
             recipientId: address,
             amount: transactions.utils.convertLSKToBeddows(amount),
-        },
-        networkIdentifier: networkIdentifier,
+        }
     });
 
-    fundTransaction.sign(accounts.sender.passphrase); // Genesis account
+    fundTransaction.sign(networkIdentifier, accounts.sender.passphrase); // Genesis account
     api.transactions.broadcast(fundTransaction.toJSON()).then(response => {
         res.app.locals.payload = {
             res: response.data,
