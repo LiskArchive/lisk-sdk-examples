@@ -23,11 +23,6 @@ class StartTransportTransaction extends BaseTransaction {
         return 21;
     }
 
-    static get FEE () {
-        //return `${10 ** 8}`;
-        return '0';
-    };
-
     async prepare(store) {
         await store.account.cache([
             {

@@ -26,10 +26,6 @@ class LightAlarmTransaction extends BaseTransaction {
         return 23;
     }
 
-    static get FEE () {
-        return '0';
-    };
-
     async prepare(store) {
         await store.account.cache([
             {

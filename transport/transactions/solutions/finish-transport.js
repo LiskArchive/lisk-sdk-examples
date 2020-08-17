@@ -23,23 +23,19 @@ class FinishTransportTransaction extends BaseTransaction {
         return 22;
     }
 
-    static get FEE () {
-        return '0';
-    };
-
     async prepare(store) {
         /**
          * Get packet account
          */
         await store.account.cache([
             {
-                address: this.asset.recipientId,
+                address: this.asset.packetId,
             }
         ]);
         /**
          * Get sender and recipient accounts of the packet
          */
-        const pckt = store.account.get(this.asset.recipientId);
+        const pckt = store.account.get(this.asset.packetId);
         await store.account.cache([
             {
                 address: pckt.asset.carrier,
@@ -52,13 +48,13 @@ class FinishTransportTransaction extends BaseTransaction {
 
     validateAsset() {
         const errors = [];
-        if (!this.asset.recipientId || typeof this.asset.recipientId !== 'string') {
+        if (!this.asset.packetId || typeof this.asset.packetId !== 'string') {
             errors.push(
                 new TransactionError(
                     'Invalid "asset.packetId" defined on transaction',
                     this.id,
                     '.asset.packetId',
-                    this.asset.recipientId
+                    this.asset.packetId
                 )
             );
         }
@@ -67,9 +63,9 @@ class FinishTransportTransaction extends BaseTransaction {
 
     async applyAsset(store) {
         const errors = [];
-        let packet = store.account.get(this.asset.recipientId);
-        let carrier = store.account.get(packet.asset.carrier);
-        let sender = store.account.get(packet.asset.sender);
+        let packet = await store.account.get(this.asset.packetId);
+        let carrier = await store.account.get(packet.asset.carrier);
+        let sender = await store.account.get(packet.asset.sender);
         // if the transaction has been signed by the packet recipient
         if (this.asset.senderId === packet.carrier) {
             // if the packet status isn't "ongoing" or "alarm"
@@ -154,7 +150,7 @@ class FinishTransportTransaction extends BaseTransaction {
 
     async undoAsset(store) {
         const errors = [];
-        const packet = await store.account.get(this.asset.recipientId);
+        const packet = await store.account.get(this.asset.packetId);
         const carrier = await store.account.get(packet.carrier);
         const sender = await store.account.get(packet.sender);
         /* --- Revert successful transport --- */

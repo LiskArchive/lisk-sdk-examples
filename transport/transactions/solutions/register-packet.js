@@ -26,10 +26,6 @@ class RegisterPacketTransaction extends BaseTransaction {
         return 20;
     }
 
-    static get FEE () {
-        return '0';
-    };
-
     async prepare(store) {
         await store.account.cache([
             {

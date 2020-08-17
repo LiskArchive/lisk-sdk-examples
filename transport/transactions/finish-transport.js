@@ -23,11 +23,6 @@ class FinishTransportTransaction extends BaseTransaction {
         return 22;
     }
 
-    static get FEE () {
-        //return `${10 ** 8}`;
-        return '0';
-    };
-
     async prepare(store) {
         /**
          * Get packet account
