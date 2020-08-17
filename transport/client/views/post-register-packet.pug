@@ -6,7 +6,7 @@ block content
     form(method='POST' action='/post-register-packet')
         div.form-group
             label(for='packetid') PacketID:
-            input.form-control(type='text', placeholder='packet ID' name='packetid')
+            input#packetid.form-control(type='text', placeholder='packet ID' name='packetid')
         div.form-group
             label(for='postage') Postage:
             input#postage.form-control(type='text', placeholder='15' name='postage')
@@ -20,7 +20,10 @@ block content
             label(for='recipient') Recipient:
             input#recipient.form-control(type='text', value='10881167371402274308L' name='recipient')
         div.form-group
+            label(for='nonce') Senders' nonce:
+            input#nonce.form-control(type='text', value='123' name='nonce')
+        div.form-group
             label(for='passphrase') Passphrase of sender:
-            input#recipient.form-control(type='text', value='wagon stock borrow episode laundry kitten salute link globe zero feed marble' name='passphrase')
+            input#passphrase.form-control(type='text', value='wagon stock borrow episode laundry kitten salute link globe zero feed marble' name='passphrase')
         button.btn.btn-warning(type='submit') Register
 

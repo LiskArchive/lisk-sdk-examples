@@ -8,11 +8,14 @@ block content
             label(for='recipient') Recipient (packet ID):
             input#recipient.form-control(type='text', placeholder='10881167371402274308L' name='recipient')
         div.form-group
-            label(for='status') Passphrase of carrier:
+            label(for='status') Status:
             select#status.form-control.input-lg(name='status')
                 option(value='success', selected= true) Success
                 option(value='fail') Fail
         div.form-group
+            label(for='nonce') Passphrase of recipient:
+            input#nonce.form-control(type='text', value='123' name='nonce')
+        div.form-group
             label(for='passphrase') Passphrase of recipient:
-            input#recipient.form-control(type='text', value='jump bicycle member exist glare hip hero burger volume cover route rare' name='passphrase')
+            input#passphrase.form-control(type='text', value='jump bicycle member exist glare hip hero burger volume cover route rare' name='passphrase')
         button.btn.btn-warning(type='submit') Finish transport

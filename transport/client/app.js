@@ -79,7 +79,7 @@ app.get('/packet-accounts', async(req, res) => {
     } while (accounts.length === 100);
 
     let assetAccounts = [];
-    for (var i = 0; i < accountsArray.length; i++) {
+    for (let i = 0; i < accountsArray.length; i++) {
         let accountAsset = accountsArray[i].asset;
         if (accountAsset && Object.keys(accountAsset).length > 0){
             assetAccounts.push(accountsArray[i]);
@@ -218,6 +218,7 @@ app.post('/post-register-packet', function (req, res) {
     const postage = req.body.postage;
     const security = req.body.security;
     const minTrust = +req.body.mintrust;
+    const nonce = req.body.nonce;
     const recipientId = req.body.recipient;
     const passphrase = req.body.passphrase;
 
@@ -229,11 +230,10 @@ app.post('/post-register-packet', function (req, res) {
             packetId,
             recipientId,
         },
-        networkIdentifier: networkIdentifier,
-        timestamp: dateToLiskEpochTimestamp(new Date()),
+        nonce: nonce,
     });
 
-    registerPackageTransaction.sign(passphrase);
+    registerPackageTransaction.sign(networkIdentifier,passphrase);
 
     api.transactions.broadcast(registerPackageTransaction.toJSON()).then(response => {
         res.app.locals.payload = {
@@ -258,6 +258,7 @@ app.post('/post-register-packet', function (req, res) {
 
 app.post('/post-start-transport', function (req, res) {
     const recipientId = req.body.recipient;
+    const nonce = req.body.nonce;
     const passphrase = req.body.passphrase;
 
     // Send start transport transaction
@@ -266,10 +267,10 @@ app.post('/post-start-transport', function (req, res) {
             recipientId,
         },
         networkIdentifier: networkIdentifier,
-        timestamp: dateToLiskEpochTimestamp(new Date()),
+        nonce: nonce,
     });
 
-    startTransportTransaction.sign(passphrase);
+    startTransportTransaction.sign(networkIdentifier,passphrase);
 
     api.transactions.broadcast(startTransportTransaction.toJSON()).then(response => {
         res.app.locals.payload = {
@@ -295,33 +296,37 @@ app.post('/post-start-transport', function (req, res) {
 app.post('/faucet', function (req, res) {
     const address = req.body.address;
     const amount = req.body.amount;
+    api.accounts.get({address: accounts.genesis.address}).then(response1 => {
 
-    const fundTransaction = new transactions.TransferTransaction({
-        asset: {
-            recipientId: address,
+        const nonce = parseInt(response1.data[0].nonce);
+        const fundTransaction = transactions.transfer({
             amount: transactions.utils.convertLSKToBeddows(amount),
-        }
-    });
+            recipientId: address,
+            passphrase: accounts.genesis.passphrase,
+            networkIdentifier,
+            fee: transactions.utils.convertLSKToBeddows('0.1'),
+            nonce: nonce.toString(),
+        });
 
-    fundTransaction.sign(networkIdentifier, accounts.sender.passphrase); // Genesis account
-    api.transactions.broadcast(fundTransaction.toJSON()).then(response => {
-        res.app.locals.payload = {
-            res: response.data,
-            tx: fundTransaction.toJSON(),
-        };
-        console.log("++++++++++++++++ API Response +++++++++++++++++");
-        console.log(response.data);
-        console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
-        console.log(fundTransaction.stringify());
-        console.log("++++++++++++++++ End Script +++++++++++++++++");
-        res.redirect('/payload');
-    }).catch(err => {
-        console.log(JSON.stringify(err.errors, null, 2));
-        res.app.locals.payload = {
-            res: err,
-            tx: fundTransaction.toJSON(),
-        };
-        res.redirect('/payload');
+        api.transactions.broadcast(fundTransaction).then(response2 => {
+            res.app.locals.payload = {
+                res: response2.data,
+                tx: fundTransaction,
+            };
+            console.log("++++++++++++++++ API Response +++++++++++++++++");
+            console.log(response2.data);
+            console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
+            console.log(fundTransaction);
+            console.log("++++++++++++++++ End Script +++++++++++++++++");
+            res.redirect('/payload');
+        }).catch(err => {
+            console.log(JSON.stringify(err.errors, null, 2));
+            res.app.locals.payload = {
+                res: err,
+                tx: fundTransaction,
+            };
+            res.redirect('/payload');
+        });
     });
 });
 
@@ -329,17 +334,17 @@ app.post('/post-finish-transport', function (req, res) {
     const recipient = req.body.recipient;
     const status = req.body.status;
     const passphrase = req.body.passphrase;
+    const nonce = req.body.nonce;
 
     const finishTransportTransaction = new FinishTransportTransaction({
         asset: {
             recipientId: recipient,
             status,
         },
-        networkIdentifier: networkIdentifier,
-        timestamp: dateToLiskEpochTimestamp(new Date()),
+        nonce: nonce,
     });
 
-    finishTransportTransaction.sign(passphrase);
+    finishTransportTransaction.sign(networkIdentifier, passphrase);
 
     api.transactions.broadcast(finishTransportTransaction.toJSON()).then(response => {
         res.app.locals.payload = {
