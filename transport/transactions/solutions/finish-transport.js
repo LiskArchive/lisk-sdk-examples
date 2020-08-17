@@ -88,7 +88,7 @@ class FinishTransportTransaction extends BaseTransaction {
                  * - Add postage & security to balance
                  * - Earn 1 trustpoint
                  */
-                const carrierBalanceWithSecurityAndPostage = new utils.BigNum(carrier.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.postage));
+                const carrierBalanceWithSecurityAndPostage = BigInt(carrier.balance) + BigInt(packet.asset.security) + BigInt(packet.asset.postage);
 
                 carrier.balance = carrierBalanceWithSecurityAndPostage.toString();
                 carrier.asset.lockedSecurity = null;
@@ -111,7 +111,7 @@ class FinishTransportTransaction extends BaseTransaction {
              * Update the Sender account:
              * - Add postage and security to balance
              */
-            const senderBalanceWithSecurityAndPostage = new utils.BigNum(sender.balance).add(new utils.BigNum(packet.asset.security)).add(new utils.BigNum(packet.asset.postage));
+            const senderBalanceWithSecurityAndPostage = BigInt(sender.balance) + BigInt(packet.asset.security) + BigInt(packet.asset.postage);
 
             sender.balance = senderBalanceWithSecurityAndPostage.toString();
 
@@ -156,7 +156,7 @@ class FinishTransportTransaction extends BaseTransaction {
         /* --- Revert successful transport --- */
         if ( this.asset.status === "success") {
             /* --- Revert carrier account --- */
-            const carrierBalanceWithoutSecurityAndPostage = new utils.BigNum(carrier.balance).sub(new utils.BigNum(packet.asset.security)).sub(new utils.BigNum(packet.asset.postage));
+            const carrierBalanceWithoutSecurityAndPostage = BigInt(carrier.balance) = BigInt(packet.asset.security) - BigInt(packet.asset.postage);
 
             carrier.balance = carrierBalanceWithoutSecurityAndPostage.toString();
             carrier.asset.lockedSecurity = packet.asset.security;
@@ -167,7 +167,7 @@ class FinishTransportTransaction extends BaseTransaction {
         /* --- Revert failed transport --- */
         } else {
             /* --- Revert sender account --- */
-            const senderBalanceWithoutSecurityAndPostage = new utils.BigNum(sender.balance).sub(new utils.BigNum(packet.asset.security)).sub(new utils.BigNum(packet.asset.postage));
+            const senderBalanceWithoutSecurityAndPostage = BigInt(sender.balance) - BigInt(packet.asset.security) - BigInt(packet.asset.postage);
             sender.balance = senderBalanceWithoutSecurityAndPostage.toString();
             store.account.set(sender.address, sender);
             /* --- Revert carrier account --- */

@@ -47,16 +47,16 @@ class StartTransportTransaction extends BaseTransaction {
             const carrier = await store.account.get(this.senderId);
             // If the carrier has the trust to transport the packet
             const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
-            const carrierBalance = new utils.BigNum(carrier.balance);
-            const packetSecurity = new utils.BigNum(packet.asset.security);
-            if (packet.asset.minTrust <= carrierTrust && carrierBalance.gte(packetSecurity)) {
+            const carrierBalance = BigInt(carrier.balance);
+            const packetSecurity = BigInt(packet.asset.security);
+            if (packet.asset.minTrust <= carrierTrust && (carrierBalance >= packetSecurity)) {
                 /**
                  * Update the Carrier account:
                  * - Lock security inside the account
                  * - Remove the security form balance
                  * - initialize carriertrust, if not present already
                  */
-                const carrierBalanceWithoutSecurity = carrierBalance.sub(packetSecurity);
+                const carrierBalanceWithoutSecurity = carrierBalance - packetSecurity;
                 const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
                 carrier.balance = carrierBalanceWithoutSecurity.toString();
                 carrier.asset = {
@@ -100,9 +100,7 @@ class StartTransportTransaction extends BaseTransaction {
         const packet = await store.account.get(this.asset.recipientId);
         const carrier = await store.account.get(this.senderId);
         /* --- Revert carrier account --- */
-        const carrierBalanceWithSecurity = new utils.BigNum(carrier.balance).add(
-            new utils.BigNum(packet.assset.security)
-        );
+        const carrierBalanceWithSecurity = BigInt(carrier.balance) + BigInt(packet.assset.security);
         carrier.balance = carrierBalanceWithSecurity.toString();
         store.account.set(carrier.address, carrier);
         /* --- Revert packet account --- */
