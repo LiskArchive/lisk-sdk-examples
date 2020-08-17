@@ -65,7 +65,7 @@ class FinishTransportTransaction extends BaseTransaction {
         return errors;
     }
 
-    applyAsset(store) {
+    async applyAsset(store) {
         const errors = [];
         let packet = store.account.get(this.asset.recipientId);
         let carrier = store.account.get(packet.asset.carrier);
@@ -152,11 +152,11 @@ class FinishTransportTransaction extends BaseTransaction {
         return errors;
     }
 
-    undoAsset(store) {
+    async undoAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.asset.recipientId);
-        const carrier = store.account.get(packet.carrier);
-        const sender = store.account.get(packet.sender);
+        const packet = await store.account.get(this.asset.recipientId);
+        const carrier = await store.account.get(packet.carrier);
+        const sender = await store.account.get(packet.sender);
         /* --- Revert successful transport --- */
         if ( this.asset.status === "success") {
             /* --- Revert carrier account --- */

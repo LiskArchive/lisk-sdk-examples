@@ -54,10 +54,10 @@ class LightAlarmTransaction extends BaseTransaction {
         return errors;
     }
 
-    applyAsset(store) {
+    async applyAsset(store) {
         const errors = [];
 
-        const packet = store.account.get(this.senderId);
+        const packet = await store.account.get(this.senderId);
         if (packet.asset.status !== 'ongoing' && packet.asset.status !== 'alarm') {
             errors.push(
                 new TransactionError(
@@ -87,9 +87,9 @@ class LightAlarmTransaction extends BaseTransaction {
         return errors;
     }
 
-    undoAsset(store) {
+    async undoAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.senderId);
+        const packet = await store.account.get(this.senderId);
 
         /* --- Revert packet status --- */
         packet.asset.status = 'ongoing';

@@ -48,13 +48,13 @@ class LightAlarmTransaction extends BaseTransaction {
         return errors;
     }
 
-    applyAsset(store) {
+    async applyAsset(store) {
         /* Insert the logic for applyAsset() here */
     }
 
-    undoAsset(store) {
+    async undoAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.senderId);
+        const packet = await store.account.get(this.senderId);
 
         /* --- Revert packet status --- */
         packet.asset.status = null;

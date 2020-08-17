@@ -66,11 +66,11 @@ class FinishTransportTransaction extends BaseTransaction {
         return errors;
     }
 
-    applyAsset(store) {
+    async applyAsset(store) {
         const errors = [];
-        let packet = store.account.get(this.asset.recipientId);
-        let carrier = store.account.get(packet.asset.carrier);
-        let sender = store.account.get(packet.asset.sender);
+        let packet = await store.account.get(this.asset.recipientId);
+        let carrier = await store.account.get(packet.asset.carrier);
+        let sender = await store.account.get(packet.asset.sender);
         // if the transaction has been signed by the packet recipient
         if (this.asset.senderId === packet.carrier) {
             // if the packet status isn't "ongoing" or "alarm"
@@ -144,11 +144,11 @@ class FinishTransportTransaction extends BaseTransaction {
         return errors;
     }
 
-    undoAsset(store) {
+    async undoAsset(store) {
         const errors = [];
-        const packet = store.account.get(this.asset.recipientId);
-        const carrier = store.account.get(packet.carrier);
-        const sender = store.account.get(packet.sender);
+        const packet = await store.account.get(this.asset.recipientId);
+        const carrier = await store.account.get(packet.carrier);
+        const sender = await store.account.get(packet.sender);
         /* --- Revert successful transport --- */
         if ( this.asset.status === "success") {
             /* --- Revert carrier account --- */
