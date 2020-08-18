@@ -26,7 +26,7 @@ class StartTransportTransaction extends BaseTransaction {
     async prepare(store) {
         await store.account.cache([
             {
-                address: this.asset.recipientId,
+                address: this.asset.packetId,
             },
             {
                 address: this.senderId,
@@ -42,7 +42,7 @@ class StartTransportTransaction extends BaseTransaction {
 
     async applyAsset(store) {
         const errors = [];
-        const packet = await store.account.get(this.asset.recipientId);
+        const packet = await store.account.get(this.asset.packetId);
         if (packet.asset.status === "pending"){
             const carrier = await store.account.get(this.senderId);
             // If the carrier has the trust to transport the packet
@@ -59,10 +59,9 @@ class StartTransportTransaction extends BaseTransaction {
                 const carrierBalanceWithoutSecurity = carrierBalance - packetSecurity;
                 const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
                 carrier.balance = carrierBalanceWithoutSecurity.toString();
-                carrier.asset = {
-                    trust: carrierTrust,
-                    lockedSecurity: packet.asset.security,
-                };
+                carrier.asset.trust = carrierTrust;
+                carrier.asset.lockedSecurity = packet.asset.security;
+
                 store.account.set(carrier.address, carrier);
                 /**
                  * Update the Packet account:

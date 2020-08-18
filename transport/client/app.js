@@ -2,10 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { APIClient } = require('@liskhq/lisk-api-client');
 const accounts = require('../client/accounts.json');
-const RegisterPacketTransaction = require('../transactions/register-packet');
-const LightAlarmTransaction = require('../transactions/light-alarm');
-const StartTransportTransaction = require('../transactions/start-transport');
-const FinishTransportTransaction = require('../transactions/finish-transport');
+const RegisterPacketTransaction = require('../transactions/solutions/register-packet');
+const LightAlarmTransaction = require('../transactions/solutions/light-alarm');
+const StartTransportTransaction = require('../transactions/solutions/start-transport');
+const FinishTransportTransaction = require('../transactions/solutions/finish-transport');
 const transactions = require('@liskhq/lisk-transactions');
 const cryptography = require('@liskhq/lisk-cryptography');
 const { Mnemonic } = require('@liskhq/lisk-passphrase');
@@ -93,7 +93,11 @@ app.get('/packet-accounts', async(req, res) => {
  * Request specific account (same page)
  */
 app.get('/accounts/:address', async(req, res) => {
-    const { data: accounts } = await api.accounts.get({ address: req.params.address });
+    try {
+        const { data: accounts } = await api.accounts.get({ address: req.params.address });
+    } catch(err) {
+        console.dir(err);
+    }
     res.render('accounts', { accounts });
 });
 
@@ -230,6 +234,7 @@ app.post('/post-register-packet', function (req, res) {
             packetId,
             recipientId,
         },
+        fee: transactions.utils.convertLSKToBeddows('0.1'),
         nonce: nonce,
     });
 
@@ -257,16 +262,16 @@ app.post('/post-register-packet', function (req, res) {
 });
 
 app.post('/post-start-transport', function (req, res) {
-    const recipientId = req.body.recipient;
+    const packetId = req.body.packetid;
     const nonce = req.body.nonce;
     const passphrase = req.body.passphrase;
 
     // Send start transport transaction
     const startTransportTransaction = new StartTransportTransaction({
         asset: {
-            recipientId,
+            packetId,
         },
-        networkIdentifier: networkIdentifier,
+        fee: '1160000',
         nonce: nonce,
     });
 
@@ -304,7 +309,7 @@ app.post('/faucet', function (req, res) {
             recipientId: address,
             passphrase: accounts.genesis.passphrase,
             networkIdentifier,
-            fee: transactions.utils.convertLSKToBeddows('0.1'),
+            fee: '0',
             nonce: nonce.toString(),
         });
 
@@ -331,16 +336,17 @@ app.post('/faucet', function (req, res) {
 });
 
 app.post('/post-finish-transport', function (req, res) {
-    const recipient = req.body.recipient;
+    const packetid = req.body.packetid;
     const status = req.body.status;
     const passphrase = req.body.passphrase;
     const nonce = req.body.nonce;
 
     const finishTransportTransaction = new FinishTransportTransaction({
         asset: {
-            recipientId: recipient,
+            packetId: packetid,
             status,
         },
+        fee: '0',
         nonce: nonce,
     });
 

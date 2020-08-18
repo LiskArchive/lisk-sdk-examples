@@ -5,17 +5,17 @@ block content
 
     form(method='POST' action='/post-finish-transport')
         div.form-group
-            label(for='recipient') Recipient (packet ID):
-            input#recipient.form-control(type='text', placeholder='10881167371402274308L' name='recipient')
+            label(for='packetid') Packet ID:
+            input#packetid.form-control(type='text', placeholder='10881167371402274308L' name='packetid')
         div.form-group
             label(for='status') Status:
             select#status.form-control.input-lg(name='status')
                 option(value='success', selected= true) Success
                 option(value='fail') Fail
         div.form-group
-            label(for='nonce') Passphrase of recipient:
+            label(for='nonce') Nonce of the recipient:
             input#nonce.form-control(type='text', value='123' name='nonce')
         div.form-group
-            label(for='passphrase') Passphrase of recipient:
-            input#passphrase.form-control(type='text', value='jump bicycle member exist glare hip hero burger volume cover route rare' name='passphrase')
+            label(for='passphrase') Passphrase of the recipient:
+            input#passphrase.form-control(type='text', value='mushroom edit regular pencil ten casino wine north vague bachelor swim piece' name='passphrase')
         button.btn.btn-warning(type='submit') Finish transport
