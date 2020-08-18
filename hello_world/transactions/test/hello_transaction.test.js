@@ -29,7 +29,7 @@ describe('Hello Transaction', () => {
     it('should save the hello string in the senders account assets', async () => {
         // Arrange
         const asset = {
-            hello: "my hello message",
+            hello: 'my hello message',
         };
 
         const senderId = '16313739661670634666L';
@@ -38,6 +38,7 @@ describe('Hello Transaction', () => {
             address: '16313739661670634666L',
             publicKey: 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f',
             asset: {},
+            nonce: "0"
         };
 
         when(storeStub.account.get)
@@ -48,19 +49,22 @@ describe('Hello Transaction', () => {
         const tx = new HelloTransaction({
             senderPublicKey,
             asset,
-            timestamp: utils.getTimeFromBlockchainEpoch(new Date()),
+            fee: "1000000",
+            nonce: "0",
         });
-        tx.applyAsset(storeStub);
+        await tx.applyAsset(storeStub);
 
         // Assert
         expect(storeStub.account.set).toHaveBeenCalledWith(
             mockedSenderAccount.address,
             {
                 address: mockedSenderAccount.address,
-                publicKey: 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f',
+                publicKey: mockedSenderAccount.publicKey,
                 asset,
+                nonce: "0"
             }
         );
+
     });
 
     it('should reject the transaction, if the sender has already a hello string in their account.', async () => {
@@ -95,10 +99,13 @@ describe('Hello Transaction', () => {
         const tx = new HelloTransaction({
             senderPublicKey,
             asset,
-            timestamp: utils.getTimeFromBlockchainEpoch(new Date()),
+            fee: "1000000",
+            nonce: "0",
         });
 
+        const result = await tx.applyAsset(storeStub);
+
         // Assert
-        expect(tx.applyAsset(storeStub)).toMatchObject(errors);
+        expect(result).toMatchObject(errors);
     });
 });
