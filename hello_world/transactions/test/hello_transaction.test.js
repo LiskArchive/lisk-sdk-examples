@@ -12,7 +12,7 @@
  * Removal or modification of this copyright notice is prohibited.
  */
 const HelloTransaction = require('../hello_transaction');
-const {TransactionError, utils} = require('@liskhq/lisk-transactions');
+const { TransactionError } = require('@liskhq/lisk-transactions');
 const { when } = require('jest-when');
 
 describe('Hello Transaction', () => {
@@ -38,7 +38,6 @@ describe('Hello Transaction', () => {
             address: '16313739661670634666L',
             publicKey: 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f',
             asset: {},
-            nonce: "0"
         };
 
         when(storeStub.account.get)
@@ -49,8 +48,6 @@ describe('Hello Transaction', () => {
         const tx = new HelloTransaction({
             senderPublicKey,
             asset,
-            fee: "1000000",
-            nonce: "0",
         });
         await tx.applyAsset(storeStub);
 
@@ -61,7 +58,6 @@ describe('Hello Transaction', () => {
                 address: mockedSenderAccount.address,
                 publicKey: mockedSenderAccount.publicKey,
                 asset,
-                nonce: "0"
             }
         );
 
@@ -99,8 +95,6 @@ describe('Hello Transaction', () => {
         const tx = new HelloTransaction({
             senderPublicKey,
             asset,
-            fee: "1000000",
-            nonce: "0",
         });
 
         const result = await tx.applyAsset(storeStub);
