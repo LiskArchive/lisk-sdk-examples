@@ -52,7 +52,7 @@ class StartTransportTransaction extends BaseTransaction {
             console.log("packet1");
             console.log(packet);
             const carrierTrust = carrier.asset.trust ? carrier.asset.trust : '0';
-            const carrierBalance = BigInt(carrier.balance);
+            const carrierBalance = carrier.balance;
             const packetSecurity = BigInt(packet.asset.security);
             // If the carrier has the trust to transport the packet
             if (BigInt(packet.asset.minTrust) <= BigInt(carrierTrust) && (carrierBalance >= packetSecurity)) {
@@ -64,8 +64,12 @@ class StartTransportTransaction extends BaseTransaction {
                  */
                 const carrierBalanceWithoutSecurity = carrierBalance - packetSecurity;
                 carrier.balance = carrierBalanceWithoutSecurity;
-                carrier.asset.trust = carrierTrust;
-                carrier.asset.lockedSecurity = packet.asset.security;
+                carrier.asset = {
+                    trust: carrierTrust,
+                    lockedSecurity: packet.asset.security
+                };
+                //carrier.asset.trust = carrierTrust;
+                //carrier.asset.lockedSecurity = packet.asset.security;
                 console.log("carrier2");
                 console.log(carrier);
 
@@ -75,8 +79,13 @@ class StartTransportTransaction extends BaseTransaction {
                  * - Set status to "ongoing"
                  * - set carrier to ID of the carrier
                  */
-                packet.asset.status = "ongoing";
-                packet.asset.carrier = carrier.address;
+                //packet.asset.status = "ongoing";
+                //packet.asset.carrier = carrier.address;
+                packet.asset = {
+                    ...packet.asset,
+                    status: "ongoing",
+                    carrier: carrier.address
+                };
                 console.log("packet2");
                 console.log(packet);
                 store.account.set(packet.address, packet);
