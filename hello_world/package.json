@@ -13,7 +13,6 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@liskhq/lisk-transactions": "^4.0.0-alpha.0",
     "lisk-sdk": "^4.0.0-alpha.0"
   }
 }

@@ -22,10 +22,6 @@ class HelloTransaction extends BaseTransaction {
 		return 20;
 	};
 
-	static get FEE () {
-		return `${10 ** 8}`;
-	};
-
 	async prepare(store) {
 		await store.account.cache([
 			{

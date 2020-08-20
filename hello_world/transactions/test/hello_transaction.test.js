@@ -12,7 +12,7 @@
  * Removal or modification of this copyright notice is prohibited.
  */
 const HelloTransaction = require('../hello_transaction');
-const {TransactionError, utils} = require('@liskhq/lisk-transactions');
+const { TransactionError } = require('@liskhq/lisk-transactions');
 const { when } = require('jest-when');
 
 describe('Hello Transaction', () => {
@@ -29,7 +29,7 @@ describe('Hello Transaction', () => {
     it('should save the hello string in the senders account assets', async () => {
         // Arrange
         const asset = {
-            hello: "my hello message",
+            hello: 'my hello message',
         };
 
         const senderId = '16313739661670634666L';
@@ -48,19 +48,19 @@ describe('Hello Transaction', () => {
         const tx = new HelloTransaction({
             senderPublicKey,
             asset,
-            timestamp: utils.getTimeFromBlockchainEpoch(new Date()),
         });
-        tx.applyAsset(storeStub);
+        await tx.applyAsset(storeStub);
 
         // Assert
         expect(storeStub.account.set).toHaveBeenCalledWith(
             mockedSenderAccount.address,
             {
                 address: mockedSenderAccount.address,
-                publicKey: 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f',
+                publicKey: mockedSenderAccount.publicKey,
                 asset,
             }
         );
+
     });
 
     it('should reject the transaction, if the sender has already a hello string in their account.', async () => {
@@ -95,10 +95,11 @@ describe('Hello Transaction', () => {
         const tx = new HelloTransaction({
             senderPublicKey,
             asset,
-            timestamp: utils.getTimeFromBlockchainEpoch(new Date()),
         });
 
+        const result = await tx.applyAsset(storeStub);
+
         // Assert
-        expect(tx.applyAsset(storeStub)).toMatchObject(errors);
+        expect(result).toMatchObject(errors);
     });
 });
