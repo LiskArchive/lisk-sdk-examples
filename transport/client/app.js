@@ -276,7 +276,7 @@ app.post('/post-start-transport', function (req, res) {
     });
 
     startTransportTransaction.sign(networkIdentifier,passphrase);
-    
+
     api.transactions.broadcast(startTransportTransaction.toJSON()).then(response => {
         res.app.locals.payload = {
             res: response.data,
@@ -346,7 +346,7 @@ app.post('/post-finish-transport', function (req, res) {
             packetId: packetid,
             status,
         },
-        fee: '0',
+        fee: transactions.utils.convertLSKToBeddows('0.1'),
         nonce: nonce,
     });
 

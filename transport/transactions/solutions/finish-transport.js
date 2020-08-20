@@ -14,7 +14,6 @@
 const {
     BaseTransaction,
     TransactionError,
-    utils
 } = require('@liskhq/lisk-transactions');
 
 class FinishTransportTransaction extends BaseTransaction {
@@ -35,7 +34,7 @@ class FinishTransportTransaction extends BaseTransaction {
         /**
          * Get sender and recipient accounts of the packet
          */
-        const pckt = store.account.get(this.asset.packetId);
+        const pckt = await store.account.get(this.asset.packetId);
         await store.account.cache([
             {
                 address: pckt.asset.carrier,
@@ -67,7 +66,11 @@ class FinishTransportTransaction extends BaseTransaction {
         let carrier = await store.account.get(packet.asset.carrier);
         let sender = await store.account.get(packet.asset.sender);
         // if the transaction has been signed by the packet recipient
-        if (this.asset.senderId === packet.carrier) {
+        console.log('this.asset.senderId: ' + this.senderId);
+        console.log('packet.asset.recipient: ' + packet.asset.recipient);
+        const cmpr = this.senderId === packet.asset.recipient;
+        console.log('cmpr: ' + cmpr);
+        if (this.senderId === packet.asset.recipient) {
             // if the packet status isn't "ongoing" or "alarm"
             if (packet.asset.status !==  "ongoing" && packet.asset.status !== "alarm") {
                 errors.push(
@@ -88,11 +91,15 @@ class FinishTransportTransaction extends BaseTransaction {
                  * - Add postage & security to balance
                  * - Earn 1 trustpoint
                  */
-                const carrierBalanceWithSecurityAndPostage = BigInt(carrier.balance) + BigInt(packet.asset.security) + BigInt(packet.asset.postage);
+                const carrierBalanceWithSecurityAndPostage = carrier.balance + BigInt(packet.asset.security) + BigInt(packet.asset.postage);
+                const trustInc = carrier.asset.trust ? BigInt(carrier.asset.trust) + BigInt(1) : BigInt(1);
+                carrier.balance = carrierBalanceWithSecurityAndPostage;
 
-                carrier.balance = carrierBalanceWithSecurityAndPostage.toString();
-                carrier.asset.lockedSecurity = null;
-                carrier.asset.trust = carrier.asset.trust ? ++carrier.asset.trust : 1;
+                carrier.asset = {
+                    ...carrier.asset,
+                    trust: trustInc.toString(),
+                    lockedSecurity: null
+                };
 
                 store.account.set(carrier.address, carrier);
                 /**
@@ -100,8 +107,11 @@ class FinishTransportTransaction extends BaseTransaction {
                  * - Remove postage from balance
                  * - Change status to "success"
                  */
-                packet.balance = '0';
-                packet.asset.status = 'success';
+                packet.balance = BigInt(0);
+                packet.asset = {
+                    ...packet.asset,
+                    status: 'success'
+                }
 
                 store.account.set(packet.address, packet);
                 return errors;
@@ -112,8 +122,9 @@ class FinishTransportTransaction extends BaseTransaction {
              * - Add postage and security to balance
              */
             const senderBalanceWithSecurityAndPostage = BigInt(sender.balance) + BigInt(packet.asset.security) + BigInt(packet.asset.postage);
+            const trustDec = carrier.asset.trust ? BigInt(carrier.asset.trust) - BigInt(1) : BigInt(-1);
 
-            sender.balance = senderBalanceWithSecurityAndPostage.toString();
+            sender.balance = senderBalanceWithSecurityAndPostage;
 
             store.account.set(sender.address, sender);
             /**
@@ -121,8 +132,11 @@ class FinishTransportTransaction extends BaseTransaction {
              * - Reduce trust by 1
              * - Set lockedSecurity to 0
              */
-            carrier.asset.trust = carrier.asset.trust ? --carrier.asset.trust : -1;
-            carrier.asset.lockedSecurity = null;
+            carrier.asset = {
+                ...carrier.asset,
+                trust: trustDec.toString(),
+                lockedSecurity: null
+            }
 
             store.account.set(carrier.address, carrier);
             /**
@@ -130,8 +144,11 @@ class FinishTransportTransaction extends BaseTransaction {
              * - set status to "fail"
              * - Remove postage from balance
              */
-            packet.balance = '0';
-            packet.asset.status = 'fail';
+            packet.balance = BigInt('0');
+            packet.asset = {
+                ...packet.asset,
+                status: 'fail'
+            };
 
             store.account.set(packet.address, packet);
 
