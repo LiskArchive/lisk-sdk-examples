@@ -123,7 +123,7 @@ class RegisterPacketTransaction extends BaseTransaction {
                 sender: this.senderId,
                 security: this.asset.security,
                 postage: this.asset.postage,
-                minTrust: this.asset.minTrust,
+                minTrust: this.asset.minTrust.toString(),
                 status: 'pending',
                 carrier: null
             };

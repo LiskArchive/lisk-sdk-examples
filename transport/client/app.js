@@ -276,7 +276,7 @@ app.post('/post-start-transport', function (req, res) {
     });
 
     startTransportTransaction.sign(networkIdentifier,passphrase);
-
+    
     api.transactions.broadcast(startTransportTransaction.toJSON()).then(response => {
         res.app.locals.payload = {
             res: response.data,
@@ -289,7 +289,7 @@ app.post('/post-start-transport', function (req, res) {
         console.log("++++++++++++++++ End Script +++++++++++++++++");
         res.redirect('/payload');
     }).catch(err => {
-        console.log(JSON.stringify(err.errors, null, 2));
+        console.log(JSON.stringify(err));
         res.app.locals.payload = {
             res: err,
             tx: startTransportTransaction.toJSON(),
@@ -309,7 +309,7 @@ app.post('/faucet', function (req, res) {
             recipientId: address,
             passphrase: accounts.genesis.passphrase,
             networkIdentifier,
-            fee: '0',
+            fee: transactions.utils.convertLSKToBeddows('0.1'),
             nonce: nonce.toString(),
         });
 

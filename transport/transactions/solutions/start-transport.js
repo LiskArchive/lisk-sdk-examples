@@ -16,6 +16,8 @@ const {
     TransactionError,
     utils
 } = require('@liskhq/lisk-transactions');
+const { intToBuffer, stringToBuffer } = require('@liskhq/lisk-cryptography');
+
 
 class StartTransportTransaction extends BaseTransaction {
 
@@ -45,11 +47,15 @@ class StartTransportTransaction extends BaseTransaction {
         const packet = await store.account.get(this.asset.packetId);
         if (packet.asset.status === "pending"){
             const carrier = await store.account.get(this.senderId);
-            // If the carrier has the trust to transport the packet
-            const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
+            console.log("carrier1");
+            console.log(carrier);
+            console.log("packet1");
+            console.log(packet);
+            const carrierTrust = carrier.asset.trust ? carrier.asset.trust : '0';
             const carrierBalance = BigInt(carrier.balance);
             const packetSecurity = BigInt(packet.asset.security);
-            if (packet.asset.minTrust <= carrierTrust && (carrierBalance >= packetSecurity)) {
+            // If the carrier has the trust to transport the packet
+            if (BigInt(packet.asset.minTrust) <= BigInt(carrierTrust) && (carrierBalance >= packetSecurity)) {
                 /**
                  * Update the Carrier account:
                  * - Lock security inside the account
@@ -57,10 +63,11 @@ class StartTransportTransaction extends BaseTransaction {
                  * - initialize carriertrust, if not present already
                  */
                 const carrierBalanceWithoutSecurity = carrierBalance - packetSecurity;
-                const carrierTrust = carrier.asset.trust ? carrier.asset.trust : 0;
-                carrier.balance = carrierBalanceWithoutSecurity.toString();
+                carrier.balance = carrierBalanceWithoutSecurity;
                 carrier.asset.trust = carrierTrust;
                 carrier.asset.lockedSecurity = packet.asset.security;
+                console.log("carrier2");
+                console.log(carrier);
 
                 store.account.set(carrier.address, carrier);
                 /**
@@ -70,6 +77,8 @@ class StartTransportTransaction extends BaseTransaction {
                  */
                 packet.asset.status = "ongoing";
                 packet.asset.carrier = carrier.address;
+                console.log("packet2");
+                console.log(packet);
                 store.account.set(packet.address, packet);
             } else {
                 errors.push(
@@ -78,7 +87,7 @@ class StartTransportTransaction extends BaseTransaction {
                         packet.asset.minTrust,
                         carrier.asset.trust,
                         packet.asset.security,
-                        carrier.balance
+                        carrier.balance.toString()
                     )
                 );
             }
