@@ -6,7 +6,7 @@ const LightAlarmTransaction = require('../transactions/solutions/light-alarm');
 
 configDevnet.label = 'lisk-transport';
 configDevnet.modules.http_api.access.public = true;
-// configDevnet.components.storage.host = 'db';
+//configDevnet.components.logger.consoleLogLevel = 'debug';
 
 const app = new Application(genesisBlockDevnet, configDevnet);
 app.registerTransaction(RegisterPacketTransaction);
