@@ -97,8 +97,7 @@ class RegisterPacketTransaction extends BaseTransaction {
              * - Deduct the postage from senders' account balance
              */
             const sender = await store.account.get(this.senderId);
-            const senderBalancePostageDeducted = BigInt(sender.balance) - BigInt(this.asset.postage);
-            sender.balance = senderBalancePostageDeducted.toString();
+            sender.balance = BigInt(sender.balance) - BigInt(this.asset.postage);
 
             store.account.set(sender.address, sender);
 
@@ -115,9 +114,8 @@ class RegisterPacketTransaction extends BaseTransaction {
              *   - minTrust: Minimal trust that is needed to be carrier for the packet
              *   - status: Status of the transport (pending|ongoing|success|fail)
              */
-            const packetBalanceWithPostage = BigInt(packet.balance) + BigInt(this.asset.postage);
+            packet.balance = packet.balance + BigInt(this.asset.postage);
 
-            packet.balance = packetBalanceWithPostage.toString();
             packet.asset = {
                 recipient: this.asset.recipientId,
                 sender: this.senderId,
@@ -145,14 +143,13 @@ class RegisterPacketTransaction extends BaseTransaction {
 
         /* --- Revert sender account --- */
         const sender = await store.account.get(this.senderId);
-        const senderBalanceWithPostage = BigInt(sender.balance) + BigInt(this.asset.postage);
-        sender.balance = senderBalanceWithPostage.toString();
+        sender.balance = sender.balance + BigInt(this.asset.postage);
 
         store.account.set(sender.address, sender);
 
         /* --- Revert packet account --- */
         const packet = await store.account.get(this.asset.packetId);
-        packet.balance = "0";
+        packet.balance = BigInt("0");
         packet.asset = null;
         store.account.set(packet.address, packet);
 

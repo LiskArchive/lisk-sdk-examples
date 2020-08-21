@@ -97,10 +97,8 @@ class RegisterPacketTransaction extends BaseTransaction {
              * - Deduct the postage from senders' account balance
              */
             const sender = await store.account.get(this.senderId);
-            const senderBalancePostageDeducted = new utils.BigNum(sender.balance).sub(
-                new utils.BigNum(this.asset.postage)
-            );
-            sender.balance = senderBalancePostageDeducted.toString();
+            sender.balance = BigInt(sender.balance) - BigInt(this.asset.postage);
+
             store.account.set(sender.address, sender);
 
             /* --- Modify packet account --- */
@@ -116,17 +114,14 @@ class RegisterPacketTransaction extends BaseTransaction {
              *   - minTrust: Minimal trust that is needed to be carrier for the packet
              *   - status: Status of the transport (pending|ongoing|success|fail)
              */
-            const packetBalanceWithPostage = new utils.BigNum(packet.balance).add(
-                new utils.BigNum(this.asset.postage)
-            );
+            packet.balance = packet.balance + BigInt(this.asset.postage);
 
-            packet.balance = packetBalanceWithPostage.toString();
             packet.asset = {
                 recipient: this.asset.recipientId,
                 sender: this.senderId,
                 security: this.asset.security,
                 postage: this.asset.postage,
-                minTrust: this.asset.minTrust,
+                minTrust: this.asset.minTrust.toString(),
                 status: 'pending',
                 carrier: null
             };
@@ -147,15 +142,14 @@ class RegisterPacketTransaction extends BaseTransaction {
 
         /* --- Revert sender account --- */
         const sender = await store.account.get(this.senderId);
-        const senderBalanceWithPostage = new utils.BigNum(sender.balance).add(
-            new utils.BigNum(this.asset.postage)
-        );
-        sender.balance = senderBalanceWithPostage.toString();
-        store.account.set(sender.address, updatedSender);
+        sender.balance = sender.balance + BigInt(this.asset.postage);
+
+        store.account.set(sender.address, sender);
 
         /* --- Revert packet account --- */
         const packet = await store.account.get(this.asset.packetId);
-        /* Task: Restore the packet account. The missing UndoAsset logic comes here */
+        packet.balance = BigInt("0");
+        packet.asset = null;
         store.account.set(packet.address, packet);
 
         return errors;

@@ -37,13 +37,13 @@ class LightAlarmTransaction extends BaseTransaction {
     validateAsset() {
         // Static checks for presence of `timestamp` which holds the timestamp of when the alarm was triggered
         const errors = [];
-        if (!this.timestamp || typeof this.timestamp !== 'number') {
+        if (!this.asset.timestamp || typeof this.asset.timestamp !== 'number') {
             errors.push(
                 new TransactionError(
                     'Invalid ".timestamp" defined on transaction',
                     this.id,
                     '.timestamp',
-                    this.timestamp
+                    this.asset.timestamp
                 )
             );
         }
@@ -73,10 +73,16 @@ class LightAlarmTransaction extends BaseTransaction {
          * - set packet status to "alarm"
          * - add current timestamp to light alarms list
          */
-        packet.asset.status = 'alarm';
-        packet.asset.alarms = packet.asset.alarms ? packet.asset.alarms : {};
-        packet.asset.alarms.light = packet.asset.alarms.light ? packet.asset.alarms.light : [];
-        packet.asset.alarms.light.push(this.timestamp);
+        const alarms = packet.asset.alarms ? packet.asset.alarms : {};
+        alarms.light = packet.asset.alarms.light ? packet.asset.alarms.light : [];
+        alarms.light.push(this.asset.timestamp);
+
+        packet.asset = {
+            ...packet.asset,
+            status: 'alarm',
+            alarms: alarms
+
+        };
 
         store.account.set(packet.address, packet);
 
@@ -88,13 +94,17 @@ class LightAlarmTransaction extends BaseTransaction {
         const packet = await store.account.get(this.senderId);
 
         /* --- Revert packet status --- */
-        packet.asset.status = 'ongoing';
-        packet.asset.alarms.light.pop();
-
+        const lightAlarms = packet.asset.alarms.light.pop();
+        packet.asset = {
+            ...packet.asset,
+            status: 'ongoing',
+            alarms : {
+                light: lightAlarms
+            }
+        };
         store.account.set(packet.address, packet);
         return errors;
     }
-
 }
 
 module.exports = LightAlarmTransaction;

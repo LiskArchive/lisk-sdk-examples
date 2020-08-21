@@ -13,11 +13,8 @@
  */
 const {
     BaseTransaction,
-    TransactionError,
-    utils
+    TransactionError
 } = require('@liskhq/lisk-transactions');
-const { intToBuffer, stringToBuffer } = require('@liskhq/lisk-cryptography');
-
 
 class StartTransportTransaction extends BaseTransaction {
 
@@ -47,10 +44,6 @@ class StartTransportTransaction extends BaseTransaction {
         const packet = await store.account.get(this.asset.packetId);
         if (packet.asset.status === "pending"){
             const carrier = await store.account.get(this.senderId);
-            console.log("carrier1");
-            console.log(carrier);
-            console.log("packet1");
-            console.log(packet);
             const carrierTrust = carrier.asset.trust ? carrier.asset.trust : '0';
             const carrierBalance = carrier.balance;
             const packetSecurity = BigInt(packet.asset.security);
@@ -62,16 +55,11 @@ class StartTransportTransaction extends BaseTransaction {
                  * - Remove the security form balance
                  * - initialize carriertrust, if not present already
                  */
-                const carrierBalanceWithoutSecurity = carrierBalance - packetSecurity;
-                carrier.balance = carrierBalanceWithoutSecurity;
+                carrier.balance = carrierBalance - packetSecurity;
                 carrier.asset = {
                     trust: carrierTrust,
                     lockedSecurity: packet.asset.security
                 };
-                //carrier.asset.trust = carrierTrust;
-                //carrier.asset.lockedSecurity = packet.asset.security;
-                console.log("carrier2");
-                console.log(carrier);
 
                 store.account.set(carrier.address, carrier);
                 /**
@@ -79,15 +67,12 @@ class StartTransportTransaction extends BaseTransaction {
                  * - Set status to "ongoing"
                  * - set carrier to ID of the carrier
                  */
-                //packet.asset.status = "ongoing";
-                //packet.asset.carrier = carrier.address;
                 packet.asset = {
                     ...packet.asset,
                     status: "ongoing",
                     carrier: carrier.address
                 };
-                console.log("packet2");
-                console.log(packet);
+
                 store.account.set(packet.address, packet);
             } else {
                 errors.push(
@@ -114,15 +99,17 @@ class StartTransportTransaction extends BaseTransaction {
 
     async undoAsset(store) {
         const errors = [];
-        const packet = await store.account.get(this.asset.recipientId);
+        const packet = await store.account.get(this.asset.packetId);
         const carrier = await store.account.get(this.senderId);
         /* --- Revert carrier account --- */
-        const carrierBalanceWithSecurity = BigInt(carrier.balance) + BigInt(packet.assset.security);
-        carrier.balance = carrierBalanceWithSecurity.toString();
+        carrier.balance = carrier.balance + BigInt(packet.asset.security);
+
         store.account.set(carrier.address, carrier);
         /* --- Revert packet account --- */
-        packet.asset.deliveryStatus = "pending";
-        packet.asset.carrier = null;
+        packet.asset = {
+            deliveryStatus: "pending",
+            carrier: null
+        };
         store.account.set(packet.address, packet);
         return errors;
     }

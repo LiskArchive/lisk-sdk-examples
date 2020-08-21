@@ -53,9 +53,14 @@ class LightAlarmTransaction extends BaseTransaction {
         const packet = await store.account.get(this.senderId);
 
         /* --- Revert packet status --- */
-        packet.asset.status = null;
-        packet.asset.alarms.light.pop();
-
+        const lightAlarms = packet.asset.alarms.light.pop();
+        packet.asset = {
+            ...packet.asset,
+            status: 'ongoing',
+            alarms : {
+                light: lightAlarms
+            }
+        };
         store.account.set(packet.address, packet);
         return errors;
     }

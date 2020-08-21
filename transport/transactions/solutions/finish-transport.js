@@ -66,10 +66,6 @@ class FinishTransportTransaction extends BaseTransaction {
         let carrier = await store.account.get(packet.asset.carrier);
         let sender = await store.account.get(packet.asset.sender);
         // if the transaction has been signed by the packet recipient
-        console.log('this.asset.senderId: ' + this.senderId);
-        console.log('packet.asset.recipient: ' + packet.asset.recipient);
-        const cmpr = this.senderId === packet.asset.recipient;
-        console.log('cmpr: ' + cmpr);
         if (this.senderId === packet.asset.recipient) {
             // if the packet status isn't "ongoing" or "alarm"
             if (packet.asset.status !==  "ongoing" && packet.asset.status !== "alarm") {
@@ -91,9 +87,8 @@ class FinishTransportTransaction extends BaseTransaction {
                  * - Add postage & security to balance
                  * - Earn 1 trustpoint
                  */
-                const carrierBalanceWithSecurityAndPostage = carrier.balance + BigInt(packet.asset.security) + BigInt(packet.asset.postage);
+                carrier.balance = carrier.balance + BigInt(packet.asset.security) + BigInt(packet.asset.postage);
                 const trustInc = carrier.asset.trust ? BigInt(carrier.asset.trust) + BigInt(1) : BigInt(1);
-                carrier.balance = carrierBalanceWithSecurityAndPostage;
 
                 carrier.asset = {
                     ...carrier.asset,
@@ -121,10 +116,7 @@ class FinishTransportTransaction extends BaseTransaction {
              * Update the Sender account:
              * - Add postage and security to balance
              */
-            const senderBalanceWithSecurityAndPostage = BigInt(sender.balance) + BigInt(packet.asset.security) + BigInt(packet.asset.postage);
-            const trustDec = carrier.asset.trust ? BigInt(carrier.asset.trust) - BigInt(1) : BigInt(-1);
-
-            sender.balance = senderBalanceWithSecurityAndPostage;
+            sender.balance = sender.balance + BigInt(packet.asset.security) + BigInt(packet.asset.postage);
 
             store.account.set(sender.address, sender);
             /**
@@ -132,11 +124,12 @@ class FinishTransportTransaction extends BaseTransaction {
              * - Reduce trust by 1
              * - Set lockedSecurity to 0
              */
+            const trustDec = carrier.asset.trust ? BigInt(carrier.asset.trust) - BigInt(1) : BigInt(-1);
             carrier.asset = {
                 ...carrier.asset,
                 trust: trustDec.toString(),
                 lockedSecurity: null
-            }
+            };
 
             store.account.set(carrier.address, carrier);
             /**
@@ -167,34 +160,44 @@ class FinishTransportTransaction extends BaseTransaction {
 
     async undoAsset(store) {
         const errors = [];
-        const packet = await store.account.get(this.asset.packetId);
-        const carrier = await store.account.get(packet.carrier);
-        const sender = await store.account.get(packet.sender);
+        const packet = await store.account.get(this.asset.recipientId);
+        const carrier = await store.account.get(packet.asset.carrier);
+        const sender = await store.account.get(packet.asset.sender);
         /* --- Revert successful transport --- */
         if ( this.asset.status === "success") {
             /* --- Revert carrier account --- */
-            const carrierBalanceWithoutSecurityAndPostage = BigInt(carrier.balance) = BigInt(packet.asset.security) - BigInt(packet.asset.postage);
+            carrier.balance = carrier.balance - BigInt(packet.asset.security) - BigInt(packet.asset.postage);
 
-            carrier.balance = carrierBalanceWithoutSecurityAndPostage.toString();
-            carrier.asset.lockedSecurity = packet.asset.security;
-            carrier.asset.trust--;
+            const trustDec = carrier.asset.trust ? BigInt(carrier.asset.trust) - BigInt(1) : BigInt(-1);
+            carrier.asset = {
+                ...carrier.asset,
+                trust: trustDec.toString(),
+                lockedSecurity: packet.asset.security
+            };
 
             store.account.set(carrier.address, carrier);
 
-        /* --- Revert failed transport --- */
+            /* --- Revert failed transport --- */
         } else {
             /* --- Revert sender account --- */
-            const senderBalanceWithoutSecurityAndPostage = BigInt(sender.balance) - BigInt(packet.asset.security) - BigInt(packet.asset.postage);
-            sender.balance = senderBalanceWithoutSecurityAndPostage.toString();
+            sender.balance = sender.balance - BigInt(packet.asset.security) - BigInt(packet.asset.postage);
             store.account.set(sender.address, sender);
             /* --- Revert carrier account --- */
-            carrier.asset.trust++;
-            carrier.asset.lockedSecurity = packet.asset.security;
+            const trustInc = carrier.asset.trust ? BigInt(carrier.asset.trust) + BigInt(1) : BigInt(1);
+            carrier.asset = {
+                ...carrier.asset,
+                trust: trustInc.toString(),
+                lockedSecurity: packet.asset.security
+            };
             store.account.set(carrier.address, carrier);
         }
         /* --- Revert packet account --- */
         packet.balance = packet.asset.postage;
         packet.asset.status = "ongoing";
+        packet.asset = {
+            ...packet.asset,
+            status: 'ongoing'
+        };
 
         store.account.set(packet.address, packet);
         return errors;
