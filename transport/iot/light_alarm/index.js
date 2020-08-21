@@ -7,41 +7,44 @@ const { APIClient } = require('@liskhq/lisk-api-client');
 const {getNetworkIdentifier} = require('@liskhq/lisk-cryptography');
 
 const networkIdentifier = getNetworkIdentifier(
-	"23ce0366ef0a14a91e5fd4b1591fc880ffbef9d988ff8bebf8f3666b0c09597d",
+	"19074b69c97e6f6b86969bb62d4f15b888898b499777bda56a3a2ee642a7f20a",
 	"Lisk",
 );
 // Enter here the IP of the node you want to reach for API requests
 // Check the IP by running `ifconfig` inside your local terminal
 const api = new APIClient(['http://localhost:4000']);
 
-// Check config file or curl localhost:4000/api/node/constants to verify your epoc time (OK when using /transport/node/index.js)
-const dateToLiskEpochTimestamp = date => (
-    Math.floor(new Date(date).getTime() / 1000) - Math.floor(new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)).getTime() / 1000)
-);
-
 /* Note: Always update to the package you are using */
 const packetCredentials = { /* Insert packet credentials here (retrieved from "Initialize" page of the client app) */};
+
 
 setInterval(() => {
 	let state = GPIO.read(4);
 	if(state === 0) {
 		console.log('Package has been opened! Send lisk transaction!');
+
 		// Uncomment the below code in step 1.3 of the workshop
-        /*let tx =  new LightAlarmTransaction({
-            timestamp: dateToLiskEpochTimestamp(new Date()),
-            networkIdentifier: networkIdentifier
-        });
+        /*api.accounts.get({address: packetCredentials.address}).then(response1 => {
 
-        tx.sign(packetCredentials.passphrase);
+			let tx =  new LightAlarmTransaction({
+				asset: {
+					timestamp: new Date().getTime() / 1000
+				},
+				fee: transactions.utils.convertLSKToBeddows('0.01'),
+				nonce: response1.data[0].nonce
+			});
 
-        api.transactions.broadcast(tx.toJSON()).then(res => {
-            console.log("++++++++++++++++ API Response +++++++++++++++++");
-            console.log(res.data);
-            console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
-            console.log(tx.stringify());
-            console.log("++++++++++++++++ End Script +++++++++++++++++");
-        }).catch(err => {
-            console.dir(err);
+            tx.sign(networkIdentifier, packetCredentials.passphrase);
+
+	        api.transactions.broadcast(tx.toJSON()).then(res => {
+	            console.log("++++++++++++++++ API Response +++++++++++++++++");
+	            console.log(res.data);
+	            console.log("++++++++++++++++ Transaction Payload +++++++++++++++++");
+	            console.log(tx.stringify());
+	            console.log("++++++++++++++++ End Script +++++++++++++++++");
+	        }).catch(err => {
+	            console.dir(err);
+	        });
         });*/
 	} else {
 		console.log('Alles gut');

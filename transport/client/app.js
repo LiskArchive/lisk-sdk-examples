@@ -188,7 +188,6 @@ app.get('/initialize', async(req, res) => {
     };
     api.accounts.get({address: accounts.genesis.address}).then(response1 => {
         const packetCredentials = getPacketCredentials();
-        const nonce = parseInt(response1.data[0].nonce);
 
         let tx = new transactions.TransferTransaction({
             asset: {
@@ -196,7 +195,7 @@ app.get('/initialize', async(req, res) => {
                 recipientId: packetCredentials.address,
             },
             fee: transactions.utils.convertLSKToBeddows('0.1'),
-            nonce: nonce.toString(),
+            nonce: response1.data[0].nonce,
         });
         tx.sign(networkIdentifier,accounts.genesis.passphrase);
         console.log("====== tx.toJSON() =====");
@@ -303,14 +302,13 @@ app.post('/faucet', function (req, res) {
     const amount = req.body.amount;
     api.accounts.get({address: accounts.genesis.address}).then(response1 => {
 
-        const nonce = parseInt(response1.data[0].nonce);
         const fundTransaction = transactions.transfer({
             amount: transactions.utils.convertLSKToBeddows(amount),
             recipientId: address,
             passphrase: accounts.genesis.passphrase,
             networkIdentifier,
             fee: transactions.utils.convertLSKToBeddows('0.1'),
-            nonce: nonce.toString(),
+            nonce: response1.data[0].nonce,
         });
 
         api.transactions.broadcast(fundTransaction).then(response2 => {
