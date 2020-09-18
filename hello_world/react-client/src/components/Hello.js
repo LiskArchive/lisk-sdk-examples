@@ -18,6 +18,7 @@ class Hello extends Component {
 
         this.state = {
             hello: '',
+            fee: '',
             nonce: '',
             passphrase: '',
             response: { meta: { status: false }},
@@ -38,18 +39,24 @@ class Hello extends Component {
             asset: {
                 hello: this.state.hello,
             },
-            fee: utils.convertLSKToBeddows('0.1').toString(),
+            fee: this.state.fee.toString(),
             nonce: this.state.nonce.toString(),
         });
 
         helloTransaction.sign(networkIdentifier,this.state.passphrase);
 
-        api.transactions.broadcast(helloTransaction.toJSON()).then(response => {
-            this.setState({response:response});
+        if ( helloTransaction.minFee() > helloTransaction.fee) {
+            this.setState({response:"Please provide a higher fee. Minimum fee for the current transaction: " + helloTransaction.minFee()});
             this.setState({transaction:helloTransaction});
-        }).catch(err => {
-            console.log(JSON.stringify(err, null, 2));
-        });
+        } else {
+
+            api.transactions.broadcast(helloTransaction.toJSON()).then(response => {
+                this.setState({response:response});
+                this.setState({transaction:helloTransaction});
+            }).catch(err => {
+                console.log(JSON.stringify(err, null, 2));
+            });
+        }
     }
 
     render() {
@@ -61,6 +68,10 @@ class Hello extends Component {
                     <label>
                         Hello message:
                         <input type="text" id="hello" name="hello" onChange={this.handleChange} />
+                    </label>
+                    <label>
+                        Fee:
+                        <input type="text" id="fee" name="fee" onChange={this.handleChange} />
                     </label>
                     <label>
                         Nonce:
