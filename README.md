@@ -20,5 +20,5 @@ In addition, anyone can become a carrier. For example, you can pick up a packet 
 ## [Hello World](https://lisk.io/documentation/lisk-sdk/tutorials/hello-world.html)
 A hello world application of the Lisk SDK. Guides through the basic flow of using Lisk SDK. By creating a new custom transaction with no practical use case, you can get an idea of why and how to implement the required methods of the custom transaction interface.
 
-## [NFT Demo]
+## [NFT Demo](./nft)
 A blockchain application built with the Lisk SDK 5. It wil demonstrate the use of On-Chain and Off-Chain architecture by creating a module and a plugin for Lisk app. Few of transactions are also included. It also equipped with a react frontend app to show the usage of transactions.
