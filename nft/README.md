@@ -1,40 +1,41 @@
-# Hello World
+# NFT Demo
 
-This is a Hello World application created using alpha version of `lisk-sdk`.
-Find the [full step by step guide here](https://lisk.io/documentation/start/tutorials/hello-world).
+This is a NFT Blockchain application created using `Version 5` of `lisk-sdk`.
 
-#### Install dependencies:
+## Install dependencies
 
-```
-npm ci
-```
-
-#### Start node:
-
-```
-node index.js | npx bunyan -o short
+```bash
+cd blockchain_app && npm ci
+cd frontend_app && npm ci
 ```
 
-#### Post a custom transaction to `/api/transactions`:
+## Start node
 
-##### Example:
-```
-curl -XPOST -H "Content-type: application/json" -d '{
-   "id":"17201273500760578616",
-   "amount":"0",
-   "type":10,
-   "timestamp":104523093,
-   "senderPublicKey":"c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f",
-   "senderId":"16313739661670634666L",
-   "recipientId":"10881167371402274308L",
-   "fee":"100000000",
-   "signature":"bcb64b1d2efa0450f143296eb0d9ffd5159fc04f9d3f1d3a95c261912632db7910d05e3be4c34cfc46f001ebdba66b8c17cbaddb0df4ef31245b4ab0270c3e00",
-   "signatures":[],
-   "asset":{"hello":"world"}
-}' http://localhost:4000/api/transactions
+```bash
+cd blockchain_app; node index.js
 ```
 
-#### Verify the transaction by querying endpoint `/api/transactions?id=`:
+## Start frontend
+
+```bash
+cd frontend_app; npm start
 ```
-curl -s http://localhost:4000/api/transactions?id=17201273500760578616
-```
+
+### Test transactions
+
+Follow these steps to test it:
+
+1. In the UI from speed dial, click on first option to get some random account.
+2. Copy the address and passphrase to somewhere else.
+3. Now choose second option from speed dial and transfer funds to that account. You can use genesis account passphrase for it.
+4. Repeat the above steps to create another account.
+5. Now choose third option from speed dial to create an NFT Token.
+6. Provide initial value, purchase margin, fee and the passphrase of first account to sign the transaction.
+7. Once that is done and you refresh the page, you will see an NFT token on the home page.
+8. Later you can click on the purchase button of the token test the purchase transaction.
+
+## Caveat
+
+1. Note the frontend app is not auto-refreshed right now. Once you notice the block height change you have to refresh it manually.
+2. The frontend app is not keeping track of account nonce, so try to sending one transaction from one account in a block.
+3. The NFT token transfer transaction is not yet implemented in frontend, feel free to contribute.
