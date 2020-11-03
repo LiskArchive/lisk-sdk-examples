@@ -6,6 +6,11 @@ const {
     AfterGenesisBlockApplyContext,
 } = require('lisk-sdk');
 const { HelloAsset } = require('./hello_asset');
+const {
+    CHAIN_STATE_HELLO_COUNTER
+} = require('./schemas');
+
+const x = new HelloAsset();
 
 export class HelloModule extends BaseModule {
     name = 'hello';
@@ -22,10 +27,10 @@ export class HelloModule extends BaseModule {
             hello: '',
         },
     };
-    transactionAssets: [new HelloAsset()];
+    transactionAssets = [ new HelloAsset() ];
     actions = {
         amountOfHellos: async (hello) => {
-            this._channel.subscribe()
+            return await this._dataAccess.getChainState(CHAIN_STATE_HELLO_COUNTER);
         },
     };
     events = ['someEvent','anotherEvent'];
