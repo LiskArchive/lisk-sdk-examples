@@ -29,18 +29,18 @@ export class HelloModule extends BaseModule {
     };
     transactionAssets = [ new HelloAsset() ];
     actions = {
-        amountOfHellos: async (hello) => {
+        amountOfHellos: async () => {
             return await this._dataAccess.getChainState(CHAIN_STATE_HELLO_COUNTER);
         },
     };
-    events = ['someEvent','anotherEvent'];
+    events = ['newHello'];
     reducers = {};
     beforeTransactionApply(context: TransactionApplyContext): Promise<void> {
         // Code in here is applied before a transaction is applied.
-        this._channel.publish('hello:someEvent', { info: 'sample' });
     };
     afterTransactionApply(context: TransactionApplyContext): Promise<void> {
         // Code in here is applied after a transaction is applied.
+        this._channel.publish('hello:newHello', { sender: transaction.senderAddress, hello: transaction.hello });
     };
     afterGenesisBlockApply(context: AfterGenesisBlockApplyContext): Promise<void> {
         // Code in here is applied after a genesis block is applied.
