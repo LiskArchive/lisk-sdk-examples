@@ -33,15 +33,10 @@ export class HelloAsset extends BaseAsset {
         const senderAddress = transaction.senderAddress;
         const senderAccount = await stateStore.account.get(senderAddress);
 
-        if (senderAccount.asset && senderAccount.asset.hello) {
-            throw new InvalidTransactionError(
-                'You cannot send a hello transaction multiple times',
-                transaction.id
-            );
-        } else {
-            sender.asset = { hello: this.asset.hello };
-            store.account.set(sender.address, sender);
-        }
+
+        senderAccount.hello = this.hello;
+        stateStore.account.set(senderAccount.address, senderAccount);
+
 
         const senderBalance = await reducerHandler.invoke("token:getBalance", {
             address: senderAddress,
