@@ -5,7 +5,7 @@ const {
     BeforeBlockApplyContext,
     AfterGenesisBlockApplyContext,
 } = require('lisk-sdk');
-const { CustomAsset } = require('./custom_asset');
+const { HelloAsset } = require('./hello_asset');
 
 export class HelloModule extends BaseModule {
     name = 'hello';
@@ -22,10 +22,10 @@ export class HelloModule extends BaseModule {
             hello: '',
         },
     };
-    transactionAssets: [new CustomAsset()];
+    transactionAssets: [new HelloAsset()];
     actions = {
-        someAction: async () => {
-            return this.id
+        amountOfHellos: async (hello) => {
+            this._channel.subscribe()
         },
     };
     events = ['someEvent','anotherEvent'];

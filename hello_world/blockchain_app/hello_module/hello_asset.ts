@@ -1,17 +1,20 @@
 const {
     BaseAsset,
     ValidationError,
+    codec
 } = require('lisk-sdk');
+const {
+    helloCounterSchema,
+    CHAIN_STATE_HELLO_COUNTER
+} = require('./schemas');
 
-interface Asset {
-    Data: string;
-}
 export class HelloAsset extends BaseAsset {
     name = 'helloAsset';
     id = 0;
     schema = {
-        $id: '/helloAsset',
+        $id: '/hello/asset',
         type: 'object',
+        required: ["hello"],
         properties: {
             hello: {
                 dataType: 'string',
@@ -23,7 +26,7 @@ export class HelloAsset extends BaseAsset {
     validate({asset}) {
         if (!asset.hello || typeof asset.hello !== 'string' || asset.hello.length > 64) {
             throw new ValidationError(
-                'Invalid "asset.hello" defined on transaction: A string value no longer than 64 characters',
+                'Invalid "asset.hello" defined on transaction: A string value no longer than 64 characters is expected',
                 asset.hello,
             );
         }
@@ -34,42 +37,16 @@ export class HelloAsset extends BaseAsset {
         const senderAccount = await stateStore.account.get(senderAddress);
 
 
-        senderAccount.hello = this.hello;
+        senderAccount.hello = asset.hello;
         stateStore.account.set(senderAccount.address, senderAccount);
 
-
-        const senderBalance = await reducerHandler.invoke("token:getBalance", {
-            address: senderAddress,
-        });
-        const minRemainingBalance = await reducerHandler.invoke(
-            "token:getMinRemainingBalance"
+        let counter = await stateStore.chain.get(
+            CHAIN_STATE_HELLO_COUNTER
         );
 
-        if (asset.initValue < minRemainingBalance) {
-            throw new Error("NFT init value is too low.");
-        }
-
-        if (senderBalance < asset.initValue + minRemainingBalance) {
-            throw new Error("Sender balance is not enough to create an NFT");
-        }
-
-        const nftToken = createNFTToken({
-            ownerAddress: senderAddress,
-            nonce: transaction.nonce,
-            value: asset.initValue,
-            minPurchaseMargin: asset.minPurchaseMargin,
-        });
-
-        senderAccount.nft.ownNFTs.push(nftToken.id);
-        await stateStore.account.set(senderAddress, senderAccount);
-
-        await reducerHandler.invoke("token:debit", {
-            address: senderAddress,
-            amount: asset.initValue,
-        });
-
-        const allTokens = await getAllNFTTokens(stateStore);
-        allTokens.push(nftToken);
-        await setAllNFTTokens(stateStore, allTokens);
+        await stateStore.chain.set(
+            CHAIN_STATE_HELLO_COUNTER,
+            codec.encode(helloCounterSchema, ++counter)
+        );
     }
 }
