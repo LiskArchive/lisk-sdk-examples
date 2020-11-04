@@ -1,14 +1,15 @@
-const {
+import {
     BaseModule,
-    TransactionApplyContext,
-    AfterBlockApplyContext,
     BeforeBlockApplyContext,
+    AfterBlockApplyContext,
     AfterGenesisBlockApplyContext,
-} = require('lisk-sdk');
-const { HelloAsset } = require('./hello_asset');
-const {
+    TransactionApplyContext,
+    GenesisConfig,
+} from 'lisk-sdk';
+import { HelloAsset } from './hello_asset';
+import {
     CHAIN_STATE_HELLO_COUNTER
-} = require('./schemas');
+} from './schemas';
 
 const x = new HelloAsset();
 
@@ -35,58 +36,26 @@ export class HelloModule extends BaseModule {
     };
     events = ['newHello'];
     reducers = {};
-    beforeTransactionApply(context: TransactionApplyContext): Promise<void> {
+    async beforeTransactionApply({transaction, stateStore}: TransactionApplyContext): Promise<void> {
         // Code in here is applied before a transaction is applied.
     };
-    afterTransactionApply(context: TransactionApplyContext): Promise<void> {
+
+    async afterTransactionApply({transaction, stateStore}: TransactionApplyContext): Promise<void> {
         // Code in here is applied after a transaction is applied.
         this._channel.publish('hello:newHello', { sender: transaction.senderAddress, hello: transaction.hello });
     };
-    afterGenesisBlockApply(context: AfterGenesisBlockApplyContext): Promise<void> {
+    async afterGenesisBlockApply(context: AfterGenesisBlockApplyContext): Promise<void> {
         // Code in here is applied after a genesis block is applied.
     };
-    beforeBlockApply(context: BeforeBlockApplyContext): Promise<void> {
+    async beforeBlockApply(context: BeforeBlockApplyContext): Promise<void> {
         // Code in here is applied before a block is applied.
     }
-    afterBlockApply(context: AfterBlockApplyContext): Promise<void> {
+    async afterBlockApply(context: AfterBlockApplyContext): Promise<void> {
         // Code in here is applied after a block is applied.
         this._channel.subscribe('app:chain:fork ', ({ data }) => {
             console.log(data);
         });
     }
 }
-
-class NFTModule extends BaseModule {
-    name = "nft";
-    id = 1000;
-    transactionAssets = [new CreateNFT(), new TransferNFT(), new PurchaseNFT()];
-
-    accountSchema = {
-        type: "object",
-        required: ["hello"],
-        properties: {
-            hello: {
-                type: "string",
-                fieldNumber: 1,
-            },
-        },
-        default: {
-            hello: "",
-        },
-    };
-
-    actions = {
-        helloAction: async () => {
-            return this._dataAccess
-        },
-    };
-
-    events = {
-        helloAction: async () => {
-            return this._dataAccess
-        },
-    };
-}
-
 
 module.exports = HelloModule;
