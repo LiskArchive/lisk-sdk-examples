@@ -1,17 +1,10 @@
 import {
     BaseModule,
-    BeforeBlockApplyContext,
-    AfterBlockApplyContext,
-    AfterGenesisBlockApplyContext,
-    TransactionApplyContext,
-    GenesisConfig,
 } from 'lisk-sdk';
 import { HelloAsset } from './hello_asset';
 import {
     CHAIN_STATE_HELLO_COUNTER
 } from './schemas';
-
-const x = new HelloAsset();
 
 export class HelloModule extends BaseModule {
     name = 'hello';
@@ -36,25 +29,25 @@ export class HelloModule extends BaseModule {
     };
     events = ['newHello'];
     reducers = {};
-    async beforeTransactionApply({transaction, stateStore}: TransactionApplyContext): Promise<void> {
+    async beforeTransactionApply({transaction, stateStore, reducerHandler}) {
         // Code in here is applied before a transaction is applied.
     };
 
-    async afterTransactionApply({transaction, stateStore}: TransactionApplyContext): Promise<void> {
+    async afterTransactionApply({transaction, stateStore, reducerHandler}) {
         // Code in here is applied after a transaction is applied.
         this._channel.publish('hello:newHello', { sender: transaction.senderAddress, hello: transaction.hello });
     };
-    async afterGenesisBlockApply(context: AfterGenesisBlockApplyContext): Promise<void> {
+    async afterGenesisBlockApply(context) {
         // Code in here is applied after a genesis block is applied.
     };
-    async beforeBlockApply(context: BeforeBlockApplyContext): Promise<void> {
+    async beforeBlockApply(context) {
         // Code in here is applied before a block is applied.
     }
-    async afterBlockApply(context: AfterBlockApplyContext): Promise<void> {
+    async afterBlockApply(context) {
         // Code in here is applied after a block is applied.
-        this._channel.subscribe('app:chain:fork ', ({ data }) => {
+        /*this._channel.subscribe('app:chain:fork ', ({ data }) => {
             console.log(data);
-        });
+        });*/
     }
 }
 

@@ -49,7 +49,7 @@ class HelloAPIPlugin extends BasePlugin {
 //return fetch("http://localhost:8080/api/hello_counter")
 //     .then((res) => res.json())
 //     .then((res) => res.data);
-    
+
   async unload() {
     await new Promise((resolve, reject) => {
       this._server.close((err) => {
