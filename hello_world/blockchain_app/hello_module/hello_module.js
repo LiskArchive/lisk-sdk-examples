@@ -1,12 +1,8 @@
-import {
-    BaseModule,
-} from 'lisk-sdk';
-import { HelloAsset } from './hello_asset';
-import {
-    CHAIN_STATE_HELLO_COUNTER
-} from './schemas';
+const { BaseModule } = require('lisk-sdk');
+const HelloAsset = require('./hello_asset');
+const { CHAIN_STATE_HELLO_COUNTER } = require('./schemas');
 
-export class HelloModule extends BaseModule {
+class HelloModule extends BaseModule {
     name = 'hello';
     id = 1000;
     accountSchema = {

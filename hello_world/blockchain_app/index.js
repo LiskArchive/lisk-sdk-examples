@@ -1,6 +1,6 @@
-const { Application, genesisBlockDevnet, configDevnet} = require('lisk-sdk');
-const HelloModule = require('./hello_module/hello_module');
-const HelloPlugin = require('./hello_plugin/index');
+const { Application, genesisBlockDevnet, configDevnet, utils} = require('lisk-sdk');
+const { HelloModule } = require('./hello_module');
+const { HelloAPIPlugin } = require('./hello_plugin');
 
 // Update genesis block accounts to include the hello attribute
 genesisBlockDevnet.header.asset.accounts = genesisBlockDevnet.header.asset.accounts.map(
@@ -23,7 +23,7 @@ const app = new Application(genesisBlockDevnet, appConfig);
 
 
 app.registerModule(HelloModule);
-app.registerPlugin(HelloPlugin);
+app.registerPlugin(HelloAPIPlugin);
 
 app
 	.run()

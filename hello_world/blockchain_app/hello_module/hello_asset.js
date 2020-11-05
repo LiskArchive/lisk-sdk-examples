@@ -8,7 +8,7 @@ const {
     CHAIN_STATE_HELLO_COUNTER
 } = require('./schemas');
 
-export class HelloAsset extends BaseAsset {
+class HelloAsset extends BaseAsset {
     name = 'helloAsset';
     id = 0;
     schema = {
@@ -50,3 +50,5 @@ export class HelloAsset extends BaseAsset {
         );
     }
 }
+
+module.exports = HelloAsset;

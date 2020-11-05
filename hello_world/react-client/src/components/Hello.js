@@ -3,8 +3,10 @@ import {
     HelloTransaction,
 } from 'lisk-hello-transactions';
 import { api } from '../api.js';
+import { createHelloTx } from '../transactions/create_hello_tx';
 import { cryptography } from '@liskhq/lisk-client';
 import {utils} from "@liskhq/lisk-transactions";
+import {createNFTToken} from "../../../../nft/frontend_app/src/utils/transactions/create_nft_token";
 
 const networkIdentifier = cryptography.getNetworkIdentifier(
     "19074b69c97e6f6b86969bb62d4f15b888898b499777bda56a3a2ee642a7f20a",
@@ -35,6 +37,12 @@ class Hello extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
+        const res = await createHelloTx({
+            ...data,
+            networkIdentifier: nodeInfo.networkIdentifier,
+            minFeePerByte: nodeInfo.minFeePerByte,
+        });
+        await api.sendTransactions(res.tx);
         const helloTransaction = new HelloTransaction({
             asset: {
                 hello: this.state.hello,

@@ -6,7 +6,7 @@ const helloCounterSchema = {
     required: ["helloCounter"],
     properties: {
         helloCounter: {
-            dataType: "number",
+            dataType: "uint32",
             fieldNumber: 1,
         },
     },
