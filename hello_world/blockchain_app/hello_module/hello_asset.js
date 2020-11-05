@@ -14,9 +14,9 @@ class HelloAsset extends BaseAsset {
     schema = {
         $id: '/hello/asset',
         type: 'object',
-        required: ["hello"],
+        required: ["helloString"],
         properties: {
-            hello: {
+            helloString: {
                 dataType: 'string',
                 fieldNumber: 1,
             },
@@ -37,7 +37,7 @@ class HelloAsset extends BaseAsset {
         const senderAccount = await stateStore.account.get(senderAddress);
 
 
-        senderAccount.hello = asset.hello;
+        senderAccount.hello.helloMessage = asset.helloString;
         stateStore.account.set(senderAccount.address, senderAccount);
 
         let counter = await stateStore.chain.get(

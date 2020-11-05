@@ -8,16 +8,17 @@ class HelloModule extends BaseModule {
     accountSchema = {
         type: 'object',
         properties: {
-            hello: {
+            helloMessage: {
                 fieldNumber: 1,
                 dataType: 'string',
             },
         },
         default: {
-            hello: '',
+            helloMessage: '',
         },
     };
     transactionAssets = [ new HelloAsset() ];
+    transactionAssets = [];
     actions = {
         amountOfHellos: async () => {
             return await this._dataAccess.getChainState(CHAIN_STATE_HELLO_COUNTER);
@@ -31,7 +32,7 @@ class HelloModule extends BaseModule {
 
     async afterTransactionApply({transaction, stateStore, reducerHandler}) {
         // Code in here is applied after a transaction is applied.
-        this._channel.publish('hello:newHello', { sender: transaction.senderAddress, hello: transaction.hello });
+        this._channel.publish('hello:newHello', { sender: transaction.senderAddress, hello: transaction.helloString });
     };
     async afterGenesisBlockApply(context) {
         // Code in here is applied after a genesis block is applied.
