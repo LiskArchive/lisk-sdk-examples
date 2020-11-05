@@ -18,7 +18,6 @@ class HelloModule extends BaseModule {
         },
     };
     transactionAssets = [ new HelloAsset() ];
-    transactionAssets = [];
     actions = {
         amountOfHellos: async () => {
             return await this._dataAccess.getChainState(CHAIN_STATE_HELLO_COUNTER);

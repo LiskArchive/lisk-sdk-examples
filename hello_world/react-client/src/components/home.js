@@ -6,11 +6,11 @@ class Home extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { data: await fetchHelloCounter() };
+        this.state = { data: 0 };
     }
 
-    componentDidMount() {
-
+    async componentDidMount() {
+        this.state = { data: await fetchHelloCounter() };
     }
 
     render() {
@@ -25,5 +25,15 @@ class Home extends Component {
     }
 }
 
+/*import React from 'react';
+
+const Home = () => {
+    return (
+        <div>
+        <h2>Hello Lisk!</h2>
+    <p>A simple frontend for blockchain applications built with the Lisk SDK.</p>
+    </div>
+);
+};*/
 
 export default Home;

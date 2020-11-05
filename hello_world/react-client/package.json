@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --mode development --open --hot",
-    "build": "webpack --mode production",
-    "postinstall": "node ./bufferFix.js"
+    "build": "webpack --mode production"
   },
   "keywords": [],
   "author": "",

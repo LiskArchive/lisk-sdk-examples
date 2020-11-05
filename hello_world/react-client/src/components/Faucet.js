@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { api } from '../api.js';
+import * as api from '../api.js';
 import accounts from '../accounts.json';
-import{ transfer, utils } from '@liskhq/lisk-transactions';
-import * as cryptography from '@liskhq/lisk-cryptography';
-
-const networkIdentifier = cryptography.getNetworkIdentifier(
-    "19074b69c97e6f6b86969bb62d4f15b888898b499777bda56a3a2ee642a7f20a", //payloadHash
-    "Lisk", //Community Identifier
-);
+import { transfer } from '../transactions/transfer';
+import {transactions} from "@liskhq/lisk-client";
 
 class Faucet extends Component {
 
@@ -17,7 +12,7 @@ class Faucet extends Component {
         this.state = {
             address: '',
             amount: '',
-            response: { meta: { status: false }},
+            fee: '',
             transaction: {},
         };
     }
@@ -28,30 +23,22 @@ class Faucet extends Component {
         this.setState({[nam]: val});
     };
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
 
-
-        api.accounts.get({address: accounts.genesis.address}).then(response1 => {
-
-            const nonce = parseInt(response1.data[0].nonce);
-            const fundTransaction = transfer({
-                amount: utils.convertLSKToBeddows(this.state.amount),
-                recipientId: this.state.address,
-                passphrase: accounts.genesis.passphrase,
-                networkIdentifier,
-                fee: utils.convertLSKToBeddows('0.1'),
-                nonce: nonce.toString(),
-            });
-
-            //The TransferTransaction is signed by the Genesis account
-            api.transactions.broadcast(fundTransaction).then(response2 => {
-                this.setState({response:response2});
-                this.setState({transaction:fundTransaction});
-            }).catch(err => {
-                console.log(JSON.stringify(err.errors, null, 2));
-            });
+        //The TransferTransaction is signed by the Genesis account
+        const res = await transfer({
+            recipientAddress: this.state.address,
+            amount: transactions.convertLSKToBeddows(this.state.amount),
+            fee: transactions.convertLSKToBeddows('0.1'),
+            passphrase: accounts.genesis.passphrase,
+            networkIdentifier: 'f9aa0b17154aa27aa17f585b96b19a6559ed6ef3805352188312912c7b9192e5',
+            minFeePerByte: 1000,
         });
+
+        const response = await api.sendTransactions(res.tx);
+        this.setState({response:response});
+        this.setState({transaction:res.tx});
     }
 
     render() {
@@ -70,7 +57,7 @@ class Faucet extends Component {
                     </label>
                     <input type="submit" value="Submit" />
                 </form>
-                {this.state.response.meta.status &&
+                {this.state.transaction &&
                     <div>
                         <pre>Transaction: {JSON.stringify(this.state.transaction, null, 2)}</pre>
                         <p>Response: {JSON.stringify(this.state.response, null, 2)}</p>

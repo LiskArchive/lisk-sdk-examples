@@ -1,4 +1,5 @@
-const { Application, genesisBlockDevnet, configDevnet, utils} = require('lisk-sdk');
+const { Application, configDevnet, utils, HTTPAPIPlugin} = require('lisk-sdk');
+const genesisBlockDevnet = require('./genesis-block');
 const { HelloModule } = require('./hello_module');
 const { HelloAPIPlugin } = require('./hello_plugin');
 
@@ -21,10 +22,11 @@ const appConfig = utils.objects.mergeDeep({}, configDevnet, {
     },
 });
 
-const app = new Application(genesisBlockDevnet, appConfig);
-
+const app = Application.defaultApplication(genesisBlockDevnet, appConfig);
 
 app.registerModule(HelloModule);
+
+app.registerPlugin(HTTPAPIPlugin);
 app.registerPlugin(HelloAPIPlugin);
 
 app

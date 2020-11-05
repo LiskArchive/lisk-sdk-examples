@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { passphrase, cryptography, Buffer } from '@liskhq/lisk-client';
+import { passphrase, cryptography, Buffer, codec } from '@liskhq/lisk-client';
 
 const newCredentials = () => {
     const pass = passphrase.Mnemonic.generateMnemonic();
     const keys = cryptography.getPrivateAndPublicKeyFromPassphrase(pass);
     const credentials = {
-        address: cryptography.getAddressFromPublicKey(keys.publicKey),
+        address: cryptography.getAddressFromPassphrase(pass).toString("hex"),
         passphrase: pass,
-        publicKey: keys.publicKey,
-        privateKey: keys.privateKey
+        publicKey: keys.publicKey.toString("hex"),
+        privateKey: keys.privateKey.toString("hex")
     };
     return credentials;
 };

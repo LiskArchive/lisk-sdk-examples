@@ -2,7 +2,7 @@
 
 import { transactions, codec, cryptography } from "@liskhq/lisk-client";
 import { getFullAssetSchema } from "./schema";
-import { fetchAccountInfo } from "../../api";
+import { fetchAccountInfo } from "../api";
 import {baseAssetSchema} from "../../../../nft/frontend_app/src/utils/common";
 
 export const createHelloTxSchema = {
