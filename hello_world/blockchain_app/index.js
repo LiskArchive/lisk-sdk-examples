@@ -6,7 +6,9 @@ const { HelloAPIPlugin } = require('./hello_plugin');
 genesisBlockDevnet.header.asset.accounts = genesisBlockDevnet.header.asset.accounts.map(
     (a) =>
         utils.objects.mergeDeep({}, a, {
-            hello: '',
+            hello: {
+                helloMessage: ''
+            },
         }),
 );
 
