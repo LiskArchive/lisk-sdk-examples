@@ -10,9 +10,6 @@ const helloCounterSchema = {
             fieldNumber: 1,
         },
     },
-    default: {
-        helloCounter: 0,
-    },
 };
 
 
