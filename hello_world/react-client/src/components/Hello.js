@@ -11,7 +11,6 @@ class Hello extends Component {
             hello: '',
             fee: '',
             passphrase: '',
-            response: { meta: { status: false }},
             transaction: {},
         };
     }
@@ -26,15 +25,16 @@ class Hello extends Component {
         event.preventDefault();
 
         const res = await createHelloTx({
-            hello: this.state.hello,
+            helloString: this.state.hello,
             fee: this.state.fee.toString(),
             passphrase: this.state.passphrase,
             networkIdentifier: 'f9aa0b17154aa27aa17f585b96b19a6559ed6ef3805352188312912c7b9192e5',
             minFeePerByte: 1000,
         });
-        const response = await api.sendTransactions(res.tx);
-        this.setState({response:response});
-        this.setState({transaction:res.tx});
+        await api.sendTransactions(res.tx).then((response) => {
+            this.setState({response: response});
+            this.setState({transaction: res.tx});
+        });
     };
 
     render() {
@@ -57,12 +57,10 @@ class Hello extends Component {
                     </label>
                     <input type="submit" value="Submit" />
                 </form>
-                {this.state.response.meta.status &&
                 <div>
                     <pre>Transaction: {JSON.stringify(this.state.transaction, null, 2)}</pre>
                     <p>Response: {JSON.stringify(this.state.response, null, 2)}</p>
                 </div>
-                }
             </div>
         );
     }

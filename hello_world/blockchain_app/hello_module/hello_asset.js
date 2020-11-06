@@ -1,8 +1,8 @@
 const {
     BaseAsset,
-    ValidationError,
     codec
 } = require('lisk-sdk');
+const { validator, LiskValidationError } = require('@liskhq/lisk-validator');
 const {
     helloCounterSchema,
     CHAIN_STATE_HELLO_COUNTER
@@ -20,15 +20,15 @@ class HelloAsset extends BaseAsset {
                 dataType: 'string',
                 fieldNumber: 1,
             },
-        },
+        }
     };
-
     validate({asset}) {
-        if (!asset.hello || typeof asset.hello !== 'string' || asset.hello.length > 64) {
-            throw new ValidationError(
+        if (!asset.helloString || typeof asset.helloString !== 'string' || asset.helloString.length > 64) {
+           /* throw new LiskValidationError(
                 'Invalid "asset.hello" defined on transaction: A string value no longer than 64 characters is expected',
-                asset.hello,
-            );
+                asset.helloString,
+            );*/
+           console.log('Invalid "asset.hello" defined on transaction: A string value no longer than 64 characters is expected');
         }
     };
 

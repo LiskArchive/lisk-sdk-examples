@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import "regenerator-runtime/runtime.js";
 /*
-import Accounts from './Accounts';
 import HelloAccounts from './HelloAccounts';
 import SendTransfer from './Transfer';
 import Transactions from './Transactions';
@@ -17,6 +16,8 @@ import Home from './home';
 import NewAccount from './NewAccount';
 import Faucet from './Faucet';
 import SendHello from './Hello';
+import Accounts from './Accounts';
+import Account from './Account';
 
 // The pages of this site are rendered dynamically
 // in the browser (not server rendered).
@@ -35,6 +36,7 @@ export default function App() {
                         <li><Link to="/send-hello">Send Hello</Link></li>
                         <hr />
                         <h3> Explore </h3>
+                        <li><Link to="/account">Account</Link></li>
                     </ul>
                 </Route>
 
@@ -57,6 +59,12 @@ export default function App() {
                     </Route>
                     <Route path="/faucet">
                         <Faucet />
+                    </Route>
+                    <Route path="/accounts">
+                        <Accounts />
+                    </Route>
+                    <Route path="/account">
+                        <Account />
                     </Route>
                 </Switch>
             </div>

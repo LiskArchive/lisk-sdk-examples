@@ -8,9 +8,9 @@ import {baseAssetSchema} from "../../../../nft/frontend_app/src/utils/common";
 export const createHelloTxSchema = {
     $id: "lisk/create-hello-asset",
     type: "object",
-    required: ["hello"],
+    required: ["helloString"],
     properties: {
-        hello: {
+        helloString: {
             dataType: 'string',
             fieldNumber: 1,
         },
@@ -18,8 +18,8 @@ export const createHelloTxSchema = {
 };
 
 const calcMinTxFee = (assetSchema, minFeePerByte, tx) => {
-    const assetBytes = codec.encode(assetSchema, tx.asset);
-    const bytes = codec.encode(baseAssetSchema, { ...tx, asset: assetBytes });
+    const assetBytes = codec.codec.encode(assetSchema, tx.asset);
+    const bytes = codec.codec.encode(baseAssetSchema, { ...tx, asset: assetBytes });
     return BigInt(bytes.length * minFeePerByte);
 };
 
@@ -47,7 +47,7 @@ export const createHelloTx = async ({
             fee: BigInt(transactions.convertLSKToBeddows(fee)),
             senderPublicKey: publicKey,
             asset: {
-                hello: helloString,
+                helloString: helloString,
             },
         },
         Buffer.from(networkIdentifier, "hex"),
@@ -56,7 +56,7 @@ export const createHelloTx = async ({
 
     return {
         id: id.toString("hex"),
-        tx: codec.toJSON(getFullAssetSchema(createHelloTxSchema), rest),
+        tx: codec.codec.toJSON(getFullAssetSchema(createHelloTxSchema), rest),
         minFee: calcMinTxFee(createHelloTxSchema, minFeePerByte, rest),
     };
 };

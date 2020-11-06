@@ -9,9 +9,7 @@ export const sendTransactions = async (tx) => {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(tx),
-    })
-        .then((res) => res.json())
-        .then((res) => res.data);
+    });
 };
 
 export const fetchAccountInfo = async (address) => {
@@ -26,3 +24,8 @@ export const fetchHelloCounter = async () => {
         .then((res) => res.data);
 };
 
+export const fetchAccounts = async (limit, offset) => {
+    return fetch(`http://localhost:4000/api/accounts?limit=${limit}&offset=${offset}`)
+        .then((res) => res.json())
+        .then((res) => res.data);
+};

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { api } from '../api.js';
+import * as api from '../api.js';
 
 const getData = async () => {
-    let offset = 0;
     let accounts = [];
     const accountsArray = [];
+    const limit = 100;
+    let offset = 0;
 
     do {
-        const retrievedAccounts = await api.accounts.get({ limit: 100, offset });
+        const retrievedAccounts = await api.fetchAccounts(limit,offset);
         accounts = retrievedAccounts.data;
         accountsArray.push(...accounts);
 
@@ -53,7 +54,7 @@ class Accounts extends Component {
                         }
                     </ul>
                 </section>
-                
+
             </div>
         );
     }

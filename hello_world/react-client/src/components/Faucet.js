@@ -29,16 +29,17 @@ class Faucet extends Component {
         //The TransferTransaction is signed by the Genesis account
         const res = await transfer({
             recipientAddress: this.state.address,
-            amount: transactions.convertLSKToBeddows(this.state.amount),
-            fee: transactions.convertLSKToBeddows('0.1'),
+            amount: this.state.amount,
+            fee: '0.1',
             passphrase: accounts.genesis.passphrase,
             networkIdentifier: 'f9aa0b17154aa27aa17f585b96b19a6559ed6ef3805352188312912c7b9192e5',
             minFeePerByte: 1000,
         });
 
-        const response = await api.sendTransactions(res.tx);
-        this.setState({response:response});
-        this.setState({transaction:res.tx});
+        await api.sendTransactions(res.tx).then((response) => {
+            this.setState({response:response.json()});
+            this.setState({transaction:res.tx});
+        });
     }
 
     render() {
