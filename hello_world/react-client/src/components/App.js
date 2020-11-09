@@ -6,18 +6,12 @@ import {
     Link
 } from "react-router-dom";
 import "regenerator-runtime/runtime.js";
-/*
-import HelloAccounts from './HelloAccounts';
-import SendTransfer from './Transfer';
-import Transactions from './Transactions';
-import HelloTransactions from './HelloTransactions';
-import Blocks from './Blocks';*/
 import Home from './home';
 import NewAccount from './NewAccount';
 import Faucet from './Faucet';
 import SendHello from './Hello';
-import Accounts from './Accounts';
 import Account from './Account';
+import Transfer from './Transer';
 
 // The pages of this site are rendered dynamically
 // in the browser (not server rendered).
@@ -34,19 +28,13 @@ export default function App() {
                         <li><Link to="/new-account">New Account</Link></li>
                         <li><Link to="/faucet">Faucet</Link></li>
                         <li><Link to="/send-hello">Send Hello</Link></li>
+                        <li><Link to="/send-transfer">Send Transfer</Link></li>
                         <hr />
                         <h3> Explore </h3>
                         <li><Link to="/account">Account</Link></li>
                     </ul>
                 </Route>
 
-                {/*
-                  A <Switch> looks through all its children <Route>
-                  elements and renders the first one whose path
-                  matches the current URL. Use a <Switch> any time
-                  you have multiple routes, but you want only one
-                  of them to render at a time
-                */}
                 <Switch>
                     <Route exact path="/">
                         <Home />
@@ -60,8 +48,8 @@ export default function App() {
                     <Route path="/faucet">
                         <Faucet />
                     </Route>
-                    <Route path="/accounts">
-                        <Accounts />
+                    <Route path="/send-transfer">
+                        <Transfer />
                     </Route>
                     <Route path="/account">
                         <Account />
