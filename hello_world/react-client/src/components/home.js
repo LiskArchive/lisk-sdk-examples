@@ -6,11 +6,21 @@ class Home extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { data: 0 };
+        this.state = {
+            data: { helloCounter: 999},
+        };
     }
 
     async componentDidMount() {
-        this.state = { data: await fetchHelloCounter() };
+        const helloData = await fetchHelloCounter() ;
+
+        console.log("============== helloCounter");
+        console.log(helloData);
+
+        this.setState({data: {helloCounter: helloData.helloCounter}});
+
+        console.log("============== this.state");
+        console.log(this.state);
     }
 
     render() {
@@ -19,7 +29,7 @@ class Home extends Component {
                 <h2>Hello Lisk!</h2>
                 <p>A simple frontend for blockchain applications built with the Lisk SDK.</p>
                 <p>Hello counter:</p>
-                <pre>{this.state.data}</pre>
+                <pre>{this.state.data.helloCounter}</pre>
             </div>
         );
     }

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import * as api from '../api.js';
 import accounts from '../accounts.json';
 import { transfer } from '../transactions/transfer';
-import {transactions} from "@liskhq/lisk-client";
 
 class Faucet extends Component {
 
@@ -37,7 +36,6 @@ class Faucet extends Component {
         });
 
         await api.sendTransactions(res.tx).then((response) => {
-            this.setState({response:response.json()});
             this.setState({transaction:res.tx});
         });
     }

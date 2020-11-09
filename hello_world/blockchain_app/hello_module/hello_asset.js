@@ -35,18 +35,27 @@ class HelloAsset extends BaseAsset {
     async apply({ asset, stateStore, reducerHandler, transaction }) {
         const senderAddress = transaction.senderAddress;
         const senderAccount = await stateStore.account.get(senderAddress);
-
+        let counter = 0;
 
         senderAccount.hello.helloMessage = asset.helloString;
         stateStore.account.set(senderAccount.address, senderAccount);
 
-        let counter = await stateStore.chain.get(
+        let counterBuffer = await stateStore.chain.get(
             CHAIN_STATE_HELLO_COUNTER
         );
 
+        if (counterBuffer) {
+            counter = codec.decode(
+                helloCounterSchema,
+                counterBuffer
+            );
+        }
+
+        counter.helloCounter++;
+
         await stateStore.chain.set(
             CHAIN_STATE_HELLO_COUNTER,
-            codec.encode(helloCounterSchema, ++counter)
+            codec.encode(helloCounterSchema, counter)
         );
     }
 }

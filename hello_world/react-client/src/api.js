@@ -19,9 +19,13 @@ export const fetchAccountInfo = async (address) => {
 };
 
 export const fetchHelloCounter = async () => {
-    return fetch(CUSTOM_API+"/api/hello_counter")
+    return fetch(CUSTOM_API + "/api/hello_counter")
         .then((res) => res.json())
-        .then((res) => res.data);
+        .then((res) => {
+            console.log("======= res ---------");
+            console.log(res);
+            return res.data
+        })
 };
 
 export const fetchAccounts = async (limit, offset) => {

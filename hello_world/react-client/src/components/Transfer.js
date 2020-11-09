@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
-import { api } from '../api.js';
-import { cryptography, transactions } from '@liskhq/lisk-client';
-import {transfer, utils} from "@liskhq/lisk-transactions";
-import accounts from "../accounts";
-
-const networkIdentifier = cryptography.getNetworkIdentifier(
-    "19074b69c97e6f6b86969bb62d4f15b888898b499777bda56a3a2ee642a7f20a",
-    "Lisk",
-);
+import * as api from '../api.js';
+import { transfer } from '../transactions/transfer';
 
 class Transfer extends Component {
 
@@ -17,9 +10,8 @@ class Transfer extends Component {
         this.state = {
             address: '',
             amount: '',
-            nonce: '',
+            fee: '',
             passphrase: '',
-            response: { meta: { status: false }},
             transaction: {},
         };
     }
@@ -30,29 +22,22 @@ class Transfer extends Component {
         this.setState({[nam]: val});
     };
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
 
-        const transferTransaction = new transactions.TransferTransaction({
-            asset: {
-                recipientId: this.state.address,
-                amount: transactions.utils.convertLSKToBeddows(this.state.amount),
-            },
-            fee: utils.convertLSKToBeddows('0.1'),
-            nonce: this.state.nonce,
+        const res = await transfer({
+            recipientAddress: this.state.address,
+            amount: this.state.amount,
+            fee: '0.1',
+            passphrase: this.state.passphrase,
+            networkIdentifier: 'f9aa0b17154aa27aa17f585b96b19a6559ed6ef3805352188312912c7b9192e5',
+            minFeePerByte: 1000,
         });
-        console.log("=========  HELLO  ========");
-        console.dir(transferTransaction);
-        transferTransaction.sign(networkIdentifier,this.state.passphrase);
-        console.dir(transferTransaction);
 
-        api.transactions.broadcast(transferTransaction.toJSON()).then(response => {
-            this.setState({response:response});
-            this.setState({transaction:transferTransaction});
-        }).catch(err => {
-            console.log(JSON.stringify(err.errors, null, 2));
+        await api.sendTransactions(res.tx).then((response) => {
+            this.setState({transaction:res.tx});
         });
-    }
+    };
 
     render() {
         return (
@@ -69,8 +54,8 @@ class Transfer extends Component {
                         <input type="text" id="amount" name="amount" onChange={this.handleChange} />
                     </label>
                     <label>
-                        Nonce:
-                        <input type="text" id="nonce" name="nonce" onChange={this.handleChange} />
+                        Fee:
+                        <input type="text" id="fee" name="fee" onChange={this.handleChange} />
                     </label>
                     <label>
                         Passphrase:
@@ -78,10 +63,9 @@ class Transfer extends Component {
                     </label>
                     <input type="submit" value="Submit" />
                 </form>
-                {this.state.response.meta.status &&
+                {this.state.transaction &&
                 <div>
                     <pre>Transaction: {JSON.stringify(this.state.transaction, null, 2)}</pre>
-                    <p>Response: {JSON.stringify(this.state.response, null, 2)}</p>
                 </div>
                 }
             </div>

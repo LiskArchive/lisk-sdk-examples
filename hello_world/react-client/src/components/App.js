@@ -11,7 +11,7 @@ import NewAccount from './NewAccount';
 import Faucet from './Faucet';
 import SendHello from './Hello';
 import Account from './Account';
-import Transfer from './Transer';
+import Transfer from './Transfer';
 
 // The pages of this site are rendered dynamically
 // in the browser (not server rendered).

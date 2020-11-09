@@ -1,6 +1,9 @@
-const { BaseModule } = require('lisk-sdk');
+const { BaseModule, codec } = require('lisk-sdk');
 const HelloAsset = require('./hello_asset');
-const { CHAIN_STATE_HELLO_COUNTER } = require('./schemas');
+const {
+    helloCounterSchema,
+    CHAIN_STATE_HELLO_COUNTER
+} = require('./schemas');
 
 class HelloModule extends BaseModule {
     name = 'hello';
@@ -20,7 +23,12 @@ class HelloModule extends BaseModule {
     transactionAssets = [ new HelloAsset() ];
     actions = {
         amountOfHellos: async () => {
-            return await this._dataAccess.getChainState(CHAIN_STATE_HELLO_COUNTER);
+            const res = await this._dataAccess.getChainState(CHAIN_STATE_HELLO_COUNTER);
+            const count = codec.decode(
+                helloCounterSchema,
+                res
+            );
+            return count;
         },
     };
     events = ['newHello'];
