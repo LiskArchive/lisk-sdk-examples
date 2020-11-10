@@ -35,7 +35,7 @@ class HelloAPIPlugin extends BasePlugin {
   async load(channel) {
     this._app = express();
 
-    channel.subscribe("app:ready", () => {
+    channel.once("app:ready", () => {
       this._app.use(cors({ origin: "*", methods: ["GET", "POST", "PUT"] }));
       this._app.use(express.json());
 
