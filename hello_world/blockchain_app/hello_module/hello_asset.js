@@ -24,11 +24,10 @@ class HelloAsset extends BaseAsset {
     };
     validate({asset}) {
         if (!asset.helloString || typeof asset.helloString !== 'string' || asset.helloString.length > 64) {
-           /* throw new LiskValidationError(
+            throw new LiskValidationError(
                 'Invalid "asset.hello" defined on transaction: A string value no longer than 64 characters is expected',
                 asset.helloString,
-            );*/
-           console.log('Invalid "asset.hello" defined on transaction: A string value no longer than 64 characters is expected');
+            );
         }
     };
 

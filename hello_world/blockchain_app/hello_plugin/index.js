@@ -41,16 +41,11 @@ class HelloAPIPlugin extends BasePlugin {
       this._app.get("/api/hello_counter", async (_req, res) => {
         const counter = await channel.invoke("hello:amountOfHellos");
 
-        console.log("++++++++ counter ++++++++++");
-        console.log(counter);
-        res.json({ data: counter });
+        await res.json({ data: counter });
       });
       this._server = this._app.listen(8080, "0.0.0.0");
     });
   }
-//return fetch("http://localhost:8080/api/hello_counter")
-//     .then((res) => res.json())
-//     .then((res) => res.data);
 
   async unload() {
     await new Promise((resolve, reject) => {
