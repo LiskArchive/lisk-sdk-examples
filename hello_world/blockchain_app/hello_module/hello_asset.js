@@ -22,6 +22,7 @@ class HelloAsset extends BaseAsset {
             },
         }
     };
+    
     validate({asset}) {
         if (!asset.helloString || typeof asset.helloString !== 'string' || asset.helloString.length > 64) {
             throw new LiskValidationError(

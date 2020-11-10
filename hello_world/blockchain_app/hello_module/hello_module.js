@@ -2,6 +2,7 @@ const { BaseModule, codec } = require('lisk-sdk');
 const HelloAsset = require('./hello_asset');
 const {
     helloCounterSchema,
+    newHelloSchema,
     CHAIN_STATE_HELLO_COUNTER
 } = require('./schemas');
 
@@ -39,7 +40,9 @@ class HelloModule extends BaseModule {
 
     async afterTransactionApply({transaction, stateStore, reducerHandler}) {
         // Code in here is applied after a transaction is applied.
-        this._channel.publish('hello:newHello', { sender: transaction.senderAddress, hello: transaction.helloString });
+      console.log("=============== transaction ==================");
+      console.log(transaction);
+        this._channel.publish('hello:newHello', { sender: transaction._senderAddress, hello: transaction.asset });
     };
     async afterGenesisBlockApply(context) {
         // Code in here is applied after a genesis block is applied.

@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-const { BasePlugin } = require("lisk-sdk");
+const { BasePlugin, codec } = require("lisk-sdk");
 const pJSON = require("../package.json");
+const { newHelloSchema } = require("../hello_module/schemas");
 
 class HelloAPIPlugin extends BasePlugin {
   _server = undefined;
@@ -43,6 +44,25 @@ class HelloAPIPlugin extends BasePlugin {
 
         await res.json({ data: counter });
       });
+
+
+      channel.subscribe('hello:newHello', (info) => {
+        this._app.get("/api/latest_hello", async (req, res) => {
+
+          console.log("+++++++++++++ info ++++++++++++++++");
+          console.log(info);
+          const newHello = codec.decode(
+            newHelloSchema,
+            //Buffer.from(info, 'hex'),
+            info
+          );
+
+          console.log("+++++++++++++ newHello ++++++++++++++++");
+          console.log(newHello);
+          await res.json(info);
+        });
+      });
+
       this._server = this._app.listen(8080, "0.0.0.0");
     });
   }
