@@ -51,14 +51,6 @@ class HelloAPIPlugin extends BasePlugin {
 
           console.log("+++++++++++++ info ++++++++++++++++");
           console.log(info);
-          const newHello = codec.decode(
-            newHelloSchema,
-            //Buffer.from(info, 'hex'),
-            info
-          );
-
-          console.log("+++++++++++++ newHello ++++++++++++++++");
-          console.log(newHello);
           await res.json(info);
         });
       });

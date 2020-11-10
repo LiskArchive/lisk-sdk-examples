@@ -40,9 +40,10 @@ class HelloModule extends BaseModule {
 
     async afterTransactionApply({transaction, stateStore, reducerHandler}) {
         // Code in here is applied after a transaction is applied.
-      console.log("=============== transaction ==================");
-      console.log(transaction);
-        this._channel.publish('hello:newHello', { sender: transaction._senderAddress, hello: transaction.asset });
+        this._channel.publish('hello:newHello', {
+          sender: transaction._senderAddress.toString('hex'),
+          hello: transaction.asset.toString('utf8')
+        });
     };
     async afterGenesisBlockApply(context) {
         // Code in here is applied after a genesis block is applied.
