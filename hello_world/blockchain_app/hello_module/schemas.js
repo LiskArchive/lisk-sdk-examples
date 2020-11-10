@@ -12,72 +12,58 @@ const helloCounterSchema = {
     },
 };
 
-const baseAssetSchema = {
-  $id: 'lisk/base-transaction',
-  type: 'object',
-  required: ['moduleID', 'assetID', 'nonce', 'fee', 'senderPublicKey', 'asset'],
+const helloAssetSchema = {
+  $id: "lisk/hello/new",
+  type: "object",
+  required: ["helloString"],
   properties: {
-    moduleID: {
-      dataType: 'uint32',
+    helloString: {
+      dataType: "string",
       fieldNumber: 1,
     },
-    assetID: {
+  },
+};
+
+/*export const keysSchema = {
+  $id: 'lisk/keys/register',
+  type: 'object',
+  required: ['numberOfSignatures', 'optionalKeys', 'mandatoryKeys'],
+  properties: {
+    numberOfSignatures: {
       dataType: 'uint32',
-      fieldNumber: 2,
+      fieldNumber: 1,
+      minimum: 1,
+      maximum: 64,
     },
-    nonce: {
-      dataType: 'uint64',
-      fieldNumber: 3,
-    },
-    fee: {
-      dataType: 'uint64',
-      fieldNumber: 4,
-    },
-    senderPublicKey: {
-      dataType: 'bytes',
-      fieldNumber: 5,
-    },
-    asset: {
-      dataType: 'bytes',
-      fieldNumber: 6,
-    },
-    signatures: {
+    mandatoryKeys: {
       type: 'array',
       items: {
         dataType: 'bytes',
+        minLength: 32,
+        maxLength: 32,
       },
-      fieldNumber: 7,
+      fieldNumber: 2,
+      minItems: 0,
+      maxItems: 64,
+    },
+    optionalKeys: {
+      type: 'array',
+      items: {
+        dataType: 'bytes',
+        minLength: 32,
+        maxLength: 32,
+      },
+      fieldNumber: 3,
+      minItems: 0,
+      maxItems: 64,
     },
   },
-};
+};*/
 
-const newHelloSchema = {
-  $id: "lisk/hello/new",
-  type: "object",
-  required: ["data"],
-  properties: {
-    data: {
-      type: "object",
-      fieldNumber: 1,
-      properties: {
-        sender: {
-          dataType: "string",
-          fieldNumber: 1,
-        },
-        asset: {
-          dataType: "string",
-          fieldNumber: 2,
-        },
-      }
-    }
-  },
-};
-
-const getFullAssetSchema = assetSchema => objects.mergeDeep({}, baseAssetSchema, { properties: { asset: assetSchema },});
 
 
 module.exports = {
     CHAIN_STATE_HELLO_COUNTER,
     helloCounterSchema,
-    newHelloSchema
+    helloAssetSchema
 };

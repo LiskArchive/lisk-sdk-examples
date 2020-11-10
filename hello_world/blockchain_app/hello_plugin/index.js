@@ -35,7 +35,7 @@ class HelloAPIPlugin extends BasePlugin {
   async load(channel) {
     this._app = express();
 
-    channel.once("app:ready", () => {
+    channel.subscribe("app:ready", () => {
       this._app.use(cors({ origin: "*", methods: ["GET", "POST", "PUT"] }));
       this._app.use(express.json());
 
@@ -48,9 +48,6 @@ class HelloAPIPlugin extends BasePlugin {
 
       channel.subscribe('hello:newHello', (info) => {
         this._app.get("/api/latest_hello", async (req, res) => {
-
-          console.log("+++++++++++++ info ++++++++++++++++");
-          console.log(info);
           await res.json(info);
         });
       });

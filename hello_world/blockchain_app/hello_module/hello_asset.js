@@ -8,9 +8,11 @@ const {
     CHAIN_STATE_HELLO_COUNTER
 } = require('./schemas');
 
+const HelloAssetID = 0;
+
 class HelloAsset extends BaseAsset {
     name = 'helloAsset';
-    id = 0;
+    id = HelloAssetID;
     schema = {
         $id: '/hello/asset',
         type: 'object',
@@ -22,7 +24,7 @@ class HelloAsset extends BaseAsset {
             },
         }
     };
-    
+
     validate({asset}) {
         if (!asset.helloString || typeof asset.helloString !== 'string' || asset.helloString.length > 64) {
             throw new LiskValidationError(
@@ -60,4 +62,4 @@ class HelloAsset extends BaseAsset {
     }
 }
 
-module.exports = HelloAsset;
+module.exports = { HelloAsset, HelloAssetID };
