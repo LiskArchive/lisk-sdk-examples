@@ -7,6 +7,7 @@ const { newHelloSchema } = require("../hello_module/schemas");
 class HelloAPIPlugin extends BasePlugin {
   _server = undefined;
   _app = undefined;
+  _hello = undefined;
 
   static get alias() {
     return "HelloHTTPAPI";
@@ -35,6 +36,10 @@ class HelloAPIPlugin extends BasePlugin {
   async load(channel) {
     this._app = express();
 
+    channel.subscribe('hello:newHello', (info) => {
+      this._hello = info;
+    });
+
     channel.once("app:ready", () => {
       this._app.use(cors({ origin: "*", methods: ["GET", "POST", "PUT"] }));
       this._app.use(express.json());
@@ -45,12 +50,11 @@ class HelloAPIPlugin extends BasePlugin {
         await res.json({ data: counter });
       });
 
-
-      channel.subscribe('hello:newHello', (info) => {
-        this._app.get("/api/latest_hello", async (req, res) => {
-          await res.json(info);
-        });
+      this._app.get("/api/latest_hello", async (req, res) => {
+        await res.json(this._hello);
       });
+
+
 
       this._server = this._app.listen(8080, "0.0.0.0");
     });
