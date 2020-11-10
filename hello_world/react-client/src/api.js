@@ -28,7 +28,7 @@ export const fetchHelloCounter = async () => {
         })
 };
 
-export const fetchLatestHello = async (limit, offset) => {
+export const fetchLatestHello = async () => {
     return fetch(CUSTOM_API + '/api/latest_hello')
         .then((res) => res.json())
         .then((res) => res.data);

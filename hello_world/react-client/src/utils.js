@@ -1,5 +1,3 @@
-/* global BigInt */
-
 import { objects } from '@liskhq/lisk-utils';
 import { codec } from '@liskhq/lisk-codec';
 

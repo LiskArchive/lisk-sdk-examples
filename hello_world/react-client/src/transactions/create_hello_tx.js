@@ -1,9 +1,6 @@
-/* global BigInt */
-
 import { transactions, codec, cryptography } from "@liskhq/lisk-client";
-import { getFullAssetSchema } from "./schema";
 import { fetchAccountInfo } from "../api";
-import {baseAssetSchema} from "../../../../nft/frontend_app/src/utils/common";
+import { baseAssetSchema, getFullAssetSchema } from "../utils";
 
 export const createHelloTxSchema = {
     $id: "lisk/create-hello-asset",

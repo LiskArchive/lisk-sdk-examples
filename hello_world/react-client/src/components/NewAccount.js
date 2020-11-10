@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { passphrase, cryptography, Buffer, codec } from '@liskhq/lisk-client';
+import { passphrase, cryptography } from '@liskhq/lisk-client';
 
 const newCredentials = () => {
     const pass = passphrase.Mnemonic.generateMnemonic();

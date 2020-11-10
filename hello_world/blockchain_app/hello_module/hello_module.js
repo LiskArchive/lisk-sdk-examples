@@ -35,22 +35,17 @@ class HelloModule extends BaseModule {
     events = ['newHello'];
     reducers = {};
     async beforeTransactionApply({transaction, stateStore, reducerHandler}) {
-        // Code in here is applied before a transaction is applied.
+        // Code in here is applied before each transaction is applied.
     };
 
     async afterTransactionApply({transaction, stateStore, reducerHandler}) {
-      // Code in here is applied after a transaction is applied.
-      console.log('transaction ============================');
-      console.log(transaction);
+      // Code in here is applied after each transaction is applied.
       if (transaction.moduleID === this.id && transaction.assetID === HelloAssetID) {
 
         const helloAsset = codec.decode(
           helloAssetSchema,
           transaction.asset
         );
-
-        console.log('helloAsset ++++++++++++++++++====');
-        console.log(helloAsset);
 
         this._channel.publish('hello:newHello', {
           sender: transaction._senderAddress.toString('hex'),
@@ -59,16 +54,13 @@ class HelloModule extends BaseModule {
       }
     };
     async afterGenesisBlockApply(context) {
-        // Code in here is applied after a genesis block is applied.
+        // Code in here is applied after the genesis block is applied.
     };
     async beforeBlockApply(context) {
-        // Code in here is applied before a block is applied.
+        // Code in here is applied before each block is applied.
     }
     async afterBlockApply(context) {
-        // Code in here is applied after a block is applied.
-        /*this._channel.subscribe('app:chain:fork ', ({ data }) => {
-            console.log(data);
-        });*/
+        // Code in here is applied after each block is applied.
     }
 }
 

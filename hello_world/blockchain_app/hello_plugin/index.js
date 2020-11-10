@@ -1,8 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-const { BasePlugin, codec } = require("lisk-sdk");
+const { BasePlugin } = require("lisk-sdk");
 const pJSON = require("../package.json");
-const { newHelloSchema } = require("../hello_module/schemas");
 
 class HelloAPIPlugin extends BasePlugin {
   _server = undefined;

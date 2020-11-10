@@ -25,7 +25,6 @@ class Faucet extends Component {
     handleSubmit = async (event) => {
         event.preventDefault();
 
-        //The TransferTransaction is signed by the Genesis account
         const res = await transfer({
             recipientAddress: this.state.address,
             amount: this.state.amount,

@@ -22,10 +22,13 @@ const appConfig = utils.objects.mergeDeep({}, configDevnet, {
     },
 });
 
+// Create the application instance
 const app = Application.defaultApplication(genesisBlockDevnet, appConfig);
 
+// Register Modules
 app.registerModule(HelloModule);
 
+// Register Plugins
 app.registerPlugin(HTTPAPIPlugin);
 app.registerPlugin(HelloAPIPlugin);
 

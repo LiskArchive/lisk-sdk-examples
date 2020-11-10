@@ -1,5 +1,3 @@
-/* global BigInt */
-
 import { transactions, codec, cryptography } from "@liskhq/lisk-client";
 import { getFullAssetSchema, calcMinTxFee } from "../utils";
 import { fetchAccountInfo } from "../api";

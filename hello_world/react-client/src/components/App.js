@@ -13,9 +13,6 @@ import SendHello from './Hello';
 import Account from './Account';
 import Transfer from './Transfer';
 
-// The pages of this site are rendered dynamically
-// in the browser (not server rendered).
-
 export default function App() {
     return (
         <Router>
