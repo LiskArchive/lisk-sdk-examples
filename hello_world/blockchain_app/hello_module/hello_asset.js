@@ -35,7 +35,6 @@ class HelloAsset extends BaseAsset {
     async apply({ asset, stateStore, reducerHandler, transaction }) {
         const senderAddress = transaction.senderAddress;
         const senderAccount = await stateStore.account.get(senderAddress);
-        let counter = { helloCounter: 0 };
 
         senderAccount.hello.helloMessage = asset.helloString;
         stateStore.account.set(senderAccount.address, senderAccount);
@@ -44,12 +43,10 @@ class HelloAsset extends BaseAsset {
             CHAIN_STATE_HELLO_COUNTER
         );
 
-        if (counterBuffer) {
-            counter = codec.decode(
-                helloCounterSchema,
-                counterBuffer
-            );
-        }
+        let counter = codec.decode(
+            helloCounterSchema,
+            counterBuffer
+        );
 
         counter.helloCounter++;
 

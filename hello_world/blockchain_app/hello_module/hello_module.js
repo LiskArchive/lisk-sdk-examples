@@ -57,7 +57,7 @@ class HelloModule extends BaseModule {
       // Set the hello counter to zero after the genesis block is applied
       await stateStore.chain.set(
         CHAIN_STATE_HELLO_COUNTER,
-        codec.encode(helloCounterSchema, 0)
+        codec.encode(helloCounterSchema, { helloCounter: 0 })
       );
     };
     async beforeBlockApply(context) {
