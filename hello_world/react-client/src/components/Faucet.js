@@ -13,6 +13,7 @@ class Faucet extends Component {
             amount: '',
             fee: '',
             transaction: {},
+            response: {}
         };
     }
 
@@ -35,7 +36,10 @@ class Faucet extends Component {
         });
 
         await api.sendTransactions(res.tx).then((response) => {
-            this.setState({transaction:res.tx});
+            this.setState({
+              transaction:res.tx,
+              response: { status: response.status, message: response.statusText}
+            });
         });
     }
 
@@ -58,7 +62,7 @@ class Faucet extends Component {
                 {this.state.transaction &&
                     <div>
                         <pre>Transaction: {JSON.stringify(this.state.transaction, null, 2)}</pre>
-                        <p>Response: {JSON.stringify(this.state.response, null, 2)}</p>
+                        <pre>Response: {JSON.stringify(this.state.response, null, 2)}</pre>
                     </div>
                 }
             </div>

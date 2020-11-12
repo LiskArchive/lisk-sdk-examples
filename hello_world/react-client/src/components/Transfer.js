@@ -13,6 +13,7 @@ class Transfer extends Component {
             fee: '',
             passphrase: '',
             transaction: {},
+            response: {}
         };
     }
 
@@ -35,7 +36,10 @@ class Transfer extends Component {
         });
 
         await api.sendTransactions(res.tx).then((response) => {
-            this.setState({transaction:res.tx});
+            this.setState({
+              transaction:res.tx,
+              response: { status: response.status, message: response.statusText}
+            });
         });
     };
 
@@ -66,6 +70,7 @@ class Transfer extends Component {
                 {this.state.transaction &&
                 <div>
                     <pre>Transaction: {JSON.stringify(this.state.transaction, null, 2)}</pre>
+                    <pre>Response: {JSON.stringify(this.state.response, null, 2)}</pre>
                 </div>
                 }
             </div>

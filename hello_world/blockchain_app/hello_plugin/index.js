@@ -53,8 +53,6 @@ class HelloAPIPlugin extends BasePlugin {
         await res.json(this._hello);
       });
 
-
-
       this._server = this._app.listen(8080, "0.0.0.0");
     });
   }

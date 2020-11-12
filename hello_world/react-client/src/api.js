@@ -22,8 +22,6 @@ export const fetchHelloCounter = async () => {
     return fetch(CUSTOM_API + "/api/hello_counter")
         .then((res) => res.json())
         .then((res) => {
-            console.log("======= res ---------");
-            console.log(res);
             return res.data
         })
 };

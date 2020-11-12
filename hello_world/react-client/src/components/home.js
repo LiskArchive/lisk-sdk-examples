@@ -21,10 +21,6 @@ class Home extends Component {
         const helloData = await fetchHelloCounter() ;
         const latestHello = await fetchLatestHello() ;
 
-        console.log("============== latestHello");
-        console.log(latestHello);
-        console.log(this.state.latestHello.message);
-
         this.setState({
           data: {
             helloCounter: helloData.helloCounter
@@ -33,9 +29,6 @@ class Home extends Component {
             message: latestHello.hello,
             sender: latestHello.sender
         }});
-
-        console.log("============== this.state");
-        console.log(this.state);
     }
 
     render() {
