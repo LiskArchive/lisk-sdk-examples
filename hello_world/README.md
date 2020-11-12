@@ -10,7 +10,7 @@ npm i
 node index.js
 ```
 
-#### Start node:
+#### Start client:
 
 ```
 cd react-client
