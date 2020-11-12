@@ -8,7 +8,7 @@ class Home extends Component {
 
       this.state = {
         data: {
-          helloCounter: 999,
+          helloCounter: 0,
         },
         latestHello: {
           message: 'N/A',
