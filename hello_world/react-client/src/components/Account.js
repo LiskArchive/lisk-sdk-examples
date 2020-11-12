@@ -27,7 +27,7 @@ class Account extends Component {
         return (
             <div>
                 <h2>Account</h2>
-                <p>Get account details byb address.</p>
+                <p>Get account details by address.</p>
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         Address:

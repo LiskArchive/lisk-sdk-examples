@@ -49,6 +49,9 @@ class HelloAPIPlugin extends BasePlugin {
         await res.json({ data: counter });
       });
 
+      // Gets the latest hello message.
+      // Resets when the application is restarted.
+      // To retrieve a persistent latest hello message, create a new action in the hello module which returns the latest hello message by looking at the latest helloAsset transaction.
       this._app.get("/api/latest_hello", async (req, res) => {
         await res.json(this._hello);
       });
