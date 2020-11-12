@@ -53,8 +53,12 @@ class HelloModule extends BaseModule {
         });
       }
     };
-    async afterGenesisBlockApply(context) {
-        // Code in here is applied after the genesis block is applied.
+    async afterGenesisBlockApply(genesisBlock, stateStore, reducerHandler) {
+      // Set the hello counter to zero after the genesis block is applied
+      await stateStore.chain.set(
+        CHAIN_STATE_HELLO_COUNTER,
+        codec.encode(helloCounterSchema, 0)
+      );
     };
     async beforeBlockApply(context) {
         // Code in here is applied before each block is applied.

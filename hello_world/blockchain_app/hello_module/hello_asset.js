@@ -1,9 +1,7 @@
 const {
     BaseAsset,
     codec,
-    validator
 } = require('lisk-sdk');
-const { LiskValidationError } = require('@liskhq/lisk-validator');
 const {
     helloCounterSchema,
     CHAIN_STATE_HELLO_COUNTER
@@ -28,9 +26,8 @@ class HelloAsset extends BaseAsset {
 
     validate({asset}) {
         if (!asset.helloString || typeof asset.helloString !== 'string' || asset.helloString.length > 64) {
-            throw new validator.LiskValidationError(
-                'Invalid "asset.hello" defined on transaction: A string value no longer than 64 characters is expected',
-                asset.helloString,
+          throw new Error(
+                'Invalid "asset.hello" defined on transaction: A string value no longer than 64 characters is expected'
             );
         }
     };
@@ -38,7 +35,7 @@ class HelloAsset extends BaseAsset {
     async apply({ asset, stateStore, reducerHandler, transaction }) {
         const senderAddress = transaction.senderAddress;
         const senderAccount = await stateStore.account.get(senderAddress);
-        let counter = 0;
+        let counter = { helloCounter: 0 };
 
         senderAccount.hello.helloMessage = asset.helloString;
         stateStore.account.set(senderAccount.address, senderAccount);
