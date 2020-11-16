@@ -55,8 +55,6 @@ class HelloModule extends BaseModule {
     };
     async afterGenesisBlockApply({genesisBlock, stateStore, reducerHandler}) {
       // Set the hello counter to zero after the genesis block is applied
-      console.log('stateStore');
-      console.log(stateStore);
       await stateStore.chain.set(
         CHAIN_STATE_HELLO_COUNTER,
         codec.encode(helloCounterSchema, { helloCounter: 0 })
