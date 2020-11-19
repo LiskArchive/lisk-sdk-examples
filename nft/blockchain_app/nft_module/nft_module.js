@@ -2,13 +2,13 @@ const { BaseModule } = require("lisk-sdk");
 const { getAllNFTTokensAsJSON } = require("./nft_token");
 
 const CreateNFT = require("./transactions/create_nft");
-const TransferNFT = require("./transactions/transfer_nft");
 const PurchaseNFT = require("./transactions/purchase_nft");
 
+// Extend base module to implement your custom module
 class NFTModule extends BaseModule {
   name = "nft";
   id = 1000;
-  transactionAssets = [new CreateNFT(), new TransferNFT(), new PurchaseNFT()];
+  transactionAssets = [new CreateNFT(), new PurchaseNFT()];
 
   accountSchema = {
     type: "object",
@@ -28,6 +28,7 @@ class NFTModule extends BaseModule {
   };
 
   actions = {
+    // get all the registered NFT tokens from blockchain
     getAllNFTTokens: async () => getAllNFTTokensAsJSON(this._dataAccess),
   };
 }

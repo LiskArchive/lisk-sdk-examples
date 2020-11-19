@@ -32,6 +32,7 @@ export default function PurchaseNFTTokenDialog(props) {
     currentValue + (currentValue * minPurchaseMargin) / 100.0;
 
   const [data, setData] = useState({
+    name: props.token.name,
     nftId: props.token.id,
     purchaseValue: "",
     fee: "",
@@ -64,7 +65,14 @@ export default function PurchaseNFTTokenDialog(props) {
         <DialogContent>
           <form className={classes.root} noValidate autoComplete="off">
             <TextField
-              label="Token Address"
+              label="Token Name"
+              value={data.name}
+              name="name"
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              label="Token ID"
               value={data.nftId}
               name="nftId"
               onChange={handleChange}

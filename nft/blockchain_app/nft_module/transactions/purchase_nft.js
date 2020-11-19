@@ -1,13 +1,16 @@
 const { BaseAsset } = require("lisk-sdk");
 const { getAllNFTTokens, setAllNFTTokens } = require("../nft_token");
 
+// 1.extend base asset to implement your custom asset
 class PurchaseNFTAsset extends BaseAsset {
+  // 2.define unique asset name and id
   name = "purchaseNFT";
-  id = 3;
+  id = 1;
+  // 3.define asset schema for serialization
   schema = {
     $id: "lisk/nft/purchase",
     type: "object",
-    required: ["nftId", "purchaseValue"],
+    required: ["nftId", "purchaseValue", "name"],
     properties: {
       nftId: {
         dataType: "bytes",
@@ -17,16 +20,18 @@ class PurchaseNFTAsset extends BaseAsset {
         dataType: "uint64",
         fieldNumber: 2,
       },
+      name: {
+        dataType: "string",
+        fieldNumber: 3,
+      },
     },
   };
 
   async apply({ asset, stateStore, reducerHandler, transaction }) {
-    const purchaserAddress = transaction.senderAddress;
-    const purchaserAccount = await stateStore.account.get(purchaserAddress);
-
     const nftTokens = await getAllNFTTokens(stateStore);
     const nftTokenIndex = nftTokens.findIndex((t) => t.id.equals(asset.nftId));
 
+    // 4.verify if purchasing nft token exists
     if (nftTokenIndex < 0) {
       throw new Error("Token id not found");
     }
@@ -34,6 +39,7 @@ class PurchaseNFTAsset extends BaseAsset {
     const tokenOwner = await stateStore.account.get(token.ownerAddress);
     const tokenOwnerAddress = tokenOwner.address;
 
+    // 5.verify if minimum nft purchasing condition met
     if (token && token.minPurchaseMargin === 0) {
       throw new Error("This NFT token can not be purchased");
     }
@@ -48,12 +54,17 @@ class PurchaseNFTAsset extends BaseAsset {
       throw new Error("Token can not be purchased on given value");
     }
 
+    const purchaserAddress = transaction.senderAddress;
+    const purchaserAccount = await stateStore.account.get(purchaserAddress);
+
+    // 6.remove nft token from owner account
     const ownerTokenIndex = tokenOwner.nft.ownNFTs.findIndex((a) =>
       a.equals(token.id)
     );
     tokenOwner.nft.ownNFTs.splice(ownerTokenIndex, 1);
     await stateStore.account.set(tokenOwnerAddress, tokenOwner);
 
+    // 7.add nft token to purchaser account
     purchaserAccount.nft.ownNFTs.push(token.id);
     await stateStore.account.set(purchaserAddress, purchaserAccount);
 
@@ -62,11 +73,13 @@ class PurchaseNFTAsset extends BaseAsset {
     nftTokens[nftTokenIndex] = token;
     await setAllNFTTokens(stateStore, nftTokens);
 
+    // 8.debit LSK tokens from purchaser account
     await reducerHandler.invoke("token:debit", {
       address: purchaserAddress,
       amount: purchaseValue,
     });
 
+    // 9.credit LSK tokens to purchaser account
     await reducerHandler.invoke("token:credit", {
       address: tokenOwnerAddress,
       amount: purchaseValue,

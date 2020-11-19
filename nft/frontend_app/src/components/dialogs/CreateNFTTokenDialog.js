@@ -24,6 +24,7 @@ export default function CreateNFTTokenDialog(props) {
   const nodeInfo = useContext(NodeInfoContext);
   const classes = useStyles();
   const [data, setData] = useState({
+    name: "",
     initValue: "",
     minPurchaseMargin: "",
     fee: "",
@@ -53,6 +54,13 @@ export default function CreateNFTTokenDialog(props) {
         <DialogTitle id="alert-dialog-title">{"Create NFT Token"}</DialogTitle>
         <DialogContent>
           <form className={classes.root} noValidate autoComplete="off">
+            <TextField
+              label="Name"
+              value={data.name}
+              name="name"
+              onChange={handleChange}
+              fullWidth
+            />
             <TextField
               label="Initial Token value"
               value={data.initValue}

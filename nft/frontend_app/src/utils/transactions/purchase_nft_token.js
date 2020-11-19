@@ -17,10 +17,15 @@ export const purchaseNFTTokenSchema = {
       dataType: "uint64",
       fieldNumber: 2,
     },
+    name: {
+      dataType: "string",
+      fieldNumber: 3,
+    },
   },
 };
 
 export const purchaseNFTToken = async ({
+  name,
   nftId,
   purchaseValue,
   passphrase,
@@ -40,11 +45,12 @@ export const purchaseNFTToken = async ({
     purchaseNFTTokenSchema,
     {
       moduleID: 1000,
-      assetID: 3,
+      assetID: 1,
       nonce: BigInt(nonce),
       fee: BigInt(transactions.convertLSKToBeddows(fee)),
       senderPublicKey: publicKey,
       asset: {
+        name,
         nftId: Buffer.from(nftId, "hex"),
         purchaseValue: BigInt(transactions.convertLSKToBeddows(purchaseValue)),
       },

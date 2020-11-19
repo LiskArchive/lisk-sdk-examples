@@ -38,8 +38,6 @@ export default function TransferFundsDialog(props) {
   const handleSend = async (event) => {
     event.preventDefault();
 
-    console.log(nodeInfo)
-
     const res = await transfer({
       ...data,
       networkIdentifier: nodeInfo.networkIdentifier,

@@ -33,3 +33,11 @@ export const fetchNFTToken = async (id) => {
     .then((res) => res.json())
     .then((res) => res.data);
 };
+
+export const getAllTransactions = async () => {
+  return fetch(`http://localhost:8080/api/transactions`)
+    .then((res) => res.json())
+    .then((res) => {
+      return res.data;
+    });
+};

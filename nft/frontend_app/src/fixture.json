@@ -1,0 +1,26 @@
+{
+  "genesisPassphrase": "peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready",
+  "accounts": [
+    {
+      "role": "artist",
+      "passphrase": "demand hungry surface wear pond great economy essence occur crowd leave large",
+      "binaryAddress": "eee694bc9a6f5ca064cf1e6b99e3b93d63996d79",
+      "amount": "1000",
+      "fee": "0.5"
+    },
+    {
+      "role": "collector1",
+      "passphrase": "fruit session repair run noise brush turkey glue whale fame spice example",
+      "binaryAddress": "4189dd498ea5d119dfa9dad1c35fb3170a5ec0eb",
+      "amount": "1000",
+      "fee": "0.4"
+    },
+    {
+      "role": "collector2",
+      "passphrase": "defense audit accuse evoke mass helmet end scatter people lecture title void",
+      "binaryAddress": "5f01ca377ff3c82b1a143202779915cd305b7bc8",
+      "amount": "1000",
+      "fee": "0.3"
+    }
+  ]
+}

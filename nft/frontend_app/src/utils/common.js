@@ -42,7 +42,7 @@ export const baseAssetSchema = {
 	},
 };
 
-export const getFullAssetSchema = assetSchema => objects.mergeDeep({}, baseAssetSchema, { properties: { asset: assetSchema },});
+export const getFullAssetSchema = assetSchema => objects.mergeDeep({}, baseAssetSchema, { properties: { asset: assetSchema }, });
 
 export const calcMinTxFee = (assetSchema, minFeePerByte, tx) => {
 	const assetBytes = codec.encode(assetSchema, tx.asset);

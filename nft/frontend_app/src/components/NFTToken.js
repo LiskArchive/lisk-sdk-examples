@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
-import { transactions } from "@liskhq/lisk-client";
+import { transactions, cryptography, Buffer } from "@liskhq/lisk-client";
 
 import PurchaseNFTTokenDialog from "./dialogs/PurchaseNFTTokenDialog";
 
@@ -42,34 +42,56 @@ const useStyles = makeStyles((theme) => ({
 export default function NFTToken(props) {
   const classes = useStyles();
   const [openPurchase, setOpenPurchase] = useState(false);
-
+  const base32UIAddress = cryptography.getBase32AddressFromAddress(Buffer.from(props.item.ownerAddress, 'hex'), 'lsk').toString('binary');
   return (
     <Card>
       <CardContent>
-        <Typography variant="h4">
-          {transactions.convertBeddowsToLSK(props.item.value)}
-        </Typography>
-        <Typography variant="h6">{props.item.id}</Typography>
+        <Typography variant="h6">{props.item.name}</Typography>
         <Divider />
         <dl className={classes.propertyList}>
+          <li>
+            <dt>Token ID</dt>
+            <dd>{props.item.id}</dd>
+          </li>
+          <li>
+            <dt>Token value</dt>
+            <dd>{transactions.convertBeddowsToLSK(props.item.value)}</dd>
+          </li>
           <li>
             <dt>Minimum Purchase Margin</dt>
             <dd>{props.item.minPurchaseMargin}</dd>
           </li>
           {!props.minimum && (
             <li>
-              <dt>Owner</dt>
+              <dt>Current Owner</dt>
               <dd>
                 <Link
                   component={RouterLink}
                   to={`/accounts/${props.item.ownerAddress}`}
                 >
-                  {props.item.ownerAddress}
+                  {base32UIAddress}
                 </Link>
               </dd>
             </li>
           )}
         </dl>
+        <Typography variant="h6">NFT History</Typography>
+        <Divider />
+        {props.item.tokenHistory.map((base32UIAddress) => (
+          <dl className={classes.propertyList}>
+            <li>
+              <dd>
+                <Link
+                  component={RouterLink}
+                  to={`/accounts/${cryptography.getAddressFromBase32Address(base32UIAddress).toString('hex')}`}
+                >
+                  {base32UIAddress}
+                </Link>
+              </dd>
+            </li>
+          </dl>
+        ))}
+
       </CardContent>
       <CardActions>
         {props.item.minPurchaseMargin > 0 ? (

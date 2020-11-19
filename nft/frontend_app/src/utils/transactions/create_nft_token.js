@@ -7,7 +7,7 @@ import { fetchAccountInfo } from "../../api";
 export const createNFTTokenSchema = {
   $id: "lisk/create-nft-asset",
   type: "object",
-  required: ["minPurchaseMargin", "initValue"],
+  required: ["minPurchaseMargin", "initValue", "name"],
   properties: {
     minPurchaseMargin: {
       dataType: "uint32",
@@ -17,10 +17,15 @@ export const createNFTTokenSchema = {
       dataType: "uint64",
       fieldNumber: 2,
     },
+    name: {
+      dataType: "string",
+      fieldNumber: 3,
+    },
   },
 };
 
 export const createNFTToken = async ({
+  name,
   initValue,
   minPurchaseMargin,
   passphrase,
@@ -31,20 +36,22 @@ export const createNFTToken = async ({
   const { publicKey } = cryptography.getPrivateAndPublicKeyFromPassphrase(
     passphrase
   );
-  const address = cryptography.getAddressFromPassphrase(passphrase);
+  const address = cryptography.getAddressFromPassphrase(passphrase).toString("hex");
+
   const {
     sequence: { nonce },
-  } = await fetchAccountInfo(address.toString("hex"));
+  } = await fetchAccountInfo(address);
 
   const { id, ...rest } = transactions.signTransaction(
     createNFTTokenSchema,
     {
       moduleID: 1000,
-      assetID: 1,
+      assetID: 0,
       nonce: BigInt(nonce),
       fee: BigInt(transactions.convertLSKToBeddows(fee)),
       senderPublicKey: publicKey,
       asset: {
+        name,
         initValue: BigInt(transactions.convertLSKToBeddows(initValue)),
         minPurchaseMargin: parseInt(minPurchaseMargin),
       },

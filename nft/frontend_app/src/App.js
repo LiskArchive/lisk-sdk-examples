@@ -24,6 +24,7 @@ import * as api from './api';
 import { NodeInfoContext, nodeInfoContextDefaultValue } from './context';
 
 import HomePage from './components/HomePage';
+import TransactionsPage from './components/TransactionsPage';
 import AccountPage from './components/AccountPage';
 import CreateAccountDialog from './components/dialogs/CreateAccountDialog';
 import TransferFundsDialog from './components/dialogs/TransferFundsDialog';
@@ -56,9 +57,9 @@ function App() {
 	const [openDialog, setOpenDialog] = useState(null);
 
 	const updateHeight = async () => {
-    const info = await api.fetchNodeInfo();
+		const info = await api.fetchNodeInfo();
 
-    updateNodeInfoState({
+		updateNodeInfoState({
 			networkIdentifier: info.networkIdentifier,
 			minFeePerByte: info.genesisConfig.minFeePerByte,
 			height: info.height,
@@ -71,7 +72,7 @@ function App() {
 			networkIdentifier: info.networkIdentifier,
 			minFeePerByte: info.genesisConfig.minFeePerByte,
 			height: info.height,
-    });
+		});
 		setInterval(updateHeight, 1000);
 	};
 
@@ -103,6 +104,14 @@ function App() {
 								className={classes.appBarLink}
 							>
 								Home
+							</Link>
+							<Link
+								color="inherit"
+								component={RouterLink}
+								to="/transactions"
+								className={classes.appBarLink}
+							>
+								Transactions
 							</Link>
 							<div className={classes.grow} />
 							<Chip label={nodeInfoState.height} />
@@ -157,6 +166,7 @@ function App() {
 							</Route>
 
 							<Route path="/accounts/:address" component={AccountPage} />
+							<Route path="/transactions" component={TransactionsPage} />
 						</Switch>
 					</Container>
 

@@ -1,13 +1,16 @@
-const { Server } = require("http");
 const express = require("express");
 const cors = require("cors");
-const { BasePlugin } = require("lisk-sdk");
+const { BasePlugin, codec } = require("lisk-sdk");
 const pJSON = require("../package.json");
+const { getDBInstance, getNFTHistory, getAllTransactions, saveNFTHistory, saveTransactions } = require("./db");
 
+// 1.plugin can be a daemon/HTTP/Websocket service for off-chain processing
 class NFTAPIPlugin extends BasePlugin {
   _server = undefined;
   _app = undefined;
   _channel = undefined;
+  _db = undefined;
+  _nodeInfo = undefined;
 
   static get alias() {
     return "NFTHttpApi";
@@ -36,31 +39,77 @@ class NFTAPIPlugin extends BasePlugin {
   async load(channel) {
     this._app = express();
     this._channel = channel;
+    this._db = await getDBInstance();
+    this._nodeInfo = await this._channel.invoke("app:getNodeInfo");
 
-    this._channel.once("app:ready", () => {
-      this._app.use(cors({ origin: "*", methods: ["GET", "POST", "PUT"] }));
-      this._app.use(express.json());
 
-      this._app.get("/api/nft_tokens", async (_req, res) => {
-        const nftTokens = await this._channel.invoke("nft:getAllNFTTokens");
+    this._app.use(cors({ origin: "*", methods: ["GET", "POST", "PUT"] }));
+    this._app.use(express.json());
 
-        res.json({ data: nftTokens });
-      });
+    this._app.get("/api/nft_tokens", async (_req, res) => {
+      const nftTokens = await this._channel.invoke("nft:getAllNFTTokens");
+      const data = await Promise.all(nftTokens.map(async token => {
+        const dbKey = `${token.name}`;
+        let tokenHistory = await getNFTHistory(this._db, dbKey);
+        tokenHistory = tokenHistory.map(h => h.toString('binary'));
+        return {
+          ...token,
+          tokenHistory,
+        }
+      }));
 
-      this._app.get("/api/nft_tokens/:id", async (req, res) => {
-        const nftTokens = await this._channel.invoke("nft:getAllNFTTokens");
-        console.log({ nftTokens, id: req.params.id });
+      res.json({ data });
+    });
 
-        const token = nftTokens.find((t) => t.id === req.params.id);
+    this._app.get("/api/nft_tokens/:id", async (req, res) => {
+      const nftTokens = await this._channel.invoke("nft:getAllNFTTokens");
+      const token = nftTokens.find((t) => t.id === req.params.id);
+      const dbKey = `${token.name}`;
+      let tokenHistory = await getNFTHistory(this._db, dbKey);
+      tokenHistory = tokenHistory.map(h => h.toString('binary'));
 
-        res.json({ data: token });
-      });
+      res.json({ data: { ...token, tokenHistory } });
+    });
 
-      this._server = this._app.listen(8080, "0.0.0.0");
+    this._app.get("/api/transactions", async (_req, res) => {
+      const transactions = await getAllTransactions(this._db, this.schemas);
+
+      const data = transactions.map(trx => {
+        const module = this._nodeInfo.registeredModules.find(m => m.id === trx.moduleID);
+        const asset = module.transactionAssets.find(a => a.id === trx.assetID);
+        return {
+          ...trx,
+          ...trx.asset,
+          moduleName: module.name,
+          assetName: asset.name,
+        }
+      })
+      res.json({ data });
+    });
+
+    this._subscribeToChannel();
+
+    this._server = this._app.listen(8080, "0.0.0.0");
+  }
+
+  // listen to application events and enrich blockchain data for third party application
+  _subscribeToChannel() {
+    this._channel.subscribe('app:block:new', async (eventInfo) => {
+      const { block } = eventInfo.data;
+      const { payload } = codec.decode(
+        this.schemas.block,
+        Buffer.from(block, 'hex'),
+      );
+      if (payload.length > 0) {
+        await saveTransactions(this._db, payload);
+        const decodedBlock = this.codec.decodeBlock(block);
+        await saveNFTHistory(this._db, decodedBlock, this._nodeInfo.registeredModules);
+      }
     });
   }
 
   async unload() {
+    // close http server
     await new Promise((resolve, reject) => {
       this._server.close((err) => {
         if (err) {
