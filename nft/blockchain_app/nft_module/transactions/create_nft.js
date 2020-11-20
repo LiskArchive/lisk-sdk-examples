@@ -14,7 +14,7 @@ class CreateNFTAsset extends BaseAsset {
   schema = {
     $id: "lisk/nft/create",
     type: "object",
-    required: ["minPurchaseMargin", "initValue"],
+    required: ["minPurchaseMargin", "initValue", "name"],
     properties: {
       minPurchaseMargin: {
         dataType: "uint32",
@@ -32,7 +32,7 @@ class CreateNFTAsset extends BaseAsset {
   };
 
   async apply({ asset, stateStore, reducerHandler, transaction }) {
-    // 4.verify if sender has enough balance in account before creating token
+    // 4.verify if sender has enough balance
     const senderAddress = transaction.senderAddress;
     const senderAccount = await stateStore.account.get(senderAddress);
     const minRemainingBalance = await reducerHandler.invoke(
