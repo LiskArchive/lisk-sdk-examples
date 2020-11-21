@@ -2,14 +2,14 @@
 
 This is a NFT Blockchain application created using `Version 5` of `lisk-sdk`.
 
-This demonstrates On-Chain and Off-Chain architecture of `lisk-sdk`. We will be building an NFT Token to cover up following requirements. 
+This demonstrates On-Chain and Off-Chain architecture of `lisk-sdk`. We will be building an NFT Token to cover up following requirements.
 
 - A blockchain app which have support for.
   - NFT Token
     - It have an initial value
     - It have a purchase margin for auto purchase
     - It have only one owner at a time
-    - Purchase margin can be set to zero meant non-purchasable  
+    - Purchase margin can be set to zero meant non-purchasable
     - Anyone can create a non-fungible token if he has enough balance
     - Owner can transfer token to someone without any profit
     - Anyone can purchase a NFT if satisfy given purchase margin
@@ -18,8 +18,8 @@ This demonstrates On-Chain and Off-Chain architecture of `lisk-sdk`. We will be 
 ## Install dependencies
 
 ```bash
-cd blockchain_app && npm ci
-cd frontend_app && npm ci
+cd blockchain_app && npm i --registry https://npm.lisk.io
+cd frontend_app && npm i --registry https://npm.lisk.io
 ```
 
 ## Start node
