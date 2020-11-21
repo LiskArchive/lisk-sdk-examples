@@ -1,0 +1,16 @@
+------------------------------ARTIST(Leonardo da Vinci)--------------------------------------------
+
+"passphrase": "demand hungry surface wear pond great economy essence occur crowd leave large"
+
+"binaryAddress": "eee694bc9a6f5ca064cf1e6b99e3b93d63996d79",
+
+------------------------------collector1(MANU)--------------------------------------------
+
+"passphrase": "fruit session repair run noise brush turkey glue whale fame spice example"
+
+"binaryAddress": "4189dd498ea5d119dfa9dad1c35fb3170a5ec0eb",
+
+------------------------------collector1(SHU)------------------------------------------
+
+"passphrase": "defense audit accuse evoke mass helmet end scatter people lecture title void",
+"binaryAddress": "5f01ca377ff3c82b1a143202779915cd305b7bc8",

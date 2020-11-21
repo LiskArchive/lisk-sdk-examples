@@ -40,7 +40,7 @@ app.registerModule(NFTModule);
 app.registerPlugin(HTTPAPIPlugin);
 app.registerPlugin(NFTAPIPlugin);
 
-// 6.Run the application
+// 7.Run the application
 app
 	.run()
 	.then(() => console.info('NFT Blockchain running....'))

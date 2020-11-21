@@ -92,8 +92,8 @@ class NFTAPIPlugin extends BasePlugin {
     this._server = this._app.listen(8080, "0.0.0.0");
   }
 
-  // listen to application events and enrich blockchain data for third party application
   _subscribeToChannel() {
+    // listen to application events and enrich blockchain data for UI/third party application
     this._channel.subscribe('app:block:new', async (eventInfo) => {
       const { block } = eventInfo.data;
       const { payload } = codec.decode(
@@ -103,6 +103,7 @@ class NFTAPIPlugin extends BasePlugin {
       if (payload.length > 0) {
         await saveTransactions(this._db, payload);
         const decodedBlock = this.codec.decodeBlock(block);
+        // save NFT transaction history
         await saveNFTHistory(this._db, decodedBlock, this._nodeInfo.registeredModules);
       }
     });
@@ -119,6 +120,8 @@ class NFTAPIPlugin extends BasePlugin {
         resolve();
       });
     });
+    // close database connection
+    await this._db.close();
   }
 }
 
