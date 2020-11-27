@@ -13,7 +13,7 @@ class HelloAsset extends BaseAsset {
     name = 'helloAsset';
     id = HelloAssetID;
     schema = {
-        $id: '/hello/asset',
+        $id: 'lisk/hello/asset',
         type: 'object',
         required: ["helloString"],
         properties: {

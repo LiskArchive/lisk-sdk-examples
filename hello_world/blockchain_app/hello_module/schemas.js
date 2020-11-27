@@ -13,7 +13,7 @@ const helloCounterSchema = {
 };
 
 const helloAssetSchema = {
-  $id: "lisk/hello/new",
+  $id: "lisk/hello/asset",
   type: "object",
   required: ["helloString"],
   properties: {
