@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
-import {
-    HelloTransaction,
-} from 'lisk-hello-transactions';
-import { api } from '../api.js';
-import { cryptography } from '@liskhq/lisk-client';
-import {utils} from "@liskhq/lisk-transactions";
-
-const networkIdentifier = cryptography.getNetworkIdentifier(
-    "19074b69c97e6f6b86969bb62d4f15b888898b499777bda56a3a2ee642a7f20a",
-    "Lisk",
-);
+import * as api from '../api.js';
+import { createHelloTx } from '../transactions/create_hello_tx';
 
 class Hello extends Component {
 
@@ -19,10 +10,9 @@ class Hello extends Component {
         this.state = {
             hello: '',
             fee: '',
-            nonce: '',
             passphrase: '',
-            response: { meta: { status: false }},
             transaction: {},
+            response: {}
         };
     }
 
@@ -32,32 +22,23 @@ class Hello extends Component {
         this.setState({[nam]: val});
     };
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
 
-        const helloTransaction = new HelloTransaction({
-            asset: {
-                hello: this.state.hello,
-            },
+        const res = await createHelloTx({
+            helloString: this.state.hello,
             fee: this.state.fee.toString(),
-            nonce: this.state.nonce.toString(),
+            passphrase: this.state.passphrase,
+            networkIdentifier: 'f9aa0b17154aa27aa17f585b96b19a6559ed6ef3805352188312912c7b9192e5',
+            minFeePerByte: 1000,
         });
-
-        helloTransaction.sign(networkIdentifier,this.state.passphrase);
-
-        if ( helloTransaction.minFee() > helloTransaction.fee) {
-            this.setState({response:"Please provide a higher fee. Minimum fee for the current transaction: " + helloTransaction.minFee()});
-            this.setState({transaction:helloTransaction});
-        } else {
-
-            api.transactions.broadcast(helloTransaction.toJSON()).then(response => {
-                this.setState({response:response});
-                this.setState({transaction:helloTransaction});
-            }).catch(err => {
-                console.log(JSON.stringify(err, null, 2));
+        await api.sendTransactions(res.tx).then((response) => {
+            this.setState({
+              transaction: res.tx,
+              response: { status: response.status, message: response.statusText}
             });
-        }
-    }
+        });
+    };
 
     render() {
         return (
@@ -74,21 +55,15 @@ class Hello extends Component {
                         <input type="text" id="fee" name="fee" onChange={this.handleChange} />
                     </label>
                     <label>
-                        Nonce:
-                        <input type="text" id="nonce" name="nonce" onChange={this.handleChange} />
-                    </label>
-                    <label>
                         Passphrase:
                         <input type="text" id="passphrase" name="passphrase" onChange={this.handleChange} />
                     </label>
                     <input type="submit" value="Submit" />
                 </form>
-                {this.state.response.meta.status &&
                 <div>
                     <pre>Transaction: {JSON.stringify(this.state.transaction, null, 2)}</pre>
-                    <p>Response: {JSON.stringify(this.state.response, null, 2)}</p>
+                    <pre>Response: {JSON.stringify(this.state.response, null, 2)}</pre>
                 </div>
-                }
             </div>
         );
     }

@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --mode development --open --hot",
-    "build": "webpack --mode production",
-    "postinstall": "node ./bufferFix.js"
+    "build": "webpack --mode production"
   },
   "keywords": [],
   "author": "",
@@ -23,8 +22,7 @@
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
-    "@liskhq/lisk-client": "^4.0.0-debug.0",
-    "lisk-hello-transactions": "file:../transactions",
+    "@liskhq/lisk-client": "^5.0.0-alpha.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0"
