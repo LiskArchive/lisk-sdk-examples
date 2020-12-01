@@ -6,10 +6,10 @@ Each example project represents an industry use case in which we showcase the po
 Currently exist the following example blockchain applications:
 
 SDK v4
-- Hello world (beginner example)
 - Lisk Transport (**Supply chain industry use case**)
 
 SDK v5
+- Hello world (beginner example)
 - NFT (non-fungable-token proof-of-concept)
 
 All industry use cases will be kept up to date with the latest Lisk SDK release.
@@ -17,10 +17,17 @@ Also, you'll find an `/archive` folder that contains older examples referring to
 At the moment, the `/archive` folder contains examples for Lisk SDK `v2` and `v3`.
 
 ## [Hello World](./hello_world)
-A hello world application built with the Lisk SDK v4.
+A hello world application built with the Lisk SDK v5.
 
-Implements the `HelloTransaction`, which is saving a custom string into the senders account.
+Implements the `HelloModule`, which is saving a custom string into the senders account.
 It also equipped with a basic react frontend app including the most common interactions.
+
+## [NFT Demo](./nft)
+A blockchain application built with the Lisk SDK v5.
+
+It demonstrates the use of On-Chain and Off-Chain architecture by creating a custom module and a plugin for Lisk application.
+A few transactions are also included.
+It also equipped with a react frontend app to show the usage of transactions.
 
 ## [Supply chain: Lisk Transport](./transport)
 A blockchain application built with the Lisk SDK v4.
@@ -32,10 +39,3 @@ During the whole transport cycle, the packet is tracked and it can fire alarms t
 
 In addition, anyone can become a carrier.
 For example, you can pick up a packet that has its destination on your daily commute and earn a small reward for this.
-
-## [NFT Demo](./nft)
-A blockchain application built with the Lisk SDK v5.
-
-It demonstrates the use of On-Chain and Off-Chain architecture by creating a custom module and a plugin for Lisk application.
-A few transactions are also included.
-It also equipped with a react frontend app to show the usage of transactions.
