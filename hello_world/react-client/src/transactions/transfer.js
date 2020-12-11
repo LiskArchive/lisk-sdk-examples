@@ -1,6 +1,8 @@
-import { transactions, codec, cryptography } from "@liskhq/lisk-client";
 import { getFullAssetSchema, calcMinTxFee } from "../utils";
 import { fetchAccountInfo } from "../api";
+import * as transactions from '@liskhq/lisk-transactions';
+import * as codec from '@liskhq/lisk-codec';
+import * as cryptography from '@liskhq/lisk-cryptography';
 
 export const transferAssetSchema = {
   $id: "lisk/transfer-asset",
