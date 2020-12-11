@@ -1,45 +1,46 @@
-import React, { Component } from 'react';
+import { cryptography } from '@liskhq/lisk-client';
+import React, { useState } from 'react';
 import * as api from '../api.js';
 
-class Account extends Component {
+const Account = () => {
+    const [state, updateState] = useState({
+        address: '',
+        account: {},
+    });
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            address: '',
-            account: {},
-        };
-    }
-
-    handleChange = (event) => {
-        let nam = event.target.name;
-        let val = event.target.value;
-        this.setState({[nam]: val});
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        updateState({
+            ...state,
+            [name]: value,
+        });
     };
 
-    handleSubmit = async (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        this.setState({account: await api.fetchAccountInfo(this.state.address)});
+        const client = await api.getClient();
+        const account = await client.account.get(cryptography.getAddressFromBase32Address(state.address));
+        updateState({
+            ...state,
+            account: client.account.toJSON(account),
+        });
     };
 
-    render() {
-        return (
+    return (
+        <div>
+            <h2>Account</h2>
+            <p>Get account details by address.</p>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Address:
+                        <input type="text" id="address" name="address" onChange={handleChange} value={state.address} />
+                </label>
+                <input type="submit" value="Submit" />
+            </form>
             <div>
-                <h2>Account</h2>
-                <p>Get account details by address.</p>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Address:
-                        <input type="text" id="address" name="address" onChange={this.handleChange} />
-                    </label>
-                    <input type="submit" value="Submit" />
-                </form>
-                <div>
-                    <pre>Transaction: {JSON.stringify(this.state.account, null, 2)}</pre>
-                </div>
+                <pre>Account: {JSON.stringify(state.account, null, 2)}</pre>
             </div>
-        );
-    }
+        </div>
+    );
 }
 export default Account;

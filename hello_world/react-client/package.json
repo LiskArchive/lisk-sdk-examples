@@ -4,7 +4,7 @@
   "description": "Lisk Passphrase generator",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --open --hot",
+    "start": "webpack serve --mode development --open --hot --port 8989",
     "build": "webpack --mode production"
   },
   "keywords": [],
@@ -16,18 +16,23 @@
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
     "babel-loader": "^8.0.4",
-    "html-webpack-plugin": "^3.2.0",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.1",
-    "webpack-dev-server": "^3.1.14"
+    "html-webpack-plugin": "^4.5.0",
+    "webpack": "^5.5.1",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "@liskhq/lisk-codec": "^0.1.0",
-    "@liskhq/lisk-cryptography": "^3.0.0",
-    "@liskhq/lisk-passphrase": "^3.0.1",
-    "@liskhq/lisk-transactions": "^5.0.0",
+    "@liskhq/lisk-client": "^5.0.1-alpha.0",
+    "crypto-browserify": "^3.12.0",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "querystring-es3": "^0.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "stream-browserify": "^3.0.0",
+    "url": "^0.11.0",
+    "util": "^0.12.3"
   }
 }

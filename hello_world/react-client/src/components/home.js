@@ -26,8 +26,8 @@ class Home extends Component {
             helloCounter: helloData.helloCounter
           },
           latestHello: {
-            message: latestHello.hello,
-            sender: latestHello.sender
+            message: latestHello ? latestHello.hello: '',
+            sender: latestHello ? latestHello.sender : '',
         }});
     }
 

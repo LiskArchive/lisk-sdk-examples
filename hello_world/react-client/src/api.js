@@ -1,6 +1,14 @@
+const { apiClient, cryptography } = require('@liskhq/lisk-client');
+const RPC_ENDPOINT = 'ws://localhost:8888/ws';
 
-const LISK_API = 'http://localhost:4000';
-const CUSTOM_API = 'http://localhost:8080';
+let clientCache;
+
+export const getClient = async () => {
+    if (!clientCache) {
+        clientCache = await apiClient.createWSClient(RPC_ENDPOINT);
+    }
+    return clientCache;
+};
 
 export const sendTransactions = async (tx) => {
     return fetch(LISK_API + "/api/transactions", {
@@ -13,21 +21,16 @@ export const sendTransactions = async (tx) => {
 };
 
 export const fetchAccountInfo = async (address) => {
-    return fetch(LISK_API +`/api/accounts/${address}`)
-        .then((res) => res.json())
-        .then((res) => res.data);
-};
+    const client = await getClient();
+    return client.account.get(cryptography.getAddressFromBase32Address(address));
+}
 
 export const fetchHelloCounter = async () => {
-    return fetch(CUSTOM_API + "/api/hello_counter")
-        .then((res) => res.json())
-        .then((res) => {
-            return res.data
-        })
-};
+    const client = await getClient();
+    return client.invoke('hello:amountOfHellos');
+}
 
 export const fetchLatestHello = async () => {
-    return fetch(CUSTOM_API + '/api/latest_hello')
-        .then((res) => res.json())
-        .then((res) => res.data);
+    const client = await getClient();
+    return client.invoke('HelloHTTPAPI:latestHello');
 };

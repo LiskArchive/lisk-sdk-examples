@@ -13,7 +13,7 @@ import SendHello from './Hello';
 import Account from './Account';
 import Transfer from './Transfer';
 
-export default function App() {
+export const app = () => {
     return (
         <Router>
             <div>
@@ -56,3 +56,5 @@ export default function App() {
         </Router>
     );
 }
+
+export default app;
