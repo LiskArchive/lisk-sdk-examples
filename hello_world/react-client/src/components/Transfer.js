@@ -35,16 +35,16 @@ const Transfer = () => {
                 data: '',
             },
         }, state.passphrase);
-        let err;
+        let res;
         try {
-            await client.transaction.send(tx);
+            res = await client.transaction.send(tx);
         } catch (error) {
-            err = error;
+            res = error;
         }
 
         updateState({
             transaction: client.transaction.toJSON(tx),
-            response: err,
+            response: res,
             address: '',
             amount: '',
             fee: '',

@@ -34,11 +34,12 @@ const Faucet = () => {
                 data: '',
             },
         }, accounts.genesis.passphrase);
-        await client.transaction.send(tx);
+        const response = await client.transaction.send(tx);
         updateState({
             transaction: client.transaction.toJSON(tx),
             address: '',
             amount: '',
+            response:response
         });
     }
 

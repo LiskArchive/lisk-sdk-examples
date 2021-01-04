@@ -7,7 +7,7 @@ class HelloAPIPlugin extends BasePlugin {
   _hello = undefined;
 
   static get alias() {
-    return "HelloHTTPAPI";
+    return "HelloAPI";
   }
 
   static get info() {
