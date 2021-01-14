@@ -4,7 +4,7 @@ const appConfig = utils.objects.mergeDeep({}, configDevnet, {
   label: 'my-app',
   rpc: {
     enable: true,
-    mode: "ipc",
+    mode: "ws",
     port: 8080
   },
 });

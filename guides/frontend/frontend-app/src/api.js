@@ -1,13 +1,11 @@
 const { apiClient, cryptography } = require('@liskhq/lisk-client');
-const RPC_ENDPOINT = '~/.lisk/my-app';
-const RPC_ENDPOINT2 = 'ws://localhost:8080/ws';
+const RPC_ENDPOINT = 'ws://localhost:8080/ws';
 
 let clientCache;
 
 export const getClient = async () => {
     if (!clientCache) {
-        clientCache = await apiClient.createIPCClient(RPC_ENDPOINT);
-        //clientCache = await apiClient.createWSClient(RPC_ENDPOINT);
+        clientCache = await apiClient.createWSClient(RPC_ENDPOINT);
     }
     return clientCache;
 };
