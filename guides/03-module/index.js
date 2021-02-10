@@ -1,6 +1,21 @@
-const { Application, genesisBlockDevnet, configDevnet } = require('lisk-sdk');
+const { Application, genesisBlockDevnet, configDevnet, utils } = require('lisk-sdk');
 const { MyModule } = require('./my-module.js');
-console.log(MyModule);
+
+// Update genesis block accounts to include the hello attribute
+genesisBlockDevnet.header.asset.accounts = genesisBlockDevnet.header.asset.accounts.map(
+  (a) =>
+    utils.objects.mergeDeep({}, a, {
+      myModule: {
+        key1 : "",
+        key2 : false,
+        key3 : 0
+      },
+    }),
+);
+
+// Set a custom label for the bblockchain app
+configDevnet.label = 'my-app';
+
 const app = Application.defaultApplication(genesisBlockDevnet, configDevnet);
 
 app.registerModule(MyModule);

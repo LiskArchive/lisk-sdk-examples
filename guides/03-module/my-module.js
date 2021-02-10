@@ -1,24 +1,11 @@
 const { BaseModule } = require('lisk-sdk');
 const { myAccountSchema } = require('./schemas.js');
 //const { myAsset } = require('./my-asset.js');
-/*console.log('myAccountSchema');
-console.log(myAccountSchema);*/
+
 class MyModule extends BaseModule {
   id = 1024;
-  name = 'my-module';
+  name = 'myModule';
   accountSchema = myAccountSchema;
-/*  accountSchema = {
-    type: 'object',
-    properties: {
-      helloMessage: {
-        fieldNumber: 1,
-        dataType: 'string',
-      },
-    },
-    default: {
-      helloMessage: '',
-    },
-  };*/
   transactionAssets = [];//[ new myAsset() ];
   actions = {
     myAction: async () => {
@@ -58,10 +45,10 @@ class MyModule extends BaseModule {
   };
   async afterGenesisBlockApply({genesisBlock, stateStore, reducerHandler}) {
     // Sets the hello counter to zero after the genesis block is applied
-    await stateStore.chain.set(
+    /*await stateStore.chain.set(
       CHAIN_STATE_HELLO_COUNTER,
       codec.encode(helloCounterSchema, { helloCounter: 0 })
-    );
+    );*/
   };
   async beforeBlockApply({block, stateStore, reducerHandler}) {
     // Code in here is applied before each block is applied.
