@@ -1,12 +1,12 @@
 const { BaseModule } = require('lisk-sdk');
 const { myAccountSchema } = require('./schemas.js');
-//const { myAsset } = require('./my-asset.js');
+const { MyAsset } = require('./my-asset.js');
 
 class MyModule extends BaseModule {
   id = 1024;
   name = 'myModule';
   accountSchema = myAccountSchema;
-  transactionAssets = [];//[ new myAsset() ];
+  transactionAssets = [ new MyAsset() ];
   actions = {
     myAction: async () => {
       // Returns some data
@@ -31,7 +31,7 @@ class MyModule extends BaseModule {
 
   async afterTransactionApply({transaction, stateStore, reducerHandler}) {
     // Code in here is applied after each transaction is applied.
-    /*if (transaction.moduleID === this.id && transaction.assetID === MyAssetID) {
+    if (transaction.moduleID === this.id && transaction.assetID === MyAssetID) {
 
       const myAsset = codec.decode(
         myAssetSchema,
@@ -41,7 +41,7 @@ class MyModule extends BaseModule {
       this._channel.publish('my-module:myEvent', {
         sender: transaction._senderAddress.toString('hex')
       });
-    }*/
+    }
   };
   async afterGenesisBlockApply({genesisBlock, stateStore, reducerHandler}) {
     // Code in here is applied after the genesis block is applied.
