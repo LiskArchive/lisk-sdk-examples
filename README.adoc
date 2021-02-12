@@ -9,12 +9,12 @@ This is a collection of working code examples, which are used in the Lisk SDK do
 
 All code examples are grouped after the guide that contains them in the documentation
 
-* xref:./guides/01-start[01-start]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/setup.html[Starting a blockchain application]
-* xref:./guides/02-configuration[02-configuration]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/configuration.html[Configuring a blockchain application]
-* xref:./guides/03-module[03-module]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/module.html[Creating a custom module]
-* xref:./guides/04-asset[04-asset]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/asset.html[Creating a custom asset]
-* xref:./guides/05-plugin[05-plugin]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/plugin.html[Creating a custom plugin]
-* xref:./guides/06-frontend[06-frontend]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/frontend.html[Communicating with a frontend]
+* link:guides/01-start[01-start]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/setup.html[Starting a blockchain application]
+* link:guides/02-configuration[02-configuration]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/configuration.html[Configuring a blockchain application]
+* link:guides/03-module[03-module]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/module.html[Creating a custom module]
+* link:guides/04-asset[04-asset]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/asset.html[Creating a custom asset]
+* link:guides/05-plugin[05-plugin]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/plugin.html[Creating a custom plugin]
+* link:guides/06-frontend[06-frontend]: Code examples from the guide xref:https://lisk.io/documentation/lisk-sdk/guides/app-development/frontend.html[Communicating with a frontend]
 
 == Tutorials: full example blockchain applications
 
@@ -35,20 +35,20 @@ All industry use cases will be kept up to date with the latest Lisk SDK release.
 Also, you'll find an `/archive` folder that contains older examples referring to previous Lisk SDK releases.
 At the moment, the `/archive` folder contains examples for Lisk SDK `v2`, `v3` and `v4`.
 
-=== xref:./tutorials/hello_world[Hello World]
+=== link:tutorials/hello-world[Hello World]
 A hello world application built with the Lisk SDK v5.
 
 Implements the `HelloModule`, which is saving a custom string into the senders account.
 It also equipped with a basic react frontend app including the most common interactions.
 
-=== xref:./tutorials/nft[NFT Demo]
+=== link:tutorials/nft[NFT Demo]
 A blockchain application built with the Lisk SDK v5.
 
 It demonstrates the use of On-Chain and Off-Chain architecture by creating a custom module and a plugin for Lisk application.
 A few transactions are also included.
 It also equipped with a react frontend app to show the usage of transactions.
 
-=== xref:./tutorials/archive/4.x/transport[Supply chain: Lisk Transport]
+=== link:tutorials/archive/4.x/transport[Supply chain: Lisk Transport]
 A blockchain application built with the Lisk SDK v4.
 
 Originally, the Lisk Transport workshop has been designed for the **Lisk.js 2019** event.
