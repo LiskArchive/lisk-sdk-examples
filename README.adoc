@@ -1,35 +1,40 @@
 # Lisk SDK examples
 
-This project contains example blockchain applications using the latest Lisk SDK.
+This repository contains working code examples and example blockchain applications using the Lisk SDK.
+
+## Guides: code examples
+
+## Tutorials: full example blockchain applications
+
 Each example project represents an industry use case in which we showcase the potential of the Lisk SDK and how it can transform this industry.
 
 Currently exist the following example blockchain applications:
-
-SDK v4
-- Lisk Transport (**Supply chain industry use case**)
 
 SDK v5
 - Hello world (beginner example)
 - NFT (non-fungable-token proof-of-concept)
 
+SDK v4
+- Lisk Transport (**Supply chain industry use case**)
+
 All industry use cases will be kept up to date with the latest Lisk SDK release.
 Also, you'll find an `/archive` folder that contains older examples referring to previous Lisk SDK releases. 
-At the moment, the `/archive` folder contains examples for Lisk SDK `v2` and `v3`.
+At the moment, the `/archive` folder contains examples for Lisk SDK `v2`, `v3` and `v4`.
 
-## [Hello World](./hello_world)
+## [Hello World](./tutorials/hello_world)
 A hello world application built with the Lisk SDK v5.
 
 Implements the `HelloModule`, which is saving a custom string into the senders account.
 It also equipped with a basic react frontend app including the most common interactions.
 
-## [NFT Demo](./nft)
+## [NFT Demo](./tutorials/nft)
 A blockchain application built with the Lisk SDK v5.
 
 It demonstrates the use of On-Chain and Off-Chain architecture by creating a custom module and a plugin for Lisk application.
 A few transactions are also included.
 It also equipped with a react frontend app to show the usage of transactions.
 
-## [Supply chain: Lisk Transport](./transport)
+## [Supply chain: Lisk Transport](./tutorials/archive/4.x/transport)
 A blockchain application built with the Lisk SDK v4.
 
 Originally, the Lisk Transport workshop has been designed for the **Lisk.js 2019** event.
