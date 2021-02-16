@@ -7,7 +7,7 @@ class MyPlugin extends BasePlugin {
   _knownTimestamps = [];
 
   static get alias() {
-    return "MyPlugin";
+    return "myPlugin";
   }
 
   static get info() {
@@ -49,7 +49,7 @@ class MyPlugin extends BasePlugin {
     channel.subscribe('app:block:new', (data) => {
       const decodedBlock = this.codec.decodeBlock(data.block);
       this._knownTimestamps.push(decodedBlock.header.timestamp);
-      channel.publish('MyPlugin:timestamp', { timestamp: decodedBlock.header.timestamp });
+      channel.publish('myPlugin:timestamp', { timestamp: decodedBlock.header.timestamp });
     });
   }
 
