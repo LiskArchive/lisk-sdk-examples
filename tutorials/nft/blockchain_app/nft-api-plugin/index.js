@@ -94,8 +94,8 @@ class NFTAPIPlugin extends BasePlugin {
 
   _subscribeToChannel() {
     // listen to application events and enrich blockchain data for UI/third party application
-    this._channel.subscribe('app:block:new', async (eventInfo) => {
-      const { block } = eventInfo.data;
+    this._channel.subscribe('app:block:new', async (data) => {
+      const { block } = data;
       const { payload } = codec.decode(
         this.schemas.block,
         Buffer.from(block, 'hex'),

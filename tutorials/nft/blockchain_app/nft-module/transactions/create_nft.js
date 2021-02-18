@@ -30,18 +30,15 @@ class CreateNFTAsset extends BaseAsset {
       },
     },
   };
-
+  validate({asset}) {
+    if (asset.initValue <= 0) {
+      throw new Error("NFT init value is too low.");
+    }
+  };
   async apply({ asset, stateStore, reducerHandler, transaction }) {
     // 4.verify if sender has enough balance
     const senderAddress = transaction.senderAddress;
     const senderAccount = await stateStore.account.get(senderAddress);
-    const minRemainingBalance = await reducerHandler.invoke(
-      "token:getMinRemainingBalance"
-    );
-
-    if (asset.initValue < minRemainingBalance) {
-      throw new Error("NFT init value is too low.");
-    }
 
     // 5.create nft token
     const nftToken = createNFTToken({

@@ -7,9 +7,7 @@ const PurchaseNFT = require("./transactions/purchase_nft");
 // Extend base module to implement your custom module
 class NFTModule extends BaseModule {
   name = "nft";
-  id = 1000;
-  transactionAssets = [new CreateNFT(), new PurchaseNFT()];
-
+  id = 1024;
   accountSchema = {
     type: "object",
     required: ["ownNFTs"],
@@ -26,11 +24,11 @@ class NFTModule extends BaseModule {
       ownNFTs: [],
     },
   };
-
+  transactionAssets = [new CreateNFT(), new PurchaseNFT()];
   actions = {
     // get all the registered NFT tokens from blockchain
     getAllNFTTokens: async () => getAllNFTTokensAsJSON(this._dataAccess),
   };
 }
 
-module.exports = NFTModule;
+module.exports = { NFTModule };
