@@ -4,13 +4,13 @@ const { getAllNFTTokens, setAllNFTTokens } = require("../nft_token");
 // 1.extend base asset to implement your custom asset
 class TransferNFTAsset extends BaseAsset {
   // 2.define unique asset name and id
-  name = "purchaseNFT";
-  id = 1;
+  name = "transferNFT";
+  id = 2;
   // 3.define asset schema for serialization
   schema = {
     $id: "lisk/nft/transfer",
     type: "object",
-    required: ["nftId", "recipient", "name"],
+    required: ["nftId", "recipient"],
     properties: {
       nftId: {
         dataType: "bytes",
@@ -40,7 +40,9 @@ class TransferNFTAsset extends BaseAsset {
     const senderAddress = transaction.senderAddress;
     // 5.verify that the sender owns the nft
 
-    if (tokenOwnerAddress !== senderAddress) {
+    console.log('tokenOwnerAddress: ', tokenOwnerAddress);
+    console.log('senderAddress: ', senderAddress);
+    if (!tokenOwnerAddress.equals(senderAddress)) {
       throw new Error("An NFT can only be transferred by the owner of the NFT.");
     }
 
@@ -56,7 +58,7 @@ class TransferNFTAsset extends BaseAsset {
     const recipientAddress = asset.recipient;
     const recipientAccount = await stateStore.account.get(recipientAddress);
     recipientAccount.nft.ownNFTs.push(token.id);
-    await stateStore.account.set(purchaserAddress, recipientAccount);
+    await stateStore.account.set(recipientAddress, recipientAccount);
 
     token.ownerAddress = recipientAddress;
     nftTokens[nftTokenIndex] = token;

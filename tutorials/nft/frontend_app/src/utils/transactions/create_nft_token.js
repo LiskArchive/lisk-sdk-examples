@@ -45,7 +45,7 @@ export const createNFTToken = async ({
   const { id, ...rest } = transactions.signTransaction(
     createNFTTokenSchema,
     {
-      moduleID: 1000,
+      moduleID: 1024,
       assetID: 0,
       nonce: BigInt(nonce),
       fee: BigInt(transactions.convertLSKToBeddows(fee)),

@@ -10,7 +10,7 @@ class PurchaseNFTAsset extends BaseAsset {
   schema = {
     $id: "lisk/nft/purchase",
     type: "object",
-    required: ["nftId", "purchaseValue", "name"],
+    required: ["nftId", "purchaseValue"],
     properties: {
       nftId: {
         dataType: "bytes",

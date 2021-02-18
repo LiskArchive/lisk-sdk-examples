@@ -13,6 +13,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { transactions, cryptography, Buffer } from "@liskhq/lisk-client";
 
 import PurchaseNFTTokenDialog from "./dialogs/PurchaseNFTTokenDialog";
+import TransferNFTDialog from "./dialogs/TransferNFTDialog";
 
 const useStyles = makeStyles((theme) => ({
   propertyList: {
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 export default function NFTToken(props) {
   const classes = useStyles();
   const [openPurchase, setOpenPurchase] = useState(false);
+  const [openTransfer, setOpenTransfer] = useState(false);
   const base32UIAddress = cryptography.getBase32AddressFromAddress(Buffer.from(props.item.ownerAddress, 'hex'), 'lsk').toString('binary');
   return (
     <Card>
@@ -94,6 +96,24 @@ export default function NFTToken(props) {
 
       </CardContent>
       <CardActions>
+        <>
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => {
+              setOpenTransfer(true);
+            }}
+          >
+            Transfer
+          </Button>
+          <TransferNFTDialog
+            open={openTransfer}
+            handleClose={() => {
+              setOpenTransfer(false);
+            }}
+            token={props.item}
+          />
+        </>
         {props.item.minPurchaseMargin > 0 ? (
           <>
             <Button
