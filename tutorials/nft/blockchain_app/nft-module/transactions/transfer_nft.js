@@ -10,14 +10,14 @@ class TransferNFTAsset extends BaseAsset {
   schema = {
     $id: "lisk/nft/transfer",
     type: "object",
-    required: ["nftId", "purchaseValue", "name"],
+    required: ["nftId", "recipient", "name"],
     properties: {
       nftId: {
         dataType: "bytes",
         fieldNumber: 1,
       },
-      purchaseValue: {
-        dataType: "uint64",
+      recipient: {
+        dataType: "bytes",
         fieldNumber: 2,
       },
       name: {
@@ -31,59 +31,36 @@ class TransferNFTAsset extends BaseAsset {
     const nftTokens = await getAllNFTTokens(stateStore);
     const nftTokenIndex = nftTokens.findIndex((t) => t.id.equals(asset.nftId));
 
-    // 4.verify if purchasing nft token exists
+    // 4.verify if the nft exists
     if (nftTokenIndex < 0) {
       throw new Error("Token id not found");
     }
     const token = nftTokens[nftTokenIndex];
-    const tokenOwner = await stateStore.account.get(token.ownerAddress);
-    const tokenOwnerAddress = tokenOwner.address;
+    const tokenOwnerAddress = token.ownerAddress;
+    const senderAddress = transaction.senderAddress;
+    // 5.verify that the sender owns the nft
 
-    // 5.verify if minimum nft purchasing condition met
-    if (token && token.minPurchaseMargin === 0) {
-      throw new Error("This NFT token can not be purchased");
+    if (tokenOwnerAddress !== senderAddress) {
+      throw new Error("An NFT can only be transferred by the owner of the NFT.");
     }
 
-    const tokenCurrentValue = token.value;
-    const tokenMinPurchaseValue =
-      tokenCurrentValue +
-      (tokenCurrentValue * BigInt(token.minPurchaseMargin)) / BigInt(100);
-    const purchaseValue = asset.purchaseValue;
-
-    if (tokenMinPurchaseValue > purchaseValue) {
-      throw new Error("Token can not be purchased on given value");
-    }
-
-    const purchaserAddress = transaction.senderAddress;
-    const purchaserAccount = await stateStore.account.get(purchaserAddress);
-
-    // 6.remove nft token from owner account
+    const tokenOwner = await stateStore.account.get(tokenOwnerAddress);
+    // 6.remove nft from the owner account
     const ownerTokenIndex = tokenOwner.nft.ownNFTs.findIndex((a) =>
       a.equals(token.id)
     );
     tokenOwner.nft.ownNFTs.splice(ownerTokenIndex, 1);
     await stateStore.account.set(tokenOwnerAddress, tokenOwner);
 
-    // 7.add nft token to purchaser account
-    purchaserAccount.nft.ownNFTs.push(token.id);
-    await stateStore.account.set(purchaserAddress, purchaserAccount);
+    // 7.add nft to the recipient account
+    const recipientAddress = asset.recipient;
+    const recipientAccount = await stateStore.account.get(recipientAddress);
+    recipientAccount.nft.ownNFTs.push(token.id);
+    await stateStore.account.set(purchaserAddress, recipientAccount);
 
-    token.ownerAddress = purchaserAddress;
-    token.value = purchaseValue;
+    token.ownerAddress = recipientAddress;
     nftTokens[nftTokenIndex] = token;
     await setAllNFTTokens(stateStore, nftTokens);
-
-    // 8.debit LSK tokens from purchaser account
-    await reducerHandler.invoke("token:debit", {
-      address: purchaserAddress,
-      amount: purchaseValue,
-    });
-
-    // 9.credit LSK tokens to purchaser account
-    await reducerHandler.invoke("token:credit", {
-      address: tokenOwnerAddress,
-      amount: purchaseValue,
-    });
   }
 }
 

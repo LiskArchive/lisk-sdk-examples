@@ -31,7 +31,7 @@ class PurchaseNFTAsset extends BaseAsset {
     const nftTokens = await getAllNFTTokens(stateStore);
     const nftTokenIndex = nftTokens.findIndex((t) => t.id.equals(asset.nftId));
 
-    // 4.verify if purchasing nft token exists
+    // 4.verify if purchasing nft exists
     if (nftTokenIndex < 0) {
       throw new Error("Token id not found");
     }
@@ -57,14 +57,14 @@ class PurchaseNFTAsset extends BaseAsset {
     const purchaserAddress = transaction.senderAddress;
     const purchaserAccount = await stateStore.account.get(purchaserAddress);
 
-    // 6.remove nft token from owner account
+    // 6.remove nft from owner account
     const ownerTokenIndex = tokenOwner.nft.ownNFTs.findIndex((a) =>
       a.equals(token.id)
     );
     tokenOwner.nft.ownNFTs.splice(ownerTokenIndex, 1);
     await stateStore.account.set(tokenOwnerAddress, tokenOwner);
 
-    // 7.add nft token to purchaser account
+    // 7.add nft to purchaser account
     purchaserAccount.nft.ownNFTs.push(token.id);
     await stateStore.account.set(purchaserAddress, purchaserAccount);
 

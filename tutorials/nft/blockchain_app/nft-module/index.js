@@ -3,6 +3,7 @@ const { getAllNFTTokensAsJSON } = require("./nft_token");
 
 const CreateNFT = require("./transactions/create_nft");
 const PurchaseNFT = require("./transactions/purchase_nft");
+const TransferNFTAsset = require("./transactions/transfer_nft");
 
 // Extend base module to implement your custom module
 class NFTModule extends BaseModule {
@@ -14,7 +15,7 @@ class NFTModule extends BaseModule {
     properties: {
       ownNFTs: {
         type: "array",
-        fieldNumber: 4,
+        fieldNumber: 1,
         items: {
           dataType: "bytes",
         },
@@ -24,7 +25,7 @@ class NFTModule extends BaseModule {
       ownNFTs: [],
     },
   };
-  transactionAssets = [new CreateNFT(), new PurchaseNFT()];
+  transactionAssets = [new CreateNFT(), new PurchaseNFT(), new TransferNFTAsset()];
   actions = {
     // get all the registered NFT tokens from blockchain
     getAllNFTTokens: async () => getAllNFTTokensAsJSON(this._dataAccess),

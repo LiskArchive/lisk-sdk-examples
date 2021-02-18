@@ -40,7 +40,7 @@ class CreateNFTAsset extends BaseAsset {
     const senderAddress = transaction.senderAddress;
     const senderAccount = await stateStore.account.get(senderAddress);
 
-    // 5.create nft token
+    // 5.create nft
     const nftToken = createNFTToken({
       name: asset.name,
       ownerAddress: senderAddress,
@@ -53,13 +53,13 @@ class CreateNFTAsset extends BaseAsset {
     senderAccount.nft.ownNFTs.push(nftToken.id);
     await stateStore.account.set(senderAddress, senderAccount);
 
-    // 7.debit tokens from sender account to create nft token
+    // 7.debit tokens from sender account to create nft
     await reducerHandler.invoke("token:debit", {
       address: senderAddress,
       amount: asset.initValue,
     });
 
-    // 8.save nft tokens
+    // 8.save nfts
     const allTokens = await getAllNFTTokens(stateStore);
     allTokens.push(nftToken);
     await setAllNFTTokens(stateStore, allTokens);
