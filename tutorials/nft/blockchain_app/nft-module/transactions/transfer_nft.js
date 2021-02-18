@@ -39,9 +39,7 @@ class TransferNFTAsset extends BaseAsset {
     const tokenOwnerAddress = token.ownerAddress;
     const senderAddress = transaction.senderAddress;
     // 5.verify that the sender owns the nft
-
-    console.log('tokenOwnerAddress: ', tokenOwnerAddress);
-    console.log('senderAddress: ', senderAddress);
+    
     if (!tokenOwnerAddress.equals(senderAddress)) {
       throw new Error("An NFT can only be transferred by the owner of the NFT.");
     }
