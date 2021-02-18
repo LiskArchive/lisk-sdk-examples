@@ -3,7 +3,7 @@ const {
   getAllNFTTokens,
   setAllNFTTokens,
   createNFTToken,
-} = require("../nft_token");
+} = require("../nft");
 
 // 1.extend base asset to implement your custom asset
 class CreateNFTAsset extends BaseAsset {

@@ -1,5 +1,5 @@
 const { BaseAsset } = require("lisk-sdk");
-const { getAllNFTTokens, setAllNFTTokens } = require("../nft_token");
+const { getAllNFTTokens, setAllNFTTokens } = require("../nft");
 
 // 1.extend base asset to implement your custom asset
 class TransferNFTAsset extends BaseAsset {
@@ -39,7 +39,7 @@ class TransferNFTAsset extends BaseAsset {
     const tokenOwnerAddress = token.ownerAddress;
     const senderAddress = transaction.senderAddress;
     // 5.verify that the sender owns the nft
-    
+
     if (!tokenOwnerAddress.equals(senderAddress)) {
       throw new Error("An NFT can only be transferred by the owner of the NFT.");
     }

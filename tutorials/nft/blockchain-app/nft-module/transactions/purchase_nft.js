@@ -1,5 +1,5 @@
 const { BaseAsset } = require("lisk-sdk");
-const { getAllNFTTokens, setAllNFTTokens } = require("../nft_token");
+const { getAllNFTTokens, setAllNFTTokens } = require("../nft");
 
 // 1.extend base asset to implement your custom asset
 class PurchaseNFTAsset extends BaseAsset {

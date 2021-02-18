@@ -1,5 +1,5 @@
 const { BaseModule } = require("lisk-sdk");
-const { getAllNFTTokensAsJSON } = require("./nft_token");
+const { getAllNFTTokensAsJSON } = require("./nft");
 
 const CreateNFT = require("./transactions/create_nft");
 const PurchaseNFT = require("./transactions/purchase_nft");
