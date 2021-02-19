@@ -14,8 +14,8 @@ const { SRSAPIPlugin } = require('./srs_plugin/');
 // 3.Update the genesis block accounts to include SRS module attributes
 genesisBlockDevnet.header.timestamp = 1605699440;
 genesisBlockDevnet.header.asset.accounts = genesisBlockDevnet.header.asset.accounts.map(
-	(a) =>
-		utils.objects.mergeDeep({}, a, {
+	(account) =>
+		utils.objects.mergeDeep({}, account, {
 			srs: {
 				config: {
 					friends: [],

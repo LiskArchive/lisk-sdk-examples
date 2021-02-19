@@ -32,7 +32,7 @@ class ClaimRecoveryAsset extends BaseAsset {
         if ((currentHeight - rescuer.srs.status.created) < delayPeriod) {
             throw new Error(`Cannot claim account before delay period of ${delayPeriod}.`);
         }
-        console.log(lostAccount.srs.status.vouchList.length, recoveryThreshold)
+
         if (lostAccount.srs.status.vouchList.length < recoveryThreshold) {
             throw new Error(`Cannot claim account until minimum threshold of ${lostAccount.srs.config.friends.length} friends have vouched.`);
         }

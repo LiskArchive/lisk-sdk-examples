@@ -42,7 +42,7 @@ class CreateRecoveryAsset extends BaseAsset {
         if (sameAccount) {
             throw new Error('You cannot add yourself to the friend list.');
         }
-        // Sorting addresses to have binary search when vouch
+        // Add friends to the list
         sender.srs.config.friends = [...asset.friends.sort()];
         // Minimum number of friends required to vouch
         sender.srs.config.recoveryThreshold = asset.recoveryThreshold;

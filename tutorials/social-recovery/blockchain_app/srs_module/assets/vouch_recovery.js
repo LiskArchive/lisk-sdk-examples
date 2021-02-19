@@ -1,21 +1,4 @@
-const { BaseAsset, cryptography } = require('lisk-sdk');
-
-const validateSignature = (
-	publicKey,
-	signature,
-	transactionBytes,
-	id,
-) => {
-	const valid = cryptography.verifyData(transactionBytes, signature, publicKey);
-
-	if (!valid) {
-		throw new Error(
-			`Failed to validate signature '${signature.toString(
-				'hex',
-			)}' for transaction with id '${id.toString('hex')}'`,
-		);
-	}
-};
+const { BaseAsset } = require('lisk-sdk');
 
 class VouchRecoveryAsset extends BaseAsset {
 	name = 'vouchRecovery';
@@ -49,21 +32,6 @@ class VouchRecoveryAsset extends BaseAsset {
             throw new Error(`Rescuer address is incorrect for the recovery of ${lostAccount.address.toString('hex')}`)
         }
 
-        const { networkIdentifier } = stateStore.chain;
-        const transactionBytes = transaction.getSigningBytes();
-
-		const transactionWithNetworkIdentifierBytes = Buffer.concat([
-			networkIdentifier,
-			transactionBytes,
-		]);
-
-        validateSignature(
-            transaction.senderPublicKey,
-            transaction.signatures[0],
-            transactionWithNetworkIdentifierBytes,
-            transaction.id,
-        );
-
         const found = lostAccount.srs.config.friends.find(f => f.equals(sender.address));
 
         if (!found) {
@@ -76,7 +44,7 @@ class VouchRecoveryAsset extends BaseAsset {
         }
 
         // Push signature to vouch list
-        lostAccount.srs.status.vouchList.push(transaction.signatures[0]);
+        lostAccount.srs.status.vouchList.push(sender.address);
         await stateStore.account.set(lostAccount.address, lostAccount);
     }
 }
