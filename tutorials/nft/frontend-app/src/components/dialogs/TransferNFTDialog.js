@@ -27,9 +27,6 @@ export default function TransferNFTDialog(props) {
   const currentValue = parseFloat(
     transactions.convertBeddowsToLSK(props.token.value)
   );
-  const minPurchaseMargin = parseFloat(props.token.minPurchaseMargin);
-  const minPurchaseValue =
-    currentValue + (currentValue * minPurchaseMargin) / 100.0;
 
   const [data, setData] = useState({
     name: props.token.name,

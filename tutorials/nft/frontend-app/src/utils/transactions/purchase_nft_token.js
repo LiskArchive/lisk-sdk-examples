@@ -44,7 +44,7 @@ export const purchaseNFTToken = async ({
   const { id, ...rest } = transactions.signTransaction(
     purchaseNFTTokenSchema,
     {
-      moduleID: 1000,
+      moduleID: 1024,
       assetID: 1,
       nonce: BigInt(nonce),
       fee: BigInt(transactions.convertLSKToBeddows(fee)),

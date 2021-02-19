@@ -85,7 +85,7 @@ const saveNFTHistory = async (db, decodedBlock, registeredModules) => {
   decodedBlock.payload.map(async trx => {
     const module = registeredModules.find(m => m.id === trx.moduleID);
     if (module.name === 'nft') {
-      const dbKey = `${trx.asset.nftId}`;
+      const dbKey = `nft:${trx.asset.nftId}`;
       const base32Address = cryptography.getBase32AddressFromPublicKey(Buffer.from(trx.senderPublicKey, 'hex'), 'lsk');
       const savedHistory = await getNFTHistory(db, dbKey);
       const nftHistory = [Buffer.from(base32Address, 'binary'), ...savedHistory];
