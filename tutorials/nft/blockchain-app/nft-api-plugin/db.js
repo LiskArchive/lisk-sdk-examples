@@ -86,6 +86,7 @@ const saveNFTHistory = async (db, decodedBlock, registeredModules) => {
     const module = registeredModules.find(m => m.id === trx.moduleID);
     if (module.name === 'nft') {
       const dbKey = `nft:${trx.asset.nftId}`;
+      //if asset.name === transferNFT, base32Address needs to be bbased on the recipient address, and not the senderPubblickey.
       const base32Address = cryptography.getBase32AddressFromPublicKey(Buffer.from(trx.senderPublicKey, 'hex'), 'lsk');
       const savedHistory = await getNFTHistory(db, dbKey);
       const nftHistory = [Buffer.from(base32Address, 'binary'), ...savedHistory];

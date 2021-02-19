@@ -49,7 +49,7 @@ class NFTAPIPlugin extends BasePlugin {
     this._app.get("/api/nft_tokens", async (_req, res) => {
       const nftTokens = await this._channel.invoke("nft:getAllNFTTokens");
       const data = await Promise.all(nftTokens.map(async token => {
-        const dbKey = `nft:${token.nftId}`;
+        const dbKey = `nft:${token.id}`;
         let tokenHistory = await getNFTHistory(this._db, dbKey);
         tokenHistory = tokenHistory.map(h => h.toString('binary'));
         return {
@@ -64,7 +64,7 @@ class NFTAPIPlugin extends BasePlugin {
     this._app.get("/api/nft_tokens/:id", async (req, res) => {
       const nftTokens = await this._channel.invoke("nft:getAllNFTTokens");
       const token = nftTokens.find((t) => t.id === req.params.id);
-      const dbKey = `nft:${token.nftId}`;
+      const dbKey = `nft:${token.id}`;
       let tokenHistory = await getNFTHistory(this._db, dbKey);
       tokenHistory = tokenHistory.map(h => h.toString('binary'));
 
