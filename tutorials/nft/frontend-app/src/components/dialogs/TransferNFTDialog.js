@@ -11,7 +11,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { NodeInfoContext } from "../../context";
 import { transferNFT } from "../../utils/transactions/transfer_nft";
 import * as api from "../../api";
-import { transactions } from "@liskhq/lisk-client";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,9 +23,6 @@ const useStyles = makeStyles((theme) => ({
 export default function TransferNFTDialog(props) {
   const nodeInfo = useContext(NodeInfoContext);
   const classes = useStyles();
-  const currentValue = parseFloat(
-    transactions.convertBeddowsToLSK(props.token.value)
-  );
 
   const [data, setData] = useState({
     name: props.token.name,

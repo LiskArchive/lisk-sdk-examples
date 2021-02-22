@@ -65,18 +65,19 @@ function App() {
 			height: info.height,
 		});
 	};
-
-	const fetchData = async () => {
-		const info = await api.fetchNodeInfo();
-		updateNodeInfoState({
-			networkIdentifier: info.networkIdentifier,
-			minFeePerByte: info.genesisConfig.minFeePerByte,
-			height: info.height,
-		});
-		setInterval(updateHeight, 1000);
-	};
-
-	useEffect(fetchData, []);
+	
+	useEffect(() => {
+    async function fetchData() {
+      const info = await api.fetchNodeInfo();
+      updateNodeInfoState({
+        networkIdentifier: info.networkIdentifier,
+        minFeePerByte: info.genesisConfig.minFeePerByte,
+        height: info.height,
+      });
+      setInterval(updateHeight, 1000);
+    }
+    fetchData();
+  }, []);
 
 	const handleSpeedDialClose = () => {
 		setOpenSpeedDial(false);
