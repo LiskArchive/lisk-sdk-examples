@@ -104,7 +104,7 @@ class NFTAPIPlugin extends BasePlugin {
         await saveTransactions(this._db, payload);
         const decodedBlock = this.codec.decodeBlock(block);
         // save NFT transaction history
-        await saveNFTHistory(this._db, decodedBlock, this._nodeInfo.registeredModules);
+        await saveNFTHistory(this._db, decodedBlock, this._nodeInfo.registeredModules, this._channel);
       }
     });
   }

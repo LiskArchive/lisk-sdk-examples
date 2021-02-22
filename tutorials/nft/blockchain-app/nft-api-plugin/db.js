@@ -81,17 +81,41 @@ const getNFTHistory = async (db, dbKey) => {
   }
 };
 
-const saveNFTHistory = async (db, decodedBlock, registeredModules) => {
+const saveNFTHistory = async (db, decodedBlock, registeredModules, channel) => {
   decodedBlock.payload.map(async trx => {
     const module = registeredModules.find(m => m.id === trx.moduleID);
     if (module.name === 'nft') {
-      const dbKey = `nft:${trx.asset.nftId}`;
-      //if asset.name === transferNFT, base32Address needs to be bbased on the recipient address, and not the senderPubblickey.
-      const base32Address = (trx.assetID === 2) ? cryptography.getBase32AddressFromAddress(Buffer.from(trx.asset.recipient, 'hex')) : cryptography.getBase32AddressFromPublicKey(Buffer.from(trx.senderPublicKey, 'hex'), 'lsk');
-      const savedHistory = await getNFTHistory(db, dbKey);
-      const nftHistory = [Buffer.from(base32Address, 'binary'), ...savedHistory];
-      const encodedNFTHistory = codec.encode(encodedNFTHistorySchema, { nftHistory });
-      await db.put(dbKey, encodedNFTHistory);
+    let dbKey, savedHistory, base32Address, nftHistory, encodedNFTHistory;
+      if (trx.assetID === 0){
+        channel.invoke('nft:getAllNFTTokens').then(async (val) => {
+          //console.log('nfts');
+         // console.dir(val);
+          //val.map(nft => {
+          for (let i = 0; i < val.length; i++) {
+            const senderAdress = cryptography.getAddressFromPublicKey(Buffer.from(trx.senderPublicKey, 'hex'));
+            if (val[i].ownerAddress === senderAdress.toString('hex')) {
+              dbKey = `nft:${val[i].id}`;
+          //  console.log('pieps2');
+              savedHistory = await getNFTHistory(db, dbKey);
+         //     console.log('savedHistory');
+         //     console.dir(savedHistory);
+              if (savedHistory && savedHistory.length < 1) {
+                base32Address = cryptography.getBase32AddressFromPublicKey(Buffer.from(trx.senderPublicKey, 'hex'), 'lsk');
+                nftHistory = [Buffer.from(base32Address, 'binary'), ...savedHistory];
+                encodedNFTHistory = codec.encode(encodedNFTHistorySchema, { nftHistory });
+                await db.put(dbKey, encodedNFTHistory);
+              }
+            }
+          };
+        });
+      } else {
+        dbKey = `nft:${trx.asset.nftId}`;
+        base32Address = (trx.assetID === 2) ? cryptography.getBase32AddressFromAddress(Buffer.from(trx.asset.recipient, 'hex')) : cryptography.getBase32AddressFromPublicKey(Buffer.from(trx.senderPublicKey, 'hex'), 'lsk');
+        savedHistory = await getNFTHistory(db, dbKey);
+        nftHistory = [Buffer.from(base32Address, 'binary'), ...savedHistory];
+        encodedNFTHistory = codec.encode(encodedNFTHistorySchema, { nftHistory });
+        await db.put(dbKey, encodedNFTHistory);
+      }
     }
   });
 };
