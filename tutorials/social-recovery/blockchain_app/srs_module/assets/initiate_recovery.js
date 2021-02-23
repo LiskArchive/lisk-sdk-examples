@@ -31,18 +31,18 @@ class InitiateRecoveryAsset extends BaseAsset {
 
         // Check if recovery configuration is present for the lost account or not
         if (lostAccount.srs.config && lostAccount.srs.config.friends.length === 0) {
-            throw Error('Lost account already has no recovery configuration.')
+            throw Error('Lost account has no recovery configuration.')
         }
 
         const currentHeight = stateStore.chain.lastBlockHeaders[0].height;
         const deposit = lostAccount.srs.config.deposit;
 
-        // Check if rescuer account have enough balance
-        const minRemainingBalance = await reducerHandler.invoke(
-            'token:getMinRemainingBalance'
-          );
+        // Check if rescuer account has enough balance
+        const rescuerBalance = await reducerHandler.invoke('token:getBalance', {
+            address: rescuer.address,
+        });
 
-        if (deposit > minRemainingBalance) {
+        if (deposit > rescuerBalance) {
             throw new Error('Rescuer doesnt have enough balance to deposit for recovery process.');
         }
         // Deduct the balance from rescuer and update rescuer account
@@ -51,13 +51,14 @@ class InitiateRecoveryAsset extends BaseAsset {
             amount: deposit,
           });
 
+        // Update lost account address to active recovery
         lostAccount.srs.status.active = true;
         lostAccount.srs.status.rescuer = rescuer.address;
         lostAccount.srs.status.created = currentHeight;
         lostAccount.srs.status.deposit = deposit;
         lostAccount.srs.status.vouchList = [];
 
-        await stateStore.account.set(rescuer.address, rescuer);
+        // Save lost account values to stateStore
         await stateStore.account.set(lostAccount.address, lostAccount);
     }
 }

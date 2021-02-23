@@ -1,15 +1,17 @@
 /* global BigInt */
 
 const { transactions, cryptography } = require('@liskhq/lisk-client');
-const { initiateRecoverySchema } = require('../schemas');
 const { SRS_MODULE_ID, DEFAULT_FEE, SRS_REMOVE_ASSET_ID } = require('../constants');
-
+const { removeRecoverySchema } = require('../schemas')
 const removeRecovery = (
     codec,
     channel,
     nodeInfo,
 ) => async (req, res) => {
-    const { passphrase, fee } = req.body;
+    const { passphrase, lostAccount, fee } = req.body;
+    const asset = {
+      lostAccount: Buffer.from(lostAccount, 'hex'),
+    }
     const { publicKey } = cryptography.getPrivateAndPublicKeyFromPassphrase(
         passphrase
     );
@@ -20,7 +22,7 @@ const removeRecovery = (
     const { sequence: { nonce } } = codec.decodeAccount(account);
 
     const { id, ...tx } = transactions.signTransaction(
-        {},
+        removeRecoverySchema,
         {
             moduleID: SRS_MODULE_ID,
             assetID: SRS_REMOVE_ASSET_ID,

@@ -137,6 +137,18 @@ const closeRecoverySchema = {
 	},
 };
 
+const removeRecoverySchema = {
+	$id: 'srs/recovery/remove',
+	type: 'object',
+	required: ['lostAccount'],
+	properties: {
+		lostAccount: {
+			dataType: 'bytes',
+			fieldNumber: 1,
+		},
+	},
+};
+
 module.exports = {
     baseAssetSchema,
     createRecoverySchema,
@@ -145,4 +157,5 @@ module.exports = {
 	vouchRecoverySchema,
 	closeRecoverySchema,
 	claimRecoverySchema,
+	removeRecoverySchema,
 };

@@ -23,7 +23,7 @@ class CloseRecoveryAsset extends BaseAsset {
 	}) {
         const lostAccount = await stateStore.account.get(transaction.senderAddress);
         if (!lostAccount.srs.status.active) {
-            throw new Error(`No active recovery found for address ${lostAccount.address}.`);
+            throw new Error(`No active recovery found for address ${lostAccount.address.toString('hex')}.`);
         }
         if (!lostAccount.srs.status.rescuer.equals(asset.rescuer)) {
             throw new Error(`Incorrect rescuer address`);
@@ -31,9 +31,10 @@ class CloseRecoveryAsset extends BaseAsset {
 
         const rescuer = await stateStore.account.get(asset.rescuer);
 
+        // Debit deposit amount from the rescuer and credit to the lost account
         await reducerHandler.invoke('token:debit', {
             address: rescuer.address,
-            amount: rescuer.srs.config.deposit,
+            amount: lostAccount.srs.config.deposit,
           });
 
         await reducerHandler.invoke('token:credit', {
@@ -41,12 +42,13 @@ class CloseRecoveryAsset extends BaseAsset {
             amount: lostAccount.srs.config.deposit,
           });
 
-        lostAccount.srs.config.active = false;
-        lostAccount.srs.status.rescuer = rescuer.address;
-        lostAccount.srs.status.created = currentHeight;
-        lostAccount.srs.status.deposit = deposit;
+        // Reset recovery status
+        lostAccount.srs.status.active = false;
+        lostAccount.srs.status.rescuer = Buffer.from('');
+        lostAccount.srs.status.created = 0;
+        lostAccount.srs.status.deposit = BigInt('0');
         lostAccount.srs.status.vouchList = [];
-        await stateStore.account.set(rescuer.address, rescuer);
+        await stateStore.account.set(lostAccount.address, lostAccount);
     }
 }
 

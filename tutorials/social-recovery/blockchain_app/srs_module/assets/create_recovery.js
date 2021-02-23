@@ -1,6 +1,6 @@
-const { BaseAsset } = require('lisk-sdk');
+const { BaseAsset, transactions } = require('lisk-sdk');
 
-const BASE_RECOVERY_DEPOSIT = 10;
+const BASE_RECOVERY_DEPOSIT = '1000000000';
 const FRIEND_FACTOR_FEE = 2;
 
 class CreateRecoveryAsset extends BaseAsset {
@@ -49,8 +49,9 @@ class CreateRecoveryAsset extends BaseAsset {
         // Minimum number of blocks after recovery process when account will be recoverable
         sender.srs.config.delayPeriod = asset.delayPeriod;
         // Set the deposit based on number of friends, 10 + friends.length * 2
-        const deposit = BASE_RECOVERY_DEPOSIT + sender.srs.config.friends.length * FRIEND_FACTOR_FEE;
+        const deposit = BigInt(BASE_RECOVERY_DEPOSIT) + BigInt(transactions.convertLSKToBeddows((sender.srs.config.friends.length * FRIEND_FACTOR_FEE).toString()));
         sender.srs.config.deposit = deposit;
+        // Save the value in stateStore
         await stateStore.account.set(sender.address, sender);
     }
 }

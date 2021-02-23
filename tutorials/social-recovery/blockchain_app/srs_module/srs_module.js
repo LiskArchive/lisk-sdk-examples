@@ -23,7 +23,7 @@ class SRSModule extends BaseModule {
     ];
 
   actions = {
-    // Get all accounts with recovery configuration
+    // TODO:Get all accounts with recovery configuration
     // getAllRecoverableAccounts: async () => getAllRecoverableAccounts(),
   };
 }
