@@ -88,17 +88,11 @@ const saveNFTHistory = async (db, decodedBlock, registeredModules, channel) => {
     let dbKey, savedHistory, base32Address, nftHistory, encodedNFTHistory;
       if (trx.assetID === 0){
         channel.invoke('nft:getAllNFTTokens').then(async (val) => {
-          //console.log('nfts');
-         // console.dir(val);
-          //val.map(nft => {
           for (let i = 0; i < val.length; i++) {
             const senderAdress = cryptography.getAddressFromPublicKey(Buffer.from(trx.senderPublicKey, 'hex'));
             if (val[i].ownerAddress === senderAdress.toString('hex')) {
               dbKey = `nft:${val[i].id}`;
-          //  console.log('pieps2');
               savedHistory = await getNFTHistory(db, dbKey);
-         //     console.log('savedHistory');
-         //     console.dir(savedHistory);
               if (savedHistory && savedHistory.length < 1) {
                 base32Address = cryptography.getBase32AddressFromPublicKey(Buffer.from(trx.senderPublicKey, 'hex'), 'lsk');
                 nftHistory = [Buffer.from(base32Address, 'binary'), ...savedHistory];
