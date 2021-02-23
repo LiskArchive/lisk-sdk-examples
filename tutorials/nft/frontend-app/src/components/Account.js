@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Typography, Divider, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { transactions } from "@liskhq/lisk-client";
+import {Buffer, cryptography, transactions} from "@liskhq/lisk-client";
 import NFTToken from "./NFTToken";
 import { fetchNFTToken } from "../api";
 
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Account(props) {
   const [nftTokens, setNftTokens] = useState([]);
   const classes = useStyles();
+  const base32UIAddress = cryptography.getBase32AddressFromAddress(Buffer.from(props.account.address, 'hex'), 'lsk').toString('binary');
 
   useEffect(() => {
     async function fetchData() {
@@ -48,7 +49,7 @@ export default function Account(props) {
 
   return (
     <Container>
-      <Typography variant="h5">{props.account.address}</Typography>
+      <Typography variant="h5">{base32UIAddress}</Typography>
       <Divider />
       <dl className={classes.propertyList}>
         <li>
@@ -58,6 +59,8 @@ export default function Account(props) {
           </dd>
           <dt>Nonce</dt>
           <dd>{props.account.sequence.nonce}</dd>
+          <dt>Binary address</dt>
+          <dd>{props.account.address}</dd>
         </li>
       </dl>
       <Typography variant="h6">{"NFT Tokens"}</Typography>

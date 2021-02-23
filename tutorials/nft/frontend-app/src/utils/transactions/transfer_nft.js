@@ -37,6 +37,7 @@ export const transferNFT = async ({
     passphrase
   );
   const address = cryptography.getAddressFromPassphrase(passphrase);
+  const recipient = cryptography.getAddressFromBase32Address(recipientAddress);
   const {
     sequence: { nonce },
   } = await fetchAccountInfo(address.toString("hex"));
@@ -52,7 +53,7 @@ export const transferNFT = async ({
       asset: {
         name,
         nftId: Buffer.from(nftId, "hex"),
-        recipient: Buffer.from(recipientAddress, "hex"),
+        recipient: recipient,
       },
     },
     Buffer.from(networkIdentifier, "hex"),

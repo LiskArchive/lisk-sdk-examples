@@ -69,7 +69,7 @@ export default function NFTToken(props) {
               <dd>
                 <Link
                   component={RouterLink}
-                  to={`/accounts/${props.item.ownerAddress}`}
+                  to={`/accounts/${base32UIAddress}`}
                 >
                   {base32UIAddress}
                 </Link>
@@ -85,7 +85,7 @@ export default function NFTToken(props) {
               <dd>
                 <Link
                   component={RouterLink}
-                  to={`/accounts/${cryptography.getAddressFromBase32Address(base32UIAddress).toString('hex')}`}
+                  to={`/accounts/${base32UIAddress}`}
                 >
                   {base32UIAddress}
                 </Link>
@@ -104,7 +104,7 @@ export default function NFTToken(props) {
               setOpenTransfer(true);
             }}
           >
-            Transfer
+            Transfer NFT
           </Button>
           <TransferNFTDialog
             open={openTransfer}
@@ -123,7 +123,7 @@ export default function NFTToken(props) {
                 setOpenPurchase(true);
               }}
             >
-              Purchase
+              Purchase NFT
             </Button>
             <PurchaseNFTTokenDialog
               open={openPurchase}

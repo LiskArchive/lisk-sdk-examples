@@ -65,7 +65,7 @@ function App() {
 			height: info.height,
 		});
 	};
-	
+
 	useEffect(() => {
     async function fetchData() {
       const info = await api.fetchNodeInfo();

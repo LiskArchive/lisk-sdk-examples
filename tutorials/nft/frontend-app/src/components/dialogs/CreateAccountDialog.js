@@ -6,8 +6,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { getAddressFromPassphrase } from "@liskhq/lisk-cryptography";
-import { Mnemonic } from "@liskhq/lisk-passphrase";
+import { passphrase, cryptography } from "@liskhq/lisk-client";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,9 +21,9 @@ export default function CreateAccountDialog(props) {
   const classes = useStyles();
 
   useEffect(() => {
-    const passphrase = Mnemonic.generateMnemonic();
-    const address = getAddressFromPassphrase(passphrase).toString("hex");
-    setData({ passphrase, address });
+    const pw = passphrase.Mnemonic.generateMnemonic();
+    const address = cryptography.getBase32AddressFromPassphrase(pw).toString("hex");
+    setData({ passphrase: pw, address });
   }, [props.open]);
 
   return (

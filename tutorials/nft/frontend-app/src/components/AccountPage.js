@@ -2,6 +2,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchAccountInfo } from "../api";
 import Account from "./Account";
+import { cryptography } from "@liskhq/lisk-client";
+
 
 function AccountPage() {
   const { address } = useParams();
@@ -10,7 +12,8 @@ function AccountPage() {
 
   useEffect(() => {
     async function fetchData() {
-      setAccount(await fetchAccountInfo(address));
+      const binaryAddress = cryptography.getAddressFromBase32Address(address).toString('hex');
+      setAccount(await fetchAccountInfo(binaryAddress));
       setLoaded(true);
     }
 

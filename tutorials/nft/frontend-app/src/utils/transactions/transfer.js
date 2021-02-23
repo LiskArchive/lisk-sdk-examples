@@ -44,7 +44,7 @@ export const transfer = async ({
   const {
     sequence: { nonce },
   } = await fetchAccountInfo(address.toString("hex"));
-
+  const recipient = cryptography.getAddressFromBase32Address(recipientAddress);
   const { id, ...rest } = transactions.signTransaction(
     transferAssetSchema,
     {
@@ -55,7 +55,7 @@ export const transfer = async ({
       senderPublicKey: publicKey,
       asset: {
         amount: BigInt(transactions.convertLSKToBeddows(amount)),
-        recipientAddress: Buffer.from(recipientAddress, 'hex'),
+        recipientAddress: Buffer.from(recipient, 'hex'),
         data: "",
       },
     },
