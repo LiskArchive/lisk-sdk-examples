@@ -53,7 +53,7 @@ export default function TransferNFTDialog(props) {
     <Fragment>
       <Dialog open={props.open} onBackdropClick={props.handleClose}>
         <DialogTitle id="alert-dialog-title">
-          {"Transfer NFT Token"}
+          {"Transfer NFT"}
         </DialogTitle>
         <DialogContent>
           <form className={classes.root} noValidate autoComplete="off">
@@ -96,7 +96,7 @@ export default function TransferNFTDialog(props) {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleSend}>Transfer NFT Token</Button>
+          <Button onClick={handleSend}>Transfer NFT</Button>
         </DialogActions>
       </Dialog>
     </Fragment>

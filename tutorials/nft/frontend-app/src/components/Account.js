@@ -63,7 +63,7 @@ export default function Account(props) {
           <dd>{props.account.address}</dd>
         </li>
       </dl>
-      <Typography variant="h6">{"NFT Tokens"}</Typography>
+      <Typography variant="h6">{"NFTs"}</Typography>
       <Grid container spacing={4}>
         {nftTokens.map((item) => (
           <Grid item md={3}>

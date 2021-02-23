@@ -51,7 +51,7 @@ export default function CreateNFTTokenDialog(props) {
   return (
     <Fragment>
       <Dialog open={props.open} onBackdropClick={props.handleClose}>
-        <DialogTitle id="alert-dialog-title">{"Create NFT Token"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Create NFT"}</DialogTitle>
         <DialogContent>
           <form className={classes.root} noValidate autoComplete="off">
             <TextField
@@ -92,7 +92,7 @@ export default function CreateNFTTokenDialog(props) {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleSend}>Create NFT Token</Button>
+          <Button onClick={handleSend}>Create NFT</Button>
         </DialogActions>
       </Dialog>
     </Fragment>

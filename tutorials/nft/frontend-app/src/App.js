@@ -130,9 +130,9 @@ function App() {
 						direction={'up'}
 					>
 						<SpeedDialAction
-							key={'Create NFT Token'}
+							key={'Create NFT'}
 							icon={<AddPhotoAlternateIcon />}
-							tooltipTitle={'Create NFT Token'}
+							tooltipTitle={'Create NFT'}
 							onClick={() => {
 								setOpenSpeedDial(false);
 								setOpenDialog('CreateNFTTokenDialog');

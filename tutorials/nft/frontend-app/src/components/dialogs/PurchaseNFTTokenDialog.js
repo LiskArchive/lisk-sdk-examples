@@ -60,7 +60,7 @@ export default function PurchaseNFTTokenDialog(props) {
     <Fragment>
       <Dialog open={props.open} onBackdropClick={props.handleClose}>
         <DialogTitle id="alert-dialog-title">
-          {"Purchase NFT Token"}
+          {"Purchase NFT"}
         </DialogTitle>
         <DialogContent>
           <form className={classes.root} noValidate autoComplete="off">
@@ -103,7 +103,7 @@ export default function PurchaseNFTTokenDialog(props) {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleSend}>Purchase NFT Token</Button>
+          <Button onClick={handleSend}>Purchase NFT</Button>
         </DialogActions>
       </Dialog>
     </Fragment>
