@@ -55,7 +55,7 @@ export const transfer = async ({
       senderPublicKey: publicKey,
       asset: {
         amount: BigInt(transactions.convertLSKToBeddows(amount)),
-        recipientAddress: Buffer.from(recipient, 'hex'),
+        recipientAddress: recipient,
         data: "",
       },
     },
