@@ -9,7 +9,7 @@ const {
 
 // 2.Import NFT module and Plugin
 const { NFTModule } = require('./nft_module');
-const { NFTAPIPlugin } = require('./nft_api_lugin');
+const { NFTAPIPlugin } = require('./nft_api_plugin');
 
 // 3.Update the genesis block accounts to include NFT module attributes
 genesisBlockDevnet.header.timestamp = 1605699440;
