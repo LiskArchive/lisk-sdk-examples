@@ -8,8 +8,8 @@ const {
 } = require('lisk-sdk');
 
 // 2.Import NFT module and Plugin
-const { NFTModule } = require('./nft-module');
-const { NFTAPIPlugin } = require('./nft-api-plugin');
+const { NFTModule } = require('./nft_module');
+const { NFTAPIPlugin } = require('./nft_api_lugin');
 
 // 3.Update the genesis block accounts to include NFT module attributes
 genesisBlockDevnet.header.timestamp = 1605699440;
