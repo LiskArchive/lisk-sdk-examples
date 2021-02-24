@@ -4,6 +4,8 @@ const path = require("path");
 const { cryptography, codec, db } = require("lisk-sdk");
 
 const DB_KEY_TRANSACTIONS = "nft:transactions";
+const CREATENFT_ASSET_ID = 0;
+const TRANSFERNFT_ASSET_ID = 2;
 
 // Schemas
 const encodedTransactionSchema = {
@@ -86,7 +88,7 @@ const saveNFTHistory = async (db, decodedBlock, registeredModules, channel) => {
     const module = registeredModules.find(m => m.id === trx.moduleID);
     if (module.name === 'nft') {
     let dbKey, savedHistory, base32Address, nftHistory, encodedNFTHistory;
-      if (trx.assetID === 0){
+      if (trx.assetID === CREATENFT_ASSET_ID){
         channel.invoke('nft:getAllNFTTokens').then(async (val) => {
           for (let i = 0; i < val.length; i++) {
             const senderAdress = cryptography.getAddressFromPublicKey(Buffer.from(trx.senderPublicKey, 'hex'));
@@ -104,7 +106,7 @@ const saveNFTHistory = async (db, decodedBlock, registeredModules, channel) => {
         });
       } else {
         dbKey = `nft:${trx.asset.nftId}`;
-        base32Address = (trx.assetID === 2) ? cryptography.getBase32AddressFromAddress(Buffer.from(trx.asset.recipient, 'hex')) : cryptography.getBase32AddressFromPublicKey(Buffer.from(trx.senderPublicKey, 'hex'), 'lsk');
+        base32Address = (trx.assetID === TRANSFERNFT_ASSET_ID) ? cryptography.getBase32AddressFromAddress(Buffer.from(trx.asset.recipient, 'hex')) : cryptography.getBase32AddressFromPublicKey(Buffer.from(trx.senderPublicKey, 'hex'), 'lsk');
         savedHistory = await getNFTHistory(db, dbKey);
         nftHistory = [Buffer.from(base32Address, 'binary'), ...savedHistory];
         encodedNFTHistory = codec.encode(encodedNFTHistorySchema, { nftHistory });
