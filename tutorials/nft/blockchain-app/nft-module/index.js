@@ -1,9 +1,9 @@
 const { BaseModule } = require("lisk-sdk");
 const { getAllNFTTokensAsJSON } = require("./nft");
 
-const CreateNFT = require("./transactions/create_nft");
-const PurchaseNFT = require("./transactions/purchase_nft");
-const TransferNFTAsset = require("./transactions/transfer_nft");
+const CreateNFT = require("./transactions/create_nft_asset");
+const PurchaseNFT = require("./transactions/purchase_nft_asset");
+const TransferNFTAsset = require("./transactions/transfer_nft_asset");
 
 // Extend base module to implement your custom module
 class NFTModule extends BaseModule {
