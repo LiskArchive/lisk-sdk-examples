@@ -1,4 +1,4 @@
-const { BaseModule } = require('lisk-sdk');
+const { BaseModule, codec } = require('lisk-sdk');
 const  { CreateRecoveryAsset, CREATE_RECOVERY_ASSET_ID } = require('./assets/create_recovery');
 const { InitiateRecoveryAsset, INITIATE_RECOVERY_ASSET_ID } = require('./assets/initiate_recovery');
 const VouchRecovery = require('./assets/vouch_recovery');
@@ -28,15 +28,26 @@ class SRSModule extends BaseModule {
     // Code in here is applied after each transaction is applied.
     if (transaction.moduleID === this.id && transaction.assetID === CREATE_RECOVERY_ASSET_ID) {
 
-      const createRecoveryAsset = codec.decode(
+      let createRecoveryAsset = codec.decode(
         createRecoverySchema,
         transaction.asset
       );
 
-      this._channel.publish('srs:createdConfig', {
-        address: transaction._senderAddress.toString('hex'),
-        config: createRecoveryAsset
-      });
+      /*for (let i = 0; i < createRecoveryAsset.friends.length; i++) {
+        createRecoveryAsset.friends[i] = createRecoveryAsset.friends[i].toString('hex');
+      }*/
+
+      const friends = createRecoveryAsset.friends.map(bufferFriend => bufferFriend.toString('hex'));
+
+      /*console.log('createRecoveryAsset');
+      console.dir(createRecoveryAsset);*/
+
+       this._channel.publish('srs:createdConfig', {
+         address: transaction._senderAddress.toString('hex'),
+         friends: friends,
+         recoveryThreshold: createRecoveryAsset.recoveryThreshold,
+         delayPeriod: createRecoveryAsset.delayPeriod
+       });
     } else if (transaction.moduleID === this.id && transaction.assetID === REMOVE_RECOVERY_ASSET_ID) {
 
       this._channel.publish('srs:removedConfig', {
