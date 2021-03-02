@@ -1,19 +1,12 @@
 const { BaseAsset } = require('lisk-sdk');
+const { initiateRecoverySchema } = require('../schemas');
+
+const INITIATE_RECOVERY_ASSET_ID = 1;
 
 class InitiateRecoveryAsset extends BaseAsset {
 	name = 'initiateRecovery';
-	id = 1;
-	schema = {
-        $id: 'srs/recovery/initiate',
-        type: 'object',
-        required: ['lostAccount'],
-        properties: {
-            lostAccount: {
-                dataType: 'bytes',
-                fieldNumber: 1,
-            },
-        },
-    };
+	id = INITIATE_RECOVERY_ASSET_ID;
+	schema = initiateRecoverySchema;
 
     async apply({
 		asset,
@@ -63,4 +56,4 @@ class InitiateRecoveryAsset extends BaseAsset {
     }
 }
 
-module.exports = InitiateRecoveryAsset;
+module.exports = { InitiateRecoveryAsset, INITIATE_RECOVERY_ASSET_ID };

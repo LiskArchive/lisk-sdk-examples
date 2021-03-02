@@ -1,33 +1,15 @@
 const { BaseAsset, transactions } = require('lisk-sdk');
+const { createRecoverySchema } = require('../schemas');
+
 
 const BASE_RECOVERY_DEPOSIT = '1000000000';
 const FRIEND_FACTOR_FEE = 2;
+const CREATE_RECOVERY_ASSET_ID = 0;
 
 class CreateRecoveryAsset extends BaseAsset {
 	name = 'createRecovery';
-	id = 0;
-	schema = {
-        $id: 'srs/recovery/create',
-        type: 'object',
-        required: ['friends', 'recoveryThreshold', 'delayPeriod'],
-        properties: {
-            friends: {
-                type: 'array',
-                fieldNumber: 1,
-                items: {
-                    dataType: 'bytes',
-                },
-            },
-            recoveryThreshold: {
-                dataType: 'uint32',
-                fieldNumber: 2,
-              },
-            delayPeriod: {
-                dataType: 'uint32',
-                fieldNumber: 3,
-            },
-        },
-    };
+	id = CREATE_RECOVERY_ASSET_ID;
+	schema = createRecoverySchema;
 
     async apply({
 		asset,
@@ -56,4 +38,5 @@ class CreateRecoveryAsset extends BaseAsset {
     }
 }
 
-module.exports = CreateRecoveryAsset;
+module.exports = { CreateRecoveryAsset, CREATE_RECOVERY_ASSET_ID };
+
