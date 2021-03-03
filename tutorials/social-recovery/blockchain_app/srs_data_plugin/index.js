@@ -60,9 +60,16 @@ const getConfigAccounts = async (database) => {
   }
 };
 
+const saveConfigAccounts = async (database) => {
+  //const savedConfigs = await getConfigAccounts(database);
+  //const encodedConfigs = codec.encode(encodedConfigAccountsSchema, savedConfigs);
+
+  await database.put(DB_KEY_CONFIGACCOUNTS, { accounts: this._accountsWithConfig });
+};
+
 // 1.plugin can be a daemon/HTTP/Websocket service for off-chain processing
 class SRSDataPlugin extends BasePlugin {
-  _accountsWithConfig = [];
+  _accountsWithConfig = undefined;
   _db = undefined;
 
   static get alias() {
@@ -92,13 +99,24 @@ class SRSDataPlugin extends BasePlugin {
   }
 
   async load(channel) {
-    this._db = getDBInstance();
+    this._db = await getDBInstance();
     this._accountsWithConfig =  await getConfigAccounts(this._db);
-    channel.subscribe('srs:createdConfig', (info) => {
+    channel.subscribe('srs:createdConfig', async (info) => {
       console.log('info: ',info);
       //const { address, ...rest } = info;
-      this._accountsWithConfig.push(info);
-      console.log('this._accountsWithConfig: ', this._accountsWithConfig)
+      let duplicate = false;
+      for (let i = 0; i < this._accountsWithConfig.length; i++) {
+        if (this._accountsWithConfig[i].address === info.address) {
+          console.log('found!');
+          duplicate = true;
+          return;
+        }
+      }
+      if (!duplicate){
+        this._accountsWithConfig.push(info);
+      }
+      console.log('this._accountsWithConfig: ', this._accountsWithConfig);
+      await saveConfigAccounts(this._db);
     });
   }
 
