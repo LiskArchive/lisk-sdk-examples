@@ -15,6 +15,7 @@ import CloseRecovery from './closeRecovery';
 import RemoveRecovery from './removeRecovery';
 import GetAccount from './getAccount';
 import GetNodeInfo from './getNodeInfo';
+import GetRecoveryAccounts from './getRecoveryAccounts';
 import SideMenu from './sideMenu';
 import Home from './home';
 
@@ -122,6 +123,9 @@ export default function RecoveryManager() {
           </Route>
           <Route path="/nodeInfo">
             <GetNodeInfo />
+          </Route>
+          <Route path="/recoveryAccounts">
+            <GetRecoveryAccounts />
           </Route>
           <Route path="/">
             <Home />

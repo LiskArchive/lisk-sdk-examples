@@ -10,6 +10,7 @@ const {
 // 2.Import SRS module
 const { SRSModule } = require('./srs_module');
 const { SRSAPIPlugin } = require('./srs_api_plugin/');
+const { SRSDataPlugin } = require('./srs_data_plugin/');
 
 // 3.Update the genesis block accounts to include SRS module attributes
 genesisBlockDevnet.header.timestamp = 1605699440;
@@ -43,8 +44,8 @@ const appConfig = utils.objects.mergeDeep({}, configDevnet, {
 	},
     rpc: {
         enable: true,
-        mode: 'ipc',
-        port: 8080,
+        mode: 'ws',
+        port: 8888,
     },
 });
 
@@ -55,6 +56,7 @@ const app = Application.defaultApplication(genesisBlockDevnet, appConfig);
 app.registerModule(SRSModule);
 app.registerPlugin(HTTPAPIPlugin);
 app.registerPlugin(SRSAPIPlugin);
+app.registerPlugin(SRSDataPlugin);
 
 // 7.Run the application
 app

@@ -28,6 +28,7 @@ const menuItems = [
 const secondaryMenu = [
     { key: 'account', text: 'Get Account', icon: <AccountCircleIcon style={{ color: green[500] }}/> },
     { key: 'nodeInfo', text: 'Get Node Info', icon: <DvrIcon style={{ color: blue[500] }} />},
+    { key: 'recoveryAccounts', text: 'Get Recovery Accounts', icon: <DvrIcon style={{ color: blue[500] }} />},
 ];
 
 const useStyles = makeStyles(() => ({
