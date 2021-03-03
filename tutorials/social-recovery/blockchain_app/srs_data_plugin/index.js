@@ -1,10 +1,10 @@
-const { BasePlugin, db } = require('lisk-sdk');
+const { BasePlugin, db, codec } = require('lisk-sdk');
 const pJSON = require('../package.json');
 const fs_extra = require("fs-extra");
 const os = require("os");
 const path = require("path");
 
-const DB_KEY_CONFIGACCOUNTS = "srs:configaccounts";
+const DB_KEY_CONFIGACCOUNTS = "srs:configAccounts";
 
 const getDBInstance = async (dataPath = '~/.lisk/srs-app/', dbName = 'srs_data_plugin.db') => {
   const dirPath = path.join(dataPath.replace('~', os.homedir()), 'plugins/data', dbName);
@@ -32,7 +32,6 @@ const encodedConfigAccountsSchema = {
             fieldNumber: 2,
             items: {
               dataType: 'bytes',
-              fieldNumber: 1,
             }
           },
           recoveryThreshold: {
@@ -63,11 +62,20 @@ const getConfigAccounts = async (database) => {
   }
 };
 
-const saveConfigAccounts = async (database) => {
+const saveConfigAccounts = async (database, accounts) => {
   //const savedConfigs = await getConfigAccounts(database);
-  //const encodedConfigs = codec.encode(encodedConfigAccountsSchema, savedConfigs);
+  const bufferAccounts = accounts.map(account => {
 
-  await database.put(DB_KEY_CONFIGACCOUNTS, { accounts: this._accountsWithConfig });
+    account.address = Buffer.from(account.address, 'hex');
+    account.friends = account.friends.map(friend => Buffer.from(friend, 'hex'));
+  });
+
+  console.log('-------- bufferAccounts ---------');
+  console.dir(bufferAccounts);
+  //for (let i = 0; i < val.length; i++) {
+  const encodedConfigs = codec.encode(encodedConfigAccountsSchema, { accounts });
+
+  await database.put(DB_KEY_CONFIGACCOUNTS, encodedConfigs);
 };
 
 // 1.plugin can be a daemon/HTTP/Websocket service for off-chain processing
@@ -97,7 +105,21 @@ class SRSDataPlugin extends BasePlugin {
 
   get actions() {
     return {
-      getAllRecoveryConfigs: () => this._accountsWithConfig,
+      getAllRecoveryConfigs: () => {
+        console.log('~~~~~~~ this._accountsWithConfig ~~~~~~~~~~');
+        console.dir(this._accountsWithConfig);
+        let stringAccounts = this._accountsWithConfig.map((account) => {
+
+          account.address = account.address.toString('hex');
+          account.friends = account.friends.map(friend => friend.toString('hex'));
+          console.log("acc");
+          console.dir(account);
+          return account;
+        });
+        console.log('~~~~~~~ stringAccounts ~~~~~~~~~~');
+        console.dir(stringAccounts);
+        return stringAccounts;
+      },
     };
   }
 
@@ -106,20 +128,24 @@ class SRSDataPlugin extends BasePlugin {
     this._accountsWithConfig =  await getConfigAccounts(this._db);
     channel.subscribe('srs:createdConfig', async (info) => {
       console.log('info: ',info);
+
+
       //const { address, ...rest } = info;
       let duplicate = false;
       for (let i = 0; i < this._accountsWithConfig.length; i++) {
-        if (this._accountsWithConfig[i].address === info.address) {
+        if (this._accountsWithConfig[i].address.toString('hex') === info.address) {
           console.log('found!');
           duplicate = true;
           return;
         }
       }
       if (!duplicate){
+        info.address = Buffer.from(info.address, 'hex');
+        info.friends = info.friends.map(friend => Buffer.from(friend, 'hex'));
         this._accountsWithConfig.push(info);
       }
       console.log('this._accountsWithConfig: ', this._accountsWithConfig);
-      await saveConfigAccounts(this._db);
+      await saveConfigAccounts(this._db, this._accountsWithConfig);
     });
   }
 
