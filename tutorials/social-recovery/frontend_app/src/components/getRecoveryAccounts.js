@@ -42,16 +42,6 @@ export default function GetRecoveryConfigs () {
     getRecoveryConfigs()
   }, [])
 
-/*
-  <Grid container spacing={4}>
-    {NFTAccounts.map((item) => (
-        <Grid item md={4}>
-          <NFTToken item={item} key={item.id} />
-        </Grid>
-      ))}
-</Grid>
-*/
-
   return (
     <Container component="main" className={classes.paper}>
       <CssBaseline />

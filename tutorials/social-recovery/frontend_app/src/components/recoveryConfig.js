@@ -42,7 +42,13 @@ export default function RecoveryConfig(props) {
         <dl className={classes.propertyList}>
           <li>
             <dt>Friends</dt>
-            <dd>{props.item.friends}</dd>
+            <dl>
+              {props.item.friends.map((friend) => (
+                <li key={friend}>
+                  <dd>{friend}</dd>
+                </li>
+              ))}
+            </dl>
           </li>
           <li>
             <dt>recoveryThreshold</dt>
