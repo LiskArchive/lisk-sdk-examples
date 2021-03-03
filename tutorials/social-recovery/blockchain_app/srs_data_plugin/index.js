@@ -13,7 +13,7 @@ const getDBInstance = async (dataPath = '~/.lisk/srs-app/', dbName = 'srs_data_p
 };
 
 const encodedConfigAccountsSchema = {
-  $id: 'srs/configAccounts',
+  $id: 'srs:configAccounts',
   type: 'object',
   required: ['accounts'],
   properties: {
@@ -24,14 +24,14 @@ const encodedConfigAccountsSchema = {
         type: 'object',
         properties: {
           address: {
-            dataType: 'binary',
+            dataType: 'bytes',
             fieldNumber: 1,
           },
           friends: {
             type: 'array',
             fieldNumber: 2,
             items: {
-              type: 'binary',
+              dataType: 'bytes',
               fieldNumber: 1,
             }
           },
@@ -53,9 +53,12 @@ const getConfigAccounts = async (database) => {
   try {
     const encodedConfigAccounts = await database.get(DB_KEY_CONFIGACCOUNTS);
     const { accounts } = codec.decode(encodedConfigAccountsSchema, encodedConfigAccounts);
+    console.log("+++++ get config accounts ++++++");
+    console.dir(accounts);
     return accounts;
   }
   catch (error) {
+    console.log('pieps');
     return [];
   }
 };
