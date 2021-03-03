@@ -103,8 +103,12 @@ const initiateRecoverySchema = {
 const removeRecoverySchema = {
   $id: 'srs/recovery/remove',
   type: 'object',
-  required: [],
+  required: ['lostAccount'],
   properties: {
+    lostAccount: {
+      dataType: 'bytes',
+      fieldNumber: 1,
+    },
   },
 };
 
