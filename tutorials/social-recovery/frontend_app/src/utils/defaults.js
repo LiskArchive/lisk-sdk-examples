@@ -1,50 +1,50 @@
 export const createRecoveryDefaults = {
-	friends: '6174515fa66c91bff1128913edd4e0f1de37cee0,328d0f546695c5fa02105deb055cf2801d9b8ba1,463e7e879b7bdc6a97ec02a2a603aa1a46a04c80',
+	friends: 'lsk32gnhxjs887bqmgoz6y6ozh6c4c6ztpz7wjfa9,lskb6bufqcbrwvgkzuu5wqu6wnruz7awvhxwfkonb,lskomdmvwhb9r3sgj3ryp4fsqnzfn8c8twzkecugt',
 	delayPeriod: 10,
 	recoveryThreshold: 2,
 	passphrase: 'peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready',
 };
 
 export const initiateRecoveryDefaults = {
-	lostAccount: 'd04699e57c4a3846c988f3c15306796f8eae5c1c',
+	lostAccount: 'lskdxc4ta5j43jp9ro3f8zqbxta9fn6jwzjucw7yt',
 	passphrase: 'endless focus guilt bronze hold economy bulk parent soon tower cement venue',
 };
 
 export const vouchRecoveryDefaults = {
-	lostAccount: 'd04699e57c4a3846c988f3c15306796f8eae5c1c',
-	rescuer: '9cabee3d27426676b852ce6b804cb2fdff7cd0b5',
+	lostAccount: 'lskdxc4ta5j43jp9ro3f8zqbxta9fn6jwzjucw7yt',
+	rescuer: 'lsktrqfj84n34tn97vraaq2ztmrgwgwakmqyskqw4',
 	passphrase: 'mushroom edit regular pencil ten casino wine north vague bachelor swim piece',
 };
 
 export const claimRecoveryDefaults = {
-	lostAccount: 'd04699e57c4a3846c988f3c15306796f8eae5c1c',
+	lostAccount: 'lskdxc4ta5j43jp9ro3f8zqbxta9fn6jwzjucw7yt',
 	passphrase: 'endless focus guilt bronze hold economy bulk parent soon tower cement venue',
 };
 
 export const closeRecoveryDefaults = {
-	rescuer: '9cabee3d27426676b852ce6b804cb2fdff7cd0b5',
+	rescuer: 'lsktrqfj84n34tn97vraaq2ztmrgwgwakmqyskqw4',
 	passphrase: 'peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready',
 };
 
 export const removeRecoveryDefaults = {
-	lostAccount: 'd04699e57c4a3846c988f3c15306796f8eae5c1c',
+	lostAccount: 'lskdxc4ta5j43jp9ro3f8zqbxta9fn6jwzjucw7yt',
 	passphrase: 'peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready',
 };
 
-export const defaultLostAddress = 'd04699e57c4a3846c988f3c15306796f8eae5c1c';
-export const defaultRescuerAddress = '9cabee3d27426676b852ce6b804cb2fdff7cd0b5';
+export const defaultLostAddress = 'lskdxc4ta5j43jp9ro3f8zqbxta9fn6jwzjucw7yt';
+export const defaultRescuerAddress = 'lsktrqfj84n34tn97vraaq2ztmrgwgwakmqyskqw4';
 
 export const defaultFriendsAccount = {
 	friend1: {
 		passphrase: 'mushroom edit regular pencil ten casino wine north vague bachelor swim piece',
-		address: '463e7e879b7bdc6a97ec02a2a603aa1a46a04c80',
+		address: 'lsk32gnhxjs887bqmgoz6y6ozh6c4c6ztpz7wjfa9',
 	},
 	friend2: {
 		passphrase: 'thought talk cherry write armed valve salute fabric auction maid join rebuild',
-		address: '328d0f546695c5fa02105deb055cf2801d9b8ba1',
+		address: 'lskb6bufqcbrwvgkzuu5wqu6wnruz7awvhxwfkonb',
 	},
 	friend3: {
 		passphrase: 'exist night more net diesel exact will purse orbit vacuum birth wide',
-		address: '6174515fa66c91bff1128913edd4e0f1de37cee0',
+		address: 'lskomdmvwhb9r3sgj3ryp4fsqnzfn8c8twzkecugt',
 	}
 };

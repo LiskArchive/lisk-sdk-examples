@@ -15,6 +15,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { sendTransactions } from '../api';
 import { initiateRecoveryDefaults } from '../utils/defaults';
+import { cryptography } from "@liskhq/lisk-client";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -77,7 +78,7 @@ export default function InitiateRecovery() {
   const handleSend = async (event) => {
     event.preventDefault();
     try {
-        const result = await sendTransactions({ lostAccount: data.lostAccount, passphrase: data.passphrase }, window.location.pathname.slice(1));
+        const result = await sendTransactions({ lostAccount: cryptography.getAddressFromBase32Address(data.lostAccount).toString('hex'), passphrase: data.passphrase }, window.location.pathname.slice(1));
         if (result.errors) {
             setData({ msg: result.errors[0].message, severity: 'error' });
         } else {

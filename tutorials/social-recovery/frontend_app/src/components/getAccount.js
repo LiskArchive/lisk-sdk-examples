@@ -15,6 +15,7 @@ import {
 import { grey } from '@material-ui/core/colors';
 import { fetchAccountInfo } from '../api';
 import { defaultLostAddress } from '../utils/defaults';
+import { cryptography } from '@liskhq/lisk-client';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -72,8 +73,12 @@ export default function GetAccount() {
 
   const handleSend = async (event) => {
     event.preventDefault();
+    console.log('data.accountAddress');
+    console.dir(data);
+    //console.log(cryptography.getBase32AddressFromAddress(Buffer.from(data.accountAddress, 'hex')));
     try {
-        const result = await fetchAccountInfo(data.accountAddress);
+        //const result = await fetchAccountInfo(data.accountAddress);
+        const result = await fetchAccountInfo(cryptography.getAddressFromBase32Address(data.accountAddress).toString('hex'));
         if (result.error) {
             setData({ severity: 'error', result: result.error, enableText: '' });
         } else {
@@ -130,7 +135,7 @@ export default function GetAccount() {
               <h3>SRS Config</h3>
               <b>friends:</b>
               <br/>
-              {data.result.data.srs.config.friends.map(f => (<i>{f}<br/></i>))}
+              {data.result.data.srs.config.friends.map(f => (<i>{cryptography.getBase32AddressFromAddress(Buffer.from(f, 'hex'))}<br/></i>))}
               <b>delayPeriod:</b><i>{data.result.data.srs.config.delayPeriod}<br/></i>
               <b>recoveryThreshold:</b><i>{data.result.data.srs.config.recoveryThreshold}<br/></i>
               <b>deposit:</b><i>{data.result.data.srs.config.deposit}<br/></i>
@@ -143,11 +148,11 @@ export default function GetAccount() {
               <h3>SRS Status</h3>
               <b>vouchList:</b>
               <br/>
-              {data.result.data.srs.status.vouchList.map(f => (<i>{f}<br/></i>))}
-              <b>rescuer:</b><i>{data.result.data.srs.status.rescuer}<br/></i>
+              {data.result.data.srs.status.vouchList.map(f => (<i>{cryptography.getBase32AddressFromAddress(Buffer.from(f, 'hex'))}<br/></i>))}
+              <b>rescuer:</b><i>{data.result.data.srs.status.rescuer? cryptography.getBase32AddressFromAddress(Buffer.from(data.result.data.srs.status.rescuer, 'hex')) : 'none'}<br/></i>
               <b>created:</b><i>{data.result.data.srs.status.created}<br/></i>
               <b>deposit:</b><i>{data.result.data.srs.status.deposit}<br/></i>
-              <b>active:</b><i>{data.result.data.srs.status.active}<br/></i>
+              <b>active:</b><i>{data.result.data.srs.status.active ? 'true':'false'}<br/></i>
               </Paper>
             </Grid>
           </Grid>

@@ -6,6 +6,7 @@ import {
   Divider,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { cryptography } from "@liskhq/lisk-client";
 
 const useStyles = makeStyles((theme) => ({
   propertyList: {
@@ -37,7 +38,7 @@ export default function RecoveryConfig(props) {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6">{props.item.address}</Typography>
+        <Typography variant="h6">{cryptography.getBase32AddressFromAddress(Buffer.from(props.item.address, 'hex'))}</Typography>
         <Divider />
         <dl className={classes.propertyList}>
           <li>
@@ -45,7 +46,7 @@ export default function RecoveryConfig(props) {
             <dl>
               {props.item.friends.map((friend) => (
                 <li key={friend}>
-                  <dd>{friend}</dd>
+                  <dd>{cryptography.getBase32AddressFromAddress(Buffer.from(friend, 'hex'))}</dd>
                 </li>
               ))}
             </dl>

@@ -15,6 +15,7 @@ import { sendTransactions } from '../api';
 import { createRecoveryDefaults } from "../utils/defaults";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import { cryptography } from '@liskhq/lisk-client';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -81,8 +82,13 @@ export default function CreateRecovery() {
     const { friends } = data;
 
     const friendList = friends ? friends.split(',').map(str => str.replace(/\s/g, '')): [];
+    console.log('friendList');
+    console.log(friendList);
+    const binaryFriends = friendList.map(friend => cryptography.getAddressFromBase32Address(friend).toString('hex'));
+    console.log('binaryFriends');
+    console.log(binaryFriends);
     try {
-        const result = await sendTransactions({ delayPeriod: data.delayPeriod, recoveryThreshold: data.recoveryThreshold, friends: friendList, passphrase: data.passphrase }, window.location.pathname.slice(1));
+        const result = await sendTransactions({ delayPeriod: data.delayPeriod, recoveryThreshold: data.recoveryThreshold, friends: binaryFriends, passphrase: data.passphrase }, window.location.pathname.slice(1));
         if (result.errors) {
             setData({ msg: result.errors[0].message, severity: 'error' });
         } else {

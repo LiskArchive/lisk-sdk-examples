@@ -16,6 +16,7 @@ import { sendTransactions } from '../api';
 import { vouchRecoveryDefaults } from '../utils/defaults';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import { cryptography } from "@liskhq/lisk-client";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -79,7 +80,7 @@ export default function VouchRecovery() {
   const handleSend = async (event) => {
     event.preventDefault();
     try {
-        const result = await sendTransactions({ lostAccount: data.lostAccount, rescuer: data.rescuerAccount, passphrase: data.passphrase }, window.location.pathname.slice(1));
+        const result = await sendTransactions({ lostAccount: cryptography.getAddressFromBase32Address(data.lostAccount).toString('hex'), rescuer: cryptography.getAddressFromBase32Address(data.rescuerAccount).toString('hex'), passphrase: data.passphrase }, window.location.pathname.slice(1));
         if (result.errors) {
             setData({ msg: result.errors[0].message, severity: 'error' });
         } else {
