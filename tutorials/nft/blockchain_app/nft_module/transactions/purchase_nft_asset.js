@@ -51,7 +51,7 @@ class PurchaseNFTAsset extends BaseAsset {
     const purchaseValue = asset.purchaseValue;
 
     if (tokenMinPurchaseValue > purchaseValue) {
-      throw new Error("Token can not be purchased on given value");
+      throw new Error("Token can not be purchased. Purchase value is too low. Minimum value: " + tokenMinPurchaseValue);
     }
 
     const purchaserAddress = transaction.senderAddress;

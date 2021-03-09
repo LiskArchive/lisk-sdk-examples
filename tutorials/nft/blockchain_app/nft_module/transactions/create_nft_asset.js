@@ -33,6 +33,8 @@ class CreateNFTAsset extends BaseAsset {
   validate({asset}) {
     if (asset.initValue <= 0) {
       throw new Error("NFT init value is too low.");
+    } else if (asset.minPurchaseMargin < 0 || asset.minPurchaseMargin > 100) {
+      throw new Error("The NFT minimum purchase value needs to be between 0 and 100.");
     }
   };
   async apply({ asset, stateStore, reducerHandler, transaction }) {
