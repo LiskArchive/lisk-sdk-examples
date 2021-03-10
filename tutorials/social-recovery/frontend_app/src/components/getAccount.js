@@ -73,11 +73,7 @@ export default function GetAccount() {
 
   const handleSend = async (event) => {
     event.preventDefault();
-    console.log('data.accountAddress');
-    console.dir(data);
-    //console.log(cryptography.getBase32AddressFromAddress(Buffer.from(data.accountAddress, 'hex')));
     try {
-        //const result = await fetchAccountInfo(data.accountAddress);
         const result = await fetchAccountInfo(cryptography.getAddressFromBase32Address(data.accountAddress).toString('hex'));
         if (result.error) {
             setData({ severity: 'error', result: result.error, enableText: '' });

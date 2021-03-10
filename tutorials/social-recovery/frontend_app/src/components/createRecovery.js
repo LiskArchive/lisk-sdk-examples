@@ -82,11 +82,7 @@ export default function CreateRecovery() {
     const { friends } = data;
 
     const friendList = friends ? friends.split(',').map(str => str.replace(/\s/g, '')): [];
-    console.log('friendList');
-    console.log(friendList);
     const binaryFriends = friendList.map(friend => cryptography.getAddressFromBase32Address(friend).toString('hex'));
-    console.log('binaryFriends');
-    console.log(binaryFriends);
     try {
         const result = await sendTransactions({ delayPeriod: data.delayPeriod, recoveryThreshold: data.recoveryThreshold, friends: binaryFriends, passphrase: data.passphrase }, window.location.pathname.slice(1));
         if (result.errors) {
