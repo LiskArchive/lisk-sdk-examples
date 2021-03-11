@@ -2,8 +2,7 @@ const {
 	BaseAsset
 } = require('lisk-sdk');
 const { removeRecoverySchema } = require('../schemas');
-
-const REMOVE_RECOVERY_ASSET_ID = 5;
+const { REMOVE_RECOVERY_ASSET_ID } = require('../constants');
 
 class RemoveRecoveryAsset extends BaseAsset {
 	name = 'removeRecovery';

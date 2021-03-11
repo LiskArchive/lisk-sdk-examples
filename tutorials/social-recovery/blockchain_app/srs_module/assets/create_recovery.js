@@ -1,10 +1,6 @@
 const { BaseAsset, transactions } = require('lisk-sdk');
 const { createRecoverySchema } = require('../schemas');
-
-
-const BASE_RECOVERY_DEPOSIT = '1000000000';
-const FRIEND_FACTOR_FEE = 2;
-const CREATE_RECOVERY_ASSET_ID = 0;
+const { BASE_RECOVERY_DEPOSIT, FRIEND_FACTOR_FEE, CREATE_RECOVERY_ASSET_ID } = require('../constants');
 
 class CreateRecoveryAsset extends BaseAsset {
 	name = 'createRecovery';

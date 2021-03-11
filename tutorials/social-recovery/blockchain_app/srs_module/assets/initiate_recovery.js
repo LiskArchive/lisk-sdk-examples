@@ -1,7 +1,7 @@
 const { BaseAsset } = require('lisk-sdk');
 const { initiateRecoverySchema } = require('../schemas');
+const { INITIATE_RECOVERY_ASSET_ID } = require('../constants');
 
-const INITIATE_RECOVERY_ASSET_ID = 1;
 
 class InitiateRecoveryAsset extends BaseAsset {
 	name = 'initiateRecovery';

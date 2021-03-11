@@ -105,7 +105,7 @@ class SRSDataPlugin extends BasePlugin {
   async load(channel) {
     this._db = await getDBInstance();
     this._accountsWithConfig =  await getConfigAccounts(this._db);
-    channel.subscribe('srs:createdConfig', async (info) => {
+    channel.subscribe('srs:configCreated', async (info) => {
 
       let duplicate = false;
       for (let i = 0; i < this._accountsWithConfig.length; i++) {
@@ -121,7 +121,7 @@ class SRSDataPlugin extends BasePlugin {
       }
       await saveConfigAccounts(this._db, this._accountsWithConfig);
     });
-    channel.subscribe('srs:removedConfig', async (info) => {
+    channel.subscribe('srs:configRemoved', async (info) => {
       for (let i = 0; i < this._accountsWithConfig.length; i++) {
         if (this._accountsWithConfig[i].address.toString('hex') === info.address) {
           this._accountsWithConfig.splice(i, 1);

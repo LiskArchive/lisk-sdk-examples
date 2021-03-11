@@ -1,9 +1,9 @@
 const { BaseModule, codec } = require('lisk-sdk');
 const  { CreateRecoveryAsset, CREATE_RECOVERY_ASSET_ID } = require('./assets/create_recovery');
 const { InitiateRecoveryAsset, INITIATE_RECOVERY_ASSET_ID } = require('./assets/initiate_recovery');
-const VouchRecovery = require('./assets/vouch_recovery');
-const ClaimRecovery = require('./assets/claim_recovery');
-const CloseRecovery = require('./assets/close_recovery');
+const VouchRecoveryAsset = require('./assets/vouch_recovery');
+const ClaimRecoveryAsset = require('./assets/claim_recovery');
+const CloseRecoveryAsset = require('./assets/close_recovery');
 const { RemoveRecoveryAsset, REMOVE_RECOVERY_ASSET_ID } = require('./assets/remove_recovery');
 const { SRSAccountSchema, createRecoverySchema, initiateRecoverySchema } = require('./schemas');
 
@@ -16,13 +16,13 @@ class SRSModule extends BaseModule {
   transactionAssets = [
     new CreateRecoveryAsset(),
     new InitiateRecoveryAsset(),
-    new VouchRecovery(),
-    new ClaimRecovery(),
-    new CloseRecovery(),
+    new VouchRecoveryAsset(),
+    new ClaimRecoveryAsset(),
+    new CloseRecoveryAsset(),
     new RemoveRecoveryAsset(),
   ];
 
-  events = ['createdConfig','removedConfig','initiatedRecovery'];
+  events = ['configCreated','configRemoved','recoveryInitiated'];
 
   async afterTransactionApply({transaction, stateStore, reducerHandler}) {
     if (transaction.moduleID === this.id && transaction.assetID === CREATE_RECOVERY_ASSET_ID) {
@@ -31,14 +31,14 @@ class SRSModule extends BaseModule {
         transaction.asset
       );
       const friends = createRecoveryAsset.friends.map(bufferFriend => bufferFriend.toString('hex'));
-      this._channel.publish('srs:createdConfig', {
+      this._channel.publish('srs:configCreated', {
          address: transaction._senderAddress.toString('hex'),
          friends: friends,
          recoveryThreshold: createRecoveryAsset.recoveryThreshold,
          delayPeriod: createRecoveryAsset.delayPeriod
       });
     } else if (transaction.moduleID === this.id && transaction.assetID === REMOVE_RECOVERY_ASSET_ID) {
-      this._channel.publish('srs:removedConfig', {
+      this._channel.publish('srs:configRemoved', {
         address: transaction._senderAddress.toString('hex')
       });
     } else if (transaction.moduleID === this.id && transaction.assetID === INITIATE_RECOVERY_ASSET_ID) {
@@ -46,7 +46,7 @@ class SRSModule extends BaseModule {
         initiateRecoverySchema,
         transaction.asset
       );
-      this._channel.publish('srs:initiatedRecovery', {
+      this._channel.publish('srs:recoveryInitiated', {
         address: transaction._senderAddress.toString('hex'),
         config: initiateRecoveryAsset
       });
