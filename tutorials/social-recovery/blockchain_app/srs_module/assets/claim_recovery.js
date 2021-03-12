@@ -1,19 +1,11 @@
 const { BaseAsset } = require('lisk-sdk');
+const { claimRecoverySchema } = require('../schemas');
+const { CLAIM_RECOVERY_ASSET_ID } = require('../constants');
 
 class ClaimRecoveryAsset extends BaseAsset {
 	name = 'claimRecovery';
-	id = 3;
-	schema = {
-        $id: 'srs/recovery/claim',
-        type: 'object',
-        required: ['lostAccount'],
-        properties: {
-            lostAccount: {
-                dataType: 'bytes',
-                fieldNumber: 1,
-            },
-        },
-    };
+	id = CLAIM_RECOVERY_ASSET_ID;
+	schema = claimRecoverySchema;
 
     async apply({
 		asset,
@@ -73,4 +65,4 @@ class ClaimRecoveryAsset extends BaseAsset {
 	}
 }
 
-module.exports = ClaimRecoveryAsset;
+module.exports = { ClaimRecoveryAsset, CLAIM_RECOVERY_ASSET_ID };

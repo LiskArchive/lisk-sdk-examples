@@ -100,6 +100,18 @@ const initiateRecoverySchema = {
   },
 };
 
+const claimRecoverySchema = {
+  $id: 'srs/recovery/claim',
+  type: 'object',
+  required: ['lostAccount'],
+  properties: {
+    lostAccount: {
+      dataType: 'bytes',
+      fieldNumber: 1,
+    },
+  },
+};
+
 const removeRecoverySchema = {
   $id: 'srs/recovery/remove',
   type: 'object',
@@ -112,4 +124,4 @@ const removeRecoverySchema = {
   },
 };
 
-module.exports = { SRSAccountSchema, createRecoverySchema, initiateRecoverySchema, removeRecoverySchema };
+module.exports = { SRSAccountSchema, createRecoverySchema, initiateRecoverySchema, claimRecoverySchema, removeRecoverySchema };
