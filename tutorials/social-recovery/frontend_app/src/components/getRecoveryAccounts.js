@@ -33,12 +33,12 @@ export default function GetRecoveryConfigs () {
   useEffect(() => {
     async function getRecoveryConfigs() {
       const result = await fetchRecoveryConfigs();
-      console.log('========= result: =========');
-      console.dir(result);
       if ( result.length > 0 ) {
         setData({ result });
       }
     }
+    console.log('data');
+    console.dir(data);
     getRecoveryConfigs()
   }, [])
 
@@ -46,13 +46,16 @@ export default function GetRecoveryConfigs () {
     <Container component="main" className={classes.paper}>
       <CssBaseline />
       <div className={classes.root}>
+        { data.result.length > 0
+          ?
         <Grid container spacing={3}>
-          { data.result.map((config) => (
-            <Grid item xs={12}>
+          {  data.result.map((config) => (
+            <Grid item xs={12}>blbub
               <RecoveryConfig item={config} key={config.address} />
             </Grid>
           )) }
         </Grid>
+          : <p>No recoverable accounts found</p> }
       </div>
     </Container>
   );
