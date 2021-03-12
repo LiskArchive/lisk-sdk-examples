@@ -37,8 +37,6 @@ export default function GetRecoveryConfigs () {
         setData({ result });
       }
     }
-    console.log('data');
-    console.dir(data);
     getRecoveryConfigs()
   }, [])
 
@@ -50,7 +48,7 @@ export default function GetRecoveryConfigs () {
           ?
         <Grid container spacing={3}>
           {  data.result.map((config) => (
-            <Grid item xs={12}>blbub
+            <Grid item xs={12}>
               <RecoveryConfig item={config} key={config.address} />
             </Grid>
           )) }
