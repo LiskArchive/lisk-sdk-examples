@@ -9,8 +9,8 @@ const {
 
 // 2.Import SRS module
 const { SRSModule } = require('./srs_module');
-const { SRSAPIPlugin } = require('./srs_api_plugin/');
-const { SRSDataPlugin } = require('./srs_data_plugin/');
+const { SRSAPIPlugin } = require('./plugins/srs_api_plugin/');
+const { SRSDataPlugin } = require('./plugins/srs_data_plugin/');
 
 // 3.Update the genesis block accounts to include SRS module attributes
 genesisBlockDevnet.header.timestamp = 1605699440;

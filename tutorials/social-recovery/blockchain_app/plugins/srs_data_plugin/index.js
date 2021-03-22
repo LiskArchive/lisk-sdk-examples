@@ -1,5 +1,5 @@
 const { BasePlugin, db, codec } = require('lisk-sdk');
-const pJSON = require('../package.json');
+const pJSON = require('../../package.json');
 const fs_extra = require("fs-extra");
 const os = require("os");
 const path = require("path");

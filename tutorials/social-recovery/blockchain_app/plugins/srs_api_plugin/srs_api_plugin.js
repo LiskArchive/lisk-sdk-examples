@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { BasePlugin } = require('lisk-sdk');
-const pJSON = require('../package.json');
+const pJSON = require('../../package.json');
 const controllers = require('./controllers');
 
 // 1.plugin can be a daemon/HTTP/Websocket service for off-chain processing
