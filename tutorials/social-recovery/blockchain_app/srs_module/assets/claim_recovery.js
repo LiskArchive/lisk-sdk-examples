@@ -65,4 +65,4 @@ class ClaimRecoveryAsset extends BaseAsset {
 	}
 }
 
-module.exports = { ClaimRecoveryAsset, CLAIM_RECOVERY_ASSET_ID };
+module.exports = ClaimRecoveryAsset;

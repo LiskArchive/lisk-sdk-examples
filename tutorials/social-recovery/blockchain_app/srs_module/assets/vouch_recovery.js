@@ -1,23 +1,11 @@
 const { BaseAsset } = require('lisk-sdk');
+const { vouchRecoverySchema } = require('../schemas');
+const { VOUCH_RECOVERY_ASSET_ID } = require('../constants');
 
 class VouchRecoveryAsset extends BaseAsset {
 	name = 'vouchRecovery';
-	id = 2;
-	schema = {
-        $id: 'srs/recovery/vouch',
-        type: 'object',
-        required: ['lostAccount', 'rescuer'],
-        properties: {
-            rescuer: {
-                dataType: 'bytes',
-                fieldNumber: 1,
-              },
-            lostAccount: {
-                dataType: 'bytes',
-                fieldNumber: 2,
-            },
-        },
-    };
+	id = VOUCH_RECOVERY_ASSET_ID;
+	schema = vouchRecoverySchema;
 
     async apply({
 		asset,

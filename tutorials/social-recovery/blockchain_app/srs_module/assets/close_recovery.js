@@ -1,19 +1,11 @@
 const { BaseAsset } = require('lisk-sdk');
+const { closeRecoverySchema } = require('../schemas');
+const { CLOSE_RECOVERY_ASSET_ID } = require('../constants');
 
 class CloseRecoveryAsset extends BaseAsset {
 	name = 'closeRecovery';
-	id = 4;
-	schema = {
-        $id: 'srs/recovery/close',
-        type: 'object',
-        required: ['rescuer'],
-        properties: {
-            rescuer: {
-                dataType: 'bytes',
-                fieldNumber: 1,
-            },
-        },
-    };
+	id = CLOSE_RECOVERY_ASSET_ID;
+	schema = closeRecoverySchema;
 
     async apply({
 		asset,

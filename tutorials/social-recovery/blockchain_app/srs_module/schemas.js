@@ -100,12 +100,40 @@ const initiateRecoverySchema = {
   },
 };
 
+const vouchRecoverySchema = {
+  $id: 'srs/recovery/vouch',
+  type: 'object',
+  required: ['lostAccount', 'rescuer'],
+  properties: {
+    rescuer: {
+      dataType: 'bytes',
+      fieldNumber: 1,
+    },
+    lostAccount: {
+      dataType: 'bytes',
+      fieldNumber: 2,
+    },
+  },
+};
+
 const claimRecoverySchema = {
   $id: 'srs/recovery/claim',
   type: 'object',
   required: ['lostAccount'],
   properties: {
     lostAccount: {
+      dataType: 'bytes',
+      fieldNumber: 1,
+    },
+  },
+};
+
+const closeRecoverySchema = {
+  $id: 'srs/recovery/close',
+  type: 'object',
+  required: ['rescuer'],
+  properties: {
+    rescuer: {
       dataType: 'bytes',
       fieldNumber: 1,
     },
@@ -124,4 +152,4 @@ const removeRecoverySchema = {
   },
 };
 
-module.exports = { SRSAccountSchema, createRecoverySchema, initiateRecoverySchema, claimRecoverySchema, removeRecoverySchema };
+module.exports = { SRSAccountSchema, createRecoverySchema, initiateRecoverySchema, vouchRecoverySchema, claimRecoverySchema, closeRecoverySchema, removeRecoverySchema };

@@ -46,4 +46,4 @@ class RemoveRecoveryAsset extends BaseAsset {
 	}
 }
 
-module.exports = { RemoveRecoveryAsset, REMOVE_RECOVERY_ASSET_ID };
+module.exports = RemoveRecoveryAsset;

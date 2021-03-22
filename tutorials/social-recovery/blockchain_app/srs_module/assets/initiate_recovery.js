@@ -56,4 +56,4 @@ class InitiateRecoveryAsset extends BaseAsset {
     }
 }
 
-module.exports = { InitiateRecoveryAsset, INITIATE_RECOVERY_ASSET_ID };
+module.exports = InitiateRecoveryAsset;

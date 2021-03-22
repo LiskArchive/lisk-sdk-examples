@@ -1,11 +1,22 @@
 const { BaseModule, codec } = require('lisk-sdk');
-const  { CreateRecoveryAsset, CREATE_RECOVERY_ASSET_ID } = require('./assets/create_recovery');
-const  { ClaimRecoveryAsset, CLAIM_RECOVERY_ASSET_ID } = require('./assets/claim_recovery');
-const { InitiateRecoveryAsset, INITIATE_RECOVERY_ASSET_ID } = require('./assets/initiate_recovery');
+const CreateRecoveryAsset = require('./assets/create_recovery');
+const ClaimRecoveryAsset = require('./assets/claim_recovery');
+const InitiateRecoveryAsset = require('./assets/initiate_recovery');
 const VouchRecoveryAsset = require('./assets/vouch_recovery');
 const CloseRecoveryAsset = require('./assets/close_recovery');
-const { RemoveRecoveryAsset, REMOVE_RECOVERY_ASSET_ID } = require('./assets/remove_recovery');
-const { SRSAccountSchema, createRecoverySchema, initiateRecoverySchema, claimRecoverySchema } = require('./schemas');
+const RemoveRecoveryAsset = require('./assets/remove_recovery');
+const {
+  SRSAccountSchema,
+  createRecoverySchema,
+  initiateRecoverySchema,
+  claimRecoverySchema
+} = require('./schemas');
+const {
+  CREATE_RECOVERY_ASSET_ID,
+  CLAIM_RECOVERY_ASSET_ID,
+  INITIATE_RECOVERY_ASSET_ID,
+  REMOVE_RECOVERY_ASSET_ID
+} = require('./constants');
 
 // Extend from the base module to implement a custom module
 class SRSModule extends BaseModule {

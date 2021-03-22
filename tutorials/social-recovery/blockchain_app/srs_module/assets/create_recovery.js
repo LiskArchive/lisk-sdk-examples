@@ -34,5 +34,5 @@ class CreateRecoveryAsset extends BaseAsset {
     }
 }
 
-module.exports = { CreateRecoveryAsset, CREATE_RECOVERY_ASSET_ID };
+module.exports = CreateRecoveryAsset;
 
