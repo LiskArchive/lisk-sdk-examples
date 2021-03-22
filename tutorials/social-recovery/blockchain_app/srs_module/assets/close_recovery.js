@@ -21,14 +21,7 @@ class CloseRecoveryAsset extends BaseAsset {
             throw new Error(`Incorrect rescuer address`);
         }
 
-        const rescuer = await stateStore.account.get(asset.rescuer);
-
-        // Debit deposit amount from the rescuer and credit to the lost account
-        await reducerHandler.invoke('token:debit', {
-            address: rescuer.address,
-            amount: lostAccount.srs.config.deposit,
-          });
-
+        // Credit deposit amount to the lost account
         await reducerHandler.invoke('token:credit', {
             address: lostAccount.address,
             amount: lostAccount.srs.config.deposit,

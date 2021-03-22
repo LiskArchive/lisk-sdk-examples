@@ -24,14 +24,6 @@ class RemoveRecoveryAsset extends BaseAsset {
 			throw Error('There is active recovery in process. Please close the recovery to remove recovery configuration.')
 		}
 
-		const deposit = lostAccount.srs.config.deposit;
-
-		// Unlock the deposit and give it back
-		await reducerHandler.invoke('token:credit', {
-			address: lostAccount.address,
-			amount: deposit,
-		});
-
 		// Reset all the default values
 		lostAccount.srs.config.friends = [];
 		lostAccount.srs.config.recoveryThreshold = 0;
