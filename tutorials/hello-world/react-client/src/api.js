@@ -23,12 +23,12 @@ export const sendTransactions = async (tx) => {
 export const fetchAccountInfo = async (address) => {
     const client = await getClient();
     return client.account.get(cryptography.getAddressFromBase32Address(address));
-}
+};
 
 export const fetchHelloCounter = async () => {
     const client = await getClient();
     return client.invoke('hello:amountOfHellos');
-}
+};
 
 export const fetchLatestHello = async () => {
     const client = await getClient();
