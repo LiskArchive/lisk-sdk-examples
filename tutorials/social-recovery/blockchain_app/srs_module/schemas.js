@@ -63,6 +63,20 @@ const SRSAccountSchema = {
         },
       }
     },
+  default: {
+    config: {
+      friends: [],
+      recoveryThreshold: 0,
+      delayPeriod: 0,
+    },
+    status: {
+      active: false,
+      vouchList: [],
+      created: 0,
+      deposit: BigInt(0),
+      rescuer: Buffer.from(''),
+    },
+  },
 };
 
 const createRecoverySchema = {
