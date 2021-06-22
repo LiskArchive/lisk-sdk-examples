@@ -74,7 +74,7 @@ browsertest/test
 tsconfig.tsbuildinfo
 
 # Unsupported lock files
-package-lock.json
+yarn.lock
 
 # Framework specific
 **/network/configs/
