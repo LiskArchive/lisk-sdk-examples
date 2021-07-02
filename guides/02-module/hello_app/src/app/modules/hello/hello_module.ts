@@ -16,14 +16,16 @@
 
 /* eslint-disable class-methods-use-this */
 
-import { 
-    BaseModule, 
-    AfterBlockApplyContext, 
-    TransactionApplyContext, 
-    BeforeBlockApplyContext, 
-    AfterGenesisBlockApplyContext, 
-    // GenesisConfig 
+import {
+    BaseModule,
+    AfterBlockApplyContext,
+    TransactionApplyContext,
+    BeforeBlockApplyContext,
+    AfterGenesisBlockApplyContext,
+    // GenesisConfig
 } from 'lisk-sdk';
+// Uncomment once the asset is implemented
+// const { HelloAsset } = require('./assets/hello_asset');
 
 export class HelloModule extends BaseModule {
     public actions = {
@@ -46,7 +48,10 @@ export class HelloModule extends BaseModule {
 		// },
     };
     public name = 'hello';
-    public transactionAssets = [];
+    public transactionAssets = [
+        // Uncomment once the asset is implemented
+        // new HelloAsset()
+    ];
     public events = [
         // Example below
         // 'hello:newBlock',
