@@ -1,0 +1,6 @@
+{
+  "commander": {
+    "version": "5.1.2"
+  },
+  "template": "lisk-ts"
+}
