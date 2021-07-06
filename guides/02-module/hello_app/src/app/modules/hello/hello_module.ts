@@ -30,8 +30,6 @@ const {
     helloAssetSchema,
     CHAIN_STATE_HELLO_COUNTER
 } = require('./schemas');
-// Uncomment once the asset is implemented
-// const { HelloAsset } = require('./assets/hello_asset');
 
 export class HelloModule extends BaseModule {
     public accountSchema = {
@@ -45,7 +43,7 @@ export class HelloModule extends BaseModule {
             },
         },
         default: {
-            helloMessage: '',
+            helloMessage: 'Hello World!',
         },
     };
     public actions = {
@@ -58,45 +56,26 @@ export class HelloModule extends BaseModule {
             return count;
         },
     };
-    public reducers = {
-        // Example below
-        // getBalance: async (
-		// 	params: Record<string, unknown>,
-		// 	stateStore: StateStore,
-		// ): Promise<bigint> => {
-		// 	const { address } = params;
-		// 	if (!Buffer.isBuffer(address)) {
-		// 		throw new Error('Address must be a buffer');
-		// 	}
-		// 	const account = await stateStore.account.getOrDefault<TokenAccount>(address);
-		// 	return account.token.balance;
-		// },
-    };
     public name = 'hello';
     public transactionAssets = [
-        // Uncomment once the asset is implemented
-        // new HelloAsset()
+        // An asset is added here in the next guide "Creating a module asset"
     ];
     public events = ['newHello'];
     public id = 1000;
-
-    // public constructor(genesisConfig: GenesisConfig) {
-    //     super(genesisConfig);
-    // }
 
     // Lifecycle hooks
     public async afterTransactionApply(_input: TransactionApplyContext) {
         // Publish a `newHello` event for every received hello transaction
         // Uncomment the snippet below, after the hello asset was created (explained in the next guide)
-        /*if (transaction.moduleID === this.id && transaction.assetID === HelloAssetID) {
+        /*if (_input.transaction.moduleID === this.id && _input.transaction.assetID === HelloAssetID) {
 
           const helloAsset = codec.decode(
             helloAssetSchema,
-            transaction.asset
+            _input.transaction.asset
           );
 
           this._channel.publish('hello:newHello', {
-            sender: transaction._senderAddress.toString('hex'),
+            sender: _input.transaction._senderAddress.toString('hex'),
             hello: helloAsset.helloString
           });
         }*/
@@ -104,7 +83,7 @@ export class HelloModule extends BaseModule {
 
     public async afterGenesisBlockApply(_input: AfterGenesisBlockApplyContext) {
         // Set the hello counter to zero after the genesis block is applied
-        await stateStore.chain.set(
+        await _input.stateStore.chain.set(
             CHAIN_STATE_HELLO_COUNTER,
             codec.encode(helloCounterSchema, { helloCounter: 0 })
         );
