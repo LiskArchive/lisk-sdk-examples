@@ -13,7 +13,7 @@ genesisBlockDevnet.header.asset.accounts = genesisBlockDevnet.header.asset.accou
     }),
 );
 
-// Set a custom label for the bblockchain app
+// Set a custom label for the blockchain app
 configDevnet.label = 'my-app';
 
 const app = Application.defaultApplication(genesisBlockDevnet, configDevnet);
