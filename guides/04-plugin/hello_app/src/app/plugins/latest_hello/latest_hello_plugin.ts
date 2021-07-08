@@ -22,12 +22,18 @@ import type { BaseChannel, EventsDefinition, ActionsDefinition, SchemaWithDefaul
 	// eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
 	public get defaults(): SchemaWithDefault {
 		return {
-			$id: '/plugins/plugin-latestHello/config',
-			type: 'object',
-			properties: {},
-			required: [],
-			default: {},
-		}
+            $id: '/plugins/plugin-latestHello/config',
+            type: 'object',
+            properties: {
+                enable: {
+                    type: 'boolean',
+                },
+            },
+            required: [ 'enable'],
+            default: {
+                enable: true,
+            },
+        }
 	}
 
 	public get events(): EventsDefinition {
@@ -39,13 +45,19 @@ import type { BaseChannel, EventsDefinition, ActionsDefinition, SchemaWithDefaul
 
 	public get actions(): ActionsDefinition {
 		return {
-		// 	hello: async () => { hello: 'world' },
+            getLatestHello: () => this._hello,
 		};
 	}
 
-		public async load(_: BaseChannel): Promise<void> {
-		// this._channel = channel;
-		// this._channel.once('app:ready', () => {});
+    public async load(_: BaseChannel): Promise<void> {
+	    if (this.options.enable) {
+            this._logger.info('Plugin enabled: LatestHello');
+            _.subscribe('hello:newHello', (info) => {
+                this._hello = info;
+            });
+        } else {
+            this._logger.info('Plugin disabled: LatestHello');
+        }
 	}
 
 	public async unload(): Promise<void> {}

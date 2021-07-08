@@ -65,7 +65,7 @@ export class HelloModule extends BaseModule {
     public async afterTransactionApply(_input: TransactionApplyContext) {
         // Publish a `newHello` event for every received hello transaction
         // 1. Check for correct module and asset IDs
-        if (_input.transaction.moduleID === this.id && _input.transaction.assetID === HelloAssetID) {
+        if (_input.transaction.moduleID === this.id && _input.transaction.assetID === 0) {
 
             // 2. Decode the transaction asset
             const helloAsset = codec.decode(

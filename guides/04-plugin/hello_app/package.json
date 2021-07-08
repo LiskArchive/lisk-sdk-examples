@@ -103,13 +103,13 @@
 		"@oclif/command": "1.8.0",
 		"@oclif/plugin-autocomplete": "0.3.0",
 		"@oclif/plugin-help": "3.2.2",
+		"axios": "0.21.1",
 		"fs-extra": "9.0.1",
 		"inquirer": "7.3.2",
 		"lisk-commander": "^5.1.2",
 		"lisk-sdk": "^5.1.1",
 		"tar": "6.0.2",
-		"tslib": "1.13.0",
-		"axios": "0.21.1"
+		"tslib": "1.13.0"
 	},
 	"devDependencies": {
 		"@oclif/dev-cli": "1.22.2",

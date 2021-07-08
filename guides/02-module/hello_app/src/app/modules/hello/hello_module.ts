@@ -57,17 +57,14 @@ export class HelloModule extends BaseModule {
         },
     };
     public name = 'hello';
-    public transactionAssets = [
-        // An asset is added here in the next guide "Creating a module asset"
-    ];
+    public transactionAssets = [];
     public events = ['newHello'];
     public id = 1000;
 
     // Lifecycle hooks
     public async afterTransactionApply(_input: TransactionApplyContext) {
         // Publish a `newHello` event for every received hello transaction
-        // Uncomment the snippet below, after the hello asset was created (explained in the next guide)
-        /*if (_input.transaction.moduleID === this.id && _input.transaction.assetID === HelloAssetID) {
+        if (_input.transaction.moduleID === this.id && _input.transaction.assetID === 0) {
 
           const helloAsset = codec.decode(
             helloAssetSchema,
@@ -78,7 +75,7 @@ export class HelloModule extends BaseModule {
             sender: _input.transaction._senderAddress.toString('hex'),
             hello: helloAsset.helloString
           });
-        }*/
+        }
     }
 
     public async afterGenesisBlockApply(_input: AfterGenesisBlockApplyContext) {
