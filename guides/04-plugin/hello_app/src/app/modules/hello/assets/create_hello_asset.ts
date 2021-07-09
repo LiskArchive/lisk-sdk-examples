@@ -1,4 +1,4 @@
-import { BaseAsset, ApplyAssetContext, ValidateAssetContext, codec } from 'lisk-sdk';
+import { BaseAsset, codec } from 'lisk-sdk';
 //const { BaseAsset, ApplyAssetContext, ValidateAssetContext, codec } = require('lisk-sdk');
 const {
     helloCounterSchema,
@@ -24,7 +24,7 @@ export class CreateHelloAsset extends BaseAsset {
         }
     };
 
-    public validate({ asset }: ValidateAssetContext<{}>): void {
+    public validate({ asset }): void {
       if (asset.helloString == "Some illegal statement") {
           throw new Error(
               'Illegal hello message: ${asset.helloString}'
@@ -33,7 +33,7 @@ export class CreateHelloAsset extends BaseAsset {
     }
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-    public async apply({ asset, transaction, stateStore }: ApplyAssetContext<{}>): Promise<void> {
+    public async apply({ asset, transaction, stateStore }): Promise<void> {
         // 1. Get account data of the sender of the hello transaction
         const senderAddress = transaction.senderAddress;
         const senderAccount = await stateStore.account.get(senderAddress);
@@ -46,7 +46,7 @@ export class CreateHelloAsset extends BaseAsset {
         let counterBuffer = await stateStore.chain.get(
           CHAIN_STATE_HELLO_COUNTER
         );
-
+        
         // 4. Decode the hello counter
         let counter = codec.decode(
           helloCounterSchema,
