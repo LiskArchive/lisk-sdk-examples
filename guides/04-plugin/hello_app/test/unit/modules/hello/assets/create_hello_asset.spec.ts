@@ -7,9 +7,11 @@ export interface HelloAccountProps {
         helloMessage: "Hello World";
     };
 }
-const CHAIN_STATE_HELLO_COUNTER = "hello:helloCounter";
 
-const helloCounterSchema = {
+
+export const CHAIN_STATE_HELLO_COUNTER = "hello:helloCounter";
+
+export const helloCounterSchema = {
     $id: "lisk/hello/counter",
     type: "object",
     required: ["helloCounter"],
@@ -45,7 +47,7 @@ describe('CreateHelloAsset', () => {
 
 	describe('validate', () => {
 		describe('schema validation', () => {
-            it('should throw error if nft name equals "Mewtwo"', () => {
+            it('should throw error if hello message equals some illegal statement', () => {
                 const context = testing.createValidateAssetContext({
                     asset: { helloString: 'Some illegal statement' },
                     transaction: { senderAddress: Buffer.alloc(0) } as any,
@@ -75,15 +77,7 @@ describe('CreateHelloAsset', () => {
         beforeEach(() => {
             account = testing.fixtures.createDefaultAccount<HelloAccountProps>([HelloModule]);
 
-            counter = 0;
-
-            /*nftToken = createNFTToken({
-                name: 'Squirtle',
-                ownerAddress: account.address,
-                nonce: BigInt(1),
-                value: BigInt(1),
-                minPurchaseMargin: 10
-            });*/
+            counter = { helloCounter: 0 };
 
             stateStore = new testing.mocks.StateStoreMock({
                 accounts: [account],
@@ -111,15 +105,11 @@ describe('CreateHelloAsset', () => {
                 expect(updatedSender.hello.helloMessage).toEqual("Some statement");
             });
             it('should increment the hello counter by +1', async () => {
-                /*await stateStore.chain.set(
-                    CHAIN_STATE_HELLO_COUNTER,
-                    codec.encode(helloCounterSchema, counter)
-                );*/
                 await transactionAsset.apply(context);
 
                 expect(stateStore.chain.set).toHaveBeenCalledWith(
                     CHAIN_STATE_HELLO_COUNTER,
-                    codec.encode(helloCounterSchema, counter+1)
+                    codec.encode(helloCounterSchema, { helloCounter: 1 })
                 );
             });
         });

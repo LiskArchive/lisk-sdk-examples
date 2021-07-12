@@ -29,6 +29,10 @@ const {
     CHAIN_STATE_HELLO_COUNTER
 } = require('./schemas');
 
+export interface HelloAssetProps {
+    helloString: "Hello World"
+}
+
 export class HelloModule extends BaseModule {
     public accountSchema = {
         type: 'object',
@@ -46,11 +50,15 @@ export class HelloModule extends BaseModule {
     };
     public actions = {
         amountOfHellos: async () => {
+            let count = 0;
             const res = await this._dataAccess.getChainState(CHAIN_STATE_HELLO_COUNTER);
-            const count = codec.decode(
-                helloCounterSchema,
-                res
-            );
+            if (res) {
+                count = codec.decode(
+                    helloCounterSchema,
+                    res
+                );
+            }
+
             return count;
         },
     };
@@ -68,7 +76,8 @@ export class HelloModule extends BaseModule {
         if (_input.transaction.moduleID === this.id && _input.transaction.assetID === 0) {
 
             // 2. Decode the transaction asset
-            const helloAsset = codec.decode(
+            let helloAsset : HelloAssetProps;
+            helloAsset = codec.decode(
                 helloAssetSchema,
                 _input.transaction.asset
             );
@@ -76,7 +85,7 @@ export class HelloModule extends BaseModule {
             // 3. Publish the event 'hello:newHello' and
             // attach information about the sender address and the posted hello message.
             this._channel.publish('hello:newHello', {
-                sender: _input.transaction._senderAddress.toString('hex'),
+                sender: _input.transaction.senderAddress.toString('hex'),
                 hello: helloAsset.helloString
             });
         }

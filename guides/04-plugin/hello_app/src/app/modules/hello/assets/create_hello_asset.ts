@@ -27,7 +27,7 @@ export class CreateHelloAsset extends BaseAsset {
     public validate({ asset }): void {
       if (asset.helloString == "Some illegal statement") {
           throw new Error(
-              'Illegal hello message: ${asset.helloString}'
+              'Illegal hello message: Some illegal statement'
           );
       }
     }
@@ -43,15 +43,16 @@ export class CreateHelloAsset extends BaseAsset {
         stateStore.account.set(senderAccount.address, senderAccount);
 
         // 3. Get the hello counter from the database
+        let counter;
         let counterBuffer = await stateStore.chain.get(
           CHAIN_STATE_HELLO_COUNTER
         );
-        
-        // 4. Decode the hello counter
-        let counter = codec.decode(
-          helloCounterSchema,
-          counterBuffer
-        );
+
+        counter = counterBuffer ? codec.decode(
+            helloCounterSchema,
+            counterBuffer
+        ) : { helloCounter: 0 };
+
 
         // 5. Increment the hello counter +1
         counter.helloCounter++;

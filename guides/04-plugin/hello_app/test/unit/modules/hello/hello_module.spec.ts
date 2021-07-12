@@ -16,25 +16,75 @@
 
 // import * as modules from '../../../src/app/modules/hello'
 
-describe('HelloModuleModule', () => {
-	describe('constructor', () => {
-		it.todo('should have valid id');
-		it.todo('should have valid name');
-	});
+import { helloCounterSchema, CHAIN_STATE_HELLO_COUNTER } from "./assets/create_hello_asset.spec";
+import { CreateHelloAsset } from '../../../../src/app/modules/hello/assets/create_hello_asset';
+import { testing, StateStore, codec } from 'lisk-sdk';
+import { HelloModule } from '../../../../src/app/modules/hello/hello_module';
 
-	describe('beforeBlockApply', () => {
-		it.todo('should execute before block apply');
-	});
-	describe('afterBlockApply', () => {
-		it.todo('should execute after block apply');
-	});
-	describe('beforeTransactionApply', () => {
-		it.todo('should execute before transaction apply');
-	});
+describe('HelloModule', () => {
+    let helloModule: HelloModule = new HelloModule(testing.fixtures.defaultConfig.genesisConfig);
+    let asset = { helloString: "Hello test" };
+    let stateStore: StateStore;
+    let account = testing.fixtures.defaultFaucetAccount;
+    let context;
+    let channel = testing.mocks.channelMock;
+    let validTestTransaction;
+
+    helloModule.init({
+        channel: channel,
+        logger: testing.mocks.loggerMock,
+        dataAccess: new testing.mocks.DataAccessMock(),
+    });
+
+    validTestTransaction = testing.createTransaction({
+        moduleID: 1000,
+        assetClass: CreateHelloAsset,
+        asset,
+        nonce: BigInt(0),
+        fee: BigInt('10000000'),
+        passphrase: account.passphrase,
+        networkIdentifier: Buffer.from(
+            'e48feb88db5b5cf5ad71d93cdcd1d879b6d5ed187a36b0002cc34e0ef9883255',
+            'hex',
+        ),
+    });
+
+    beforeEach(() => {
+        stateStore = new testing.mocks.StateStoreMock({
+            chain: { "hello:helloCounter": codec.encode(helloCounterSchema,  { helloCounter: 0 })}
+        });
+
+        jest.spyOn(channel, 'publish');
+        jest.spyOn(stateStore.chain, 'get');
+        jest.spyOn(stateStore.chain, 'set');
+    });
+
 	describe('afterTransactionApply', () => {
-		it.todo('should execute after transaction apply');
+        it('should should publish a new event for each applied hello transaction.', async () => {
+            context = testing.createTransactionApplyContext ({
+                transaction: validTestTransaction,
+            });
+
+            await helloModule.afterTransactionApply(context);
+
+            expect(channel.publish).toHaveBeenCalledWith("hello:newHello", {
+                sender: account.address.toString('hex'),
+                hello: asset.helloString
+            });
+        });
 	});
 	describe('afterGenesisBlockApply', () => {
-		it.todo('should execute after genesis apply');
+		it('should set the hello counter to zero', async () => {
+            context = testing.createAfterGenesisBlockApplyContext ({
+                stateStore: stateStore,
+            });
+
+            await helloModule.afterGenesisBlockApply(context);
+
+            expect(stateStore.chain.set).toHaveBeenCalledWith(
+                CHAIN_STATE_HELLO_COUNTER,
+                codec.encode(helloCounterSchema, { helloCounter: 0 })
+            );
+        });
 	});
 });
