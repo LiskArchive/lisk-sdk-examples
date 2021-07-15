@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { cryptography, transactions } from '@liskhq/lisk-client';
-import * as api from './api.js';
-
-const accounts = {
-  "genesis": {
-    "passphrase": "peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready"
-  }
-};
+import * as api from '../api.js';
+import accounts from '../accounts.json';
 
 const Faucet = () => {
     const [state, updateState] = useState({

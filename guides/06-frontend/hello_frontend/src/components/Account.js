@@ -1,6 +1,6 @@
 import { cryptography } from '@liskhq/lisk-client';
 import React, { useState } from 'react';
-import * as api from './api.js';
+import * as api from '../api.js';
 
 const Account = () => {
     const [state, updateState] = useState({

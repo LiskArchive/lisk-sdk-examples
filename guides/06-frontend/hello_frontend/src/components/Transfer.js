@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { cryptography, transactions } from '@liskhq/lisk-client';
-import * as api from './api.js';
+import * as api from '../api.js';
 
 const Transfer = () => {
     const [state, updateState] = useState({
