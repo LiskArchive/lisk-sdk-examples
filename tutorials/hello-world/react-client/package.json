@@ -4,7 +4,7 @@
   "description": "Lisk Passphrase generator",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --mode development --open --hot --port 8989",
+    "start": "webpack serve --mode development --hot --port 8989",
     "build": "webpack --mode production"
   },
   "keywords": [],

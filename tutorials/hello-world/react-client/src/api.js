@@ -10,16 +10,6 @@ export const getClient = async () => {
     return clientCache;
 };
 
-export const sendTransactions = async (tx) => {
-    return fetch(LISK_API + "/api/transactions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(tx),
-    });
-};
-
 export const fetchAccountInfo = async (address) => {
     const client = await getClient();
     return client.account.get(cryptography.getAddressFromBase32Address(address));
