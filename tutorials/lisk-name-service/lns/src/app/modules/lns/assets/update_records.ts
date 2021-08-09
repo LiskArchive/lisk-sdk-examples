@@ -8,7 +8,7 @@ import {
 	VALID_RECORD_TYPES,
 } from '../constants';
 import { LNSAccountProps, UpdateRecordsAssetProps, updateRecordsAssetPropsSchema } from '../data';
-import { getLNSObject, updateLSNObject, getNodeForName } from '../storage';
+import { getLNSObject, updateLNSObject, getNodeForName } from '../storage';
 import { isTTLPassed } from '../utils';
 
 export class UpdateRecordsAsset extends BaseAsset<UpdateRecordsAssetProps> {
@@ -81,6 +81,6 @@ export class UpdateRecordsAsset extends BaseAsset<UpdateRecordsAssetProps> {
 			throw new Error('You have to wait for TTL from the last update.');
 		}
 
-		await updateLSNObject(stateStore, { node, records: asset.records });
+		await updateLNSObject(stateStore, { node, records: asset.records });
 	}
 }

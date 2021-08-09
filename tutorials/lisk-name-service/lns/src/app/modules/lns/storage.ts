@@ -104,7 +104,7 @@ export const getLNSObject = async (
 	return codec.decode<LNSNode>(lnsNodeSchema, result);
 };
 
-export const createLSNObject = async (
+export const createLNSObject = async (
 	stateStore: StateStore,
 	params: Omit<LNSNode, 'createdAt' | 'updatedAt' | 'node'> & { name: string },
 ): Promise<void> => {
@@ -121,7 +121,7 @@ export const createLSNObject = async (
 	await stateStore.chain.set(getKeyForNode(node), codec.encode(lnsNodeSchema, input));
 };
 
-export const updateLSNObject = async (
+export const updateLNSObject = async (
 	stateStore: StateStore,
 	params: Partial<Omit<LNSNode, 'createdAt' | 'updatedAt'>> & { node: Buffer },
 ): Promise<void> => {

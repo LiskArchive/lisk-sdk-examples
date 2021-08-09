@@ -54,7 +54,7 @@ describe('RegisterAsset', () => {
 				);
 			});
 
-			it('should throw error if name is registered for more than a year', () => {
+			it('should throw error if name is registered for more than 5 years', () => {
 				const context = testing.createValidateAssetContext({
 					asset: { name: 'nazar.hussain', ttl: 60 * 60, registerFor: 6 },
 					transaction: { senderAddress: Buffer.alloc(0) } as any,

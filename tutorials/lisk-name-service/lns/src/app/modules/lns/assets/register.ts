@@ -2,7 +2,7 @@ import { addYears } from 'date-fns';
 import { ApplyAssetContext, BaseAsset, ValidateAssetContext } from 'lisk-sdk';
 import { MIN_TTL_VALUE, VALID_TLDS } from '../constants';
 import { LNSAccountProps, RegisterAssetProps, registerAssetPropsSchema } from '../data';
-import { createLSNObject, getLNSObject, getNodeForName } from '../storage';
+import { createLNSObject, getLNSObject, getNodeForName } from '../storage';
 
 export class RegisterAsset extends BaseAsset<RegisterAssetProps> {
 	public name = 'register';
@@ -57,7 +57,7 @@ export class RegisterAsset extends BaseAsset<RegisterAssetProps> {
 			records: [],
 		};
 
-		await createLSNObject(stateStore, lnsObject);
+		await createLNSObject(stateStore, lnsObject);
 
 		const sender = await stateStore.account.get<LNSAccountProps>(transaction.senderAddress);
 		sender.lns.ownNodes = [...sender.lns.ownNodes, node];
