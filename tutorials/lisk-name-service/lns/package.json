@@ -102,7 +102,7 @@
 		"@oclif/command": "1.6.1",
 		"@oclif/plugin-autocomplete": "0.3.0",
 		"@oclif/plugin-help": "3.1.0",
-		"axios": "0.21.1",
+		"axios": "0.21.2",
 		"date-fns": "2.21.1",
 		"eth-ens-namehash": "2.0.8",
 		"fs-extra": "9.0.1",
