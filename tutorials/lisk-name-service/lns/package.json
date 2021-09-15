@@ -99,8 +99,6 @@
 		}
 	},
 	"dependencies": {
-		"@liskhq/lisk-framework-dashboard-plugin": "0.1.4",
-		"@liskhq/lisk-framework-faucet-plugin": "0.1.4",
 		"@oclif/command": "1.6.1",
 		"@oclif/plugin-autocomplete": "0.3.0",
 		"@oclif/plugin-help": "3.1.0",
@@ -109,11 +107,11 @@
 		"eth-ens-namehash": "2.0.8",
 		"fs-extra": "9.0.1",
 		"inquirer": "7.3.2",
-		"lisk-commander": "5.1.3",
-		"lisk-sdk": "5.1.3",
-		"lns-dashboard-plugin": "file:../lns-dashboard-plugin",
-		"tar": "6.0.2",
-		"tslib": "1.13.0"
+		"lisk-commander": "5.1.2",
+		"lisk-sdk": "5.1.1",
+		"tar": "6.1.9",
+		"tslib": "1.13.0",
+		"lns-dashboard-plugin": "file:../lns-dashboard-plugin"
 	},
 	"devDependencies": {
 		"@oclif/config": "1.15.1",
