@@ -22,5 +22,5 @@ export const fetchHelloCounter = async () => {
 
 export const fetchLatestHello = async () => {
     const client = await getClient();
-    return client.invoke('HelloAPI:latestHello');
+    return client.invoke('latestHello:getLatestHello');
 };

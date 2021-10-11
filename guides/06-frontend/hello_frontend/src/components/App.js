@@ -6,7 +6,7 @@ import {
     Link
 } from "react-router-dom";
 import "regenerator-runtime/runtime.js";
-import Home from './home';
+import Home from './Home';
 import NewAccount from './NewAccount';
 import Faucet from './Faucet';
 import SendHello from './Hello';
