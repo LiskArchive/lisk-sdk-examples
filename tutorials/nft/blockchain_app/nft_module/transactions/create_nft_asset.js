@@ -28,12 +28,7 @@ class CreateNFTAsset extends BaseAsset {
         dataType: "string",
         fieldNumber: 3,
       },
-    },
-    default: {
-      minPurchaseMargin: 0,
-      initValue: 1,
-      name: "",
-    },
+    }
   };
   validate({asset}) {
     if (asset.initValue <= 0) {
