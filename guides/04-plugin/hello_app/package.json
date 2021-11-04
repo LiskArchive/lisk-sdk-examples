@@ -103,7 +103,7 @@
 		"@oclif/command": "1.8.0",
 		"@oclif/plugin-autocomplete": "0.3.0",
 		"@oclif/plugin-help": "3.2.2",
-		"axios": "0.21.1",
+		"axios": "0.21.2",
 		"fs-extra": "9.0.1",
 		"inquirer": "7.3.2",
 		"lisk-commander": "^5.1.2",
