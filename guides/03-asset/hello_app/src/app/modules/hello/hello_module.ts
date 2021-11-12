@@ -36,7 +36,6 @@ export class HelloModule extends BaseModule {
             helloMessage: {
                 fieldNumber: 1,
                 dataType: 'string',
-                minLength: 3,
                 maxLength: 64,
             },
         },
