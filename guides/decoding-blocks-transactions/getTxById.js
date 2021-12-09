@@ -20,7 +20,9 @@ getClient().then((client) => {
 		id: txId
 	}).then(res => {
 		console.log(res);
-		console.log(client.transaction.decode(res));
+		const txObject = client.transaction.decode(res);
+		const txJSON = client.transaction.toJSON(txObject);
+		console.log(txJSON);
 		process.exit(0);
 	});
 });

@@ -20,11 +20,12 @@ getClient().then((client) => {
 		id: blockId
 	}).then(res => {
 		console.log(res);
-		const block = client.block.decode(res);
-		console.log(block);
-		if (block.payload && block.payload.length > 0) {
-			console.log(block.payload[0].asset);
-			console.log(block.payload[0].signatures);
+		const blockObject = client.block.decode(res);
+		const blockJSON = client.block.toJSON(blockObject);
+		console.log(blockJSON);
+		if (blockJSON.payload && blockJSON.payload.length > 0) {
+			console.log(blockJSON.payload[0].asset);
+			console.log(blockJSON.payload[0].signatures);
 		}
 		process.exit(0);
 	});
