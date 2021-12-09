@@ -26,7 +26,6 @@ getClient().then((client) => {
 		console.log(blockJSON);
 		if (blockJSON.payload && blockJSON.payload.length > 0) {
 			console.log(blockJSON.payload[0].asset);
-			console.log(blockJSON.payload[0].signatures);
 		}
 		process.exit(0);
 	});
