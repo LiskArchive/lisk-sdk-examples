@@ -1,10 +1,10 @@
 const { apiClient } = require('@liskhq/lisk-client');
 let clientCache;
-const nodeAPI = 'ws://localhost:8080/ws';
+const nodeAPIURL = 'ws://localhost:8080/ws';
 
 const getClient = async () => {
 	if (!clientCache) {
-		clientCache = await apiClient.createWSClient(nodeAPI);
+		clientCache = await apiClient.createWSClient(nodeAPIURL);
 	}
 	return clientCache;
 };
