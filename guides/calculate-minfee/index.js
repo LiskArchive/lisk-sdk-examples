@@ -1,4 +1,5 @@
-import { apiClient } from "@liskhq/lisk-client";
+//import { apiClient } from "@liskhq/lisk-client";
+const { apiClient, transactions } = require('@liskhq/lisk-client');
 
 let clientCache;
 const nodeAPIURL = 'ws://localhost:8080/ws'
@@ -10,11 +11,11 @@ const getClient = async () => {
 	return clientCache;
 };
 
-const account = {};
-account.passphrase = '';
+// Paste the passphrase of sender account here
+const passphrase = '';
 
-const execute = async () => {
-	const client = await getClient();
+const calcMinFee = async (client) => {
+	//const client = await getClient();
 
 	const signedTxWithSomeFee = await client.transaction.create({
 		moduleID: 1000,
@@ -23,23 +24,36 @@ const execute = async () => {
 		asset: {
 			helloString: "Hello World!"
 		}
-	}, account.passphrase);
+	}, passphrase);
 
-	const minFee = client.transaction.computeMinFee(signedTxWithSomeFee);
+	//const minFee = client.transaction.computeMinFee(signedTxWithSomeFee);
+	return client.transaction.computeMinFee(signedTxWithSomeFee);
+}
+
+const postTx = async (client, minFee) => {
+	//const minFee = await calcMinFee();
 
 	const signedTx = await client.transaction.create({
 		moduleID: 1000,
 		assetID: 0,
-		fee: minFee,
+		fee: minFee-BigInt("1"),
 		asset: {
 			helloString: "Hello World!"
 		}
-	}, account.passphrase);
+	}, passphrase);
 
 	return client.transaction.send(signedTx).then(res => {
 		return res;
 	});
 }
-execute().then((res) => {
-	console.log(res);
-});
+
+getClient().then(client => {
+	calcMinFee(client).then(minFee => {
+		console.log("Minimum fee: ", minFee);
+		postTx(client, minFee).then((res) => {
+			console.log(res);
+			process.exit(0);
+		});
+	})
+})
+
