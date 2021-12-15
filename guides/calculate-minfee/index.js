@@ -1,4 +1,3 @@
-//import { apiClient } from "@liskhq/lisk-client";
 const { apiClient, transactions } = require('@liskhq/lisk-client');
 
 let clientCache;
@@ -15,8 +14,6 @@ const getClient = async () => {
 const passphrase = '';
 
 const calcMinFee = async (client) => {
-	//const client = await getClient();
-
 	const signedTxWithSomeFee = await client.transaction.create({
 		moduleID: 1000,
 		assetID: 0,
@@ -26,13 +23,10 @@ const calcMinFee = async (client) => {
 		}
 	}, passphrase);
 
-	//const minFee = client.transaction.computeMinFee(signedTxWithSomeFee);
 	return client.transaction.computeMinFee(signedTxWithSomeFee);
 }
 
 const postTx = async (client, minFee) => {
-	//const minFee = await calcMinFee();
-
 	const signedTx = await client.transaction.create({
 		moduleID: 1000,
 		assetID: 0,
