@@ -30,7 +30,7 @@ const postTx = async (client, minFee) => {
 	const signedTx = await client.transaction.create({
 		moduleID: 1000,
 		assetID: 0,
-		fee: minFee-BigInt("1"),
+		fee: minFee,
 		asset: {
 			helloString: "Hello World!"
 		}
