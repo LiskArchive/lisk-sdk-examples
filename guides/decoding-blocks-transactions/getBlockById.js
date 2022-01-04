@@ -20,13 +20,21 @@ getClient().then((client) => {
 	client.invoke("app:getBlockByID", {
 		id: blockId
 	}).then(res => {
-		console.log(res);
-		const blockObject = client.block.decode(res);
-		const blockJSON = client.block.toJSON(blockObject);
-		console.log(blockJSON);
+		const decodedBlock = client.block.decode(res);
+		const blockJSON = client.block.toJSON(decodedBlock);
+		const blockBuffer = client.block.fromJSON(blockJSON);
+		const encodedBlockAsBuffer = client.block.encode(blockBuffer);
+		const encodedBlockAsHexString = encodedBlockAsBuffer.toString('hex');
+		console.log("Encoded block: ", res)
+		console.log("Decoded block: ", decodedBlock);
+		console.log("Block as JSON: ", blockJSON);
 		if (blockJSON.payload && blockJSON.payload.length > 0) {
 			console.log(blockJSON.payload[0].asset);
 		}
+		console.log("Block from JSON to Buffer: ", blockBuffer);
+		console.log("Encoded block as Buffer: ", encodedBlockAsBuffer);
+		console.log("Encoded block as hex string: ", encodedBlockAsHexString)
+		console.log("res = encodedBlockAsHexString? - ", (res == encodedBlockAsHexString));
 		process.exit(0);
+		});
 	});
-});

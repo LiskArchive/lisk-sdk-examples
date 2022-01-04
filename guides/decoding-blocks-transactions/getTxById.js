@@ -28,7 +28,7 @@ getClient().then((client) => {
 		console.log("Decoded tx: ", decodedTx);
 		console.log("Tx as JSON: ", txJSON);
 		console.log("Tx from JSON to Buffer: ", txBuffer);
-		console.log("Re-encoded tx: ", encodedTxAsBuffer);
+		console.log("Encoded tx as Buffer: ", encodedTxAsBuffer);
 		console.log("Encoded tx as hex string: ", encodedTxAsHexString)
 		console.log("res = encodedTxAsHexString? - ", (res == encodedTxAsHexString));
 		process.exit(0);
