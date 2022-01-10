@@ -21,14 +21,14 @@ getClient().then((client) => {
 	}).then(res => {
 		const decodedTx = client.transaction.decode(res);
 		const txJSON = client.transaction.toJSON(decodedTx);
-		const txBuffer = client.transaction.fromJSON(txJSON);
-		const encodedTxAsBuffer = client.transaction.encode(txBuffer)
-		const encodedTxAsHexString = encodedTxAsBuffer.toString('hex')
+		const txObject = client.transaction.fromJSON(txJSON);
+		const encodedTxObject = client.transaction.encode(txObject)
+		const encodedTxAsHexString = encodedTxObject.toString('hex')
 		console.log("Encoded tx: ", res)
 		console.log("Decoded tx: ", decodedTx);
 		console.log("Tx as JSON: ", txJSON);
-		console.log("Tx from JSON to Buffer: ", txBuffer);
-		console.log("Encoded tx as Buffer: ", encodedTxAsBuffer);
+		console.log("Tx from JSON to Object: ", txObject);
+		console.log("Encoded tx object: ", encodedTxObject);
 		console.log("Encoded tx as hex string: ", encodedTxAsHexString)
 		console.log("res = encodedTxAsHexString? - ", (res == encodedTxAsHexString));
 		process.exit(0);
