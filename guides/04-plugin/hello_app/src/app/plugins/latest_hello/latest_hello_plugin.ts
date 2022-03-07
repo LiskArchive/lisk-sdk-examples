@@ -49,15 +49,16 @@ import type { BaseChannel, EventsDefinition, ActionsDefinition, SchemaWithDefaul
 		};
 	}
 
-    public async load(_: BaseChannel): Promise<void> {
+	public async load(_: BaseChannel): Promise<void> {
 	    if (this.options.enable) {
-            this._logger.info('Plugin enabled: LatestHello');
-            _.subscribe('hello:newHello', (info) => {
-                this._hello = info;
-            });
-        } else {
+				this._hello = "";
+				this._logger.info('Plugin enabled: LatestHello');
+				_.subscribe('hello:newHello', (info) => {
+						this._hello = info;
+				});
+			} else {
             this._logger.info('Plugin disabled: LatestHello');
-        }
+			}
 	}
 
 	public async unload(): Promise<void> {}
