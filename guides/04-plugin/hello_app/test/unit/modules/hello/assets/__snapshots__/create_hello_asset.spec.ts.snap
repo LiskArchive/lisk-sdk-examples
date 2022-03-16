@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateHelloAsset constructor should have valid schema 1`] = `
+Object {
+  "$id": "lisk/hello/asset",
+  "properties": Object {
+    "helloString": Object {
+      "dataType": "string",
+      "fieldNumber": 1,
+      "maxLength": 64,
+      "minLength": 3,
+    },
+  },
+  "required": Array [
+    "helloString",
+  ],
+  "type": "object",
+}
+`;

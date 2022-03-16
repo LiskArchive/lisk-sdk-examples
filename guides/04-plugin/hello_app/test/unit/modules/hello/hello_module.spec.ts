@@ -16,29 +16,29 @@
 
 // import * as modules from '../../../src/app/modules/hello'
 
+import { testing, StateStore, codec, TokenTransferAsset } from 'lisk-sdk';
 import { helloCounterSchema, CHAIN_STATE_HELLO_COUNTER } from "./assets/create_hello_asset.spec";
 import { CreateHelloAsset } from '../../../../src/app/modules/hello/assets/create_hello_asset';
-import { testing, StateStore, codec, TokenTransferAsset } from 'lisk-sdk';
 import { HelloModule } from '../../../../src/app/modules/hello/hello_module';
 
+
+
 describe('HelloModule', () => {
-    let helloModule: HelloModule = new HelloModule(testing.fixtures.defaultConfig.genesisConfig);
-    let asset = { helloString: "Hello test" };
-    let account = testing.fixtures.defaultFaucetAccount;
-    let transferAsset = { amount: "100000000", recipientAddress: account.address, data: "" };
+    const helloModule: HelloModule = new HelloModule(testing.fixtures.defaultConfig.genesisConfig);
+    const asset = { helloString: "Hello test" };
+    const account = testing.fixtures.defaultFaucetAccount;
+    const transferAsset = { amount: BigInt("100000000"), recipientAddress: account.address, data: "" };
     let stateStore: StateStore;
     let context;
-    let channel = testing.mocks.channelMock;
-    let validTestTransaction;
-    let invalidTestTransaction;
+    const channel = testing.mocks.channelMock;
 
     helloModule.init({
-        channel: channel,
+        channel,
         logger: testing.mocks.loggerMock,
         dataAccess: new testing.mocks.DataAccessMock(),
     });
 
-    validTestTransaction = testing.createTransaction({
+    const validTestTransaction = testing.createTransaction({
         moduleID: 1000,
         assetClass: CreateHelloAsset,
         asset,
@@ -51,7 +51,7 @@ describe('HelloModule', () => {
         ),
     });
 
-    invalidTestTransaction = testing.createTransaction({
+    const invalidTestTransaction = testing.createTransaction({
         moduleID: 2,
         assetClass: TokenTransferAsset,
         asset: transferAsset,
@@ -99,9 +99,7 @@ describe('HelloModule', () => {
 	});
 	describe('afterGenesisBlockApply', () => {
 		it('should set the hello counter to zero', async () => {
-            context = testing.createAfterGenesisBlockApplyContext ({
-                stateStore: stateStore,
-            });
+            context = testing.createAfterGenesisBlockApplyContext ({ stateStore, });
 
             await helloModule.afterGenesisBlockApply(context);
 
@@ -114,11 +112,12 @@ describe('HelloModule', () => {
 	describe('amountOfHellos', () => {
 		it('should return the absolute amount of sent hello transactions', async () => {
 
-		    stateStore.chain.set(CHAIN_STATE_HELLO_COUNTER,
-                codec.encode(helloCounterSchema, { helloCounter: 13 })
-            );
-            const helloCounter = await helloModule.actions.amountOfHellos();
+        await stateStore.chain.set(CHAIN_STATE_HELLO_COUNTER,
+          codec.encode(helloCounterSchema, { helloCounter: 13 }));
+
+        const helloCounter = await helloModule.actions.amountOfHellos();
             expect(helloCounter).toEqual(13);
         });
+
 	});
 });
