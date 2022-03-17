@@ -31,11 +31,12 @@ describe('HelloModule', () => {
     let stateStore: StateStore;
     let context;
     const channel = testing.mocks.channelMock;
+    const dataAccess = new testing.mocks.DataAccessMock();
 
     helloModule.init({
         channel,
         logger: testing.mocks.loggerMock,
-        dataAccess: new testing.mocks.DataAccessMock(),
+        dataAccess
     });
 
     const validTestTransaction = testing.createTransaction({
@@ -70,6 +71,7 @@ describe('HelloModule', () => {
         });
 
         jest.spyOn(channel, 'publish');
+        jest.spyOn(dataAccess,'getChainState');
         jest.spyOn(stateStore.chain, 'get');
         jest.spyOn(stateStore.chain, 'set');
     });
@@ -111,13 +113,9 @@ describe('HelloModule', () => {
 	});
 	describe('amountOfHellos', () => {
 		it('should return the absolute amount of sent hello transactions', async () => {
-
-        await stateStore.chain.set(CHAIN_STATE_HELLO_COUNTER,
-          codec.encode(helloCounterSchema, { helloCounter: 13 }));
-
+        jest.spyOn(helloModule['_dataAccess'], 'getChainState').mockResolvedValue(codec.encode(helloCounterSchema, { helloCounter: 13 }));
         const helloCounter = await helloModule.actions.amountOfHellos();
-            expect(helloCounter).toEqual(13);
-        });
-
+        expect(helloCounter).toEqual({"helloCounter": 13});
+    });
 	});
 });
