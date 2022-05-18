@@ -1,0 +1,18 @@
+{
+  "name": "tx-creation-and-signing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@liskhq/lisk-client": "^5.2.1",
+    "@liskhq/lisk-codec": "^0.2.1",
+    "@liskhq/lisk-transactions": "^5.2.1",
+    "@liskhq/lisk-validator": "^0.6.1"
+  }
+}

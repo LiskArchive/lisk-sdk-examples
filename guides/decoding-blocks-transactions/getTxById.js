@@ -25,12 +25,15 @@ getClient().then((client) => {
 		const encodedTxObject = client.transaction.encode(txObject)
 		const encodedTxAsHexString = encodedTxObject.toString('hex')
 		console.log("Encoded tx: ", res)
-		console.log("Decoded tx: ", decodedTx);
-		console.log("Tx as JSON: ", txJSON);
-		console.log("Tx from JSON to Object: ", txObject);
-		console.log("Encoded tx object: ", encodedTxObject);
+		console.log("Decoded tx as object: ", decodedTx);
+		console.log("Tx as JSON compatible object: ", txJSON);
+		console.log("Tx from JSON to decoded object: ", txObject);
+		console.log("Encoded tx object as buffer: ", encodedTxObject);
 		console.log("Encoded tx as hex string: ", encodedTxAsHexString)
 		console.log("res = encodedTxAsHexString? - ", (res == encodedTxAsHexString));
 		process.exit(0);
+	}).catch(err => {
+		console.log("Error: ", err);
+		process.exit(1);
 	});
 });

@@ -27,14 +27,17 @@ getClient().then((client) => {
 		const encodedBlockAsHexString = encodedBlockObject.toString('hex');
 		console.log("Encoded block: ", res)
 		console.log("Decoded block: ", decodedBlock);
-		console.log("Block as JSON: ", blockJSON);
+		console.log("Block as JSON compatible object: ", blockJSON);
 		if (blockJSON.payload && blockJSON.payload.length > 0) {
 			console.log(blockJSON.payload[0].asset);
 		}
-		console.log("Block from JSON to Object: ", blockObject);
+		console.log("Block from JSON to decoded block: ", blockObject);
 		console.log("Encoded block object: ", encodedBlockObject);
 		console.log("Encoded block as hex string: ", encodedBlockAsHexString)
 		console.log("res = encodedBlockAsHexString? - ", (res == encodedBlockAsHexString));
 		process.exit(0);
+	}).catch(err => {
+		console.log("Error: ", err);
+		process.exit(1);
 	});
 });
