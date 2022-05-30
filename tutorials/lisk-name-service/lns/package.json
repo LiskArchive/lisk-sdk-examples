@@ -99,6 +99,8 @@
 		}
 	},
 	"dependencies": {
+		"@liskhq/lisk-framework-dashboard-plugin": "0.1.7",
+		"@liskhq/lisk-framework-faucet-plugin": "0.1.7",
 		"@oclif/command": "1.6.1",
 		"@oclif/plugin-autocomplete": "0.3.0",
 		"@oclif/plugin-help": "3.1.0",
@@ -109,9 +111,9 @@
 		"inquirer": "7.3.2",
 		"lisk-commander": "5.1.10",
 		"lisk-sdk": "5.2.2",
+		"lns-dashboard-plugin": "file:../lns-dashboard-plugin",
 		"tar": "6.1.9",
-		"tslib": "1.13.0",
-		"lns-dashboard-plugin": "file:../lns-dashboard-plugin"
+		"tslib": "1.13.0"
 	},
 	"devDependencies": {
 		"@oclif/config": "1.15.1",
