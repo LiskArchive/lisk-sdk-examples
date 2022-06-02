@@ -11,8 +11,8 @@ export interface PostboardAccountProps {
 	token: {
 		balance: number;
 	};
-	following: string[];
-	followers: string[];
+	following: Buffer[];
+	followers: Buffer[];
 	posts: string[];
 	replies: string[];
 }
