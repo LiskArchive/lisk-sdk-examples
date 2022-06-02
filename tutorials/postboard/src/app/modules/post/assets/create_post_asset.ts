@@ -1,5 +1,5 @@
-import { BaseAsset, ApplyAssetContext, ValidateAssetContext, codec, cryptography } from 'lisk-sdk';
-import { createPostPropsSchema, CreatePostProps, postPropsSchema, PostProps, postboardAccountPropsSchema, PostboardAccountProps } from '../schemas';
+import { BaseAsset, ApplyAssetContext, codec, cryptography } from 'lisk-sdk';
+import { createPostPropsSchema, CreatePostProps, postPropsSchema, PostboardAccountProps } from '../schemas';
 
 const getIDForPost: (sender: PostboardAccountProps) => Buffer = function (
 	s:	PostboardAccountProps
@@ -15,9 +15,9 @@ export class CreatePostAsset extends BaseAsset {
 	public schema = createPostPropsSchema;
 
 
-  public validate({ _asset }: ValidateAssetContext<{}>): void {
+/*  public validate({ _asset }: ValidateAssetContext<{}>): void {
     // Validate your asset
-  }
+  } */
 
 	// eslint-disable-next-line @typescript-eslint/require-await
   public async apply({ asset, transaction, stateStore }: ApplyAssetContext<CreatePostProps>): Promise<void> {

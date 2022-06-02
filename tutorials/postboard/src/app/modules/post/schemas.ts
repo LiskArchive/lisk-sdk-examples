@@ -24,14 +24,14 @@ export const postboardAccountPropsSchema = {
 			fieldNumber: 1,
 			type: 'array',
 			items: {
-				dataType: 'Buffer',
+				dataType: 'bytes',
 			}
 		},
 		followers: {
 			fieldNumber: 2,
 			type: 'array',
 			items: {
-				dataType: 'Buffer',
+				dataType: 'bytes',
 			}
 		},
 		posts: {
@@ -45,7 +45,7 @@ export const postboardAccountPropsSchema = {
 			fieldNumber: 4,
 			type: 'array',
 			items: {
-				dataType: 'Buffer',
+				dataType: 'string',
 			}
 		}
 	},
