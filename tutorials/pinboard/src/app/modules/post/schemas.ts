@@ -1,9 +1,9 @@
 export interface PostboardAccountProps {
 	address: Buffer;
 	keys: {
-		mandatoryKeys: [ Buffer ];
+		mandatoryKeys: Buffer[];
 		numberOfSignatures: number;
-		optionalKeys:  [ Buffer ];
+		optionalKeys: Buffer[];
 	};
 	sequence: {
 		nonce: number;
@@ -11,10 +11,10 @@ export interface PostboardAccountProps {
 	token: {
 		balance: number;
 	};
-	following: [];
-	followers: [];
-	posts: [];
-	replies: [];
+	following: string[];
+	followers: string[];
+	posts: string[];
+	replies: string[];
 }
 
 export const postboardAccountPropsSchema = {
@@ -38,7 +38,7 @@ export const postboardAccountPropsSchema = {
 			fieldNumber: 3,
 			type: 'array',
 			items: {
-				dataType: 'Buffer',
+				dataType: 'string',
 			}
 		},
 		replies: {

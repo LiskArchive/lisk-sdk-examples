@@ -15,7 +15,7 @@ export class CreatePostAsset extends BaseAsset {
 	public schema = createPostPropsSchema;
 
 
-  public validate({ asset }: ValidateAssetContext<{}>): void {
+  public validate({ _asset }: ValidateAssetContext<{}>): void {
     // Validate your asset
   }
 
@@ -27,7 +27,7 @@ export class CreatePostAsset extends BaseAsset {
 		const post = {
 			id: postId,
 			content: asset.message,
-			date: 0,
+			date: Date.now(),
 			author: transaction.senderAddress,
 			replies: [],
 			likes: []

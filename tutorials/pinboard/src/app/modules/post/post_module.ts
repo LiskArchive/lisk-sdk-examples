@@ -10,6 +10,7 @@ import {
     BeforeBlockApplyContext, TransactionApplyContext
 } from 'lisk-sdk';
 import { CreatePostAsset } from "./assets/create_post_asset";
+import { postboardAccountPropsSchema } from './schemas';
 
 export class PostModule extends BaseModule {
     public actions = {
@@ -38,33 +39,7 @@ export class PostModule extends BaseModule {
         // 'post:newBlock',
     ];
     public id = 1000;
-    public accountSchema = {
-        type: 'object',
-        properties: {
-            following: {
-                fieldNumber: 1,
-                type: 'array'
-            },
-            followers: {
-                fieldNumber: 2,
-                type: 'array'
-            },
-            posts: {
-                fieldNumber: 3,
-                type: 'array'
-            },
-            replies: {
-                fieldNumber: 4,
-                type: 'array'
-            }
-        },
-        default: {
-            followers: [],
-            following: [],
-            posts: [],
-            replies: []
-        },
-    };
+    public accountSchema = postboardAccountPropsSchema;
     // public constructor(genesisConfig: GenesisConfig) {
     //     super(genesisConfig);
     // }
