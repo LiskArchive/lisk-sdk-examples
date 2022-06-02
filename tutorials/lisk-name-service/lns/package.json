@@ -14,8 +14,8 @@
 	"homepage": "",
 	"repository": {},
 	"engines": {
-		"node": ">=12.13.0 <=12",
-		"npm": ">=6.12.0"
+		"node": ">=16.14.1 <=16",
+		"npm": ">=8.1.0"
 	},
 	"main": "dist/index.js",
 	"scripts": {
@@ -99,6 +99,8 @@
 		}
 	},
 	"dependencies": {
+		"@liskhq/lisk-framework-dashboard-plugin": "0.1.7",
+		"@liskhq/lisk-framework-faucet-plugin": "0.1.7",
 		"@oclif/command": "1.6.1",
 		"@oclif/plugin-autocomplete": "0.3.0",
 		"@oclif/plugin-help": "3.1.0",
@@ -107,11 +109,11 @@
 		"eth-ens-namehash": "2.0.8",
 		"fs-extra": "9.0.1",
 		"inquirer": "7.3.2",
-		"lisk-commander": "5.1.2",
-		"lisk-sdk": "5.1.1",
+		"lisk-commander": "5.1.10",
+		"lisk-sdk": "5.2.2",
+		"lns-dashboard-plugin": "file:../lns-dashboard-plugin",
 		"tar": "6.1.9",
-		"tslib": "1.13.0",
-		"lns-dashboard-plugin": "file:../lns-dashboard-plugin"
+		"tslib": "1.13.0"
 	},
 	"devDependencies": {
 		"@oclif/config": "1.15.1",
@@ -124,7 +126,7 @@
 		"@typescript-eslint/eslint-plugin": "4.19.0",
 		"@typescript-eslint/parser": "4.19.0",
 		"eslint": "7.22.0",
-		"eslint-config-lisk-base": "2.0.0",
+		"eslint-config-lisk-base": "2.0.1",
 		"eslint-plugin-import": "2.22.1",
 		"eslint-plugin-jest": "24.3.2",
 		"globby": "10.0.2",
