@@ -58,6 +58,8 @@ export class PostModule extends BaseModule {
     }
 
     public async beforeTransactionApply(_input: TransactionApplyContext) {
+        this._logger.info(name, "name");
+
         // Get any data from stateStore using transaction info, below is an example
         // const sender = await _input.stateStore.account.getOrDefault<TokenAccount>(_input.transaction.senderAddress);
     }

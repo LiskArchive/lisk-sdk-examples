@@ -4,6 +4,7 @@ import { createPostPropsSchema, CreatePostProps, postPropsSchema, PostboardAccou
 const getIDForPost: (sender: PostboardAccountProps) => Buffer = function (
 	s:	PostboardAccountProps
 ): Buffer {
+	console.log("Sender account:  - ", s);
 	return cryptography.hash(s.address.toString('hex') + s.sequence.nonce.toString())
 };
 
@@ -36,6 +37,7 @@ export class CreatePostAsset extends BaseAsset {
 		await stateStore.chain.set(postId, codec.encode(postPropsSchema, post));
 
 		sender.posts.push(postId);
+
 		await stateStore.account.set(sender.address, sender);
 	}
 }
