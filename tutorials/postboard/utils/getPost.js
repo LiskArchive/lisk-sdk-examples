@@ -15,6 +15,7 @@ getClient().then((client) => {
 		id: "14eb6024aef0730ac814e4af58e530005ad1cf256d9a7a34b06dbf1818d17973"
 	}).then(res => {
 		console.log(res);
+		// console.log(res.replies[0].author);
 /*		const accObject = client.account.decode(res);
 		const accJSON = client.account.toJSON(accObject);
 		console.log(accJSON); */

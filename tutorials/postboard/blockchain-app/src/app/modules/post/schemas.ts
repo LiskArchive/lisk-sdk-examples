@@ -84,7 +84,7 @@ export interface RepostProps {
 
 export const repostPropsSchema = {
 	$id: 'post/repost-asset',
-	title: 'RepostAsset transaction asset for post module',
+	title: 'Repost transaction asset for post module',
 	type: 'object',
 	required: ['postId'],
 	properties: {
@@ -95,14 +95,56 @@ export const repostPropsSchema = {
 	}
 }
 
+export interface ReplyProps {
+	postId: string;
+	content: string;
+}
+
+export const replyPropsSchema = {
+	$id: 'post/reply-asset',
+	title: 'Reply transaction asset for post module',
+	type: 'object',
+	required: ['postId', 'content'],
+	properties: {
+		postId: {
+			dataType: 'string',
+			fieldNumber: 1,
+		},
+		content: {
+			dataType: 'string',
+			fieldNumber: 2,
+			minLength: 3,
+			maxLength: 256
+		}
+	}
+}
+
 export interface PostProps {
 	id: string;
 	content: string;
 	date: number;
 	author: Buffer;
-	replies: string[];
+	replies: {
+		author: Buffer;
+		date: number;
+		content: string;
+	}[];
 	reposts: Buffer[];
 	likes: Buffer[];
+}
+
+export interface StringProps {
+	id: string;
+	content: string;
+	date: number;
+	author: string;
+	replies: {
+		author: string;
+		date: number;
+		content: string;
+	}[];
+	reposts: string[];
+	likes: string[];
 }
 
 export const postPropsSchema = {
@@ -136,7 +178,21 @@ export const postPropsSchema = {
 			type: 'array',
 			fieldNumber: 5,
 			items: {
-				dataType: 'string',
+				type: 'object',
+				properties: {
+					author: {
+						fieldNumber: 1,
+						dataType: 'bytes',
+					},
+					date: {
+						dataType: 'uint32',
+						fieldNumber: 2,
+					},
+					content: {
+						fieldNumber: 3,
+						dataType: 'string',
+					},
+				},
 			},
 		},
 		likes: {

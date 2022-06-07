@@ -1,4 +1,4 @@
-import { BaseAsset, ApplyAssetContext, ValidateAssetContext, codec } from 'lisk-sdk';
+import { BaseAsset, ApplyAssetContext, codec } from 'lisk-sdk';
 import { PostboardAccountProps, postPropsSchema, PostProps, RepostProps, repostPropsSchema } from '../schemas';
 
 export class RepostAsset extends BaseAsset<RepostProps> {
@@ -18,8 +18,6 @@ export class RepostAsset extends BaseAsset<RepostProps> {
 		if (oPostBuffer) {
 			const oPost: PostProps = codec.decode(postPropsSchema, oPostBuffer);
 			oPost.reposts.push(transaction.senderAddress);
-			// eslint-disable-next-line no-console
-			console.log('oPost :', oPost);
 			await stateStore.chain.set(asset.postId, codec.encode(postPropsSchema, oPost));
 
 			const sender = await stateStore.account.get<PostboardAccountProps>(transaction.senderAddress);
@@ -28,6 +26,5 @@ export class RepostAsset extends BaseAsset<RepostProps> {
 		} else {
 			throw new Error('PostID not found.');
 		}
-
 	}
 }
