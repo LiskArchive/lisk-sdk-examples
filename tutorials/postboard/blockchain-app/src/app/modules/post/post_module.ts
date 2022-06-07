@@ -15,16 +15,14 @@ import { postboardAccountPropsSchema, postPropsSchema, PostProps, StringProps } 
 const stringifyPost: (post: any) => any = function (
   p: any,
 ): any {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const sPost = p;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    sPost.author = cryptography.getLisk32AddressFromAddress(p.author);
+    p.author = cryptography.getLisk32AddressFromAddress(p.author);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    sPost.reposts[0] = cryptography.getLisk32AddressFromAddress(p.reposts[0]);
+    p.reposts[0] = cryptography.getLisk32AddressFromAddress(p.reposts[0]);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    sPost.replies[0].author = cryptography.getLisk32AddressFromAddress(p.replies[0].author);
+    p.replies[0].author = cryptography.getLisk32AddressFromAddress(p.replies[0].author);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return sPost;
+    return p;
 };
 
 export class PostModule extends BaseModule {
