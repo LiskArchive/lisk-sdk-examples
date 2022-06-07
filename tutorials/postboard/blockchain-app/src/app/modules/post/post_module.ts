@@ -7,13 +7,24 @@ import {
     AfterGenesisBlockApplyContext, BaseModule,
 
 
-    BeforeBlockApplyContext, TransactionApplyContext
+    BeforeBlockApplyContext, codec, cryptography, TransactionApplyContext,
 } from 'lisk-sdk';
 import { CreatePostAsset } from "./assets/create_post_asset";
-import { postboardAccountPropsSchema } from './schemas';
+import { postboardAccountPropsSchema, postPropsSchema } from './schemas';
 
 export class PostModule extends BaseModule {
     public actions = {
+        getPost: async (params) => {
+            // this._logger.info(params, 'The params: ');
+            const postBuffer = await this._dataAccess.getChainState(params.id);
+            let post = {};
+            if (postBuffer) {
+                post = codec.decode(postPropsSchema, postBuffer);
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+                post.author = cryptography.getLisk32AddressFromAddress(post.author);
+            }
+            return post;
+        }
         // Example below
         // getBalance: async (params) => this._dataAccess.account.get(params.address).token.balance,
         // getBlockByID: async (params) => this._dataAccess.blocks.get(params.id),
@@ -48,18 +59,17 @@ export class PostModule extends BaseModule {
     public async beforeBlockApply(_input: BeforeBlockApplyContext) {
         // Get any data from stateStore using block info, below is an example getting a generator
         // const generatorAddress = getAddressFromPublicKey(_input.block.header.generatorPublicKey);
-		// const generator = await _input.stateStore.account.get<TokenAccount>(generatorAddress);
+		    // const generator = await _input.stateStore.account.get<TokenAccount>(generatorAddress);
     }
 
     public async afterBlockApply(_input: AfterBlockApplyContext) {
         // Get any data from stateStore using block info, below is an example getting a generator
         // const generatorAddress = getAddressFromPublicKey(_input.block.header.generatorPublicKey);
-		// const generator = await _input.stateStore.account.get<TokenAccount>(generatorAddress);
+		    // const generator = await _input.stateStore.account.get<TokenAccount>(generatorAddress);
     }
 
+    // eslint-disable-next-line @typescript-eslint/require-await
     public async beforeTransactionApply(_input: TransactionApplyContext) {
-        this._logger.info(name, "name");
-
         // Get any data from stateStore using transaction info, below is an example
         // const sender = await _input.stateStore.account.getOrDefault<TokenAccount>(_input.transaction.senderAddress);
     }

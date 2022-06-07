@@ -1,14 +1,17 @@
 import { BaseAsset, ApplyAssetContext, codec, cryptography } from 'lisk-sdk';
 import { createPostPropsSchema, CreatePostProps, postPropsSchema, PostboardAccountProps } from '../schemas';
 
-const getIDForPost: (sender: PostboardAccountProps) => Buffer = function (
-	s:	PostboardAccountProps
+const getIDForPost: (address: Buffer, nonce: bigint) => Buffer = function (
+	a: Buffer,
+	n: bigint
 ): Buffer {
-	console.log("Sender account:  - ", s);
-	return cryptography.hash(s.address.toString('hex') + s.sequence.nonce.toString())
+	const nonceBuffer = Buffer.alloc(8);
+	nonceBuffer.writeBigInt64LE(n);
+	const seed = Buffer.concat([a, nonceBuffer]);
+	return cryptography.hash(seed);
 };
 
-export class CreatePostAsset extends BaseAsset {
+export class CreatePostAsset extends BaseAsset<CreatePostProps> {
 	public name = 'createPost';
   public id = 0;
 
@@ -23,21 +26,20 @@ export class CreatePostAsset extends BaseAsset {
 	// eslint-disable-next-line @typescript-eslint/require-await
   public async apply({ asset, transaction, stateStore }: ApplyAssetContext<CreatePostProps>): Promise<void> {
 		const sender = await stateStore.account.get<PostboardAccountProps>(transaction.senderAddress);
-		const postId = getIDForPost(sender).toString('hex');
+		const	postId = getIDForPost(transaction.senderAddress, transaction.nonce).toString('hex');
 
 		const post = {
 			id: postId,
 			content: asset.message,
 			date: Date.now(),
-			author: transaction.senderAddress,
+			author: sender.address,
 			replies: [],
 			likes: []
 		};
 
 		await stateStore.chain.set(postId, codec.encode(postPropsSchema, post));
 
-		sender.posts.push(postId);
-
+		sender.post.posts.push(postId);
 		await stateStore.account.set(sender.address, sender);
 	}
 }

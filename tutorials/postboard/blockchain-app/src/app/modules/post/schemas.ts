@@ -2,19 +2,21 @@ export interface PostboardAccountProps {
 	address: Buffer;
 	keys: {
 		mandatoryKeys: Buffer[];
-		numberOfSignatures: number;
+		numberOfSignatures: string;
 		optionalKeys: Buffer[];
 	};
 	sequence: {
-		nonce: number;
+		nonce: string;
 	};
 	token: {
-		balance: number;
+		balance: string;
 	};
-	following: Buffer[];
-	followers: Buffer[];
-	posts: string[];
-	replies: string[];
+	post: {
+		following: Buffer[];
+		followers: Buffer[];
+		posts: string[];
+		replies: string[];
+	};
 }
 
 export const postboardAccountPropsSchema = {
@@ -77,9 +79,10 @@ export const createPostPropsSchema = {
 };
 
 export interface PostProps {
+	id: string;
 	content: string;
 	date: number;
-	author: string;
+	author: Buffer;
 	replies: [];
 	likes: [];
 }
@@ -88,7 +91,7 @@ export const postPropsSchema = {
 	$id: 'post/posts',
 	title: 'CreatePostAsset transaction asset for post module',
 	type: 'object',
-	required: ['message'],
+	required: ['content','date','author'],
 	properties: {
 		content: {
 			dataType: 'string',
@@ -101,18 +104,18 @@ export const postPropsSchema = {
 			fieldNumber: 2,
 		},
 		author: {
-			dataType: 'string',
+			dataType: 'bytes',
 			fieldNumber: 3,
 		},
 		replies: {
-			dataType: 'array',
+			type: 'array',
 			fieldNumber: 4,
 			items: {
 				dataType: 'string',
 			},
 		},
 		likes: {
-			dataType: 'array',
+			type: 'array',
 			fieldNumber: 5,
 			items: {
 				dataType: 'string',
