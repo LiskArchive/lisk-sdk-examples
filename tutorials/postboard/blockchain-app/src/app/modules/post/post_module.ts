@@ -2,11 +2,7 @@
 
 import {
     AfterBlockApplyContext,
-
-
     AfterGenesisBlockApplyContext, BaseModule,
-
-
     BeforeBlockApplyContext, codec, cryptography, TransactionApplyContext
 } from 'lisk-sdk';
 import { CreatePostAsset } from "./assets/create_post_asset";
@@ -21,21 +17,12 @@ const stringifyPost: (post: any) => any = function (
 ): any {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const sPost = p;
-    /* const sPost = {
-        author: "",
-        replies: [{author:"", date: 0, content:""}],
-        reposts: [""],
-        likes: [""]
-    } */
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     sPost.author = cryptography.getLisk32AddressFromAddress(p.author);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     sPost.reposts[0] = cryptography.getLisk32AddressFromAddress(p.reposts[0]);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    // sPost.likes[0] = cryptography.getLisk32AddressFromAddress(p.likes[0]);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     sPost.replies[0].author = cryptography.getLisk32AddressFromAddress(p.replies[0].author);
-    // const fullPost = {...p, ...sPost}
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return sPost;
 };
@@ -43,22 +30,17 @@ const stringifyPost: (post: any) => any = function (
 export class PostModule extends BaseModule {
     public actions = {
         getPost: async (params) => {
-            // this._logger.info(params, 'The params: ');
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             const postBuffer = await this._dataAccess.getChainState(params.id);
             let post: PostProps;
             let sPost: StringProps;
             if (postBuffer) {
                 post = codec.decode(postPropsSchema, postBuffer);
-                sPost = stringifyPost(post);
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-
+                sPost = stringifyPost(post) as StringProps;
                 return sPost;
             }
             return {};
         }
-        // Example below
-        // getBalance: async (params) => this._dataAccess.account.get(params.address).token.balance,
-        // getBlockByID: async (params) => this._dataAccess.blocks.get(params.id),
     };
     public reducers = {
         // Example below
