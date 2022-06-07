@@ -11,7 +11,8 @@ const getClient = async () => {
 
 getClient().then((client) => {
 	client.invoke("post:getPost", {
-		id: "a23f361b7b4efdd5faa1d19fd232ab61a50a845bba99eeec1fd5db89c6615624"
+		// id: "a23f361b7b4efdd5faa1d19fd232ab61a50a845bba99eeec1fd5db89c6615624"
+		id: "14eb6024aef0730ac814e4af58e530005ad1cf256d9a7a34b06dbf1818d17973"
 	}).then(res => {
 		console.log(res);
 /*		const accObject = client.account.decode(res);

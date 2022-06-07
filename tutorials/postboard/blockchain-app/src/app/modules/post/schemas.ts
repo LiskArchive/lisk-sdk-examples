@@ -78,13 +78,31 @@ export const createPostPropsSchema = {
 	}
 };
 
+export interface RepostProps {
+	postId: string;
+}
+
+export const repostPropsSchema = {
+	$id: 'post/repost-asset',
+	title: 'RepostAsset transaction asset for post module',
+	type: 'object',
+	required: ['postId'],
+	properties: {
+		postId: {
+			dataType: 'string',
+			fieldNumber: 1,
+		}
+	}
+}
+
 export interface PostProps {
 	id: string;
 	content: string;
 	date: number;
 	author: Buffer;
-	replies: [];
-	likes: [];
+	replies: string[];
+	reposts: Buffer[];
+	likes: Buffer[];
 }
 
 export const postPropsSchema = {
@@ -107,16 +125,23 @@ export const postPropsSchema = {
 			dataType: 'bytes',
 			fieldNumber: 3,
 		},
-		replies: {
+		reposts: {
 			type: 'array',
 			fieldNumber: 4,
+			items: {
+				dataType: 'bytes',
+			},
+		},
+		replies: {
+			type: 'array',
+			fieldNumber: 5,
 			items: {
 				dataType: 'string',
 			},
 		},
 		likes: {
 			type: 'array',
-			fieldNumber: 5,
+			fieldNumber: 6,
 			items: {
 				dataType: 'string',
 			},

@@ -7,9 +7,13 @@ import {
     AfterGenesisBlockApplyContext, BaseModule,
 
 
-    BeforeBlockApplyContext, codec, cryptography, TransactionApplyContext,
+    BeforeBlockApplyContext, codec, cryptography, TransactionApplyContext
 } from 'lisk-sdk';
 import { CreatePostAsset } from "./assets/create_post_asset";
+import { FollowAsset } from "./assets/follow_asset";
+import { LikeAsset } from "./assets/like_asset";
+import { ReplyAsset } from "./assets/reply_asset";
+import { RepostAsset } from "./assets/repost_asset";
 import { postboardAccountPropsSchema, postPropsSchema } from './schemas';
 
 export class PostModule extends BaseModule {
@@ -22,6 +26,7 @@ export class PostModule extends BaseModule {
                 post = codec.decode(postPropsSchema, postBuffer);
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
                 post.author = cryptography.getLisk32AddressFromAddress(post.author);
+                post.reposts[0] = cryptography.getLisk32AddressFromAddress(post.reposts[0]);
             }
             return post;
         }
@@ -44,7 +49,7 @@ export class PostModule extends BaseModule {
 		// },
     };
     public name = 'post';
-    public transactionAssets = [new CreatePostAsset()];
+    public transactionAssets = [new CreatePostAsset(), new RepostAsset(), new ReplyAsset(), new LikeAsset(), new FollowAsset()];
     public events = [
         // Example below
         // 'post:newBlock',
