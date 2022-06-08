@@ -3,16 +3,17 @@
 import {
     AfterBlockApplyContext,
     AfterGenesisBlockApplyContext, BaseModule,
-    BeforeBlockApplyContext, codec, cryptography, TransactionApplyContext
+    BeforeBlockApplyContext, TransactionApplyContext
 } from 'lisk-sdk';
 import { CreatePostAsset } from "./assets/create_post_asset";
-import { FollowAsset } from "./assets/follow_asset";
-import { LikeAsset } from "./assets/like_asset";
-import { ReplyAsset } from "./assets/reply_asset";
-import { RepostAsset } from "./assets/repost_asset";
-import { postboardAccountPropsSchema, postPropsSchema, PostProps, StringProps } from './schemas';
+// import { FollowAsset } from "./assets/follow_asset";
+// import { LikeAsset } from "./assets/like_asset";
+// import { ReplyAsset } from "./assets/reply_asset";
+// import { RepostAsset } from "./assets/repost_asset";
+import { postboardAccountPropsSchema } from './schemas';
+// import { postboardAccountPropsSchema, postPropsSchema, PostProps, StringProps } from './schemas';
 
-const stringifyPost: (post: any) => any = function (
+/* const stringifyPost: (post: any) => any = function (
   p: any,
 ): any {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -23,18 +24,17 @@ const stringifyPost: (post: any) => any = function (
     });
    //  p.reposts.forEach((item, index) => { cryptography.getLisk32AddressFromAddress(item));
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-
     p.replies.forEach((item, index) => {
         p.replies[index] = cryptography.getLisk32AddressFromAddress(item.author);
     });
     p.likes.forEach(item => cryptography.getLisk32AddressFromAddress(item));
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return p;
-};
+}; */
 
 export class PostModule extends BaseModule {
     public actions = {
-        getPost: async (params) => {
+        /* getPost: async (params) => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             const postBuffer = await this._dataAccess.getChainState(params.id);
             let post: PostProps;
@@ -45,7 +45,7 @@ export class PostModule extends BaseModule {
                 return sPost;
             }
             return {};
-        }
+        } */
     };
     public reducers = {
         // Example below
@@ -62,7 +62,8 @@ export class PostModule extends BaseModule {
 		// },
     };
     public name = 'post';
-    public transactionAssets = [new CreatePostAsset(), new RepostAsset(), new ReplyAsset(), new LikeAsset(), new FollowAsset()];
+    // public transactionAssets = [new CreatePostAsset(), new RepostAsset(), new ReplyAsset(), new LikeAsset(), new FollowAsset()];
+    public transactionAssets = [new CreatePostAsset()];
     public events = [
         // Example below
         // 'post:newBlock',

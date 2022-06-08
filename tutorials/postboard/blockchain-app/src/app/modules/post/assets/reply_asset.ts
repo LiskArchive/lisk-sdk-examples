@@ -17,13 +17,16 @@ export class ReplyAsset extends BaseAsset {
 
 		const oPostBuffer = await stateStore.chain.get(asset.postId);
 		if (oPostBuffer) {
+			// eslint-disable-next-line no-console
+			console.log('======= oPostBuffer: ', oPostBuffer);
 			const oPost: PostProps = codec.decode(postPropsSchema, oPostBuffer);
 			const reply = {
 				author: sender.address,
 				date: Date.now(),
 				content: asset.content
 			}
-			const replyId = oPost.replies.length.toString();
+			const replyId = '0';
+			// const replyId = oPost.replies.length.toString();
 			oPost.replies.push(reply);
 			await stateStore.chain.set(asset.postId, codec.encode(postPropsSchema, oPost));
 

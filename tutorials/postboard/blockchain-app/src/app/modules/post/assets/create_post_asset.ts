@@ -25,8 +25,10 @@ export class CreatePostAsset extends BaseAsset<CreatePostProps> {
 
 	// eslint-disable-next-line @typescript-eslint/require-await
   public async apply({ asset, transaction, stateStore }: ApplyAssetContext<CreatePostProps>): Promise<void> {
+		console.log('piep =============== 1', postPropsSchema);
 		const sender = await stateStore.account.get<PostboardAccountProps>(transaction.senderAddress);
 		const	postId = getIDForPost(transaction.senderAddress, transaction.nonce).toString('hex');
+		console.log('piep =============== 2', sender);
 
 		const post = {
 			id: postId,
@@ -36,10 +38,14 @@ export class CreatePostAsset extends BaseAsset<CreatePostProps> {
 			replies: [],
 			likes: []
 		};
+		console.log('piep =============== 3', post);
 
 		await stateStore.chain.set(postId, codec.encode(postPropsSchema, post));
 
+		console.log('piep =============== 4');
 		sender.post.posts.push(postId);
+		console.log('piep =============== 5');
 		await stateStore.account.set(sender.address, sender);
+		console.log('piep =============== 6');
 	}
 }

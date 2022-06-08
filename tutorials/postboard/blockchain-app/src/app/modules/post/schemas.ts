@@ -50,13 +50,21 @@ export const postboardAccountPropsSchema = {
 			items: {
 				dataType: 'string',
 			}
+		},
+		likes: {
+			fieldNumber: 5,
+			type: 'array',
+			items: {
+				dataType: 'string',
+			}
 		}
 	},
 	default: {
 		followers: [],
 		following: [],
 		posts: [],
-		replies: []
+		replies: [],
+		likes: []
 	},
 };
 
