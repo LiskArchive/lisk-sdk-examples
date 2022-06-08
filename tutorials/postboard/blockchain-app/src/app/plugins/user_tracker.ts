@@ -24,9 +24,6 @@ import { UserTrackerAcitons } from './actions';
 
 
 
-// eslint-disable-next-line
-const packageJSON = require('../package.json');
-
 export class UserTrackerPlugin extends BasePlugin {
 	private _pluginDB!: db.KVStore;
     private _action!: UserTrackerAcitons;
@@ -39,12 +36,9 @@ export class UserTrackerPlugin extends BasePlugin {
 	// eslint-disable-next-line @typescript-eslint/class-literal-property-style
 	public static get info(): PluginInfo {
 		return {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-			author: packageJSON.author,
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-			version: packageJSON.version,
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-			name: packageJSON.name,
+			author: 'LiskHQ',
+			version: '0.1.0',
+			name: 'userTracker',
             exportPath: __filename,
 		};
 	}
@@ -59,10 +53,10 @@ export class UserTrackerPlugin extends BasePlugin {
 
 	public get actions(): ActionsDefinition {
 		return {
-            createUserList: this._action.createUserList.bind(this._action),
-            deleteUserList: this._action.deleteUserList.bind(this._action),
-            getUserListByID: this._action.getUserListByID.bind(this._action),
-            getUserListsByAddress: this._action.getUserListsByAddress.bind(this._action),
+            createUserList: async params => this._action.createUserList(params),
+            deleteUserList: async params => this._action.deleteUserList(params),
+            getUserListByID: async params => this._action.getUserListByID(params),
+            getUserListsByAddress: async params => this._action.getUserListsByAddress(params),
         };
 	}
 
