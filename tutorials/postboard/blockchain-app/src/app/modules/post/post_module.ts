@@ -1,19 +1,18 @@
 /* eslint-disable class-methods-use-this */
 
 import {
-    AfterBlockApplyContext,
+    AfterBlockApplyContext, cryptography, codec,
     AfterGenesisBlockApplyContext, BaseModule,
     BeforeBlockApplyContext, TransactionApplyContext
 } from 'lisk-sdk';
 import { CreatePostAsset } from "./assets/create_post_asset";
-// import { FollowAsset } from "./assets/follow_asset";
-// import { LikeAsset } from "./assets/like_asset";
-// import { ReplyAsset } from "./assets/reply_asset";
-// import { RepostAsset } from "./assets/repost_asset";
-import { postboardAccountPropsSchema } from './schemas';
-// import { postboardAccountPropsSchema, postPropsSchema, PostProps, StringProps } from './schemas';
+import { FollowAsset } from "./assets/follow_asset";
+import { LikeAsset } from "./assets/like_asset";
+import { ReplyAsset } from "./assets/reply_asset";
+import { RepostAsset } from "./assets/repost_asset";
+import { postboardAccountPropsSchema, postPropsSchema, PostProps, StringProps } from './schemas';
 
-/* const stringifyPost: (post: any) => any = function (
+const stringifyPost: (post: any) => any = function (
   p: any,
 ): any {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -23,29 +22,33 @@ import { postboardAccountPropsSchema } from './schemas';
         p.reposts[index] = cryptography.getLisk32AddressFromAddress(item);
     });
    //  p.reposts.forEach((item, index) => { cryptography.getLisk32AddressFromAddress(item));
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     p.replies.forEach((item, index) => {
-        p.replies[index] = cryptography.getLisk32AddressFromAddress(item.author);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        p.replies[index].author = cryptography.getLisk32AddressFromAddress(item.author);
     });
-    p.likes.forEach(item => cryptography.getLisk32AddressFromAddress(item));
+    p.likes.forEach((item, index) => {
+        p.likes[index] = cryptography.getLisk32AddressFromAddress(item);
+    });
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return p;
-}; */
+};
 
 export class PostModule extends BaseModule {
     public actions = {
-        /* getPost: async (params) => {
+        getPost: async (params) => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             const postBuffer = await this._dataAccess.getChainState(params.id);
             let post: PostProps;
             let sPost: StringProps;
             if (postBuffer) {
                 post = codec.decode(postPropsSchema, postBuffer);
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 sPost = stringifyPost(post) as StringProps;
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                 return sPost;
             }
             return {};
-        } */
+        }
     };
     public reducers = {
         // Example below
@@ -63,7 +66,7 @@ export class PostModule extends BaseModule {
     };
     public name = 'post';
     // public transactionAssets = [new CreatePostAsset(), new RepostAsset(), new ReplyAsset(), new LikeAsset(), new FollowAsset()];
-    public transactionAssets = [new CreatePostAsset()];
+    public transactionAssets = [new CreatePostAsset(), new RepostAsset(), new ReplyAsset(), new FollowAsset(), new LikeAsset()];
     public events = [
         // Example below
         // 'post:newBlock',

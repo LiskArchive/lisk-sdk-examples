@@ -11,8 +11,8 @@ const getClient = async () => {
 
 getClient().then((client) => {
 	client.invoke("post:getPost", {
-		// id: "a23f361b7b4efdd5faa1d19fd232ab61a50a845bba99eeec1fd5db89c6615624"
-		id: "14eb6024aef0730ac814e4af58e530005ad1cf256d9a7a34b06dbf1818d17973"
+		id: "17759060e4583f290bf07807b7d3f5c6629e28941277714d377294f680fd759d"
+		// id: "9ee0e2d8d50003ed3ed3eba5c6bb9a1d1f332a7d6e924827887ac5244680588e"
 	}).then(res => {
 		console.log(res);
 		// console.log(res.replies[0].author);

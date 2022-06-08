@@ -18,11 +18,11 @@ export class LikeAsset extends BaseAsset<LikeProps> {
 		const oPostBuffer = await stateStore.chain.get(asset.postId);
 		if (oPostBuffer) {
 			const oPost: PostProps = codec.decode(postPropsSchema, oPostBuffer);
-			// eslint-disable-next-line no-console
-			console.log('====== oPostBuffer: ', oPostBuffer);
 			const postIndex = oPost.likes.indexOf(transaction.senderAddress);
 			const senderIndex = sender.post.likes.indexOf(asset.postId);
-			if (postIndex > -1 && senderIndex > -1) {
+			console.log('================ postIndex: ',postIndex);
+			console.log('senderIndex: ',senderIndex);
+			if (postIndex > -1 || senderIndex > -1) {
 				oPost.likes.splice(postIndex, 1);
 				sender.post.likes.splice(postIndex, 1);
 			} else {
@@ -32,6 +32,7 @@ export class LikeAsset extends BaseAsset<LikeProps> {
 			// eslint-disable-next-line no-console
 			console.log('====== oPost: ', oPost);
 			await stateStore.chain.set(asset.postId, codec.encode(postPropsSchema, oPost));
+			await stateStore.account.set(sender.address, sender);
 		} else {
 			throw new Error('PostID not found.');
 		}

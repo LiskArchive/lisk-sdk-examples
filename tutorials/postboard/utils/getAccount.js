@@ -11,8 +11,8 @@ const getClient = async () => {
 
 getClient().then((client) => {
 	client.invoke("app:getAccount", {
-		address: "52f7e743004b5b46d78e8850d2d821cd4ed864bd"
-		// address: "5492d2a79c05b9b0c6f367afa5e98730838bcf55"
+		address: "3eeb3441c192bcb4096466a20ce75a912063ab8e"
+		// address: "048246c3de926550485fb4d4077ba39a25656fec"
 	}).then(res => {
 		console.log(res);
 		const accObject = client.account.decode(res);
