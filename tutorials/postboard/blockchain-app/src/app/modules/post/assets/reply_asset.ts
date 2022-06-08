@@ -18,22 +18,16 @@ export class ReplyAsset extends BaseAsset {
 		const oPostBuffer = await stateStore.chain.get(asset.postId);
 		if (oPostBuffer) {
 			const oPost: PostProps = codec.decode(postPropsSchema, oPostBuffer);
-			// eslint-disable-next-line no-console
-			console.log('====== oPostBuffer: ', oPostBuffer);
 			const reply = {
 				author: sender.address,
 				date: Date.now(),
 				content: asset.content
 			}
-			oPost.replies.push(reply);
-			// eslint-disable-next-line no-console
-			console.log('====== oPost: ', oPost);
 			const replyId = oPost.replies.length.toString();
+			oPost.replies.push(reply);
 			await stateStore.chain.set(asset.postId, codec.encode(postPropsSchema, oPost));
 
 			sender.post.replies.push(`${asset.postId}#${replyId}`);
-			// eslint-disable-next-line no-console
-			console.log('====== sender: ', sender);
 			await stateStore.account.set(sender.address, sender);
 		} else {
 			throw new Error('PostID not found.');

@@ -16,6 +16,7 @@ export interface PostboardAccountProps {
 		followers: Buffer[];
 		posts: string[];
 		replies: string[];
+		likes: string[];
 	};
 }
 
@@ -119,6 +120,40 @@ export const replyPropsSchema = {
 	}
 }
 
+export interface LikeProps {
+	postId: string;
+}
+
+export const likePropsSchema = {
+	$id: 'post/like-asset',
+	title: 'Like transaction asset for post module',
+	type: 'object',
+	required: ['postId'],
+	properties: {
+		postId: {
+			dataType: 'string',
+			fieldNumber: 1,
+		}
+	}
+}
+
+export interface FollowProps {
+	account: string;
+}
+
+export const followPropsSchema = {
+	$id: 'post/follow-asset',
+	title: 'Follow transaction asset for post module',
+	type: 'object',
+	required: ['account'],
+	properties: {
+		account: {
+			dataType: 'string',
+			fieldNumber: 1,
+		}
+	}
+}
+
 export interface PostProps {
 	id: string;
 	content: string;
@@ -199,7 +234,7 @@ export const postPropsSchema = {
 			type: 'array',
 			fieldNumber: 6,
 			items: {
-				dataType: 'string',
+				dataType: 'bytes',
 			},
 		}
 	}

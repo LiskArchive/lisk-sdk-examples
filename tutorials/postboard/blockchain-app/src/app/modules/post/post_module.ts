@@ -18,9 +18,16 @@ const stringifyPost: (post: any) => any = function (
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     p.author = cryptography.getLisk32AddressFromAddress(p.author);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    p.reposts[0] = cryptography.getLisk32AddressFromAddress(p.reposts[0]);
+    p.reposts.forEach((item, index) => {
+        p.reposts[index] = cryptography.getLisk32AddressFromAddress(item);
+    });
+   //  p.reposts.forEach((item, index) => { cryptography.getLisk32AddressFromAddress(item));
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    p.replies[0].author = cryptography.getLisk32AddressFromAddress(p.replies[0].author);
+
+    p.replies.forEach((item, index) => {
+        p.replies[index] = cryptography.getLisk32AddressFromAddress(item.author);
+    });
+    p.likes.forEach(item => cryptography.getLisk32AddressFromAddress(item));
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return p;
 };
