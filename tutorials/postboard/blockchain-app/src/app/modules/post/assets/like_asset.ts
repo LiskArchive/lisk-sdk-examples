@@ -20,8 +20,7 @@ export class LikeAsset extends BaseAsset<LikeProps> {
 			const oPost: PostProps = codec.decode(postPropsSchema, oPostBuffer);
 			const postIndex = oPost.likes.indexOf(transaction.senderAddress);
 			const senderIndex = sender.post.likes.indexOf(asset.postId);
-			console.log('================ postIndex: ',postIndex);
-			console.log('senderIndex: ',senderIndex);
+
 			if (postIndex > -1 || senderIndex > -1) {
 				oPost.likes.splice(postIndex, 1);
 				sender.post.likes.splice(postIndex, 1);

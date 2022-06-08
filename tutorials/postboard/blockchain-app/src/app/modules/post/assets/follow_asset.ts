@@ -17,9 +17,15 @@ export class FollowAsset extends BaseAsset<FollowProps> {
 		const sender = await stateStore.account.get<PostboardAccountProps>(transaction.senderAddress);
 		const accountBuffer = cryptography.getAddressFromLisk32Address(asset.account)
 		const account = await stateStore.account.get<PostboardAccountProps>(accountBuffer);
-		const indexSender = sender.post.following.indexOf(account.address);
-		const indexAccount = account.post.followers.indexOf(sender.address);
+		const isAccountAddress = (element) => element.equals(account.address);
+		const isSenderAddress = (element) => element.equals(sender.address);
 
+		const indexSender = sender.post.following.findIndex(isAccountAddress);
+		const indexAccount = account.post.followers.findIndex(isSenderAddress);
+		console.log('================ sender: ',sender);
+		console.log('================ account: ',account);
+		console.log('================ indexSender: ',indexSender);
+		console.log('indexAccount: ',indexAccount);
 		if (indexSender > -1 || indexAccount > -1) {
 			sender.post.following.splice(indexSender, 1);
 			account.post.followers.splice(indexAccount, 1);
