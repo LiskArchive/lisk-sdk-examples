@@ -64,7 +64,7 @@ export class CreatePostAsset extends BaseAsset<CreatePostProps> {
 		const post = {
 			id: postId,
 			content: asset.message,
-			date: 1,
+			date: Math.floor(Date.now() / 1000),
 			author: sender.address,
 			replies: [],
 			reposts: [],
