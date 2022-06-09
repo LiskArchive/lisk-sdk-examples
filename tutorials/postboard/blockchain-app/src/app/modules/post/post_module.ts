@@ -1,16 +1,28 @@
 /* eslint-disable class-methods-use-this */
 
 import {
-    AfterBlockApplyContext, cryptography, codec,
-    AfterGenesisBlockApplyContext, BaseModule,
-    BeforeBlockApplyContext, TransactionApplyContext
+    AfterBlockApplyContext,
+    AfterGenesisBlockApplyContext,
+    BaseModule,
+    BeforeBlockApplyContext,
+    codec,
+    cryptography,
+    TransactionApplyContext,
 } from 'lisk-sdk';
-import { CreatePostAsset } from "./assets/create_post_asset";
-import { FollowAsset } from "./assets/follow_asset";
-import { LikeAsset } from "./assets/like_asset";
-import { ReplyAsset } from "./assets/reply_asset";
-import { RepostAsset } from "./assets/repost_asset";
-import { postboardAccountPropsSchema, postPropsSchema, PostProps, StringProps } from './schemas';
+import { CreatePostAsset } from './assets/create_post_asset';
+import { FollowAsset } from './assets/follow_asset';
+import { LikeAsset } from './assets/like_asset';
+import { ReplyAsset } from './assets/reply_asset';
+import { RepostAsset } from './assets/repost_asset';
+import {
+    AllPosts,
+    allPostsSchema,
+    PostboardAccountProps,
+    postboardAccountPropsSchema,
+    PostProps,
+    postPropsSchema,
+    StringProps,
+} from './schemas';
 
 const stringifyPost: (post: any) => any = function (
   p: any,
@@ -48,6 +60,21 @@ export class PostModule extends BaseModule {
                 return sPost;
             }
             return {};
+        },
+        getLatestPosts: async (params) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            const { account: address } = params;
+            if (address) {
+                const account: PostboardAccountProps|undefined = await this._dataAccess.getAccountByAddress(Buffer.from(address,'hex'));
+                return account.post.posts;
+            }
+            const allPostsBuffer: Buffer|undefined = await this._dataAccess.getChainState('post/all');
+            if (allPostsBuffer) {
+                const allPosts: AllPosts = codec.decode(allPostsSchema, allPostsBuffer);
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+                return allPosts.posts;
+            }
+            return [];
         }
     };
     public reducers = {

@@ -194,32 +194,36 @@ export const postPropsSchema = {
 	$id: 'post/posts',
 	title: 'CreatePostAsset transaction asset for post module',
 	type: 'object',
-	required: ['content','date','author'],
+	required: ['id','content','date','author'],
 	properties: {
-		content: {
+		id: {
 			dataType: 'string',
 			fieldNumber: 1,
+		},
+		content: {
+			dataType: 'string',
+			fieldNumber: 2,
 			minLength: 3,
 			maxLength: 256,
 		},
 		date: {
 			dataType: 'uint32',
-			fieldNumber: 2,
+			fieldNumber: 3,
 		},
 		author: {
 			dataType: 'bytes',
-			fieldNumber: 3,
+			fieldNumber: 4,
 		},
 		reposts: {
 			type: 'array',
-			fieldNumber: 4,
+			fieldNumber: 5,
 			items: {
 				dataType: 'bytes',
 			},
 		},
 		replies: {
 			type: 'array',
-			fieldNumber: 5,
+			fieldNumber: 6,
 			items: {
 				type: 'object',
 				properties: {
@@ -240,13 +244,33 @@ export const postPropsSchema = {
 		},
 		likes: {
 			type: 'array',
-			fieldNumber: 6,
+			fieldNumber: 7,
 			items: {
 				dataType: 'bytes',
 			},
 		}
 	}
 };
+
+export interface AllPosts {
+	posts: string[];
+}
+
+export const allPostsSchema = {
+	$id: "lisk/post/posts",
+	type: "object",
+	required: ["posts"],
+	properties: {
+		posts: {
+			type: "array",
+			fieldNumber: 1,
+			items: {
+				dataType: 'string',
+			},
+		},
+	},
+};
+
 
 export const accountSchema = {
 	$id: '/account/base',
