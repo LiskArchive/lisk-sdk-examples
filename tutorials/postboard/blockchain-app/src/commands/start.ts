@@ -59,6 +59,7 @@ const setPluginConfig = (config: ApplicationConfig, flags: Flags): void => {
 	}
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type StartFlags = typeof BaseStartCommand.flags & flagParser.Input<any>;
 
 export class StartCommand extends BaseStartCommand {

@@ -55,6 +55,20 @@ export interface PostProps {
 	likes: Buffer[];
 }
 
+export interface PostPropsJSON {
+	id: string;
+	content: string;
+	date: number;
+	author: string;
+	replies: {
+		author: string;
+		date: number;
+		content: string;
+	}[];
+	reposts: string[];
+	likes: string[];
+}
+
 export interface StringProps {
 	id: string;
 	content: string;

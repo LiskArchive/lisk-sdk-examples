@@ -2,13 +2,10 @@ import { BaseAsset, ApplyAssetContext, codec, cryptography, StateStore } from 'l
 import { createPostPropsSchema, postPropsSchema, allPostsSchema } from '../schemas';
 import { AllPosts, CreatePostProps, PostboardAccountProps } from '../types';
 
-const getIDForPost: (address: Buffer, nonce: bigint) => Buffer = function (
-	a: Buffer,
-	n: bigint,
-): Buffer {
+const getIDForPost = (address: Buffer, nonce: bigint): Buffer => {
 	const nonceBuffer = Buffer.alloc(8);
-	nonceBuffer.writeBigInt64LE(n);
-	const seed = Buffer.concat([a, nonceBuffer]);
+	nonceBuffer.writeBigInt64LE(nonce);
+	const seed = Buffer.concat([address, nonceBuffer]);
 	return cryptography.hash(seed);
 };
 
@@ -31,8 +28,8 @@ export class CreatePostAsset extends BaseAsset<CreatePostProps> {
 	public schema = createPostPropsSchema;
 
 	/*  public validate({ _asset }: ValidateAssetContext<{}>): void {
-    // Validate your asset
-  } */
+		// Validate your asset
+	} */
 
 	public async apply({
 		asset,

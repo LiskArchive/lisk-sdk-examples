@@ -41,7 +41,7 @@ export class UserTrackerPlugin extends BasePlugin {
 		};
 	}
 
-	public get defaults(): object {
+	public get defaults(): Record<string, unknown> {
 		return {};
 	}
 

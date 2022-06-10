@@ -13,48 +13,33 @@ import { LikeAsset } from './assets/like_asset';
 import { ReplyAsset } from './assets/reply_asset';
 import { RepostAsset } from './assets/repost_asset';
 import { allPostsSchema, postboardAccountPropsSchema, postPropsSchema } from './schemas';
-import { AllPosts, PostboardAccountProps, PostProps, StringProps } from './types';
+import { AllPosts, PostboardAccountProps, PostProps, PostPropsJSON, StringProps } from './types';
 
-const stringifyPost: (post: any) => any = function (p: any): any {
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-	p.author = cryptography.getLisk32AddressFromAddress(p.author);
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-	p.reposts.forEach((item, index) => {
-		p.reposts[index] = cryptography.getLisk32AddressFromAddress(item);
-	});
-	//  p.reposts.forEach((item, index) => { cryptography.getLisk32AddressFromAddress(item));
-	p.replies.forEach((item, index) => {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-		p.replies[index].author = cryptography.getLisk32AddressFromAddress(item.author);
-	});
-	p.likes.forEach((item, index) => {
-		p.likes[index] = cryptography.getLisk32AddressFromAddress(item);
-	});
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-	return p;
-};
+const stringifyPost = (post: PostProps): PostPropsJSON => ({
+	author: cryptography.getLisk32AddressFromAddress(post.author),
+	content: post.content,
+	date: post.date,
+	id: post.id,
+	likes: post.likes.map(l => cryptography.getLisk32AddressFromAddress(l)),
+	replies: post.replies.map(r => ({ ...r, author: cryptography.getLisk32AddressFromAddress(r.author) })),
+	reposts: post.reposts.map(p => cryptography.getLisk32AddressFromAddress(p)),
+});
 
 export class PostModule extends BaseModule {
 	public actions = {
 		// Get post by ID
-		getPost: async params => {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-			const postBuffer = await this._dataAccess.getChainState(params.id);
-			let post: PostProps;
-			let sPost: StringProps;
-			if (postBuffer) {
-				post = codec.decode(postPropsSchema, postBuffer);
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				sPost = stringifyPost(post) as StringProps;
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-				return sPost;
+		getPost: async (params: Record<string, unknown>) => {
+			const encodedPost = await this._dataAccess.getChainState(params.id as string);
+			if (!encodedPost) {
+				return {};
 			}
-			return {};
+			const decodedPost = codec.decode<PostProps>(postPropsSchema, encodedPost);
+
+			return stringifyPost(decodedPost);
 		},
 		// Get latests posts
-		getLatestPosts: async params => {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			const { account: address } = params;
+		getLatestPosts: async (params: Record<string, unknown>) => {
+			const { account: address } = params as { account: string };
 			if (address) {
 				const account:
 					| PostboardAccountProps

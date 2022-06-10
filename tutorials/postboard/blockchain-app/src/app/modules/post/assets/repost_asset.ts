@@ -10,8 +10,8 @@ export class RepostAsset extends BaseAsset<RepostProps> {
 	public schema = repostPropsSchema;
 
 	/*  public validate({ asset }: ValidateAssetContext<{}>): void {
-    // Validate your asset
-  } */
+    	// Validate your asset
+  	} */
 
 	public async apply({
 		asset,
@@ -24,7 +24,7 @@ export class RepostAsset extends BaseAsset<RepostProps> {
 		const oPostBuffer = await stateStore.chain.get(asset.postId);
 
 		if (oPostBuffer) {
-			const oPost: PostProps = codec.decode(postPropsSchema, oPostBuffer);
+			const oPost = codec.decode<PostProps>(postPropsSchema, oPostBuffer);
 
 			// Add sender address to the reposts list of the post
 			oPost.reposts.push(transaction.senderAddress);

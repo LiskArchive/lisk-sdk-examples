@@ -10,8 +10,8 @@ export class FollowAsset extends BaseAsset<FollowProps> {
 	public schema = followPropsSchema;
 
 	/*  public validate({ asset }: ValidateAssetContext<{}>): void {
-    // Validate your asset
-  } */
+		// Validate your asset
+	} */
 
 	public async apply({
 		asset,
@@ -25,8 +25,8 @@ export class FollowAsset extends BaseAsset<FollowProps> {
 		const account = await stateStore.account.get<PostboardAccountProps>(accountBuffer);
 
 		// Testing functions for findIndex()
-		const isAccountAddress = element => element.equals(account.address);
-		const isSenderAddress = element => element.equals(sender.address);
+		const isAccountAddress = (element: Buffer) => element.equals(account.address);
+		const isSenderAddress = (element: Buffer) => element.equals(sender.address);
 		// Check if sender is already following
 		const indexSender = sender.post.following.findIndex(isAccountAddress);
 		const indexAccount = account.post.followers.findIndex(isSenderAddress);

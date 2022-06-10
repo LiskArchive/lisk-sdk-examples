@@ -10,8 +10,8 @@ export class ReplyAsset extends BaseAsset {
 	public schema = replyPropsSchema;
 
 	/*  public validate({ asset }: ValidateAssetContext<{}>): void {
-    // Validate your asset
-  } */
+		// Validate your asset
+	} */
 
 	public async apply({
 		asset,
@@ -23,7 +23,7 @@ export class ReplyAsset extends BaseAsset {
 		// Get post by ID
 		const oPostBuffer = await stateStore.chain.get(asset.postId);
 		if (oPostBuffer) {
-			const oPost: PostProps = codec.decode(postPropsSchema, oPostBuffer);
+			const oPost = codec.decode<PostProps>(postPropsSchema, oPostBuffer);
 
 			// Create reply object
 			const reply = {

@@ -10,8 +10,8 @@ export class LikeAsset extends BaseAsset<LikeProps> {
 	public schema = likePropsSchema;
 
 	/*  public validate({ asset }: ValidateAssetContext<{}>): void {
-    // Validate your asset
-  } */
+		// Validate your asset
+	} */
 
 	public async apply({
 		asset,
@@ -23,7 +23,7 @@ export class LikeAsset extends BaseAsset<LikeProps> {
 		// Get post from DB
 		const oPostBuffer = await stateStore.chain.get(asset.postId);
 		if (oPostBuffer) {
-			const oPost: PostProps = codec.decode(postPropsSchema, oPostBuffer);
+			const oPost = codec.decode<PostProps>(postPropsSchema, oPostBuffer);
 
 			// Check if the post is already liked by the sender account
 			const postIndex = oPost.likes.indexOf(transaction.senderAddress);
