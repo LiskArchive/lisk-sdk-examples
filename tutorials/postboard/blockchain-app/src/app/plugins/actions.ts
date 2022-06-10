@@ -46,6 +46,8 @@ export class UserTrackerActions {
 			throw new Error('Param is required.');
 		}
 		const errors = validator.validate(createUserListRequest, params);
+		console.log("Errors: ", errors);
+		console.log("Params: ", params);
 		if (errors.length) {
 			throw new LiskValidationError(errors);
 		}
@@ -63,7 +65,7 @@ export class UserTrackerActions {
 			await this._db.put(
 				topicKey,
 				codec.encode(topicIndexPluginStore, {
-					addresses: request.addresses,
+					addresses: request.addresses.map(address => Buffer.from(address, 'hex')),
 				}),
 			);
 		}
