@@ -20,13 +20,13 @@ import {
 	PluginInfo,
     db,
 } from 'lisk-sdk';
-import { UserTrackerAcitons } from './actions';
+import { UserTrackerActions } from './actions';
 
 
 
 export class UserTrackerPlugin extends BasePlugin {
 	private _pluginDB!: db.KVStore;
-    private _action!: UserTrackerAcitons;
+    private _action!: UserTrackerActions;
 
 	// eslint-disable-next-line @typescript-eslint/class-literal-property-style
 	public static get alias(): string {
@@ -64,7 +64,7 @@ export class UserTrackerPlugin extends BasePlugin {
 	public async load(_channel: BaseChannel): Promise<void> {
         const dbPath = path.join(this.options.dataPath, 'tracker.db');
         this._pluginDB = new db.KVStore(dbPath);
-        this._action = new UserTrackerAcitons(this._pluginDB);
+        this._action = new UserTrackerActions(this._pluginDB);
 	}
 
 	public async unload(): Promise<void> {

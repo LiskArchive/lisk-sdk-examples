@@ -29,7 +29,7 @@ const dbKey = (prefix: Buffer, key: Buffer) =>
 const DB_KEY_TOPIC = 'DB_KEY_TOPIC';
 const DB_KEY_ADDRESS = 'DB_KEY_ADDRESS';
 
-export class UserTrackerAcitons {
+export class UserTrackerActions {
     private readonly _db: db.KVStore;
 
     public constructor(kvStore: db.KVStore ) {

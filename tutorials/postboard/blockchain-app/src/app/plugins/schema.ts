@@ -20,7 +20,7 @@ export interface CreateUserListRequest {
 export const createUserListRequest = {
     $id: '/lisk/userTracker/createUserListRequest',
     type: 'object',
-    reqquired: ['topic', 'addresses'],
+    required: ['topic', 'addresses'],
     properties: {
         topic: {
             type: 'string',
@@ -42,7 +42,7 @@ export interface DeleteUserListRequest {
 export const deleteUserListRequest = {
     $id: '/lisk/userTracker/deleteUserListRequest',
     type: 'object',
-    reqquired: ['topic'],
+    required: ['topic'],
     properties: {
         topic: {
             type: 'string',
@@ -57,7 +57,7 @@ export interface GetUserListByTopicRequest {
 export const getUserListByTopicRequest = {
     $id: '/lisk/userTracker/getUserListByTopicRequest',
     type: 'object',
-    reqquired: ['topic'],
+    required: ['topic'],
     properties: {
         topic: {
             type: 'string',
@@ -72,7 +72,7 @@ export interface GetUserListByAddressRequest {
 export const getUserListsByAddressRequest = {
     $id: '/lisk/userTracker/getUserListsByAddressRequest',
     type: 'object',
-    reqquired: ['address'],
+    required: ['address'],
     properties: {
         address: {
             type: 'string',
@@ -84,7 +84,7 @@ export const getUserListsByAddressRequest = {
 export const addressIndexPluginStore = {
     $id: '/lisk/userTracker/addressIndexPluginStore',
     type: 'object',
-    reqquired: ['topics'],
+    required: ['topics'],
     properties: {
         topics: {
             fieldNumber: 1,
@@ -99,7 +99,7 @@ export const addressIndexPluginStore = {
 export const topicIndexPluginStore = {
     $id: '/lisk/userTracker/topicIndexPluginStore',
     type: 'object',
-    reqquired: ['addresses'],
+    required: ['addresses'],
     properties: {
         addresses: {
             fieldNumber: 1,
