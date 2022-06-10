@@ -1,5 +1,3 @@
-/* eslint-disable class-methods-use-this */
-
 import {
     AfterBlockApplyContext,
     AfterGenesisBlockApplyContext,
@@ -47,6 +45,7 @@ const stringifyPost: (post: any) => any = function (
 
 export class PostModule extends BaseModule {
     public actions = {
+        // Get post by ID
         getPost: async (params) => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             const postBuffer = await this._dataAccess.getChainState(params.id);
@@ -61,6 +60,7 @@ export class PostModule extends BaseModule {
             }
             return {};
         },
+        // Get latests posts
         getLatestPosts: async (params) => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const { account: address } = params;
@@ -92,8 +92,7 @@ export class PostModule extends BaseModule {
 		// },
     };
     public name = 'post';
-    // public transactionAssets = [new CreatePostAsset(), new RepostAsset(), new ReplyAsset(), new LikeAsset(), new FollowAsset()];
-    public transactionAssets = [new CreatePostAsset(), new RepostAsset(), new ReplyAsset(), new FollowAsset(), new LikeAsset()];
+    public transactionAssets = [new CreatePostAsset(), new RepostAsset(), new ReplyAsset(), new LikeAsset(), new FollowAsset()];
     public events = [
         // Example below
         // 'post:newBlock',

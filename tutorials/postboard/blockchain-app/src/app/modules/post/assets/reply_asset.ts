@@ -13,24 +13,29 @@ export class ReplyAsset extends BaseAsset {
   } */
 
   public async apply({ asset, transaction, stateStore }: ApplyAssetContext<ReplyProps>): Promise<void> {
+		// Get sender account by address
 		const sender = await stateStore.account.get<PostboardAccountProps>(transaction.senderAddress);
-
+		// Get post by ID
 		const oPostBuffer = await stateStore.chain.get(asset.postId);
 		if (oPostBuffer) {
-			// eslint-disable-next-line no-console
-			console.log('======= oPostBuffer: ', oPostBuffer);
 			const oPost: PostProps = codec.decode(postPropsSchema, oPostBuffer);
+
+			// Create reply object
 			const reply = {
 				author: sender.address,
 				date: Date.now(),
 				content: asset.content
 			}
-			const replyId = '0';
-			// const replyId = oPost.replies.length.toString();
-			oPost.replies.push(reply);
-			await stateStore.chain.set(asset.postId, codec.encode(postPropsSchema, oPost));
 
+			// Add reply to the replies list of the post object
+			oPost.replies.push(reply);
+
+			// Add postID & replyID to the replies list of the sender account
+			const replyId = oPost.replies.length.toString();
 			sender.post.replies.push(`${asset.postId}#${replyId}`);
+
+			// Save the updated post and sender account in the DB
+			await stateStore.chain.set(asset.postId, codec.encode(postPropsSchema, oPost));
 			await stateStore.account.set(sender.address, sender);
 		} else {
 			throw new Error('PostID not found.');

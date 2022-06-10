@@ -34,17 +34,6 @@ const getAllPosts = async (stateStore: StateStore) => {
 	return posts;
 };
 
-/* const setAllPosts = async (stateStore, Posts) => {
-	const allPosts = {
-		posts: Posts.sort((a, b) => a.id.compare(b.id)),
-	};
-
-	await stateStore.chain.set(
-		'post/all',
-		codec.encode(allPostsSchema, allPosts)
-	);
-}; */
-
 export class CreatePostAsset extends BaseAsset<CreatePostProps> {
 	public name = 'createPost';
   public id = 0;
@@ -57,10 +46,12 @@ export class CreatePostAsset extends BaseAsset<CreatePostProps> {
     // Validate your asset
   } */
 
-	// eslint-disable-next-line @typescript-eslint/require-await
   public async apply({ asset, transaction, stateStore }: ApplyAssetContext<CreatePostProps>): Promise<void> {
+		// Get sender account
 		const sender = await stateStore.account.get<PostboardAccountProps>(transaction.senderAddress);
+		// Create a unique ID for the post
 		const	postId = getIDForPost(transaction.senderAddress, transaction.nonce).toString('hex');
+		// Create the post object
 		const post = {
 			id: postId,
 			content: asset.message,
@@ -71,20 +62,18 @@ export class CreatePostAsset extends BaseAsset<CreatePostProps> {
 			likes: []
 		};
 
-		// Save post
+		// Save post in the DB
 		await stateStore.chain.set(postId, codec.encode(postPropsSchema, post));
 
-		// Save to allPosts
+		// Save postID to allPosts list
 		const allPosts: AllPosts = await getAllPosts(stateStore);
-
-
 		allPosts.posts.push(postId);
 		await stateStore.chain.set(
 			'post/all',
 			codec.encode(allPostsSchema, allPosts)
 		);
 
-		// Save in users account
+		// Save postID in users account
 		sender.post.posts.push(postId);
 		await stateStore.account.set(sender.address, sender);
 	}
