@@ -26,12 +26,13 @@ export class ReplyAsset extends BaseAsset {
 				date: Date.now(),
 				content: asset.content
 			}
+			// Create reply ID
+			const replyId = oPost.replies.length.toString();
 
 			// Add reply to the replies list of the post object
 			oPost.replies.push(reply);
 
 			// Add postID & replyID to the replies list of the sender account
-			const replyId = oPost.replies.length.toString();
 			sender.post.replies.push(`${asset.postId}#${replyId}`);
 
 			// Save the updated post and sender account in the DB
