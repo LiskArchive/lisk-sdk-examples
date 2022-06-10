@@ -13,7 +13,7 @@ import { LikeAsset } from './assets/like_asset';
 import { ReplyAsset } from './assets/reply_asset';
 import { RepostAsset } from './assets/repost_asset';
 import { allPostsSchema, postboardAccountPropsSchema, postPropsSchema } from './schemas';
-import { AllPosts, PostboardAccountProps, PostProps, PostPropsJSON, StringProps } from './types';
+import { AllPosts, PostboardAccountProps, PostProps, PostPropsJSON } from './types';
 
 const stringifyPost = (post: PostProps): PostPropsJSON => ({
 	author: cryptography.getLisk32AddressFromAddress(post.author),
