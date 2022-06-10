@@ -33,13 +33,13 @@
 		"prepublishOnly": "npm ci && npm run lint && npm run build"
 	},
 	"bin": {
-		"pinboard": "./bin/run"
+		"postboard": "./bin/run"
 	},
 	"lisk": {
 		"addressPrefix": "lsk"
 	},
 	"oclif": {
-		"bin": "pinboard",
+		"bin": "postboard",
 		"commands": "./dist/commands",
 		"plugins": [
 			"@oclif/plugin-autocomplete",
@@ -47,40 +47,40 @@
 		],
 		"topics": {
 			"account": {
-				"description": "Commands relating to pinboard accounts."
+				"description": "Commands relating to postboard accounts."
 			},
 			"block": {
-				"description": "Commands relating to pinboard blocks."
+				"description": "Commands relating to postboard blocks."
 			},
 			"blockchain": {
-				"description": "Commands relating to pinboard blockchain data."
+				"description": "Commands relating to postboard blockchain data."
 			},
 			"console": {
-				"description": "pinboard interactive REPL session to run commands."
+				"description": "postboard interactive REPL session to run commands."
 			},
 			"config": {
-				"description": "Commands relating to pinboard node configuration."
+				"description": "Commands relating to postboard node configuration."
 			},
 			"forger-info": {
-				"description": "Commands relating to pinboard forger-info data."
+				"description": "Commands relating to postboard forger-info data."
 			},
 			"forging": {
-				"description": "Commands relating to pinboard forging."
+				"description": "Commands relating to postboard forging."
 			},
 			"hash-onion": {
 				"description": "Create hash onions to be used by the forger."
 			},
 			"node": {
-				"description": "Commands relating to pinboard node."
+				"description": "Commands relating to postboard node."
 			},
 			"passphrase": {
-				"description": "Commands relating to pinboard passphrases."
+				"description": "Commands relating to postboard passphrases."
 			},
 			"sdk": {
 				"description": "Commands relating to Lisk SDK development."
 			},
 			"transaction": {
-				"description": "Commands relating to pinboard transactions."
+				"description": "Commands relating to postboard transactions."
 			}
 		}
 	},
