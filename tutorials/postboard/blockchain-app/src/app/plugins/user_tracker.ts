@@ -18,15 +18,13 @@ import {
 	BaseChannel,
 	EventsDefinition,
 	PluginInfo,
-    db,
+	db,
 } from 'lisk-sdk';
 import { UserTrackerActions } from './actions';
 
-
-
 export class UserTrackerPlugin extends BasePlugin {
 	private _pluginDB!: db.KVStore;
-    private _action!: UserTrackerActions;
+	private _action!: UserTrackerActions;
 
 	// eslint-disable-next-line @typescript-eslint/class-literal-property-style
 	public static get alias(): string {
@@ -39,7 +37,7 @@ export class UserTrackerPlugin extends BasePlugin {
 			author: 'LiskHQ',
 			version: '0.1.0',
 			name: 'userTracker',
-            exportPath: __filename,
+			exportPath: __filename,
 		};
 	}
 
@@ -53,18 +51,18 @@ export class UserTrackerPlugin extends BasePlugin {
 
 	public get actions(): ActionsDefinition {
 		return {
-            createUserList: async params => this._action.createUserList(params),
-            deleteUserList: async params => this._action.deleteUserList(params),
-            getUserListByID: async params => this._action.getUserListByID(params),
-            getUserListsByAddress: async params => this._action.getUserListsByAddress(params),
-        };
+			createUserList: async params => this._action.createUserList(params),
+			deleteUserList: async params => this._action.deleteUserList(params),
+			getUserListByID: async params => this._action.getUserListByID(params),
+			getUserListsByAddress: async params => this._action.getUserListsByAddress(params),
+		};
 	}
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async load(_channel: BaseChannel): Promise<void> {
-        const dbPath = path.join(this.options.dataPath, 'tracker.db');
-        this._pluginDB = new db.KVStore(dbPath);
-        this._action = new UserTrackerActions(this._pluginDB);
+		const dbPath = path.join(this.options.dataPath, 'tracker.db');
+		this._pluginDB = new db.KVStore(dbPath);
+		this._action = new UserTrackerActions(this._pluginDB);
 	}
 
 	public async unload(): Promise<void> {

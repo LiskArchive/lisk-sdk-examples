@@ -1,7 +1,7 @@
 import { ReplyAsset } from '../../../../../src/app/modules/post/assets/reply_asset';
 
 describe('ReplyAsset', () => {
-  let transactionAsset: ReplyAsset;
+	let transactionAsset: ReplyAsset;
 
 	beforeEach(() => {
 		transactionAsset = new ReplyAsset();
@@ -23,18 +23,18 @@ describe('ReplyAsset', () => {
 
 	describe('validate', () => {
 		describe('schema validation', () => {
-      it.todo('should throw errors for invalid schema');
-      it.todo('should be ok for valid schema');
-    });
+			it.todo('should throw errors for invalid schema');
+			it.todo('should be ok for valid schema');
+		});
 	});
 
 	describe('apply', () => {
-    describe('valid cases', () => {
-      it.todo('should update the state store');
-    });
+		describe('valid cases', () => {
+			it.todo('should update the state store');
+		});
 
-    describe('invalid cases', () => {
-      it.todo('should throw error');
-    });
+		describe('invalid cases', () => {
+			it.todo('should throw error');
+		});
 	});
 });

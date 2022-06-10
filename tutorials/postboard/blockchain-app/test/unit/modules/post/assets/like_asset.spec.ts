@@ -1,7 +1,7 @@
 import { LikeAsset } from '../../../../../src/app/modules/post/assets/like_asset';
 
 describe('LikeAsset', () => {
-  let transactionAsset: LikeAsset;
+	let transactionAsset: LikeAsset;
 
 	beforeEach(() => {
 		transactionAsset = new LikeAsset();
@@ -23,18 +23,18 @@ describe('LikeAsset', () => {
 
 	describe('validate', () => {
 		describe('schema validation', () => {
-      it.todo('should throw errors for invalid schema');
-      it.todo('should be ok for valid schema');
-    });
+			it.todo('should throw errors for invalid schema');
+			it.todo('should be ok for valid schema');
+		});
 	});
 
 	describe('apply', () => {
-    describe('valid cases', () => {
-      it.todo('should update the state store');
-    });
+		describe('valid cases', () => {
+			it.todo('should update the state store');
+		});
 
-    describe('invalid cases', () => {
-      it.todo('should throw error');
-    });
+		describe('invalid cases', () => {
+			it.todo('should throw error');
+		});
 	});
 });

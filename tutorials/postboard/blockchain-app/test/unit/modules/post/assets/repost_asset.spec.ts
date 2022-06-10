@@ -1,7 +1,7 @@
 import { RepostAsset } from '../../../../../src/app/modules/post/assets/repost_asset';
 
 describe('RepostAsset', () => {
-  let transactionAsset: RepostAsset;
+	let transactionAsset: RepostAsset;
 
 	beforeEach(() => {
 		transactionAsset = new RepostAsset();
@@ -23,18 +23,18 @@ describe('RepostAsset', () => {
 
 	describe('validate', () => {
 		describe('schema validation', () => {
-      it.todo('should throw errors for invalid schema');
-      it.todo('should be ok for valid schema');
-    });
+			it.todo('should throw errors for invalid schema');
+			it.todo('should be ok for valid schema');
+		});
 	});
 
 	describe('apply', () => {
-    describe('valid cases', () => {
-      it.todo('should update the state store');
-    });
+		describe('valid cases', () => {
+			it.todo('should update the state store');
+		});
 
-    describe('invalid cases', () => {
-      it.todo('should throw error');
-    });
+		describe('invalid cases', () => {
+			it.todo('should throw error');
+		});
 	});
 });

@@ -1,16 +1,10 @@
 import { BaseAsset, ApplyAssetContext, codec, cryptography, StateStore } from 'lisk-sdk';
-import {
-	createPostPropsSchema,
-	CreatePostProps,
-	postPropsSchema,
-	PostboardAccountProps,
-	allPostsSchema,
-	AllPosts
-} from '../schemas';
+import { createPostPropsSchema, postPropsSchema, allPostsSchema } from '../schemas';
+import { AllPosts, CreatePostProps, PostboardAccountProps } from '../types';
 
 const getIDForPost: (address: Buffer, nonce: bigint) => Buffer = function (
 	a: Buffer,
-	n: bigint
+	n: bigint,
 ): Buffer {
 	const nonceBuffer = Buffer.alloc(8);
 	nonceBuffer.writeBigInt64LE(n);
@@ -19,38 +13,36 @@ const getIDForPost: (address: Buffer, nonce: bigint) => Buffer = function (
 };
 
 const getAllPosts = async (stateStore: StateStore) => {
-	const allPostsBuffer = await stateStore.chain.get(
-		'post/all'
-	);
+	const allPostsBuffer = await stateStore.chain.get('post/all');
 	if (!allPostsBuffer) {
 		return {
-			posts:[]
+			posts: [],
 		};
 	}
-	const posts: AllPosts = codec.decode(
-		allPostsSchema,
-		allPostsBuffer
-	);
+	const posts: AllPosts = codec.decode(allPostsSchema, allPostsBuffer);
 	return posts;
 };
 
 export class CreatePostAsset extends BaseAsset<CreatePostProps> {
 	public name = 'createPost';
-  public id = 0;
+	public id = 0;
 
-  // Define schema for asset
+	// Define schema for asset
 	public schema = createPostPropsSchema;
 
-
-/*  public validate({ _asset }: ValidateAssetContext<{}>): void {
+	/*  public validate({ _asset }: ValidateAssetContext<{}>): void {
     // Validate your asset
   } */
 
-  public async apply({ asset, transaction, stateStore }: ApplyAssetContext<CreatePostProps>): Promise<void> {
+	public async apply({
+		asset,
+		transaction,
+		stateStore,
+	}: ApplyAssetContext<CreatePostProps>): Promise<void> {
 		// Get sender account
 		const sender = await stateStore.account.get<PostboardAccountProps>(transaction.senderAddress);
 		// Create a unique ID for the post
-		const	postId = getIDForPost(transaction.senderAddress, transaction.nonce).toString('hex');
+		const postId = getIDForPost(transaction.senderAddress, transaction.nonce).toString('hex');
 		// Create the post object
 		const post = {
 			id: postId,
@@ -59,7 +51,7 @@ export class CreatePostAsset extends BaseAsset<CreatePostProps> {
 			author: sender.address,
 			replies: [],
 			reposts: [],
-			likes: []
+			likes: [],
 		};
 
 		// Save post in the DB
@@ -68,10 +60,7 @@ export class CreatePostAsset extends BaseAsset<CreatePostProps> {
 		// Save postID to allPosts list
 		const allPosts: AllPosts = await getAllPosts(stateStore);
 		allPosts.posts.push(postId);
-		await stateStore.chain.set(
-			'post/all',
-			codec.encode(allPostsSchema, allPosts)
-		);
+		await stateStore.chain.set('post/all', codec.encode(allPostsSchema, allPosts));
 
 		// Save postID in users account
 		sender.post.posts.push(postId);

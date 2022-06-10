@@ -1,25 +1,3 @@
-export interface PostboardAccountProps {
-	address: Buffer;
-	keys: {
-		mandatoryKeys: Buffer[];
-		numberOfSignatures: string;
-		optionalKeys: Buffer[];
-	};
-	sequence: {
-		nonce: string;
-	};
-	token: {
-		balance: string;
-	};
-	post: {
-		following: Buffer[];
-		followers: Buffer[];
-		posts: string[];
-		replies: string[];
-		likes: string[];
-	};
-}
-
 export const postboardAccountPropsSchema = {
 	type: 'object',
 	properties: {
@@ -28,49 +6,45 @@ export const postboardAccountPropsSchema = {
 			type: 'array',
 			items: {
 				dataType: 'bytes',
-			}
+			},
 		},
 		followers: {
 			fieldNumber: 2,
 			type: 'array',
 			items: {
 				dataType: 'bytes',
-			}
+			},
 		},
 		posts: {
 			fieldNumber: 3,
 			type: 'array',
 			items: {
 				dataType: 'string',
-			}
+			},
 		},
 		replies: {
 			fieldNumber: 4,
 			type: 'array',
 			items: {
 				dataType: 'string',
-			}
+			},
 		},
 		likes: {
 			fieldNumber: 5,
 			type: 'array',
 			items: {
 				dataType: 'string',
-			}
-		}
+			},
+		},
 	},
 	default: {
 		followers: [],
 		following: [],
 		posts: [],
 		replies: [],
-		likes: []
+		likes: [],
 	},
 };
-
-export interface CreatePostProps {
-	message: string;
-}
 
 export const createPostPropsSchema = {
 	$id: 'post/createPost-asset',
@@ -83,13 +57,9 @@ export const createPostPropsSchema = {
 			fieldNumber: 1,
 			minLength: 3,
 			maxLength: 256,
-		}
-	}
+		},
+	},
 };
-
-export interface RepostProps {
-	postId: string;
-}
 
 export const repostPropsSchema = {
 	$id: 'post/repost-asset',
@@ -100,14 +70,9 @@ export const repostPropsSchema = {
 		postId: {
 			dataType: 'string',
 			fieldNumber: 1,
-		}
-	}
-}
-
-export interface ReplyProps {
-	postId: string;
-	content: string;
-}
+		},
+	},
+};
 
 export const replyPropsSchema = {
 	$id: 'post/reply-asset',
@@ -123,14 +88,10 @@ export const replyPropsSchema = {
 			dataType: 'string',
 			fieldNumber: 2,
 			minLength: 3,
-			maxLength: 256
-		}
-	}
-}
-
-export interface LikeProps {
-	postId: string;
-}
+			maxLength: 256,
+		},
+	},
+};
 
 export const likePropsSchema = {
 	$id: 'post/like-asset',
@@ -141,13 +102,9 @@ export const likePropsSchema = {
 		postId: {
 			dataType: 'string',
 			fieldNumber: 1,
-		}
-	}
-}
-
-export interface FollowProps {
-	account: string;
-}
+		},
+	},
+};
 
 export const followPropsSchema = {
 	$id: 'post/follow-asset',
@@ -158,43 +115,15 @@ export const followPropsSchema = {
 		account: {
 			dataType: 'string',
 			fieldNumber: 1,
-		}
-	}
-}
-
-export interface PostProps {
-	id: string;
-	content: string;
-	date: number;
-	author: Buffer;
-	replies: {
-		author: Buffer;
-		date: number;
-		content: string;
-	}[];
-	reposts: Buffer[];
-	likes: Buffer[];
-}
-
-export interface StringProps {
-	id: string;
-	content: string;
-	date: number;
-	author: string;
-	replies: {
-		author: string;
-		date: number;
-		content: string;
-	}[];
-	reposts: string[];
-	likes: string[];
-}
+		},
+	},
+};
 
 export const postPropsSchema = {
 	$id: 'post/posts',
 	title: 'CreatePostAsset transaction asset for post module',
 	type: 'object',
-	required: ['id','content','date','author'],
+	required: ['id', 'content', 'date', 'author'],
 	properties: {
 		id: {
 			dataType: 'string',
@@ -248,21 +177,17 @@ export const postPropsSchema = {
 			items: {
 				dataType: 'bytes',
 			},
-		}
-	}
+		},
+	},
 };
 
-export interface AllPosts {
-	posts: string[];
-}
-
 export const allPostsSchema = {
-	$id: "lisk/post/posts",
-	type: "object",
-	required: ["posts"],
+	$id: 'lisk/post/posts',
+	type: 'object',
+	required: ['posts'],
 	properties: {
 		posts: {
-			type: "array",
+			type: 'array',
 			fieldNumber: 1,
 			items: {
 				dataType: 'string',

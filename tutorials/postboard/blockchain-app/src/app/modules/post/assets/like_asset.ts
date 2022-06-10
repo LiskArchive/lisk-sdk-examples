@@ -1,18 +1,23 @@
 import { BaseAsset, ApplyAssetContext, codec } from 'lisk-sdk';
-import { PostProps, postPropsSchema, LikeProps, likePropsSchema, PostboardAccountProps } from '../schemas';
+import { postPropsSchema, likePropsSchema } from '../schemas';
+import { LikeProps, PostboardAccountProps, PostProps } from '../types';
 
 export class LikeAsset extends BaseAsset<LikeProps> {
 	public name = 'like';
-  public id = 3;
+	public id = 3;
 
-  // Define schema for asset
+	// Define schema for asset
 	public schema = likePropsSchema;
 
-/*  public validate({ asset }: ValidateAssetContext<{}>): void {
+	/*  public validate({ asset }: ValidateAssetContext<{}>): void {
     // Validate your asset
   } */
 
-  public async apply({ asset, transaction, stateStore }: ApplyAssetContext<LikeProps>): Promise<void> {
+	public async apply({
+		asset,
+		transaction,
+		stateStore,
+	}: ApplyAssetContext<LikeProps>): Promise<void> {
 		// Get sender account from DB
 		const sender = await stateStore.account.get<PostboardAccountProps>(transaction.senderAddress);
 		// Get post from DB
@@ -29,7 +34,7 @@ export class LikeAsset extends BaseAsset<LikeProps> {
 				oPost.likes.splice(postIndex, 1);
 				// Remove the postID from the likes list of the sender account
 				sender.post.likes.splice(postIndex, 1);
-			// If the post is not already liked by the sender
+				// If the post is not already liked by the sender
 			} else {
 				// Add the sender address to the likes list of the post
 				oPost.likes.push(transaction.senderAddress);

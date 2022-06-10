@@ -1,18 +1,23 @@
 import { BaseAsset, ApplyAssetContext, codec } from 'lisk-sdk';
-import { PostboardAccountProps, PostProps, postPropsSchema, replyPropsSchema, ReplyProps } from '../schemas';
+import { postPropsSchema, replyPropsSchema } from '../schemas';
+import { ReplyProps, PostboardAccountProps, PostProps } from '../types';
 
 export class ReplyAsset extends BaseAsset {
 	public name = 'reply';
-  public id = 2;
+	public id = 2;
 
-  // Define schema for asset
+	// Define schema for asset
 	public schema = replyPropsSchema;
 
-/*  public validate({ asset }: ValidateAssetContext<{}>): void {
+	/*  public validate({ asset }: ValidateAssetContext<{}>): void {
     // Validate your asset
   } */
 
-  public async apply({ asset, transaction, stateStore }: ApplyAssetContext<ReplyProps>): Promise<void> {
+	public async apply({
+		asset,
+		transaction,
+		stateStore,
+	}: ApplyAssetContext<ReplyProps>): Promise<void> {
 		// Get sender account by address
 		const sender = await stateStore.account.get<PostboardAccountProps>(transaction.senderAddress);
 		// Get post by ID
@@ -24,8 +29,8 @@ export class ReplyAsset extends BaseAsset {
 			const reply = {
 				author: sender.address,
 				date: Date.now(),
-				content: asset.content
-			}
+				content: asset.content,
+			};
 			// Create reply ID
 			const replyId = oPost.replies.length.toString();
 
