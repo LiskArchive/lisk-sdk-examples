@@ -1,0 +1,126 @@
+.wrapper {
+  margin: 0;
+  position: relative;
+  
+  .inputs {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    border: 1px solid $dark_border_color;
+    border-radius: 3px;
+    background-color: $background;
+    padding: 0px 24px;
+    box-sizing: border-box;
+    outline: none;
+    &.error {
+      border: 1px solid $fully_red;
+      &:focus-within {
+      border-color: $fully_red;
+    }
+    }
+    input {
+      outline: none;
+      border: none;
+      width: 100%;
+      margin: 5px;
+      color: #000;
+    }
+  
+    &:focus-within {
+      border-color: $ultramarine_blue;
+    }
+  
+    & > .inputContainer {
+      width: calc(100% / 6);
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      flex-grow: 1;
+      box-sizing: border-box;
+      color: var(--color-ghost);
+      margin: 15px 0 15px;
+  
+      &:focus-within {
+        color: $ultramarine_blue;
+      }
+  
+      
+      & input {
+        border: none;
+        text-align: left;
+        padding: 0 2px 1px !important;
+        height: 20px !important;
+        box-sizing: border-box;
+        background-color: $background;
+  
+        &:focus {
+          color: $ultramarine_blue;
+  
+          &::placeholder {
+            border-bottom: none;
+          }
+        }
+  
+        &::placeholder {
+          font-family: sans-serif;
+          color: $ghost;
+          border-bottom: 1px solid;
+          height: 13px;
+        }
+      }
+    }
+  
+    & > .inputContainer:nth-last-child(n + 7) {
+      margin-bottom: 0;
+    }
+  }
+  
+  .footerContent {
+    align-items: center;
+    display: flex;
+    height: auto;
+    justify-content: space-between;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+  }
+  
+  .errorMessage {
+    width: auto;
+  }
+
+  .inputNumber {
+    color: #BEC1CD;
+  }
+  
+  .showPassphrase {
+    cursor: pointer;
+    float: right;
+  
+    & > input {
+      display: none;
+    }
+  
+    & .label {
+      margin-left: 8px;
+    }
+  
+    & > img {
+      width: 19px;
+      height: 17px;
+    }
+  }
+}
+
+
+@media only screen and (max-width: 768px) {
+  .wrapper {
+    .inputs {
+      & > .inputContainer {
+        width: calc(100% / 4);
+      } 
+    }
+  }
+}
