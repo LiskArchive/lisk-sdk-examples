@@ -28,7 +28,7 @@ const AppRoutes = () => {
   const isLoggedIn = !!authContext.state.address;
   return (
     <div className="container grid-container">
-      <Sidebar items={isLoggedIn ? [menuItems[0]] : menuItems} />
+      <Sidebar items={isLoggedIn ? menuItems : [menuItems[0]]} />
       <div className="app">
         <ExploreInput />
         <Routes>
