@@ -4,8 +4,9 @@ import { AuthContext } from 'context/AuthContext';
 import { PostContext } from 'context/PostContext';
 import useAccount from 'hooks/useAccount';
 import usePost from 'hooks/usePosts';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { AccountType } from 'types/Account.type';
 
 const Landing = () => {
   const authContext = useContext(AuthContext);
@@ -13,9 +14,9 @@ const Landing = () => {
     state: { posts },
   } = useContext(PostContext);
   const { getLatestPosts, createPost, likePost, repost } = usePost();
-  const { followAccount } = useAccount();
+  const { followAccount, isFollowing, getAccount } = useAccount();
+  const [account, setAccount] = useState<AccountType>();
   const navigate = useNavigate();
-  const postItems = useMemo(() => Object.values(posts), [posts]);
   const isAuthenticated = useMemo<boolean>(() => !!authContext.state.address, [authContext]);
 
   useEffect(() => {
@@ -24,6 +25,13 @@ const Landing = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const address = authContext.state.address;
+    if (address) {
+      getAccount(address).then(setAccount);
+    }
+  }, [authContext.state.address]);
 
   const submitPost = (message: string) => {
     createPost(message, authContext.state.passphrase);
@@ -53,24 +61,21 @@ const Landing = () => {
     <div className="app">
       {authContext.state.address ? <PostInput onSubmit={submitPost} /> : null}
       <h3 className="bold">Recent Post</h3>
-      {postItems.length ? (
-        postItems.map((post) => (
-          <PostItem
-            className="shadow"
-            key={post.id}
-            post={post}
-            viewPost={() => viewPost(post.id)}
-            viewComments={() => viewPost(post.id)}
-            repost={() => repostItem(post.id)}
-            likePost={() => likePostItem(post.id)}
-            followAccount={() => followUser(post.author)}
-            disabled={!isAuthenticated}
-            address={authContext.state.address}
-          />
-        ))
-      ) : (
-        <h5>...fetching posts</h5>
-      )}
+      {posts.map((post) => (
+        <PostItem
+          className="shadow"
+          key={post.id}
+          post={post}
+          viewPost={() => viewPost(post.id)}
+          viewComments={() => viewPost(post.id)}
+          repost={() => repostItem(post.id)}
+          likePost={() => likePostItem(post.id)}
+          followAccount={() => followUser(post.author)}
+          isFollowing={account ? isFollowing(post.author, account.following) : false}
+          disabled={!isAuthenticated}
+          address={authContext.state.address}
+        />
+      ))}
     </div>
   );
 };

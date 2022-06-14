@@ -9,7 +9,9 @@ const AccountRoutes = () => {
   const address = useParams().id;
   return (
     <div className="account">
-      <h3 className="bold">Account</h3>
+      <h3 className="bold">
+        Account <small className="small">{address}</small>
+      </h3>
       <Tab
         tabs={[
           { label: 'Posts', route: `/profile/${address}` },

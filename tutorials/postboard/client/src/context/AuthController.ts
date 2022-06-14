@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { Reducer, useEffect, useReducer } from 'react';
 import { AuthContextState, AuthActionType } from './AuthContext';
 import types from './types';
 
@@ -18,6 +18,7 @@ function reducer(state: AuthContextState, action: AuthActionType) {
         hexAddress: action.payload.hexAddress,
       };
     case types.LOG_OUT:
+      localStorage.setItem('@postboard', JSON.stringify(initialState));
       return {
         ...state,
         address: '',
@@ -28,7 +29,20 @@ function reducer(state: AuthContextState, action: AuthActionType) {
 }
 
 const useAuthController = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer<Reducer<AuthContextState, AuthActionType>>(reducer, initialState);
+
+  useEffect(() => {
+    if (state.address) {
+      localStorage.setItem('@postboard', JSON.stringify(state));
+    }
+  }, [state]);
+
+  useEffect(() => {
+    const store = localStorage.getItem('@postboard');
+    if (store) {
+      dispatch({ type: types.FETCH_ACCOUNT, payload: JSON.parse(store) });
+    }
+  }, []);
 
   return { state, dispatch };
 };

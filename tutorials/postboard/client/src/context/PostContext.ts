@@ -2,10 +2,10 @@ import { createContext, Dispatch } from 'react';
 import { PostType } from 'types/Post.type';
 
 export type PostContextState = {
-  posts: { [key: string]: PostType };
+  posts: Array<PostType>;
 };
 
-export type PostActionType = { type: string; payload: PostType };
+export type PostActionType = { type: string; payload: Array<PostType> };
 
 type PostContext = {
   state: PostContextState;

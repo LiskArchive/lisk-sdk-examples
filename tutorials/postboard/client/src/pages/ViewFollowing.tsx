@@ -4,7 +4,6 @@ import useAccount from 'hooks/useAccount';
 import { AvatarSvg } from 'assets/icons';
 import { stringShortener } from 'utils/helpers';
 import { AccountType } from 'types/Account.type';
-import { getAddressFromHex } from 'utils/account';
 
 const ViewFollowing = () => {
   const address = useParams().id;
@@ -19,7 +18,7 @@ const ViewFollowing = () => {
   }, [address]);
 
   const viewProfile = (address: string) => {
-    navigate(`/profile/${getAddressFromHex(Buffer.from(address, 'hex'))}`);
+    navigate(`/profile/${address}`);
   };
 
   if (isLoading && !account) {
@@ -27,7 +26,7 @@ const ViewFollowing = () => {
   }
 
   return !account?.following.length ? (
-    <h3>You are not following anyone yet</h3>
+    <p>You are not following anyone yet</p>
   ) : (
     <div>
       <h3 className="bold">Account</h3>

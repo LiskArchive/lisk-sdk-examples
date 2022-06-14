@@ -4,7 +4,6 @@ import useAccount from 'hooks/useAccount';
 import { AvatarSvg } from 'assets/icons';
 import { stringShortener } from 'utils/helpers';
 import { AccountType } from 'types/Account.type';
-import { getAddressFromHex } from 'utils/account';
 
 const ViewFollowers = () => {
   const address = useParams().id;
@@ -19,7 +18,7 @@ const ViewFollowers = () => {
   }, [address]);
 
   const viewProfile = (address: string) => {
-    navigate(`/profile/${getAddressFromHex(Buffer.from(address, 'hex'))}`);
+    navigate(`/profile/${address}`);
   };
 
   if (isLoading && !account) {
@@ -27,7 +26,7 @@ const ViewFollowers = () => {
   }
 
   return !account?.followers.length ? (
-    <h3>No followers yet</h3>
+    <p>No followers yet</p>
   ) : (
     <div>
       <h3 className="bold">Account</h3>

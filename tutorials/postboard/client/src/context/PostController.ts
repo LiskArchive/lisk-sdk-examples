@@ -3,14 +3,14 @@ import { PostContextState, PostActionType } from './PostContext';
 import types from './types';
 
 const initialState: PostContextState = {
-  posts: {},
+  posts: [],
 };
 
 function reducer(state: PostContextState, action: PostActionType) {
   switch (action.type) {
     case types.GET_POSTS:
       return {
-        posts: { ...state.posts, [action.payload.id]: action.payload },
+        posts: action.payload,
       };
     default:
       return state;

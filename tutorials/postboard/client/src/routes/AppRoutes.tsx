@@ -6,6 +6,8 @@ import Home from 'pages/Home';
 import ViewPost from 'pages/ViewPost';
 import { HomeSvg, ProfileSvg, ListSvg, NotificationSvg, SettingsSvg } from '../assets/icons';
 import AccountRoutes from './AccountRoutes';
+import Alert from 'components/Alert';
+import { AlertContext } from 'context/AlertContext';
 
 export type MenuItem = {
   iconComponent: FunctionComponent<SVGProps<SVGSVGElement>>;
@@ -15,6 +17,7 @@ export type MenuItem = {
 
 const AppRoutes = () => {
   const authContext = useContext(AuthContext);
+  const alertContext = useContext(AlertContext);
   const isLoggedIn = !!authContext.state.address;
 
   const menuItems: Array<MenuItem> = [
@@ -34,6 +37,7 @@ const AppRoutes = () => {
           <Route path="/post/:id" element={<ViewPost />} />
           <Route path="/profile/:id/*" element={<AccountRoutes />} />
         </Routes>
+        {alertContext.state.message && <Alert message={alertContext.state.message} type={alertContext.state.type} />}
       </div>
     </div>
   );

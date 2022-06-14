@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarSvg, BookmarkSvg, CommentSvg, LikeFilledSvg, LikeSvg, RepostSvg } from 'assets/icons';
+import { AvatarSvg, CommentSvg, LikeFilledSvg, LikeSvg, RepostSvg } from 'assets/icons';
 import { PostType } from 'types/Post.type';
 import { stringShortener } from 'utils/helpers';
 import { Link } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 type PostItemProps = {
   post: PostType;
   address: string;
+  isFollowing?: boolean;
   viewPost?: () => void;
   likePost?: () => void;
   repost?: () => void;
@@ -26,6 +27,7 @@ const PostItem = ({
   disabled,
   className,
   address,
+  isFollowing,
 }: PostItemProps) => {
   const getValue = (val: number) => (val ? val : null);
   const isLiked = post.likes.indexOf(address) !== -1;
@@ -43,8 +45,8 @@ const PostItem = ({
             <span>{stringShortener(post.author, 6, 6)}</span>
           </span>
           {!disabled && (
-            <button className="outline" onClick={followAccount}>
-              Follow
+            <button className="outline" onClick={followAccount} disabled={isFollowing}>
+              {isFollowing ? 'Following' : 'Follow'}
             </button>
           )}
         </p>
@@ -63,9 +65,6 @@ const PostItem = ({
           <button className="icon" onClick={repost} disabled={disabled}>
             <RepostSvg />
             <span className="icon-item">{getValue(post.reposts.length)}</span>
-          </button>
-          <button className="icon" disabled={disabled}>
-            <BookmarkSvg />
           </button>
         </div>
       </div>
