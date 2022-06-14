@@ -10,7 +10,7 @@ import { AuthContext } from 'context/AuthContext';
 const ViewProfile = () => {
   const address = useParams().id;
   const authContext = useContext(AuthContext);
-  const { getPostsArrayByIds } = usePost();
+  const { getPostsArrayByIds, likePost, repost } = usePost();
   const navigate = useNavigate();
   const { isLoading, getAccount } = useAccount();
   const [posts, setPosts] = useState<Array<PostType>>([]);
@@ -32,7 +32,20 @@ const ViewProfile = () => {
   }, [account?.posts.length]);
 
   const viewPost = (id: string) => {
+    console.log('id', id);
     navigate(`/post/${id}`);
+  };
+
+  const likePostItem = (id: string) => {
+    if (isAuthenticated) {
+      likePost(id, authContext.state.passphrase);
+    }
+  };
+
+  const repostItem = (id: string) => {
+    if (isAuthenticated) {
+      repost(id, authContext.state.passphrase);
+    }
   };
 
   if (isLoading && !account) {
@@ -43,12 +56,15 @@ const ViewProfile = () => {
     <h3>Cannot find account</h3>
   ) : (
     <div>
-      {posts.map((post) => (
+      {posts.map((post, i) => (
         <PostItem
-          key={post.id}
+          key={`${post.id}-${i}`}
           address={account.address}
           post={post}
           viewPost={() => viewPost(post.id)}
+          viewComments={() => viewPost(post.id)}
+          likePost={() => likePostItem(post.id)}
+          repost={() => repostItem(post.id)}
           disabled={!isAuthenticated}
         />
       ))}
