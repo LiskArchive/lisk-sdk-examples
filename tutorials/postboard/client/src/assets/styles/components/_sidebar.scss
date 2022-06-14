@@ -16,10 +16,13 @@
           margin-right: 10px;
           width: 30px;
         }
-        a {
+        button {
           display: flex;
           align-items: center;
           text-decoration: none;
+          background-color: transparent;
+          border: 0;
+          outline: 0;
         }
         &:hover {
           background-color: $platinum_gray;

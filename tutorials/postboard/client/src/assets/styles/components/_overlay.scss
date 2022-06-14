@@ -37,8 +37,8 @@
     opacity: 1;
     visibility: visible;
   }
-  
-  .overlay {
+
+  .overlay-bg {
     position: fixed;
     top: 0;
     left: 0;
@@ -75,7 +75,7 @@
       transform: translateY(100%);
     }
   }
-  .overlay.is-open {
+  .overlay-bg.is-open {
     opacity: 1;
     visibility: visible;
     &::before {

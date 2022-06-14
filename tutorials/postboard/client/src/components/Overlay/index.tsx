@@ -9,7 +9,7 @@ type OverlayProps = {
 const Overlay = ({ children, isOpen }: OverlayProps) => {
   return (
     <div className="overlay-item">
-      <div className={`overlay ${isOpen && 'is-open'}`}>
+      <div className={`overlay-bg ${isOpen && 'is-open'}`}>
         {isOpen && <div className={`children ${isOpen && 'is-open'}`}>{children}</div>}
       </div>
     </div>

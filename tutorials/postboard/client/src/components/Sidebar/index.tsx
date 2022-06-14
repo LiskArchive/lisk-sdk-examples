@@ -4,6 +4,7 @@ import React from 'react';
 // @ts-ignore
 import Logo from 'assets/images/logo.png';
 import { useNavigate } from 'react-router';
+import Login from 'views/Login';
 
 type SidebarProps = {
   items: Array<MenuItem>;
@@ -19,12 +20,13 @@ const Sidebar = ({ items }: SidebarProps) => {
         <ul className="menu-items">
           {items.map((item) => (
             <li className="menu-item" key={item.label} onClick={() => navigate(item.route)}>
-              <a href="#">
+              <button>
                 <item.iconComponent className="icon" />
                 <span>{item.label}</span>
-              </a>
+              </button>
             </li>
           ))}
+          <Login />
         </ul>
       </div>
     </div>

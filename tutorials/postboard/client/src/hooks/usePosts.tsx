@@ -21,6 +21,11 @@ const usePost = () => {
       });
     });
 
+  const getPostsArrayByIds = (ids: Array<string>): Promise<Array<PostType>> => {
+    const posts = ids.map((id) => getPost(id));
+    return Promise.all(posts);
+  };
+
   const getLatestPosts = () => {
     setIsLoading(true);
     getClient().then((client) => {
@@ -123,7 +128,7 @@ const usePost = () => {
     });
   };
 
-  return { getPost, createPost, getLatestPosts, replyPost, likePost, repost, isLoading };
+  return { getPost, createPost, getLatestPosts, replyPost, likePost, repost, isLoading, getPostsArrayByIds };
 };
 
 export default usePost;

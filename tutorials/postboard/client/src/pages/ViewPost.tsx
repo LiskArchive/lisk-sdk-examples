@@ -17,7 +17,6 @@ const ViewPost = () => {
 
   const getPostDetails = (id: string) => {
     getPost(id).then((data) => {
-      console.log(data);
       if (data.id) {
         setPost(data);
       }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarSvg, BookmarkSvg, CommentSvg, LikeSvg } from 'assets/icons';
+import { AvatarSvg } from 'assets/icons';
 import { stringShortener } from 'utils/helpers';
 import { ReplyType } from 'types/Reply.type';
 
@@ -21,17 +21,6 @@ const ReplyItem = ({ reply }: PostItemProps) => {
             </span>
           </p>
           <p>{reply.content}</p>
-        </div>
-        <div className="icons">
-          <div className="icon like">
-            <LikeSvg />
-          </div>
-          <div className="icon">
-            <CommentSvg />
-          </div>
-          <div className="icon">
-            <BookmarkSvg />
-          </div>
         </div>
       </div>
     </div>
