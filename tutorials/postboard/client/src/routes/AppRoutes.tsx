@@ -4,7 +4,6 @@ import { AuthContext } from 'context/AuthContext';
 import { Route, Routes } from 'react-router-dom';
 import Home from 'pages/Home';
 import ViewPost from 'pages/ViewPost';
-import ExploreInput from 'components/ExploreInput';
 import { HomeSvg, ProfileSvg, ListSvg, NotificationSvg, SettingsSvg } from '../assets/icons';
 import AccountRoutes from './AccountRoutes';
 
@@ -30,7 +29,6 @@ const AppRoutes = () => {
     <div className="container grid-container">
       <Sidebar items={isLoggedIn ? menuItems : [menuItems[0]]} />
       <div className="app">
-        <ExploreInput />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/post/:id" element={<ViewPost />} />
