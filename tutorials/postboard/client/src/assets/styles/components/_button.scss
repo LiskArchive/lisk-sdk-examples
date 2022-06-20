@@ -1,0 +1,22 @@
+.button {
+  padding: 5px 35px;
+  border-radius: 25px;
+  &.btn-primary {
+    min-width: 150px;
+    background-color: $ultramarine_blue;
+    border-color: $ultramarine_blue;
+    &.outline {
+      background-color: $background;
+      color: $ultramarine_blue;
+      border-color: 1px solid $ultramarine_blue;
+      &:hover {
+        color: $background;
+        background-color: $ultramarine_blue;
+        border-color: $ultramarine_blue;
+      }
+    }
+  }
+  &:disabled {
+    opacity: 0.4;
+  }
+}

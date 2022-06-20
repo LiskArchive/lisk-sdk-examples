@@ -1,0 +1,14 @@
+{
+  "name": "utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "getAccount.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@liskhq/lisk-client": "^5.2.2"
+  }
+}

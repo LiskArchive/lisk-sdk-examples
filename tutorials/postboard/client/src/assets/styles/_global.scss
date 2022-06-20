@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600;700&display=swap');
+body {
+  margin: 0;
+  font-family: 'Rubik', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $background;
+}
+
+.grid-container {
+  display: flex;
+}
+
+.float-right {
+  float: right
+}
+
+.app {
+  flex: 1;
+  padding-top: 20px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+.right-content {
+  padding: 10px
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.small {
+  font-weight: 400;
+  font-size: 0.9rem;
+}

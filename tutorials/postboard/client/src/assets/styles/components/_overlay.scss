@@ -1,0 +1,88 @@
+.overlay-item {
+  .back {
+    position: absolute;
+    top: 2em;
+    right: 2em;
+    z-index: 100;
+    color: #222;
+    text-decoration: none;
+    transition: color 0.3s;
+    &:hover {
+      color: #aaa;
+    }
+  }
+  h1 {
+    padding: 2em 0;
+    font-size: 48px;
+    font-weight: 300;
+    text-align: center;
+  }
+  .children {
+    position: fixed;
+    padding: 20px;
+    top: calc(100% / 5);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    border-radius: 4px;
+    color: #222;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.2s ease-in-out;
+  }
+  .children.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .overlay-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    transition: 0.3s linear;
+    opacity: 0;
+    visibility: hidden;
+    &::before {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      transition: 0.3s linear;
+      content: "";
+      // background: rgba(0, 0, 0, 0.45);
+      transform: translateY(-100%);
+      background-color: rgba(0, 0, 0, .15);  
+      backdrop-filter: blur(5px);
+    }
+    &::after {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      transition: 0.3s linear;
+      content: "";
+      background-color: rgba(0, 0, 0, .15);  
+      transform: translateY(100%);
+    }
+  }
+  .overlay-bg.is-open {
+    opacity: 1;
+    visibility: visible;
+    &::before {
+      transform: translateY(0);
+    }
+    &::after {
+      transform: translateY(0);
+    }
+  }
+}
