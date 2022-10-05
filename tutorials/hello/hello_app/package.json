@@ -1,0 +1,142 @@
+{
+	"name": "hello_app",
+	"version": "0.1.0",
+	"description": "Lisk-SDK Application",
+	"author": "mona",
+	"license": "ISC",
+	"keywords": [
+		"blockchain",
+		"lisk",
+		"nodejs",
+		"javascript",
+		"typescript"
+	],
+	"homepage": "",
+	"repository": {},
+	"engines": {
+		"node": ">=16.14.1 <=16",
+		"npm": ">=8.1.0"
+	},
+	"main": "dist/index.js",
+	"scripts": {
+		"lint": "eslint --ext .js,.ts .",
+		"lint:fix": "eslint --fix --ext .js,.ts .",
+		"format": "prettier --write '**/*'",
+		"prepack": "oclif-dev manifest && oclif-dev readme --multi --dir=docs/commands && npm shrinkwrap && npm prune --production && npm shrinkwrap",
+		"prebuild": "if test -d dist; then rm -r dist; fi; rm -f tsconfig.tsbuildinfo; rm -f npm-shrinkwrap.json",
+		"start": "echo Run \"./bin/run start\" to start the app",
+		"build": "tsc",
+		"test": "jest --passWithNoTests",
+		"test:coverage": "jest --passWithNoTests --coverage=true --coverage-reporters=text",
+		"test:ci": "jest --passWithNoTests --coverage=true --coverage-reporters=json --verbose",
+		"version": "oclif-dev readme --multi --dir=docs/commands && git add README.md docs",
+		"prepublishOnly": "npm ci && npm run lint && npm run build"
+	},
+	"bin": {
+		"hello_app": "./bin/run"
+	},
+	"lisk": {
+		"addressPrefix": "lsk"
+	},
+	"oclif": {
+		"bin": "hello_app",
+		"commands": "./dist/commands",
+		"plugins": [
+			"@oclif/plugin-autocomplete",
+			"@oclif/plugin-help"
+		],
+		"topics": {
+			"account": {
+				"description": "Commands relating to hello_app accounts."
+			},
+			"block": {
+				"description": "Commands relating to hello_app blocks."
+			},
+			"blockchain": {
+				"description": "Commands relating to hello_app blockchain data."
+			},
+			"console": {
+				"description": "hello_app interactive REPL session to run commands."
+			},
+			"config": {
+				"description": "Commands relating to hello_app node configuration."
+			},
+			"forger-info": {
+				"description": "Commands relating to hello_app forger-info data."
+			},
+			"forging": {
+				"description": "Commands relating to hello_app forging."
+			},
+			"hash-onion": {
+				"description": "Create hash onions to be used by the forger."
+			},
+			"node": {
+				"description": "Commands relating to hello_app node."
+			},
+			"passphrase": {
+				"description": "Commands relating to hello_app passphrases."
+			},
+			"sdk": {
+				"description": "Commands relating to Lisk SDK development."
+			},
+			"transaction": {
+				"description": "Commands relating to hello_app transactions."
+			}
+		}
+	},
+	"files": [
+		"/bin",
+		"/npm-shrinkwrap.json",
+		"/oclif.manifest.json",
+		"/dist",
+		"/config",
+		"/docs"
+	],
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"dependencies": {
+		"@liskhq/lisk-framework-dashboard-plugin": "^0.2.0-alpha.2",
+		"@liskhq/lisk-framework-faucet-plugin": "^0.2.0-alpha.2",
+		"@liskhq/lisk-framework-monitor-plugin": "^0.3.0-alpha.2",
+		"@liskhq/lisk-framework-forger-plugin": "^0.3.0-alpha.2",
+		"@liskhq/lisk-framework-report-misbehavior-plugin": "^0.3.0-alpha.2",
+		"@oclif/command": "1.8.0",
+		"@oclif/plugin-autocomplete": "0.3.0",
+		"@oclif/plugin-help": "3.2.2",
+		"fs-extra": "9.1.0",
+		"inquirer": "8.0.0",
+		"lisk-commander": "^6.0.0-alpha.3",
+		"lisk-sdk": "^6.0.0-alpha.2",
+		"tar": "6.0.2",
+		"tslib": "1.14.1",
+		"axios": "0.21.2"
+	},
+	"devDependencies": {
+		"@oclif/dev-cli": "1.26.0",
+		"@oclif/config": "1.17.0",
+		"@types/fs-extra": "9.0.1",
+		"@types/node": "12.20.6",
+		"@types/tar": "4.0.3",
+		"@types/jest": "26.0.21",
+		"@types/jest-when": "2.7.2",
+		"@typescript-eslint/eslint-plugin": "4.19.0",
+		"@typescript-eslint/parser": "4.19.0",
+		"eslint": "7.22.0",
+		"eslint-config-lisk-base": "2.0.1",
+		"eslint-plugin-import": "2.22.1",
+		"eslint-plugin-jest": "24.3.2",
+		"globby": "10.0.2",
+		"husky": "4.2.5",
+		"jest": "26.6.3",
+		"jest-extended": "0.11.5",
+		"jest-when": "3.2.1",
+		"lint-staged": "10.2.11",
+		"prettier": "2.2.1",
+		"ts-jest": "26.5.4",
+		"ts-node": "9.1.1",
+		"typescript": "4.2.3"
+	}
+}
