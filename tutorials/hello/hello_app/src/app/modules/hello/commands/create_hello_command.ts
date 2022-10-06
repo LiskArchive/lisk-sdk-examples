@@ -1,6 +1,7 @@
 import { BaseCommand, CommandVerifyContext, VerificationResult, CommandExecuteContext } from 'lisk-sdk';
 import { MessageStore } from '../stores/message';
 import { CounterStore, counterStoreSchema } from '../stores/counter';
+import { VerifyStatus } from 'lisk-framework/dist-node/state_machine/types';
 
 interface Params {
 	message: string;
@@ -9,7 +10,7 @@ interface Params {
 export class CreateHelloCommand extends BaseCommand {
   // Define schema for asset
 	public schema = {
-		$id: 'hello/createHello-asset',
+		$id: 'hello/createHello-params',
 		title: 'CreateHelloCommand transaction asset for hello module',
 		type: 'object',
 		required: ['message'],
@@ -24,12 +25,21 @@ export class CreateHelloCommand extends BaseCommand {
 	};
 
 	public async verify(context: CommandVerifyContext<Params>): Promise <VerificationResult> {
-		// Validate your asset
-		if (context.params.message == "Some illegal statement") {
-			throw new Error(
-				'Illegal hello message: Some illegal statement'
-			);
+		let validation: VerificationResult;
+		context.logger.info("HELLO TX VERIFICATION");
+		if (context.params.message === "Some illegal statement") {
+			validation = {
+				status: -1,
+				error: new Error(
+					'Illegal hello message: Some illegal statement'
+				)
+			};
+		} else {
+			validation = {
+				status: 1
+			};
 		}
+		return validation;
 	}
 
     public async execute(context: CommandExecuteContext<Params>): Promise <void> {

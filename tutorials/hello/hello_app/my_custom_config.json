@@ -2,11 +2,11 @@
 	"system": {
 		"dataPath": "/Users/mona/.lisk/beta-sdk-app",
 		"keepEventsForHeights": 300,
-		"logLevel": "info"
+		"logLevel": "debug"
 	},
 	"rpc": {
-		"modes": ["ws"],
-		"port": 8080,
+		"modes": ["ipc","http"],
+		"port": 7887,
 		"host": "127.0.0.1"
 	},
 	"network": {
