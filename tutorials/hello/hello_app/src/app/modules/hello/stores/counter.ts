@@ -23,7 +23,7 @@ export const counterStoreSchema = {
 	required: ['counter'],
 	properties: {
 		counter: {
-			dataType: 'int32',
+			dataType: 'uint32',
 			fieldNumber: 1,
 		},
 	},

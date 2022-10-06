@@ -1,7 +1,6 @@
 import { BaseCommand, CommandVerifyContext, VerificationResult, CommandExecuteContext } from 'lisk-sdk';
 import { MessageStore } from '../stores/message';
-import { CounterStore, counterStoreSchema } from '../stores/counter';
-import { VerifyStatus } from 'lisk-framework/dist-node/state_machine/types';
+import { CounterStore, CounterStoreData } from '../stores/counter';
 
 interface Params {
 	message: string;
@@ -44,22 +43,36 @@ export class CreateHelloCommand extends BaseCommand {
 
     public async execute(context: CommandExecuteContext<Params>): Promise <void> {
 			// 1. Get account data of the sender of the hello transaction
-			const senderAddress = context.transaction.senderAddress;
+			const {senderAddress} = context.transaction;
+			context.logger.info("====== this.stores.get(MessageStore) ======");
 			const messageSubstore = this.stores.get(MessageStore);
+			context.logger.info("====== this.stores.get(CounterStore) ======");
 			const counterSubstore = this.stores.get(CounterStore);
 
-			// 2. Update hello message in the senders account with thehelloString of the transaction asset
-			await messageSubstore.set(context, context.transaction.senderAddress, {
+			// 2. Update hello message in the senders account with the helloString of the transaction asset
+			await messageSubstore.set(context, senderAddress, {
 				message: context.params.message,
 			});
 
 			// 3. Get the hello counter from the database
 			const helloBuffer = Buffer.from('hello','utf8');
-			const helloCounter = await counterSubstore.get(context, helloBuffer);
+			context.logger.info("====== counterSubstore.get(context, helloBuffer) ======");
+			context.logger.info(helloBuffer);
+			let helloCounter: CounterStoreData;
+			try {
+				helloCounter = await counterSubstore.get(context, helloBuffer);
+			} catch (error) {
+				context.logger.info("====== " + error + " ======");
+				helloCounter = {
+					counter: 0,
+				}
+			}
 
-
+			context.logger.info("====== helloCounter ======");
+			context.logger.info(helloCounter);
+			context.logger.info("====== helloCounter ======");
 			// 5. Increment the hello counter +1
-			helloCounter.counter++;
+			helloCounter.counter+=1;
 
 			// 6. Encode the hello counter and save it back to the database
 			await counterSubstore.set(context, helloBuffer, helloCounter);

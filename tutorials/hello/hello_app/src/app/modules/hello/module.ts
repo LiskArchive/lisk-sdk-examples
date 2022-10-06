@@ -1,43 +1,25 @@
 /* eslint-disable class-methods-use-this */
 
 import {
-    BaseModule,
-
-
-
-
-
-
-
-
-
-    BlockAfterExecuteContext, BlockExecuteContext, BlockVerifyContext,
-
-
-
-    GenesisBlockExecuteContext, InsertAssetContext, ModuleInitArgs,
-
-
-
-
-
-
-    ModuleMetadata, TransactionExecuteContext, TransactionVerifyContext,
-    VerificationResult
+    BaseModule, BlockAfterExecuteContext, BlockExecuteContext, BlockVerifyContext, GenesisBlockExecuteContext,
+	InsertAssetContext, ModuleInitArgs, ModuleMetadata, TransactionExecuteContext, TransactionVerifyContext, VerificationResult
 } from 'lisk-sdk';
 import { CreateHelloCommand } from "./commands/create_hello_command";
-import { TestCommand } from "./commands/test_command";
 import { HelloEndpoint } from './endpoint';
 import { HelloMethod } from './method';
+import { CounterStore } from './stores/counter';
+import { MessageStore } from './stores/message';
 
 export class HelloModule extends BaseModule {
     public endpoint = new HelloEndpoint(this.stores, this.offchainStores);
     public method = new HelloMethod(this.stores, this.events);
-    public commands = [new CreateHelloCommand(), new TestCommand()];
+    public commands = [new CreateHelloCommand(this.stores,
+			this.events)];
 
 	public constructor() {
 		super();
-		// registeration of stores and events
+		this.stores.register(CounterStore, new CounterStore(this.name));
+		this.stores.register(MessageStore, new MessageStore(this.name));
 	}
 
 	public metadata(): ModuleMetadata {
@@ -70,7 +52,10 @@ export class HelloModule extends BaseModule {
 
     // Lifecycle hooks
 	public async verifyTransaction(_context: TransactionVerifyContext): Promise<VerificationResult> {
-		// verify transaction will be called multiple times in the transaction pool
+		const result = {
+			status: 1
+		}
+		return result;
 	}
 
 	public async beforeCommandExecute(_context: TransactionExecuteContext): Promise<void> {
