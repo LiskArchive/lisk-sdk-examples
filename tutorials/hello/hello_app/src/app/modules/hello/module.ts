@@ -9,6 +9,7 @@ import { HelloEndpoint } from './endpoint';
 import { HelloMethod } from './method';
 import { CounterStore } from './stores/counter';
 import { MessageStore } from './stores/message';
+import { NewHelloEvent } from './events/new_hello';
 
 export class HelloModule extends BaseModule {
     public endpoint = new HelloEndpoint(this.stores, this.offchainStores);
@@ -20,17 +21,19 @@ export class HelloModule extends BaseModule {
 		super();
 		this.stores.register(CounterStore, new CounterStore(this.name));
 		this.stores.register(MessageStore, new MessageStore(this.name));
+		this.events.register(NewHelloEvent, new NewHelloEvent(this.name));
 	}
 
 	public metadata(): ModuleMetadata {
 		return {
+			name: this.name,
 			endpoints: [],
 			commands: this.commands.map(command => ({
 				name: command.name,
 				params: command.schema,
 			})),
 			events: this.events.values().map(v => ({
-				typeID: v.name,
+				name: v.name,
 				data: v.schema,
 			})),
 			assets: [],
@@ -61,8 +64,16 @@ export class HelloModule extends BaseModule {
 	public async beforeCommandExecute(_context: TransactionExecuteContext): Promise<void> {
 	}
 
-	public async afterCommandExecute(_context: TransactionExecuteContext): Promise<void> {
+	public async afterCommandExecute(context: TransactionExecuteContext): Promise<void> {
 
+		const newHelloEvent = this.events.get(NewHelloEvent);
+		newHelloEvent.log(context.getMethodContext(), {
+			context ,
+			recipientAddress,
+			result: TransferEventResult.SUCCESSFUL,
+			senderAddress,
+			tokenID,
+		});
 	}
 	public async initGenesisState(_context: GenesisBlockExecuteContext): Promise<void> {
 

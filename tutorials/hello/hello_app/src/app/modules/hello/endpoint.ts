@@ -7,26 +7,26 @@ export class HelloEndpoint extends BaseEndpoint {
 	public async getHelloCounter(ctx: ModuleEndpointContext): Promise<CounterStoreData> {
 		const counterSubStore = this.stores.get(CounterStore);
 
-		const helloCounterData = await counterSubStore.get(
+		const helloCounter = await counterSubStore.get(
 			ctx,
 			Buffer.from('hello','utf8'),
 		);
 
-		return helloCounterData;
+		return helloCounter;
 	}
 
 	public async getHello(ctx: ModuleEndpointContext): Promise<MessageStoreData> {
-		const counterSubStore = this.stores.get(MessageStore);
+		const messageSubStore = this.stores.get(MessageStore);
 
 		const { address } = ctx.params;
 		if (typeof address !== 'string') {
 			throw new Error('Parameter address must be a string.');
 		}
 		cryptography.address.validateLisk32Address(address);
-		const helloCounterData = await counterSubStore.get(
+		const helloMessage = await messageSubStore.get(
 			ctx,
 			cryptography.address.getAddressFromLisk32Address(address),
 		);
-		return helloCounterData;
+		return helloMessage;
 	}
 }

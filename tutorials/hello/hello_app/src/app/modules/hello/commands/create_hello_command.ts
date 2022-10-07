@@ -76,5 +76,6 @@ export class CreateHelloCommand extends BaseCommand {
 
 			// 6. Encode the hello counter and save it back to the database
 			await counterSubstore.set(context, helloBuffer, helloCounter);
+
 	}
 }
