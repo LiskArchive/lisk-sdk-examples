@@ -43,6 +43,8 @@ The SRS offers the functionality to enable users to build an account recovery to
 === link:tutorials/lns[Lisk Name Service]
 A blockchain application built with the Lisk SDK v5.
 
+The LNS provides users with the ability to create a domain name service for their blockchain accounts.
+
 === https://github.com/LiskHQ/lisk-sdk-examples/tree/v4/archive/3.x/transport[Supply chain:Lisk Transport]
 A blockchain application built with the Lisk SDK v5.
 
