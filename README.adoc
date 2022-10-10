@@ -31,13 +31,19 @@ A few transactions are also included.
 It also equipped with a react frontend app to show the usage of transactions.
 
 === link:tutorials/postboard[Postboard]
-xxxxx
+A blockchain application built with the Lisk SDK v5.
 
-=== srs
+xx
 
-=== lns
+=== link:tutorials/social-recovery[Social Recovery]
+A blockchain application built with the Lisk SDK v5.
 
-=== [Supply chain:Lisk Transport](https://github.com/LiskHQ/lisk-sdk-examples/tree/v4/archive/3.x/transport)
+The SRS offers the functionality to enable users to build an account recovery tool to assist in retrieving lost funds.
+
+=== link:tutorials/lns[Lisk Name Service]
+A blockchain application built with the Lisk SDK v5.
+
+=== https://github.com/LiskHQ/lisk-sdk-examples/tree/v4/archive/3.x/transport[Supply chain:Lisk Transport]
 A blockchain application built with the Lisk SDK v5.
 
 Originally, the Lisk Transport workshop has been designed for the **Lisk.js 2019** event.
