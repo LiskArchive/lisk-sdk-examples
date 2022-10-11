@@ -33,7 +33,7 @@ It is also equipped with a react frontend app to show the usage of transactions.
 === link:tutorials/postboard[Postboard]
 A blockchain application built with the Lisk SDK v5.
 
-xx
+Postboard offers the user a set of useful tools for building apps and assists in making the front-end development easier and more robust.
 
 === link:tutorials/social-recovery[Social Recovery]
 A blockchain application built with the Lisk SDK v5.
