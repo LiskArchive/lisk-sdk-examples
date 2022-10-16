@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { Application } from 'lisk-sdk';
-import { LnsModule } from './modules/lns/lns_module';
+import { LnsModule } from "./modules/lns/module";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export const registerModules = (_app: Application): void => {
-	_app.registerModule(LnsModule);
+export const registerModules = (app: Application): void => {
+    app.registerModule(new LnsModule());
 };

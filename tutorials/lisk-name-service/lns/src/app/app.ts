@@ -1,12 +1,10 @@
-import { Application, PartialApplicationConfig, utils } from 'lisk-sdk';
+import { Application, PartialApplicationConfig } from 'lisk-sdk';
 import { registerModules } from './modules';
 import { registerPlugins } from './plugins';
 
-export const getApplication = (
-	genesisBlock: Record<string, unknown>,
-	config: PartialApplicationConfig,
-): Application => {
-	const app = Application.defaultApplication(genesisBlock, config);
+export const getApplication = (config: PartialApplicationConfig): Application => {
+
+	const { app } = Application.defaultApplication(config);
 
 	registerModules(app);
 	registerPlugins(app);

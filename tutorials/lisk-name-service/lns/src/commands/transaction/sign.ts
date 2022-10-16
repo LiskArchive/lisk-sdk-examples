@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import { TransactionSignCommand } from 'lisk-commander';
 import { Application, PartialApplicationConfig } from 'lisk-sdk';
 import { getApplication } from '../../app/app';
@@ -12,11 +13,8 @@ export class SignCommand extends TransactionSignCommand {
 
 	static args = [...TransactionSignCommand.args];
 
-	public getApplication(
-		genesisBlock: Record<string, unknown>,
-		config: PartialApplicationConfig,
-	): Application {
-		const app = getApplication(genesisBlock, config);
+	public getApplication(config: PartialApplicationConfig): Application {
+		const app = getApplication(config);
 		return app;
 	}
 }

@@ -1,6 +1,6 @@
-import { LNSNode } from './data';
+import { LNSNode, LNSNodeJSON } from './types';
 
-export const isExpired = (node: LNSNode): boolean => {
+export const isExpired = (node: LNSNodeJSON): boolean => {
 	const currentTime = Math.ceil(new Date().getTime() / 1000);
 
 	return currentTime > node.expiry;
