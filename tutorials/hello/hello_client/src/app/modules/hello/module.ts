@@ -1,31 +1,13 @@
 /* eslint-disable class-methods-use-this */
 
 import {
-    BaseModule,
-
-
-
-
-
-
-
-
-
-    BlockAfterExecuteContext, BlockExecuteContext, BlockVerifyContext,
-
-
-
+    BaseModule, BlockAfterExecuteContext, BlockExecuteContext, BlockVerifyContext,
     GenesisBlockExecuteContext, InsertAssetContext, ModuleInitArgs,
-
-
-
-
-
-
     ModuleMetadata, TransactionExecuteContext, TransactionVerifyContext,
-    VerificationResult
+    VerificationResult, codec
 } from 'lisk-sdk';
 import { CreateHelloCommand } from "./commands/create_hello_command";
+import { createHelloSchema, CreateHelloParams } from './schema';
 import { HelloEndpoint } from './endpoint';
 import { NewHelloEvent } from './events/new_hello';
 import { HelloMethod } from './method';
@@ -75,19 +57,25 @@ export class HelloModule extends BaseModule {
 	}
 
     // Lifecycle hooks
-	public async verifyTransaction(_context: TransactionVerifyContext): Promise<VerificationResult> {
+	public async verifyTransaction(context: TransactionVerifyContext): Promise<VerificationResult> {
 		// verify transaction will be called multiple times in the transaction pool
+		context.logger.info("TX VERIFICATION");
+		const result = {
+			status: 1
+		}
+		return result;
 	}
 
 	public async beforeCommandExecute(_context: TransactionExecuteContext): Promise<void> {
 	}
 
 	public async afterCommandExecute(context: TransactionExecuteContext): Promise<void> {
-		context.logger.info(context.transaction.params,"tx params in afterCommandExecute")
 		const newHelloEvent = this.events.get(NewHelloEvent);
+		const createHelloParams: CreateHelloParams = codec.decode<CreateHelloParams>(createHelloSchema, context.transaction.params);
+		context.logger.info(createHelloParams,"createHelloParams")
 		newHelloEvent.log(context.getMethodContext(), {
 			senderAddress: context.transaction.senderAddress,
-			message: context.transaction.params.message
+			message: createHelloParams.message
 		});
 
 	}

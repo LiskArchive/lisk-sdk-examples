@@ -7,6 +7,7 @@ import {
 	VerificationResult,
 	VerifyStatus,
 } from 'lisk-sdk';
+import { createHelloSchema } from '../schema';
 import { MessageStore } from '../stores/message';
 import { CounterStore, CounterStoreData } from '../stores/counter';
 
@@ -15,20 +16,7 @@ interface Params {
 }
 
 export class CreateHelloCommand extends BaseCommand {
-	public schema = {
-		$id: 'hello/createHello-params',
-		title: 'CreateHelloCommand transaction asset for hello module',
-		type: 'object',
-		required: ['message'],
-		properties: {
-			message: {
-				dataType: 'string',
-				fieldNumber: 1,
-				minLength: 3,
-				maxLength: 256,
-			},
-		},
-	};
+	public schema = createHelloSchema;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async verify(context: CommandVerifyContext<Params>): Promise<VerificationResult> {

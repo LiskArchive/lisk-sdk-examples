@@ -1,0 +1,14 @@
+{
+  "name": "hello_utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@liskhq/lisk-client": "^6.0.0-alpha.4"
+  }
+}
