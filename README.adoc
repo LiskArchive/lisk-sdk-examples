@@ -14,8 +14,6 @@ All code examples are grouped after the guide that contains them in the document
 Each example project represents an industry use case in which we showcase the potential of the Lisk SDK and how it can transform this industry.
 
 All industry use cases will be kept up to date with the latest Lisk SDK release.
-Also, you'll find an `/archive` folder that contains older examples referring to previous Lisk SDK releases.
-At the moment, the `/archive` folder contains examples for Lisk SDK `v2`, `v3` and `v4`.
 
 === link:guides/01-bootstrap[Hello World]
 A hello world application built with the Lisk SDK v5.
