@@ -44,7 +44,7 @@ A blockchain application built with the Lisk SDK v5.
 The LNS provides users with the ability to create a domain name service for their blockchain accounts.
 
 === https://github.com/LiskHQ/lisk-sdk-examples/tree/v4/archive/3.x/transport[Supply chain:Lisk Transport]
-A blockchain application built with the Lisk SDK v5.
+A blockchain application built with the Lisk SDK v3.
 
 Originally, the Lisk Transport workshop was designed for the **Lisk.js 2019** event.
 The project represents a flow where a carrier can sign up to pick up a packet, and deliver it to the right person in a decentralized manner.
