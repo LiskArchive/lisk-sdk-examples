@@ -16,3 +16,32 @@ export const createHelloSchema = {
 		},
 	},
 };
+
+export const configSchema = {
+	$id: '/hello/config',
+	type: 'object',
+	properties: {
+		maxMessageLength: {
+			dataType: 'uint32',
+			fieldNumber: 1,
+		},
+		minMessageLength: {
+			dataType: 'uint32',
+			fieldNumber: 2,
+		},
+		blacklist: {
+			type: 'array',
+			fieldNumber: 3,
+			items: {
+				dataType: 'string',
+				minLength: 1,
+				maxLength: 40,
+			},
+		},
+	},
+	required: [
+		'maxMessageLength',
+		'minMessageLength',
+		'blacklist'
+	],
+};

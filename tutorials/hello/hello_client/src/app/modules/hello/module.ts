@@ -4,20 +4,31 @@ import {
     BaseModule, BlockAfterExecuteContext, BlockExecuteContext, BlockVerifyContext,
     GenesisBlockExecuteContext, InsertAssetContext, ModuleInitArgs,
     ModuleMetadata, TransactionExecuteContext, TransactionVerifyContext,
-    VerificationResult, codec
+    VerificationResult, codec, utils
 } from 'lisk-sdk';
+import { validator } from '@liskhq/lisk-validator';
 import { CreateHelloCommand } from "./commands/create_hello_command";
-import { createHelloSchema, CreateHelloParams } from './schema';
+import { createHelloSchema, CreateHelloParams, configSchema } from './schema';
+import { ModuleConfigJSON } from './types';
 import { HelloEndpoint } from './endpoint';
 import { NewHelloEvent } from './events/new_hello';
 import { HelloMethod } from './method';
 import { CounterStore } from './stores/counter';
 import { MessageStore } from './stores/message';
 
+export const defaultConfig = {
+	blacklist: ["illegalWord1"],
+	maxMessageLength: 256,
+	minMessageLength: 3
+};
+
 export class HelloModule extends BaseModule {
     public endpoint = new HelloEndpoint(this.stores, this.offchainStores);
     public method = new HelloMethod(this.stores, this.events);
-    public commands = [new CreateHelloCommand(this.stores, this.events)];
+
+	  private _blacklist: string[] = [];
+
+
 
 	public constructor() {
 		super();
@@ -44,9 +55,24 @@ export class HelloModule extends BaseModule {
 	}
 
     // Lifecycle hooks
-    public async init(_args: ModuleInitArgs): Promise<void> {
-		// initialize this module when starting a node
+	  // eslint-disable-next-line @typescript-eslint/require-await
+    public async init(args: ModuleInitArgs): Promise<void> {
+			const { moduleConfig } = args;
+			console.log("moduleConfig: ", moduleConfig);
+			const config = utils.objects.mergeDeep({}, defaultConfig, moduleConfig) as ModuleConfigJSON;
+			console.log("===================================");
+			console.log("config: ", config);
+			validator.validate(configSchema, config);
+			console.log("===================================");
+
+			this._blacklist = config.blacklist;
+			createHelloSchema.properties.message.maxLength = config.maxMessageLength;
+			createHelloSchema.properties.message.minLength = config.minMessageLength;
+			console.log("this._blacklist: ", this._blacklist);
+
 	}
+
+	public commands = [new CreateHelloCommand(this.stores, this.events, this._blacklist)];
 
 	public async insertAssets(_context: InsertAssetContext) {
 		// initialize block generation, add asset

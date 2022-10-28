@@ -37,6 +37,12 @@
 			"fromFile": "./config/dev-validators.json"
 		}
 	},
-	"modules": {},
+	"modules": {
+		"hello": {
+			"maxMessageLength": 300,
+			"minMessageLength": 5,
+			"blacklist": ["illegalWord1", "badWord2", "censoredWord3"]
+		}
+	},
 	"plugins": {}
 }

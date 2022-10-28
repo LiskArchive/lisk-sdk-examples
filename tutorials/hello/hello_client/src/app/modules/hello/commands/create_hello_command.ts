@@ -17,23 +17,38 @@ interface Params {
 
 export class CreateHelloCommand extends BaseCommand {
 	public schema = createHelloSchema;
+	private readonly _blacklist: string[];
+
+	public constructor(stores,events,blacklist: string[]) {
+		super(stores,events);
+		this._blacklist = blacklist;
+	}
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async verify(context: CommandVerifyContext<Params>): Promise<VerificationResult> {
 		let validation: VerificationResult;
 		context.logger.info("HELLO TX VERIFICATION");
-		if (context.params.message === "Some illegal statement") {
+		const wordList = context.params.message.split(" ");
+		context.logger.info(wordList,"wordList");
+		context.logger.info(this._blacklist,"this._blacklist");
+		const found = this._blacklist.filter(value => wordList.includes(value));
+		context.logger.info(found,"==================");
+		if (found.length >= 0) {
+		  context.logger.info("======FOUND============");
 			validation = {
 				status: VerifyStatus.FAIL,
 				error: new Error(
-					'Illegal hello message: Some illegal statement'
+					`Illegal word in hello message: ${  found.toString()}`
 				)
 			};
 		} else {
+		  context.logger.info("======NOT FOUND============");
 			validation = {
 				status: VerifyStatus.OK
 			};
 		}
+		context.logger.info("==================");
+		context.logger.info(validation,"validation");
 		return validation;
 	}
 

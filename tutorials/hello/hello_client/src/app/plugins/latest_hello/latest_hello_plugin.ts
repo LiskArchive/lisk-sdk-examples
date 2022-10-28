@@ -20,7 +20,7 @@ import { BasePlugin, apiClient } from 'lisk-sdk';
 
 	public async load(): Promise<void> {
 		const client = await apiClient.createIPCClient('~/.lisk/hello-client');
-		client.subscribe("hello_newHello", ( data ) => {
+		client.subscribe("hello_newHello", ( _data ) => {
 
 		});
 		// this._channel = channel;
