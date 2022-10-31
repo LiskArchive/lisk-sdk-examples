@@ -25,6 +25,7 @@ export const defaultConfig = {
 export class HelloModule extends BaseModule {
     public endpoint = new HelloEndpoint(this.stores, this.offchainStores);
     public method = new HelloMethod(this.stores, this.events);
+	  public commands = [new CreateHelloCommand(this.stores, this.events)];
 
 	  private _blacklist: string[] = [];
 
@@ -57,8 +58,9 @@ export class HelloModule extends BaseModule {
     // Lifecycle hooks
 	  // eslint-disable-next-line @typescript-eslint/require-await
     public async init(args: ModuleInitArgs): Promise<void> {
-			const { moduleConfig } = args;
+			const { moduleConfig, genesisConfig } = args;
 			console.log("moduleConfig: ", moduleConfig);
+			console.log("genesisConfig: ", genesisConfig);
 			const config = utils.objects.mergeDeep({}, defaultConfig, moduleConfig) as ModuleConfigJSON;
 			console.log("===================================");
 			console.log("config: ", config);
@@ -66,13 +68,22 @@ export class HelloModule extends BaseModule {
 			console.log("===================================");
 
 			this._blacklist = config.blacklist;
+			console.log("============== config.maxMessageLength: ",config.maxMessageLength);
+			console.log("============== config.minMessageLength: ",config.minMessageLength);
+			console.log("============== createHelloSchema.properties.message.maxLength: ", createHelloSchema.properties.message.maxLength);
+			console.log("=======BEFORE======= createHelloSchema.properties.message.minLength: ", createHelloSchema.properties.message.minLength);
 			createHelloSchema.properties.message.maxLength = config.maxMessageLength;
 			createHelloSchema.properties.message.minLength = config.minMessageLength;
-			console.log("this._blacklist: ", this._blacklist);
+			console.log("======AFTER======== createHelloSchema.properties.message.maxLength: ", createHelloSchema.properties.message.maxLength);
+			console.log("========AFTER====== createHelloSchema.properties.message.minLength: ", createHelloSchema.properties.message.minLength);
+			this.commands[0].init(this._blacklist).then(res => {
+				console.log("Result: ", res);
+			}).catch(err => {
+				console.log("Error: ", err);
+			});
 
 	}
 
-	public commands = [new CreateHelloCommand(this.stores, this.events, this._blacklist)];
 
 	public async insertAssets(_context: InsertAssetContext) {
 		// initialize block generation, add asset

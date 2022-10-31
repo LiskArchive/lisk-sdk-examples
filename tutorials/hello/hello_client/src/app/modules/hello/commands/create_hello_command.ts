@@ -1,9 +1,9 @@
 /* eslint-disable class-methods-use-this */
 
 import {
-    BaseCommand,
-    CommandVerifyContext,
-    CommandExecuteContext,
+	BaseCommand,
+	CommandVerifyContext,
+	CommandExecuteContext,
 	VerificationResult,
 	VerifyStatus,
 } from 'lisk-sdk';
@@ -11,16 +11,20 @@ import { createHelloSchema } from '../schema';
 import { MessageStore } from '../stores/message';
 import { CounterStore, CounterStoreData } from '../stores/counter';
 
+/* import { ModuleConfigJSON } from '../types';
+import { validator } from '@liskhq/lisk-validator';
+import { defaultConfig } from '../module'; */
+
 interface Params {
 	message: string;
 }
 
 export class CreateHelloCommand extends BaseCommand {
 	public schema = createHelloSchema;
-	private readonly _blacklist: string[];
+	private _blacklist!: string[];
 
-	public constructor(stores,events,blacklist: string[]) {
-		super(stores,events);
+	// eslint-disable-next-line @typescript-eslint/require-await
+	public async init(blacklist: string[]): Promise<void> {
 		this._blacklist = blacklist;
 	}
 
@@ -32,8 +36,7 @@ export class CreateHelloCommand extends BaseCommand {
 		context.logger.info(wordList,"wordList");
 		context.logger.info(this._blacklist,"this._blacklist");
 		const found = this._blacklist.filter(value => wordList.includes(value));
-		context.logger.info(found,"==================");
-		if (found.length >= 0) {
+		if (found.length > 0) {
 		  context.logger.info("======FOUND============");
 			validation = {
 				status: VerifyStatus.FAIL,
@@ -72,17 +75,16 @@ export class CreateHelloCommand extends BaseCommand {
 		try {
 			helloCounter = await counterSubstore.get(context, helloBuffer);
 		} catch (error) {
-			context.logger.info(helloBuffer,"====== ERROR ======");
+			context.logger.info(error,"====== ERROR ======");
 			helloCounter = {
 				counter: 0,
 			}
 		}
-
+		// 5. Increment the hello counter +1
+		helloCounter.counter+=1;
 		context.logger.info("====== helloCounter ======");
 		context.logger.info(helloCounter);
 		context.logger.info("====== helloCounter ======");
-		// 5. Increment the hello counter +1
-		helloCounter.counter+=1;
 
 		// 6. Encode the hello counter and save it back to the database
 		await counterSubstore.set(context, helloBuffer, helloCounter);
