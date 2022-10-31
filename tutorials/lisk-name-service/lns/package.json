@@ -1,8 +1,8 @@
 {
-	"name": "lns",
+	"name": "lisk-name-service",
 	"version": "0.1.0",
-	"description": "Lisk-SDK Application",
-	"author": "nazar",
+	"description": "Lisk name service",
+	"author": "reyraa",
 	"license": "ISC",
 	"keywords": [
 		"blockchain",
@@ -22,14 +22,14 @@
 		"lint": "eslint --ext .js,.ts .",
 		"lint:fix": "eslint --fix --ext .js,.ts .",
 		"format": "prettier --write '**/*'",
-		"prepack": "oclif-dev manifest && oclif-dev readme --multi --dir=docs/commands && npm shrinkwrap && npm prune --production && npm shrinkwrap",
+		"prepack": "oclif manifest && oclif readme --multi --dir=docs/commands && npm shrinkwrap && npm prune --production && npm shrinkwrap",
 		"prebuild": "if test -d dist; then rm -r dist; fi; rm -f tsconfig.tsbuildinfo; rm -f npm-shrinkwrap.json",
 		"start": "echo Run \"./bin/run start\" to start the app",
 		"build": "tsc",
 		"test": "jest --passWithNoTests",
 		"test:coverage": "jest --passWithNoTests --coverage=true --coverage-reporters=text",
 		"test:ci": "jest --passWithNoTests --coverage=true --coverage-reporters=json --verbose",
-		"version": "oclif-dev readme --multi --dir=docs/commands && git add README.md docs",
+		"version": "oclif readme --multi --dir=docs/commands && git add README.md docs",
 		"prepublishOnly": "npm ci && npm run lint && npm run build"
 	},
 	"bin": {
@@ -42,13 +42,18 @@
 		"bin": "lisk-name-service",
 		"commands": "./dist/commands",
 		"plugins": [
+			"@oclif/plugin-help",
 			"@oclif/plugin-autocomplete",
-			"@oclif/plugin-help"
+			"@oclif/plugin-version"
 		],
+		"additionalHelpFlags": [
+			"-h"
+		],
+		"additionalVersionFlags": [
+			"-v"
+		],
+		"topicSeparator": " ",
 		"topics": {
-			"account": {
-				"description": "Commands relating to lisk-name-service accounts."
-			},
 			"block": {
 				"description": "Commands relating to lisk-name-service blocks."
 			},
@@ -61,11 +66,11 @@
 			"config": {
 				"description": "Commands relating to lisk-name-service node configuration."
 			},
-			"forger-info": {
-				"description": "Commands relating to lisk-name-service forger-info data."
+			"keys": {
+				"description": "Commands relating to lisk-name-service key generation."
 			},
-			"forging": {
-				"description": "Commands relating to lisk-name-service forging."
+			"generator": {
+				"description": "Commands relating to lisk-name-service block generator."
 			},
 			"hash-onion": {
 				"description": "Create hash onions to be used by the forger."
@@ -75,6 +80,9 @@
 			},
 			"passphrase": {
 				"description": "Commands relating to lisk-name-service passphrases."
+			},
+			"endpoint": {
+				"description": "Commands relating to lisk-name-service endpoint."
 			},
 			"sdk": {
 				"description": "Commands relating to Lisk SDK development."
@@ -101,11 +109,12 @@
 		"@liskhq/lisk-codec": "^0.3.0-alpha.3",
 		"@liskhq/lisk-cryptography": "^4.0.0-alpha.3",
 		"@liskhq/lisk-db": "^0.3.0-debug.20-b876469836935925369a887fe03e50a67c26c38f",
-		"@liskhq/lisk-framework-dashboard-plugin": "^0.2.0-alpha.2",
-		"@liskhq/lisk-framework-faucet-plugin": "^0.2.0-alpha.2",
-		"@liskhq/lisk-framework-forger-plugin": "^0.3.0-alpha.2",
-		"@liskhq/lisk-framework-monitor-plugin": "^0.3.0-alpha.2",
-		"@liskhq/lisk-framework-report-misbehavior-plugin": "^0.3.0-alpha.2",
+		"@liskhq/lisk-framework-dashboard-plugin": "^0.2.0-alpha.4",
+		"@liskhq/lisk-framework-faucet-plugin": "^0.2.0-alpha.4",
+		"@liskhq/lisk-framework-forger-plugin": "^0.3.0-alpha.4",
+		"@liskhq/lisk-framework-http-api-plugin": "^0.2.7",
+		"@liskhq/lisk-framework-monitor-plugin": "^0.3.0-alpha.4",
+		"@liskhq/lisk-framework-report-misbehavior-plugin": "^0.3.0-alpha.4",
 		"@oclif/command": "1.8.0",
 		"@oclif/plugin-autocomplete": "0.3.0",
 		"@oclif/plugin-help": "3.2.2",
@@ -114,20 +123,18 @@
 		"eth-ens-namehash": "^2.0.8",
 		"fs-extra": "9.1.0",
 		"inquirer": "8.0.0",
-		"lisk-commander": "^6.0.0-alpha.2",
-		"lisk-framework": "^0.10.0-alpha.3",
-		"lisk-sdk": "^6.0.0-alpha.2",
-		"tar": "6.0.2",
+		"lisk-commander": "6.0.0-alpha.4",
+		"lisk-sdk": "6.0.0-alpha.4",
+		"tar": "6.1.11",
 		"tslib": "1.14.1"
 	},
 	"devDependencies": {
-		"@oclif/config": "1.17.0",
-		"@oclif/dev-cli": "1.26.0",
+		"@oclif/test": "2.1.1",
 		"@types/fs-extra": "9.0.1",
 		"@types/jest": "26.0.21",
 		"@types/jest-when": "2.7.2",
 		"@types/node": "12.20.6",
-		"@types/tar": "4.0.3",
+		"@types/tar": "6.1.3",
 		"@typescript-eslint/eslint-plugin": "4.19.0",
 		"@typescript-eslint/parser": "4.19.0",
 		"eslint": "7.22.0",
@@ -140,6 +147,7 @@
 		"jest-extended": "0.11.5",
 		"jest-when": "3.2.1",
 		"lint-staged": "10.2.11",
+		"oclif": "3.2.12",
 		"prettier": "2.2.1",
 		"ts-jest": "26.5.4",
 		"ts-node": "9.1.1",

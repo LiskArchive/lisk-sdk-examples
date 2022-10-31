@@ -1,8 +1,9 @@
 import {
 	BaseCommand,
 	CommandVerifyContext,
-	VerificationResult,
 	CommandExecuteContext,
+	VerificationResult,
+	VerifyStatus,
 } from 'lisk-sdk';
 import { reverseLookupCommandParamsSchema } from '../schemas';
 import { ReverseLookupCommandParams } from '../types';
@@ -10,15 +11,11 @@ import { LNSAccountStore } from '../stores/lnsAccount';
 import { getNodeForName } from '../stores/lnsNode';
 
 export class ReverseLookupCommand extends BaseCommand {
-  // Define schema for command
 	public schema = reverseLookupCommandParamsSchema;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async verify(context: CommandVerifyContext<ReverseLookupCommandParams>): Promise<VerificationResult> {
-		// Validate your asset
-    return {
-			status: 1,
-		}
+	public async verify(_context: CommandVerifyContext<ReverseLookupCommandParams>): Promise<VerificationResult> {
+		return { status: VerifyStatus.OK };
 	}
 
 	public async execute(context: CommandExecuteContext<ReverseLookupCommandParams>): Promise<void> {

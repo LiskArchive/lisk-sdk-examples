@@ -21,7 +21,7 @@ export const lnsStoreSchema = {
 };
 
 export const updateRecordsCommandParamsSchema = {
-  $id: 'lns/command/update-records',
+  $id: 'UpdateRecordsCommand',
   title: 'UpdateRecordsCommand transaction asset for lns module',
   type: 'object',
   required: ['records'],
@@ -41,7 +41,7 @@ export const updateRecordsCommandParamsSchema = {
 }
 
 export const reverseLookupCommandParamsSchema = {
-  $id: 'lns/command/reverse-lookup',
+  $id: 'ReverseLookupCommand',
   title: 'reverseLookup transaction asset for lns module',
   type: 'object',
   required: ['name'],
@@ -54,7 +54,7 @@ export const reverseLookupCommandParamsSchema = {
 }
 
 export const registerCommandParamsSchema = {
-  $id: 'lns/register-command',
+  $id: 'RegisterCommand',
   title: 'RegisterAsset transaction asset for lns module',
   type: 'object',
   required: ['name', 'ttl', 'registerFor'],

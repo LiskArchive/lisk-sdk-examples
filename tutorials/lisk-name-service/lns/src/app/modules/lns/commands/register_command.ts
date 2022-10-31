@@ -1,8 +1,9 @@
 import {
 	BaseCommand,
 	CommandVerifyContext,
-	VerificationResult,
 	CommandExecuteContext,
+	VerificationResult,
+	VerifyStatus,
 } from 'lisk-sdk';
 import { addYears } from 'date-fns';
 import { RegisterCommandParams } from '../types';
@@ -12,28 +13,27 @@ import { LNSAccountStore } from '../stores/lnsAccount';
 import { getNodeForName, LNSNodeStore } from '../stores/lnsNode';
 
 export class RegisterCommand extends BaseCommand {
-  // Define schema for command parameters
 	public schema = registerCommandParamsSchema;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async verify(context: CommandVerifyContext<RegisterCommandParams>): Promise<VerificationResult> {
 		if (context.params.ttl < MIN_TTL_VALUE) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error(`Must set TTL value larger or equal to ${MIN_TTL_VALUE}`)
 			}
 		}
 
 		if (context.params.registerFor < 1) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error('You can register name at least for 1 year.')
 			}
 		}
 
 		if (context.params.registerFor > 5) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error('You can register name maximum for 5 year.')
 			}
 		}
@@ -42,23 +42,21 @@ export class RegisterCommand extends BaseCommand {
 
 		if (chunks.length > 2) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error('You can only register second level domain name.')
 			}
 		}
 
 		if (!VALID_TLDS.includes(chunks[1])) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error(`Invalid TLD found "${chunks[1]}". Valid TLDs are "${VALID_TLDS.join()}"`)
 			}
 		}
-		return {
-			status: 1,
-		}
+		return { status: VerifyStatus.OK }
 	}
 
-	public async execute(context: CommandExecuteContext<RegisterCommandParams>): Promise <void> {
+	public async execute(context: CommandExecuteContext<RegisterCommandParams>): Promise<void> {
 		// Get namehash output of the domain name
 		const node = getNodeForName(context.params.name);
 

@@ -1,10 +1,9 @@
 /* eslint-disable class-methods-use-this */
+
 import {
-    BaseModule,
-    BlockAfterExecuteContext, BlockExecuteContext, BlockVerifyContext,
-    GenesisBlockExecuteContext, InsertAssetContext, ModuleInitArgs,
-    ModuleMetadata, TransactionExecuteContext, TransactionVerifyContext,
-    VerificationResult
+	BaseModule, BlockVerifyContext, InsertAssetContext,
+	ModuleInitArgs, ModuleMetadata, TransactionVerifyContext,
+	VerificationResult,
 } from 'lisk-sdk';
 import { RegisterCommand } from "./commands/register_command";
 import { ReverseLookupCommand } from "./commands/reverse_lookup_command";
@@ -21,24 +20,35 @@ import {
 	resolveNodeParamsSchema,
 } from './schemas';
 
+const promise = new Promise<void>((resolve) => {
+	resolve();
+});
+
+export declare enum VerifyStatus {
+	FAIL = -1,
+	OK = 1,
+	PENDING = 0
+}
+
 export class LnsModule extends BaseModule {
-    public endpoint = new LnsEndpoint(this.stores, this.offchainStores);
-    public method = new LnsMethod(this.stores, this.events);
-    public commands = [
-			new RegisterCommand(),
-			new ReverseLookupCommand(),
-			new UpdateRecordsCommand(),
-		];
+	public endpoint = new LnsEndpoint(this.stores, this.offchainStores);
+	public method = new LnsMethod(this.stores, this.events);
+	public commands = [
+		new RegisterCommand(this.stores, this.events),
+		new UpdateRecordsCommand(this.stores, this.events),
+		new ReverseLookupCommand(this.stores, this.events),
+	];
 
 	public constructor() {
 		super();
-		this.stores.register(LNSNodeStore, new LNSNodeStore(this.name));
-		this.stores.register(LNSNodeStore, new LNSNodeStore(this.name));
-		this.stores.register(LNSAccountStore, new LNSAccountStore(this.name));
+		this.stores.register(LNSNodeStore, new LNSNodeStore());
+		this.stores.register(LNSNodeStore, new LNSNodeStore());
+		this.stores.register(LNSAccountStore, new LNSAccountStore());
 	}
 
 	public metadata(): ModuleMetadata {
 		return {
+			name: 'Lns',
 			endpoints: [
 				{
 					name: 'lookupAddress',
@@ -61,15 +71,15 @@ export class LnsModule extends BaseModule {
 				params: command.schema,
 			})),
 			events: this.events.values().map(v => ({
-				typeID: v.name,
+				name: v.name,
 				data: v.schema,
 			})),
 			assets: [],
 		};
 	}
 
-  // Lifecycle hooks
-  public async init(_args: ModuleInitArgs): Promise<void> {
+	// Lifecycle hooks
+	public async init(_args: ModuleInitArgs): Promise<void> {
 		// initialize this module when starting a node
 	}
 
@@ -83,28 +93,24 @@ export class LnsModule extends BaseModule {
 
     // Lifecycle hooks
 	public async verifyTransaction(_context: TransactionVerifyContext): Promise<VerificationResult> {
-		// verify transaction will be called multiple times in the transaction pool
+		let status = VerifyStatus.PENDING;
+		await promise.then(() => {
+			status = VerifyStatus.OK;
+		});
+		return {
+			status,
+		};
 	}
 
-	public async beforeCommandExecute(_context: TransactionExecuteContext): Promise<void> {
-	}
+	// public async beforeCommandExecute(_context: TransactionExecuteContext): Promise<void> {}
 
-	public async afterCommandExecute(_context: TransactionExecuteContext): Promise<void> {
+	// public async afterCommandExecute(_context: TransactionExecuteContext): Promise<void> {}
+	
+	// public async initGenesisState(_context: GenesisBlockExecuteContext): Promise<void> {}
 
-	}
-	public async initGenesisState(_context: GenesisBlockExecuteContext): Promise<void> {
+	// public async finalizeGenesisState(_context: GenesisBlockExecuteContext): Promise<void> {}
 
-	}
+	// public async beforeTransactionsExecute(_context: BlockExecuteContext): Promise<void> {}
 
-	public async finalizeGenesisState(_context: GenesisBlockExecuteContext): Promise<void> {
-
-	}
-
-	public async beforeTransactionsExecute(_context: BlockExecuteContext): Promise<void> {
-
-	}
-
-	public async afterTransactionsExecute(_context: BlockAfterExecuteContext): Promise<void> {
-
-	}
+	// public async afterTransactionsExecute(_context: BlockAfterExecuteContext): Promise<void> {}
 }
