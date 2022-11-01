@@ -34,7 +34,7 @@ A blockchain application built with the Lisk SDK v5.
 
 Postboard is a Twitter-like application that offers the possibility to create/post and re-post opinions, follow other users' accounts, like posts, etc.
 
-=== link:tutorials/social-recovery[Social Recovery]
+=== link:tutorials/social-recovery[Social Recovery System (SRS)]
 A blockchain application built with the Lisk SDK v5.
 
 The SRS offers the functionality to enable users to build an account recovery tool to assist in retrieving lost funds.
