@@ -39,7 +39,7 @@ A blockchain application built with the Lisk SDK v5.
 
 The SRS offers the functionality to enable users to build an account recovery tool to assist in retrieving lost funds.
 
-=== link:tutorials/lisk-name-service[Lisk Name Service]
+=== link:tutorials/lisk-name-service[Lisk Name Service (LNS)]
 A blockchain application built with the Lisk SDK v5.
 
 The LNS provides users with the ability to create a domain name service for their blockchain accounts.
