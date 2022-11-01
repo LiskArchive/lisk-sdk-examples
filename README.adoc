@@ -16,7 +16,7 @@ Each example project represents an industry use case in which we showcase the po
 All industry use cases will be kept up to date with the latest Lisk SDK release.
 
 === link:guides/01-bootstrap[Hello World]
-A hello world application built with the Lisk SDK v6.
+A hello world application built with the Lisk SDK v5.
 
 Implements the `HelloModule`, which is saving a custom string into the senders account.
 It demonstrates the use of On-Chain and Off-Chain architecture by creating a custom module and a plugin for a sidechain client.
