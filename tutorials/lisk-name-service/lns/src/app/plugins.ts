@@ -1,15 +1,13 @@
 import { Application } from 'lisk-sdk';
 // import { ForgerPlugin } from '@liskhq/lisk-framework-forger-plugin';
-// import { HTTPAPIPlugin } from '@liskhq/lisk-framework-http-api-plugin';
 // import { FaucetPlugin } from '@liskhq/lisk-framework-faucet-plugin';
 // import { DashboardPlugin } from '@liskhq/lisk-framework-dashboard-plugin';
 // import { LNSDashboardPlugin } from 'lns-dashboard-plugin';
 
 export const registerPlugins = (_app: Application): void => {
-  // app.registerPlugin(HTTPAPIPlugin, {});
-	// app.registerPlugin(ForgerPlugin, {});
-	// app.registerPlugin(DashboardPlugin, {});
-	// app.registerPlugin(FaucetPlugin, {});
+	// app.registerPlugin(new ForgerPlugin());
+	// app.registerPlugin(new DashboardPlugin());
+	// app.registerPlugin(new FaucetPlugin());
 	// app.registerPlugin(LNSDashboardPlugin);
 
 	// app.overridePluginOptions(LNSDashboardPlugin.alias, {

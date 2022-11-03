@@ -112,7 +112,6 @@
 		"@liskhq/lisk-framework-dashboard-plugin": "^0.2.0-alpha.4",
 		"@liskhq/lisk-framework-faucet-plugin": "^0.2.0-alpha.4",
 		"@liskhq/lisk-framework-forger-plugin": "^0.3.0-alpha.4",
-		"@liskhq/lisk-framework-http-api-plugin": "^0.2.7",
 		"@liskhq/lisk-framework-monitor-plugin": "^0.3.0-alpha.4",
 		"@liskhq/lisk-framework-report-misbehavior-plugin": "^0.3.0-alpha.4",
 		"@oclif/command": "1.8.0",

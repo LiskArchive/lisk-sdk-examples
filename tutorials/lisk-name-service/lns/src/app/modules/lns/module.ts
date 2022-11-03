@@ -41,9 +41,8 @@ export class LnsModule extends BaseModule {
 
 	public constructor() {
 		super();
-		this.stores.register(LNSNodeStore, new LNSNodeStore());
-		this.stores.register(LNSNodeStore, new LNSNodeStore());
-		this.stores.register(LNSAccountStore, new LNSAccountStore());
+		this.stores.register(LNSNodeStore, new LNSNodeStore(this.name));
+		this.stores.register(LNSAccountStore, new LNSAccountStore(this.name));
 	}
 
 	public metadata(): ModuleMetadata {
