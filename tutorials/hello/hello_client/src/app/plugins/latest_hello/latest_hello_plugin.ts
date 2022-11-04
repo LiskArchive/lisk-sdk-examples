@@ -1,4 +1,4 @@
-import { BasePlugin, apiClient } from 'lisk-sdk';
+import { BasePlugin } from 'lisk-sdk';
 
  /* eslint-disable class-methods-use-this */
  /* eslint-disable  @typescript-eslint/no-empty-function */
@@ -19,10 +19,11 @@ import { BasePlugin, apiClient } from 'lisk-sdk';
 	}
 
 	public async load(): Promise<void> {
-		const client = await apiClient.createIPCClient('~/.lisk/hello-client');
+		console.log("-------- ::::::PLUGIN:::::::: ------------");
+		/* const client = await apiClient.createIPCClient('~/.lisk/hello-client');
 		client.subscribe("hello_newHello", ( _data ) => {
 
-		});
+		}); */
 		// this._channel = channel;
 		// this._channel.once('app:ready', () => {});
 	}

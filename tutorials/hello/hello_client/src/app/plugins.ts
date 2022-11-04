@@ -4,5 +4,5 @@ import { Application } from 'lisk-sdk';
 
 export const registerPlugins = (_app: Application): void => {
 
-    // app.registerPlugin(new LatestHelloPlugin());
+	// app.registerPlugin(new LatestHelloPlugin());
 };

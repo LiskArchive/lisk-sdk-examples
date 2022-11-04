@@ -75,7 +75,7 @@
 			"hash-onion": {
 				"description": "Create hash onions to be used by the forger."
 			},
-			"node": {
+			"system": {
 				"description": "Commands relating to hello_client node."
 			},
 			"passphrase": {
