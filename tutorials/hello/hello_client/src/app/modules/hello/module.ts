@@ -72,11 +72,11 @@ export class HelloModule extends BaseModule {
 			console.log("============== config.minMessageLength: ",config.minMessageLength);
 			console.log("============== createHelloSchema.properties.message.maxLength: ", createHelloSchema.properties.message.maxLength);
 			console.log("=======BEFORE======= createHelloSchema.properties.message.minLength: ", createHelloSchema.properties.message.minLength);
-			createHelloSchema.properties.message.maxLength = config.maxMessageLength;
-			createHelloSchema.properties.message.minLength = config.minMessageLength;
+			this.commands[0].schema.properties.message.maxLength = config.maxMessageLength;
+			this.commands[0].schema.properties.message.minLength = config.minMessageLength;
 			console.log("======AFTER======== createHelloSchema.properties.message.maxLength: ", createHelloSchema.properties.message.maxLength);
 			console.log("========AFTER====== createHelloSchema.properties.message.minLength: ", createHelloSchema.properties.message.minLength);
-			this.commands[0].init(this._blacklist).then(res => {
+			this.commands[0].init(this._blacklist,config.maxMessageLength,config.minMessageLength).then(res => {
 				console.log("Result: ", res);
 			}).catch(err => {
 				console.log("Error: ", err);

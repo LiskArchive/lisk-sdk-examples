@@ -24,8 +24,10 @@ export class CreateHelloCommand extends BaseCommand {
 	private _blacklist!: string[];
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async init(blacklist: string[]): Promise<void> {
+	public async init(blacklist: string[], maxLength: number, minLength: number): Promise<void> {
 		this._blacklist = blacklist;
+		this.schema.properties.message.maxLength = maxLength;
+		this.schema.properties.message.minLength = minLength;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/require-await

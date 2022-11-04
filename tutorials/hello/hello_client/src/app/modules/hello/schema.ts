@@ -4,7 +4,7 @@ export interface CreateHelloParams {
 
 export const createHelloSchema = {
 	$id: 'hello/createHello-params',
-	title: 'CreateHelloCommand transaction asset for hello module',
+	title: 'CreateHelloCommand transaction parameter for the Hello module',
 	type: 'object',
 	required: ['message'],
 	properties: {
