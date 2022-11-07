@@ -63,7 +63,7 @@ export class HelloModule extends BaseModule {
 		// Validate the provided config with the config schema
 		validator.validate(configSchema, config);
 		// Call the command init() method with config values as parameters
-		this.commands[0].init(config.blacklist,config.maxMessageLength,config.minMessageLength).catch(err => {
+		this.commands[0].init(config).catch(err => {
 			console.log("Error: ", err);
 		});
 	}

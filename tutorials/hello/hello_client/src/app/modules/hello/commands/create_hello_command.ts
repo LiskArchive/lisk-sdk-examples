@@ -10,6 +10,7 @@ import {
 import { createHelloSchema } from '../schema';
 import { MessageStore } from '../stores/message';
 import { CounterStore, CounterStoreData } from '../stores/counter';
+import { ModuleConfig } from '../types';
 
 /* import { ModuleConfigJSON } from '../types';
 import { validator } from '@liskhq/lisk-validator';
@@ -24,13 +25,13 @@ export class CreateHelloCommand extends BaseCommand {
 	private _blacklist!: string[];
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async init(blacklist: string[], maxLength: number, minLength: number): Promise<void> {
+	public async init(config: ModuleConfig): Promise<void> {
 		// Set _blacklist to the value of the blacklist defined in the module config
-		this._blacklist = blacklist;
+		this._blacklist = config.blacklist;
 		// Set the max message length to the value defined in the module config
-		this.schema.properties.message.maxLength = maxLength;
+		this.schema.properties.message.maxLength = config.maxMessageLength;
 		// Set the min message length to the value defined in the module config
-		this.schema.properties.message.minLength = minLength;
+		this.schema.properties.message.minLength = config.minMessageLength;
 		console.log("this.schema: ", this.schema);
 	}
 
