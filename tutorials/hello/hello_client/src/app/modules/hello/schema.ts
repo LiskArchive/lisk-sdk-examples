@@ -17,6 +17,22 @@ export const createHelloSchema = {
 	},
 };
 
+export const newHelloEventSchema = {
+	$id: '/hello/events/new_hello',
+	type: 'object',
+	required: ['senderAddress', 'message'],
+	properties: {
+		senderAddress: {
+			dataType: 'bytes',
+			fieldNumber: 1,
+		},
+		message: {
+			dataType: 'string',
+			fieldNumber: 2,
+		},
+	},
+};
+
 export const configSchema = {
 	$id: '/hello/config',
 	type: 'object',

@@ -58,19 +58,20 @@ export class CreateHelloCommand extends BaseCommand {
 	}
 
 	public async execute(context: CommandExecuteContext<Params>): Promise<void> {
-		// 1. Get account data of the sender of the hello transaction
+		// 1. Get account data of the sender of the Hello transaction.
 		const {senderAddress} = context.transaction;
+		// 2. Get message and counter stores.
 		context.logger.info("====== this.stores.get(MessageStore) ======");
 		const messageSubstore = this.stores.get(MessageStore);
 		context.logger.info("====== this.stores.get(CounterStore) ======");
 		const counterSubstore = this.stores.get(CounterStore);
 
-		// 2. Update hello message in the senders account with the helloString of the transaction asset
+		// 3. Save the Hello message to the message store, using the senderAddress as key, and the message as value.
 		await messageSubstore.set(context, senderAddress, {
 			message: context.params.message,
 		});
 
-		// 3. Get the hello counter from the database
+		// 3. Get the Hello counter from the counter store.
 		const helloBuffer = Buffer.from('hello','utf8');
 		context.logger.info(helloBuffer,"====== counterSubstore.get(context, helloBuffer) ======");
 		let helloCounter: CounterStoreData;
@@ -82,13 +83,13 @@ export class CreateHelloCommand extends BaseCommand {
 				counter: 0,
 			}
 		}
-		// 5. Increment the hello counter +1
+		// 5. Increment the Hello counter +1.
 		helloCounter.counter+=1;
 		context.logger.info("====== helloCounter ======");
 		context.logger.info(helloCounter);
 		context.logger.info("====== helloCounter ======");
 
-		// 6. Encode the hello counter and save it back to the database
+		// 6. Save the Hello counter to the counter store.
 		await counterSubstore.set(context, helloBuffer, helloCounter);
 	}
 }
