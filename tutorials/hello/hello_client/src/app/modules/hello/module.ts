@@ -58,26 +58,14 @@ export class HelloModule extends BaseModule {
     // Lifecycle hooks
 	  // eslint-disable-next-line @typescript-eslint/require-await
     public async init(args: ModuleInitArgs): Promise<void> {
-			const { moduleConfig, genesisConfig } = args;
-			console.log("moduleConfig: ", moduleConfig);
-			console.log("genesisConfig: ", genesisConfig);
+			const { moduleConfig } = args;
 			const config = utils.objects.mergeDeep({}, defaultConfig, moduleConfig) as ModuleConfigJSON;
-			console.log("===================================");
-			console.log("config: ", config);
 			validator.validate(configSchema, config);
-			console.log("===================================");
 
 			this._blacklist = config.blacklist;
-			console.log("============== config.maxMessageLength: ",config.maxMessageLength);
-			console.log("============== config.minMessageLength: ",config.minMessageLength);
-			console.log("============== createHelloSchema.properties.message.maxLength: ", createHelloSchema.properties.message.maxLength);
-			console.log("=======BEFORE======= createHelloSchema.properties.message.minLength: ", createHelloSchema.properties.message.minLength);
 			this.commands[0].schema.properties.message.maxLength = config.maxMessageLength;
 			this.commands[0].schema.properties.message.minLength = config.minMessageLength;
-			console.log("======AFTER======== createHelloSchema.properties.message.maxLength: ", createHelloSchema.properties.message.maxLength);
-			console.log("========AFTER====== createHelloSchema.properties.message.minLength: ", createHelloSchema.properties.message.minLength);
 			this.commands[0].init(this._blacklist,config.maxMessageLength,config.minMessageLength).then(res => {
-				console.log("Result: ", res);
 			}).catch(err => {
 				console.log("Error: ", err);
 			});

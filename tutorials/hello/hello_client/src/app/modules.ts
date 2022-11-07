@@ -3,5 +3,6 @@ import { Application } from 'lisk-sdk';
 import { HelloModule } from "./modules/hello/module";
 
 export const registerModules = (app: Application): void => {
-	app.registerModule(new HelloModule());
+
+    app.registerModule(new HelloModule());
 };
