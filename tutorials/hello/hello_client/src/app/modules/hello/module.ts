@@ -17,19 +17,15 @@ import { CounterStore } from './stores/counter';
 import { MessageStore } from './stores/message';
 
 export const defaultConfig = {
-	blacklist: ["illegalWord1"],
 	maxMessageLength: 256,
-	minMessageLength: 3
+	minMessageLength: 3,
+	blacklist: ["illegalWord1"]
 };
 
 export class HelloModule extends BaseModule {
-    public endpoint = new HelloEndpoint(this.stores, this.offchainStores);
-    public method = new HelloMethod(this.stores, this.events);
-	  public commands = [new CreateHelloCommand(this.stores, this.events)];
-
-	  private _blacklist: string[] = [];
-
-
+	public endpoint = new HelloEndpoint(this.stores, this.offchainStores);
+	public method = new HelloMethod(this.stores, this.events);
+	public commands = [new CreateHelloCommand(this.stores, this.events)];
 
 	public constructor() {
 		super();
@@ -55,23 +51,22 @@ export class HelloModule extends BaseModule {
 		};
 	}
 
-    // Lifecycle hooks
-	  // eslint-disable-next-line @typescript-eslint/require-await
-    public async init(args: ModuleInitArgs): Promise<void> {
-			const { moduleConfig } = args;
-			const config = utils.objects.mergeDeep({}, defaultConfig, moduleConfig) as ModuleConfigJSON;
-			validator.validate(configSchema, config);
-
-			this._blacklist = config.blacklist;
-			this.commands[0].schema.properties.message.maxLength = config.maxMessageLength;
-			this.commands[0].schema.properties.message.minLength = config.minMessageLength;
-			this.commands[0].init(this._blacklist,config.maxMessageLength,config.minMessageLength).then(res => {
-			}).catch(err => {
-				console.log("Error: ", err);
-			});
-
+	// Lifecycle hooks
+	// eslint-disable-next-line @typescript-eslint/require-await
+	public async init(args: ModuleInitArgs): Promise<void> {
+		// Get the module config defined in the config.json file
+		const { moduleConfig } = args;
+		console.log("defaultConfig: ", defaultConfig);
+		console.log("moduleConfig: ", moduleConfig);
+		// Overwrite the default module config with values from config.json, if set
+		const config = utils.objects.mergeDeep({}, defaultConfig, moduleConfig) as ModuleConfigJSON;
+		// Validate the provided config with the config schema
+		validator.validate(configSchema, config);
+		// Call the command init() method with config values as parameters
+		this.commands[0].init(config.blacklist,config.maxMessageLength,config.minMessageLength).catch(err => {
+			console.log("Error: ", err);
+		});
 	}
-
 
 	public async insertAssets(_context: InsertAssetContext) {
 		// initialize block generation, add asset
