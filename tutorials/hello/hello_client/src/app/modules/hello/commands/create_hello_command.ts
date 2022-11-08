@@ -12,10 +12,6 @@ import { MessageStore } from '../stores/message';
 import { CounterStore, CounterStoreData } from '../stores/counter';
 import { ModuleConfig } from '../types';
 
-/* import { ModuleConfigJSON } from '../types';
-import { validator } from '@liskhq/lisk-validator';
-import { defaultConfig } from '../module'; */
-
 interface Params {
 	message: string;
 }
