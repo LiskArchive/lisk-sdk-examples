@@ -90,15 +90,17 @@ export class HelloModule extends BaseModule {
 	}
 
 	public async afterCommandExecute(context: TransactionExecuteContext): Promise<void> {
-		const newHelloEvent = this.events.get(NewHelloEvent);
-		const createHelloParams: CreateHelloParams = codec.decode<CreateHelloParams>(createHelloSchema, context.transaction.params);
-		context.logger.info(createHelloParams,"createHelloParams")
-		newHelloEvent.log(context.getMethodContext(), {
-			senderAddress: context.transaction.senderAddress,
-			message: createHelloParams.message
-		});
-
+		if (context.transaction.command === "createHello") {
+			const newHelloEvent = this.events.get(NewHelloEvent);
+			const createHelloParams: CreateHelloParams = codec.decode<CreateHelloParams>(createHelloSchema, context.transaction.params);
+			context.logger.info(createHelloParams,"createHelloParams")
+			newHelloEvent.log(context.getMethodContext(), {
+				senderAddress: context.transaction.senderAddress,
+				message: createHelloParams.message
+			});
+		}
 	}
+
 	public async initGenesisState(_context: GenesisBlockExecuteContext): Promise<void> {
 
 	}
