@@ -42,5 +42,9 @@
 			"blacklist": ["illegalWord1", "badWord2", "censoredWord3"]
 		}
 	},
-	"plugins": {}
+	"plugins": {
+		"helloInfo": {
+			"enablePlugin": false
+		}
+	}
 }
