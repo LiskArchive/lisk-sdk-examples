@@ -16,7 +16,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable  @typescript-eslint/no-empty-function */
-import { BasePlugin, db as liskDB, PluginInitContext, cryptography } from 'lisk-sdk';
+import { BasePlugin, db as liskDB, PluginInitContext, cryptography, codec } from 'lisk-sdk';
 import {
 	getDBInstance,
 	setAddressInfo,
@@ -28,10 +28,27 @@ import { HelloInfoPluginConfig } from './types';
 import { Endpoint } from './endpoint';
 
 
+const bytesArraySchema = {
+	$id: '/liskChain/bytesarray',
+	type: 'object',
+	required: ['list'],
+	properties: {
+		list: {
+			type: 'array',
+			fieldNumber: 1,
+			items: {
+				dataType: 'bytes',
+			},
+		},
+	},
+};
+
+
 export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 	public configSchema = configSchema;
 	public endpoint = new Endpoint();
 	public counter = 0;
+	public height = 0;
 	private _addressPluginDB!: liskDB.Database;
 
 	public get nodeModulePath(): string {
@@ -69,17 +86,51 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 	}
 
 	private _subscribeToEvent(): void {
-		this.apiClient.subscribe(
-			'network_newBlock',
-			async (event) => {
-				if (!event) {
-					this.logger.error('Invalid payload for network_newBlock');
-					return;
-				}
-				let parsedData = event;
-				this._saveAddressesToDB(parsedData);
-			},
-		)
+		// this.apiClient.subscribe(
+		// 	'network_newBlock',
+		// 	async (event) => {
+		// 		if (!event) {
+		// 			this.logger.error('Invalid payload for network_newBlock');
+		// 			return;
+		// 		}
+		// 		let parsedData = event;
+		// 		console.log(parsedData);
+		// 		this._saveAddressesToDB(parsedData);
+		// 	},
+		// )
+
+		// for (let index = 0; index < array.length; index++) {
+		// 	const element = array[index];
+
+		// }
+
+		this.apiClient.invoke("chain_getEvents", {
+			height: 137
+		}).then(res => {
+			console.log("Result: ", res);
+			// const newHello = codec.codec.decode(newHelloEventSchema, res[2].data);
+			// console.log("newHello: ", newHello);
+		});
+
+		// this.apiClient.invoke("chain_getLastBlock", {
+		// }).then(res => {
+		// 	this.height = res['header']['height'];
+
+		// 	for (let index = 1; index <= this.height; index += 1) {
+		// 		this.apiClient.invoke("chain_getEvents", {
+		// 			height: index
+		// 		}).then(result => {
+		// 			if (result['module'] === 'hello') {
+		// 				console.log("Result: ", result);
+		// 			}
+
+		// 		});
+		// 	}
+		// });
+
+
+
+
 	}
 
 	private async _saveAddressesToDB(parsedData: Record<string, unknown>): Promise<string> {
