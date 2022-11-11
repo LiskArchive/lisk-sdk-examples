@@ -2,11 +2,15 @@ export interface HelloInfoPluginConfig {
     enablePlugin: boolean;
 }
 
-export interface Address {
-    byteAddress: Buffer;
-    lskAddress: string;
+export interface Event {
+    senderAddress: Buffer;
+    message: string;
 }
 
 export interface Counter {
     counter: number;
+}
+
+export interface Height {
+    height: number;
 }

@@ -1,3 +1,6 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-loop-func */
+/* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable for-direction */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-floating-promises */
@@ -19,30 +22,14 @@
 import { BasePlugin, db as liskDB, PluginInitContext, cryptography, codec } from 'lisk-sdk';
 import {
 	getDBInstance,
-	setAddressInfo,
+	setEventHelloInfo,
 	setLastCounter,
-	getLastCounter
+	getLastCounter,
+	setLastEventHeight
 } from './db';
-import { configSchema } from './schemas';
+import { newHelloEventSchema, configSchema } from './schemas';
 import { HelloInfoPluginConfig } from './types';
 import { Endpoint } from './endpoint';
-
-
-const bytesArraySchema = {
-	$id: '/liskChain/bytesarray',
-	type: 'object',
-	required: ['list'],
-	properties: {
-		list: {
-			type: 'array',
-			fieldNumber: 1,
-			items: {
-				dataType: 'bytes',
-			},
-		},
-	},
-};
-
 
 export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 	public configSchema = configSchema;
@@ -65,11 +52,11 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 			this.endpoint.init(this._addressPluginDB, this.apiClient);
 			const lastCounter = await getLastCounter(this._addressPluginDB);
 			if (lastCounter.counter > 0) {
-				this._subscribeToEvent();
+				this._fetchHelloEvents();
 			} else {
 				let newCounter = 0;
 				await setLastCounter(this._addressPluginDB, newCounter);
-				this._subscribeToEvent();
+				this._fetchHelloEvents();
 			}
 		} else {
 			console.log("");
@@ -85,7 +72,7 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 		this._addressPluginDB.close();
 	}
 
-	private _subscribeToEvent(): void {
+	private _fetchHelloEvents(): void {
 		// this.apiClient.subscribe(
 		// 	'network_newBlock',
 		// 	async (event) => {
@@ -99,46 +86,99 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 		// 	},
 		// )
 
-		// for (let index = 0; index < array.length; index++) {
+
+
+		this.apiClient.invoke("chain_getLastBlock", {
+		}).then(res => {
+			this.height = res['header']['height'];
+			//console.log('Height is', this.height);
+			for (let index = 1; index < this.height; index += 1) {
+				//console.log("Before chain_getEvents call", index);
+				this.apiClient.invoke("chain_getEvents", {
+					height: index
+				}).then(result => {
+					//console.log(result[0]['module'])
+					if (result[3] !== undefined) {
+						//console.log(result[3]);
+						let dataElement = result[3]['data'];
+						const height = result[4]['height'];
+
+						const parsedData = codec.decode(newHelloEventSchema, Buffer.from(dataElement, 'hex'));
+
+						//console.log(cryptography.address.getLisk32AddressFromAddress(parsedData['senderAddress']));
+						//console.log(parsedData['message']);
+						this._saveAddressesToDB(parsedData, height);
+					}
+				});
+			}
+		});
+	}
+
+	private async _saveAddressesToDB(parsedData: Record<string, unknown>, height: number): Promise<string> {
+		console.log(parsedData);
+		console.log(height)
+		await setLastEventHeight(this._addressPluginDB, height);
+		// let senderAddress = parsedData['senderAddress'];
+		// let message = parsedData['message'];
+		// const lastCounter = await getLastCounter(this._addressPluginDB);
+		// await setEventHelloInfo(this._addressPluginDB, senderAddress, message, lastCounter.counter += 1);
+		// await setLastCounter(this._addressPluginDB, lastCounter.counter);
+		return "Data Saved";
+	}
+}
+
+
+
+					//console.log(result[index]);
+					// for (let height = 0; height < this.height; index += 1) {
+					// 	console.log("Value of index is: ", height);
+					// }
+					//if (result[index] === index) {
+					//console.log("Value of INDEX is: ", index);
+					//console.log("Result: ", result[index]);
+					//}
+
+
+					// for (let height = 0; height < array.length; height += 1) {
+
+					// 	console.log("Value of index is: ", index);
+					// 	//if (result[index] === index) {
+					// 	console.log("Value of INDEX is: ", index);
+					// 	console.log("Result: ", result[index]);
+					// 	//}
+					// }
+
+
+
+
+
+					//if (result[index]['module'] === 'hello') {
+					//	console.log("Result: ", result[index]);
+					// let dataElement = result[3]['data'];
+
+					// const decoded = codec.decode(newHelloEventSchema, Buffer.from(dataElement, 'hex'));
+
+					// console.log(cryptography.address.getLisk32AddressFromAddress(decoded['senderAddress']));
+					// console.log(decoded['message']);
+					//	}
+
+
+							// for (let index = 0; index < array.length; index++) {
 		// 	const element = array[index];
 
 		// }
 
-		this.apiClient.invoke("chain_getEvents", {
-			height: 137
-		}).then(res => {
-			console.log("Result: ", res);
-			// const newHello = codec.codec.decode(newHelloEventSchema, res[2].data);
-			// console.log("newHello: ", newHello);
-		});
-
-		// this.apiClient.invoke("chain_getLastBlock", {
+		// this.apiClient.invoke("chain_getEvents", {
+		// 	height: 263
 		// }).then(res => {
-		// 	this.height = res['header']['height'];
+		// 	console.log("Result: ", res[3].data);
+		// 	let dataElement = res[3]['data'];
 
-		// 	for (let index = 1; index <= this.height; index += 1) {
-		// 		this.apiClient.invoke("chain_getEvents", {
-		// 			height: index
-		// 		}).then(result => {
-		// 			if (result['module'] === 'hello') {
-		// 				console.log("Result: ", result);
-		// 			}
+		// 	const decoded = codec.decode(newHelloEventSchema, Buffer.from(dataElement, 'hex'));
 
-		// 		});
-		// 	}
+		// 	console.log(cryptography.address.getLisk32AddressFromAddress(decoded['senderAddress']));
+		// 	console.log(decoded['message']);
+		// 	//return decoded;
+		// 	// const newHello = codec.codec.decode(newHelloEventSchema, res[2].data);
+		// 	// console.log("newHello: ", newHello);
 		// });
-
-
-
-
-	}
-
-	private async _saveAddressesToDB(parsedData: Record<string, unknown>): Promise<string> {
-		let addrslsk = parsedData['blockHeader']['generatorAddress'];
-		let fullAddress = cryptography.address.getAddressFromLisk32Address(addrslsk)
-		const lastCounter = await getLastCounter(this._addressPluginDB);
-		await setAddressInfo(this._addressPluginDB, addrslsk, fullAddress, lastCounter.counter += 1);
-		await setLastCounter(this._addressPluginDB, lastCounter.counter);
-		return "Data Saved";
-	}
-}

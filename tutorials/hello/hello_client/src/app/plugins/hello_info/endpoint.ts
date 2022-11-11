@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable no-console */
@@ -7,9 +8,10 @@ import {
     PluginEndpointContext,
     BasePlugin,
     db as liskDB,
+    cryptography,
 } from 'lisk-sdk';
 import {
-    getAddressInfo,
+    getEventHelloInfo,
     getLastCounter
 } from './db';
 
@@ -29,7 +31,7 @@ export class Endpoint extends BasePluginEndpoint {
         const data = [];
         const lastCounter = await getLastCounter(this._db);
         for (let index = 1; index < lastCounter.counter; index += 1) {
-            addressList = await getAddressInfo(this._db, index);
+            addressList = await getEventHelloInfo(this._db, index);
             data.push({
                 ID: index,
                 Addresses: addressList

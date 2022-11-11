@@ -11,17 +11,17 @@ export const configSchema = {
         enablePlugin: true,
     },
 };
-export const addressSchema = {
-    $id: '/helloInfo/address',
+export const newHelloEventSchema = {
+    $id: '/helloInfo/new_hello',
     type: 'object',
-    required: ['lskAddress', 'byteAddress'],
+    required: ['senderAddress', 'message'],
     properties: {
-        lskAddress: {
-            dataType: 'string',
+        senderAddress: {
+            dataType: 'bytes',
             fieldNumber: 1,
         },
-        byteAddress: {
-            dataType: 'bytes',
+        message: {
+            dataType: 'string',
             fieldNumber: 2,
         },
     },
@@ -33,6 +33,18 @@ export const counterSchema = {
     required: ['counter'],
     properties: {
         counter: {
+            dataType: 'uint32',
+            fieldNumber: 1,
+        },
+    },
+};
+
+export const heightSchema = {
+    $id: '/helloInfo/height',
+    type: 'object',
+    required: ['height'],
+    properties: {
+        height: {
             dataType: 'uint32',
             fieldNumber: 1,
         },
