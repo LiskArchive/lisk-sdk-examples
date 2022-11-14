@@ -25,10 +25,12 @@ import {
 	setEventHelloInfo,
 	setLastCounter,
 	getLastCounter,
-	setLastEventHeight
+	setLastEventHeight,
+	getLastEventHeight,
+	getEventHelloInfo
 } from './db';
-import { newHelloEventSchema, configSchema } from './schemas';
-import { HelloInfoPluginConfig } from './types';
+import { chainEventSchema, configSchema } from './schemas';
+import { HelloInfoPluginConfig, Event } from './types';
 import { Endpoint } from './endpoint';
 
 export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
@@ -52,11 +54,12 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 			this.endpoint.init(this._addressPluginDB, this.apiClient);
 			const lastCounter = await getLastCounter(this._addressPluginDB);
 			if (lastCounter.counter > 0) {
-				this._fetchHelloEvents();
+				//this._fetchHelloEvents();
 			} else {
 				let newCounter = 0;
 				await setLastCounter(this._addressPluginDB, newCounter);
-				this._fetchHelloEvents();
+				//this._fetchHelloEvents();
+
 			}
 		} else {
 			console.log("");
@@ -72,113 +75,52 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 		this._addressPluginDB.close();
 	}
 
-	private _fetchHelloEvents(): void {
-		// this.apiClient.subscribe(
-		// 	'network_newBlock',
-		// 	async (event) => {
-		// 		if (!event) {
-		// 			this.logger.error('Invalid payload for network_newBlock');
-		// 			return;
-		// 		}
-		// 		let parsedData = event;
-		// 		console.log(parsedData);
-		// 		this._saveAddressesToDB(parsedData);
-		// 	},
-		// )
+	// private _fetchHelloEvents(): void {
+	// 	this.apiClient.invoke("chain_getLastBlock", {
+	// 	}).then(res => {
+	// 		this.height = res['header']['height'];
+	// 		for (let index = 1; index < this.height; index += 1) {
+	// 			this.apiClient.invoke("chain_getEvents", {
+	// 				height: index
+	// 			}).then(result => {
+	// 				if (result[3] !== undefined) {
+	// 					let dataElement = result[3]['data'];
+	// 					const height = result[3]['height'];
+	// 					const parsedData = codec.decode(chainEventSchema, Buffer.from(dataElement, 'hex'));
+	// 					this._saveEventInfoToDB(parsedData, height);
+	// 				}
+	// 			});
+	// 		}
+	// 	});
+	// }
 
+	// private async _saveEventInfoToDB(parsedData: Record<string, unknown>, height: number) {
 
+	// 	const lastEventHeight = await getLastEventHeight(this._addressPluginDB);
+	// 	if (height > lastEventHeight.height) {
 
-		this.apiClient.invoke("chain_getLastBlock", {
-		}).then(res => {
-			this.height = res['header']['height'];
-			//console.log('Height is', this.height);
-			for (let index = 1; index < this.height; index += 1) {
-				//console.log("Before chain_getEvents call", index);
-				this.apiClient.invoke("chain_getEvents", {
-					height: index
-				}).then(result => {
-					//console.log(result[0]['module'])
-					if (result[3] !== undefined) {
-						//console.log(result[3]);
-						let dataElement = result[3]['data'];
-						const height = result[4]['height'];
+	// 		let senderAddress = parsedData['senderAddress'];
+	// 		let message = parsedData['message'];
+	// 		const lastCounter = await getLastCounter(this._addressPluginDB);
+	// 		await setEventHelloInfo(this._addressPluginDB, senderAddress, message.toString(), height, lastCounter.counter += 1);
+	// 		await setLastCounter(this._addressPluginDB, lastCounter.counter);
 
-						const parsedData = codec.decode(newHelloEventSchema, Buffer.from(dataElement, 'hex'));
+	// 	} else if (lastEventHeight.height === height) {
 
-						//console.log(cryptography.address.getLisk32AddressFromAddress(parsedData['senderAddress']));
-						//console.log(parsedData['message']);
-						this._saveAddressesToDB(parsedData, height);
-					}
-				});
-			}
-		});
-	}
+	// 		console.log("***************************");
+	// 		console.log("Please Generate a new Event");
+	// 		console.log("***************************");
 
-	private async _saveAddressesToDB(parsedData: Record<string, unknown>, height: number): Promise<string> {
-		console.log(parsedData);
-		console.log(height)
-		await setLastEventHeight(this._addressPluginDB, height);
-		// let senderAddress = parsedData['senderAddress'];
-		// let message = parsedData['message'];
-		// const lastCounter = await getLastCounter(this._addressPluginDB);
-		// await setEventHelloInfo(this._addressPluginDB, senderAddress, message, lastCounter.counter += 1);
-		// await setLastCounter(this._addressPluginDB, lastCounter.counter);
-		return "Data Saved";
-	}
+	// 	} else {
+
+	// 		await setLastEventHeight(this._addressPluginDB, height);
+	// 		let senderAddress = parsedData['senderAddress'];
+	// 		let message = parsedData['message'];
+	// 		let lastCounter = await getLastCounter(this._addressPluginDB);
+	// 		await setEventHelloInfo(this._addressPluginDB, senderAddress, message.toString(), height, lastCounter.counter += 1);
+	// 		await setLastCounter(this._addressPluginDB, lastCounter.counter);
+
+	// 	}
+	// }
 }
 
-
-
-					//console.log(result[index]);
-					// for (let height = 0; height < this.height; index += 1) {
-					// 	console.log("Value of index is: ", height);
-					// }
-					//if (result[index] === index) {
-					//console.log("Value of INDEX is: ", index);
-					//console.log("Result: ", result[index]);
-					//}
-
-
-					// for (let height = 0; height < array.length; height += 1) {
-
-					// 	console.log("Value of index is: ", index);
-					// 	//if (result[index] === index) {
-					// 	console.log("Value of INDEX is: ", index);
-					// 	console.log("Result: ", result[index]);
-					// 	//}
-					// }
-
-
-
-
-
-					//if (result[index]['module'] === 'hello') {
-					//	console.log("Result: ", result[index]);
-					// let dataElement = result[3]['data'];
-
-					// const decoded = codec.decode(newHelloEventSchema, Buffer.from(dataElement, 'hex'));
-
-					// console.log(cryptography.address.getLisk32AddressFromAddress(decoded['senderAddress']));
-					// console.log(decoded['message']);
-					//	}
-
-
-							// for (let index = 0; index < array.length; index++) {
-		// 	const element = array[index];
-
-		// }
-
-		// this.apiClient.invoke("chain_getEvents", {
-		// 	height: 263
-		// }).then(res => {
-		// 	console.log("Result: ", res[3].data);
-		// 	let dataElement = res[3]['data'];
-
-		// 	const decoded = codec.decode(newHelloEventSchema, Buffer.from(dataElement, 'hex'));
-
-		// 	console.log(cryptography.address.getLisk32AddressFromAddress(decoded['senderAddress']));
-		// 	console.log(decoded['message']);
-		// 	//return decoded;
-		// 	// const newHello = codec.codec.decode(newHelloEventSchema, res[2].data);
-		// 	// console.log("newHello: ", newHello);
-		// });

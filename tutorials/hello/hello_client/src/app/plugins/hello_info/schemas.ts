@@ -11,10 +11,12 @@ export const configSchema = {
         enablePlugin: true,
     },
 };
-export const newHelloEventSchema = {
-    $id: '/helloInfo/new_hello',
+
+
+export const chainEventSchema = {
+    $id: '/helloInfo/new_hello/chainEvent',
     type: 'object',
-    required: ['senderAddress', 'message'],
+    // required: ['senderAddress', 'message'],
     properties: {
         senderAddress: {
             dataType: 'bytes',
@@ -23,6 +25,26 @@ export const newHelloEventSchema = {
         message: {
             dataType: 'string',
             fieldNumber: 2,
+        },
+    },
+};
+
+export const newHelloEventSchema = {
+    $id: '/helloInfo/new_hello',
+    type: 'object',
+    required: ['senderAddress', 'message', 'height'],
+    properties: {
+        senderAddress: {
+            dataType: 'bytes',
+            fieldNumber: 1,
+        },
+        message: {
+            dataType: 'string',
+            fieldNumber: 2,
+        },
+        height: {
+            dataType: 'uint32',
+            fieldNumber: 3,
         },
     },
 };

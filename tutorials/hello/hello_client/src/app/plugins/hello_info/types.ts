@@ -5,6 +5,7 @@ export interface HelloInfoPluginConfig {
 export interface Event {
     senderAddress: Buffer;
     message: string;
+    height: number;
 }
 
 export interface Counter {

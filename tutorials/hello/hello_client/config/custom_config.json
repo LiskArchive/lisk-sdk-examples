@@ -6,13 +6,13 @@
 	},
 	"rpc": {
 		"modes": ["ipc", "ws", "http"],
-		"port": 7887,
+		"port": 7888,
 		"host": "127.0.0.1"
 	},
 	"network": {
 		"version": "1.0",
 		"seedPeers": [],
-		"port": 7667
+		"port": 7668
 	},
 	"transactionPool": {
 		"maxTransactions": 4096,
