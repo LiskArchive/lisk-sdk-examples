@@ -19,18 +19,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable  @typescript-eslint/no-empty-function */
-import { BasePlugin, db as liskDB, PluginInitContext, cryptography, codec } from 'lisk-sdk';
+import { BasePlugin, db as liskDB, PluginInitContext } from 'lisk-sdk';
 import {
 	getDBInstance,
-	setEventHelloInfo,
 	setLastCounter,
 	getLastCounter,
-	setLastEventHeight,
-	getLastEventHeight,
-	getEventHelloInfo
 } from './db';
-import { chainEventSchema, configSchema } from './schemas';
-import { HelloInfoPluginConfig, Event } from './types';
+import { configSchema } from './schemas';
+import { HelloInfoPluginConfig } from './types';
 import { Endpoint } from './endpoint';
 
 export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
@@ -54,12 +50,10 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 			this.endpoint.init(this._addressPluginDB, this.apiClient);
 			const lastCounter = await getLastCounter(this._addressPluginDB);
 			if (lastCounter.counter > 0) {
-				//this._fetchHelloEvents();
+				console.log("Value of Last Counter is: ", lastCounter.counter);
 			} else {
 				let newCounter = 0;
 				await setLastCounter(this._addressPluginDB, newCounter);
-				//this._fetchHelloEvents();
-
 			}
 		} else {
 			console.log("");
@@ -74,53 +68,5 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 		console.log("Program shutdown succesfull.")
 		this._addressPluginDB.close();
 	}
-
-	// private _fetchHelloEvents(): void {
-	// 	this.apiClient.invoke("chain_getLastBlock", {
-	// 	}).then(res => {
-	// 		this.height = res['header']['height'];
-	// 		for (let index = 1; index < this.height; index += 1) {
-	// 			this.apiClient.invoke("chain_getEvents", {
-	// 				height: index
-	// 			}).then(result => {
-	// 				if (result[3] !== undefined) {
-	// 					let dataElement = result[3]['data'];
-	// 					const height = result[3]['height'];
-	// 					const parsedData = codec.decode(chainEventSchema, Buffer.from(dataElement, 'hex'));
-	// 					this._saveEventInfoToDB(parsedData, height);
-	// 				}
-	// 			});
-	// 		}
-	// 	});
-	// }
-
-	// private async _saveEventInfoToDB(parsedData: Record<string, unknown>, height: number) {
-
-	// 	const lastEventHeight = await getLastEventHeight(this._addressPluginDB);
-	// 	if (height > lastEventHeight.height) {
-
-	// 		let senderAddress = parsedData['senderAddress'];
-	// 		let message = parsedData['message'];
-	// 		const lastCounter = await getLastCounter(this._addressPluginDB);
-	// 		await setEventHelloInfo(this._addressPluginDB, senderAddress, message.toString(), height, lastCounter.counter += 1);
-	// 		await setLastCounter(this._addressPluginDB, lastCounter.counter);
-
-	// 	} else if (lastEventHeight.height === height) {
-
-	// 		console.log("***************************");
-	// 		console.log("Please Generate a new Event");
-	// 		console.log("***************************");
-
-	// 	} else {
-
-	// 		await setLastEventHeight(this._addressPluginDB, height);
-	// 		let senderAddress = parsedData['senderAddress'];
-	// 		let message = parsedData['message'];
-	// 		let lastCounter = await getLastCounter(this._addressPluginDB);
-	// 		await setEventHelloInfo(this._addressPluginDB, senderAddress, message.toString(), height, lastCounter.counter += 1);
-	// 		await setLastCounter(this._addressPluginDB, lastCounter.counter);
-
-	// 	}
-	// }
 }
 

@@ -4,7 +4,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-// import * as createDebug from 'debug';
+
 import { codec, db as liskDB } from 'lisk-sdk';
 import * as os from 'os';
 import { join } from 'path';
@@ -13,7 +13,6 @@ import { newHelloEventSchema, counterSchema, heightSchema } from './schemas';
 import { Event, Counter, Height } from './types';
 import { DB_KEY_ADDRESS_INFO, DB_LAST_COUNTER_INFO, DB_LAST_HEIGHT_INFO } from './constants';
 
-// const debug = createDebug('plugin:helloInfo:db');
 const { Database } = liskDB;
 type KVStore = liskDB.Database;
 
@@ -43,7 +42,7 @@ export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _messa
         let dbKey = Buffer.from(lastCounter.toString());
         dbKey = Buffer.concat([dbKey, Buffer.from(':', 'utf8'), DB_KEY_ADDRESS_INFO]);
         await db.set(dbKey, encodedAddressInfo);
-        console.log("************************************** Address saved successfully in the database **************************************");
+        console.log("************************************** Event's Data saved successfully in the database **************************************");
     } catch (error) {
         return (error);
     }

@@ -30,7 +30,6 @@ import { chainEventSchema } from './schemas';
 
 
 export class Endpoint extends BasePluginEndpoint {
-    // public testPlugin = new TestPlugin();
     private _client!: BasePlugin['apiClient'];
     private _db!: liskDB.Database;
 
@@ -45,9 +44,6 @@ export class Endpoint extends BasePluginEndpoint {
         const lastCounter = await getLastCounter(this._db);
         for (let index = 1; index <= lastCounter.counter; index += 1) {
             addressList = await getEventHelloInfo(this._db, index);
-
-            console.log(addressList);
-            // let lskSenderAddress = ;
             data.push({
                 ID: index,
                 Sender_Address: cryptography.address.getLisk32AddressFromAddress(addressList.senderAddress),
@@ -67,8 +63,6 @@ export class Endpoint extends BasePluginEndpoint {
         }
 
     }
-
-
 
     private _fetchHelloEvents(): void {
         this._client.invoke("chain_getLastBlock", {
@@ -92,43 +86,28 @@ export class Endpoint extends BasePluginEndpoint {
     private async _saveEventInfoToDB(parsedData: Record<string, unknown>, height: number) {
 
         const lastEventHeight = await getLastEventHeight(this._db);
-        if (height > lastEventHeight.height) {
 
-            let senderAddress = parsedData['senderAddress'];
-            let message = parsedData['message'];
-            const lastCounter = await getLastCounter(this._db);
-            await setEventHelloInfo(this._db, senderAddress, message.toString(), height, lastCounter.counter += 1);
-            await setLastCounter(this._db, lastCounter.counter);
-
-        } else if (lastEventHeight.height === height) {
-
-            console.log("***************************");
-            console.log("Please Generate a new Event");
-            console.log("***************************");
-
-        } else {
-
+        if (typeof lastEventHeight.height !== typeof height) {
             await setLastEventHeight(this._db, height);
             let senderAddress = parsedData['senderAddress'];
             let message = parsedData['message'];
             let lastCounter = await getLastCounter(this._db);
             await setEventHelloInfo(this._db, senderAddress, message.toString(), height, lastCounter.counter += 1);
             await setLastCounter(this._db, lastCounter.counter);
+        } else if (height > lastEventHeight.height) {
+            let senderAddress = parsedData['senderAddress'];
+            let message = parsedData['message'];
+            const lastCounter = await getLastCounter(this._db);
+            await setEventHelloInfo(this._db, senderAddress, message.toString(), height, lastCounter.counter += 1);
+            await setLastCounter(this._db, lastCounter.counter);
+            await setLastEventHeight(this._db, height);
 
+        } else if (lastEventHeight.height === height) {
+            console.log("");
+            console.log("***************************");
+            console.log("Please Generate a new Event");
+            console.log("***************************");
+            console.log("");
         }
     }
-
 }
-
-
-//console.log(addressList);
-
-//console.log("Hello Endpoint");
-//console.log("Value of Counter is: ", lastCounter.counter);
-//console.log("ID of address is: ", index);
-
-        //const addressList = this.testPlugin._getAddressFromDB(this._db);
-        //await getAddressInfo(this._db);
-            // const encodedAddressInfo = await this._db.get(DB_KEY_ADDRESS_INFO);
-    // console.log(encodedAddressInfo);
-    // return codec.decode<Address>(addressStoreSchema, encodedAddressInfo);
