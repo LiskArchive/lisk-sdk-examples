@@ -1,9 +1,8 @@
 import {
 	BaseCommand,
 	CommandVerifyContext,
-	CommandExecuteContext,
 	VerificationResult,
-	VerifyStatus,
+	CommandExecuteContext,
 } from 'lisk-sdk';
 import { reverseLookupCommandParamsSchema } from '../schemas';
 import { ReverseLookupCommandParams } from '../types';
@@ -11,15 +10,20 @@ import { LNSAccountStore } from '../stores/lnsAccount';
 import { getNodeForName } from '../stores/lnsNode';
 
 export class ReverseLookupCommand extends BaseCommand {
+  // Define schema for command
 	public schema = reverseLookupCommandParamsSchema;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async verify(_context: CommandVerifyContext<ReverseLookupCommandParams>): Promise<VerificationResult> {
-		return { status: VerifyStatus.OK };
+		// Validate your asset
+    return {
+			status: 1,
+		}
 	}
 
 	public async execute(context: CommandExecuteContext<ReverseLookupCommandParams>): Promise<void> {
 		const node = getNodeForName(context.params.name);
+		context.logger.info(context.params.name, node.toString('hex'));
 
     // Get the sender account
 		const lnsAccountSubStore = this.stores.get(LNSAccountStore);

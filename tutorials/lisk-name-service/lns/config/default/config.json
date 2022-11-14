@@ -1,11 +1,11 @@
 {
 	"system": {
-		"dataPath": "~/.lisk/beta-sdk-app",
+		"dataPath": "/Users/reyraa/.lisk/beta-sdk-app",
 		"keepEventsForHeights": 300,
 		"logLevel": "info"
 	},
 	"rpc": {
-		"modes": ["ipc", "ws"],
+		"modes": ["ipc"],
 		"port": 7887,
 		"host": "127.0.0.1"
 	},

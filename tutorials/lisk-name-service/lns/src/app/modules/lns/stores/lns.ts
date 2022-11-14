@@ -1,4 +1,4 @@
-import { BaseStore } from 'lisk-sdk';
+import { BaseStore } from 'lisk-framework';
 import { lnsStoreSchema } from '../schemas';
 import { LNS } from '../types';
 

@@ -1,4 +1,4 @@
-import { BaseStore, ImmutableStoreGetter, StoreGetter } from 'lisk-sdk';
+import { BaseStore, ImmutableStoreGetter, StoreGetter } from 'lisk-framework';
 // import { codec } from '@liskhq/lisk-codec';
 import * as namehash from 'eth-ens-namehash';
 import { LNS_PREFIX } from "../constants";

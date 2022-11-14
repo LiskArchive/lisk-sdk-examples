@@ -1,7 +1,7 @@
 {
 	"name": "lisk-name-service",
 	"version": "0.1.0",
-	"description": "Lisk name service",
+	"description": "Lisk-SDK Application",
 	"author": "reyraa",
 	"license": "ISC",
 	"keywords": [
@@ -75,7 +75,7 @@
 			"hash-onion": {
 				"description": "Create hash onions to be used by the forger."
 			},
-			"node": {
+			"system": {
 				"description": "Commands relating to lisk-name-service node."
 			},
 			"passphrase": {
@@ -106,24 +106,22 @@
 		}
 	},
 	"dependencies": {
-		"@liskhq/lisk-codec": "^0.3.0-alpha.3",
-		"@liskhq/lisk-cryptography": "^4.0.0-alpha.3",
-		"@liskhq/lisk-db": "^0.3.0-debug.20-b876469836935925369a887fe03e50a67c26c38f",
-		"@liskhq/lisk-framework-dashboard-plugin": "^0.2.0-alpha.4",
-		"@liskhq/lisk-framework-faucet-plugin": "^0.2.0-alpha.4",
-		"@liskhq/lisk-framework-forger-plugin": "^0.3.0-alpha.4",
-		"@liskhq/lisk-framework-monitor-plugin": "^0.3.0-alpha.4",
-		"@liskhq/lisk-framework-report-misbehavior-plugin": "^0.3.0-alpha.4",
-		"@oclif/command": "1.8.0",
-		"@oclif/plugin-autocomplete": "0.3.0",
-		"@oclif/plugin-help": "3.2.2",
-		"axios": "^0.21.2",
+		"@liskhq/lisk-framework-dashboard-plugin": "0.2.0-alpha.5",
+		"@liskhq/lisk-framework-faucet-plugin": "0.2.0-alpha.5",
+		"@liskhq/lisk-framework-forger-plugin": "0.3.0-alpha.5",
+		"@liskhq/lisk-framework-monitor-plugin": "0.3.0-alpha.5",
+		"@liskhq/lisk-framework-report-misbehavior-plugin": "0.3.0-alpha.5",
+		"@oclif/core": "1.16.1",
+		"@oclif/plugin-autocomplete": "1.3.0",
+		"@oclif/plugin-help": "5.1.12",
+		"@oclif/plugin-version": "1.1.2",
+		"axios": "0.21.2",
 		"date-fns": "^2.29.3",
 		"eth-ens-namehash": "^2.0.8",
 		"fs-extra": "9.1.0",
 		"inquirer": "8.0.0",
-		"lisk-commander": "6.0.0-alpha.4",
-		"lisk-sdk": "6.0.0-alpha.4",
+		"lisk-commander": "6.0.0-alpha.5",
+		"lisk-sdk": "6.0.0-alpha.5",
 		"tar": "6.1.11",
 		"tslib": "1.14.1"
 	},

@@ -1,6 +1,6 @@
-export const LNS_PREFIX = 'LNS';
 export const MIN_TTL_VALUE = 60 * 60; // 1 hour
 export const VALID_TLDS = ['lsk'];
+export const LNS_PREFIX = 'LNS';
 export const EMPTY_BUFFER = Buffer.alloc(0);
 export const CNAME_RECORD_TYPE = 1;
 export const TXT_RECORD_TYPE = 2;
