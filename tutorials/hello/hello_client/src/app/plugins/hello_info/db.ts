@@ -16,6 +16,7 @@ import { DB_KEY_ADDRESS_INFO, DB_LAST_COUNTER_INFO, DB_LAST_HEIGHT_INFO } from '
 const { Database } = liskDB;
 type KVStore = liskDB.Database;
 
+// Returns DB's instance.
 export const getDBInstance = async (
     dataPath: string,
     dbName = 'lisk-framework-helloInfo-plugin.db',
@@ -25,6 +26,7 @@ export const getDBInstance = async (
     return new Database(dirPath);
 };
 
+// Returns event's data stored in the database.
 export const getEventHelloInfo = async (db: KVStore, lastCounter: number): Promise<Event> => {
     try {
         let dbKey = Buffer.from(lastCounter.toString());
@@ -36,6 +38,7 @@ export const getEventHelloInfo = async (db: KVStore, lastCounter: number): Promi
     }
 };
 
+// Stores event's data in the database.
 export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number): Promise<Event> => {
     try {
         const encodedAddressInfo = codec.encode(newHelloEventSchema, { senderAddress: _lskAddress, message: _message, height: _eventHeight });
@@ -48,6 +51,7 @@ export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _messa
     }
 };
 
+// Stores lastCounter for key generation.
 export const setLastCounter = async (db: KVStore, lastCounter: number) => {
     try {
         const encodedCounterInfo = codec.encode(counterSchema, { counter: lastCounter });
@@ -58,6 +62,7 @@ export const setLastCounter = async (db: KVStore, lastCounter: number) => {
     }
 }
 
+// Returns lastCounter.
 export const getLastCounter = async (db: KVStore): Promise<Counter> => {
     try {
         const encodedCounterInfo = await db.get(DB_LAST_COUNTER_INFO);
@@ -67,7 +72,7 @@ export const getLastCounter = async (db: KVStore): Promise<Counter> => {
     }
 }
 
-
+// Stores height of block where hello event exists.
 export const setLastEventHeight = async (db: KVStore, lastHeight: number) => {
     try {
         const encodedHeightInfo = codec.encode(heightSchema, { height: lastHeight });
@@ -78,6 +83,7 @@ export const setLastEventHeight = async (db: KVStore, lastHeight: number) => {
     }
 }
 
+// Returns height of block where hello event exists.
 export const getLastEventHeight = async (db: KVStore): Promise<Height> => {
     try {
         const encodedHeightInfo = await db.get(DB_LAST_HEIGHT_INFO);

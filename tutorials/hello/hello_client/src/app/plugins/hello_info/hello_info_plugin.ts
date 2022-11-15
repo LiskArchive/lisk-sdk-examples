@@ -44,6 +44,7 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 		await super.init(context);
 	}
 
+	// loads DB instances and initiates counter for first run.
 	public async load(): Promise<void> {
 		if (this.config.enablePlugin) {
 			this._addressPluginDB = await getDBInstance(this.dataPath);
@@ -58,12 +59,12 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 		} else {
 			console.log("");
 			console.log("*******************************************************************");
-			console.log("Hello Plugin is disabled, please enable it in the config.json file.");
+			console.log("HelloInfo Plugin is disabled, please enable it in the config.json file.");
 			console.log("*******************************************************************");
 			console.log("");
 		}
 	}
-
+	// Unloads DB instance.
 	public async unload(): Promise<void> {
 		console.log("Program shutdown succesfull.")
 		this._addressPluginDB.close();

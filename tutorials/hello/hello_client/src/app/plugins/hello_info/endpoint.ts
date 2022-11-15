@@ -38,6 +38,7 @@ export class Endpoint extends BasePluginEndpoint {
         this._client = apiClient;
     }
 
+    // Returns all Sender Addresses, Hello Messages and Block Height of the block where the Hello Event was emitted.
     public async getAddressList(_context: PluginEndpointContext): Promise<any[]> {
         let addressList: any;
         const data = [];
@@ -54,6 +55,7 @@ export class Endpoint extends BasePluginEndpoint {
         return data;
     }
 
+    // Syncs on-chain event's data with plugin's database.
     public async syncChainEvents() {
         try {
             await this._fetchHelloEvents();
@@ -64,6 +66,7 @@ export class Endpoint extends BasePluginEndpoint {
 
     }
 
+    // Fetches all events emitted on chain and searches for hello events.
     private _fetchHelloEvents(): void {
         this._client.invoke("chain_getLastBlock", {
         }).then(res => {
@@ -83,6 +86,7 @@ export class Endpoint extends BasePluginEndpoint {
         });
     }
 
+    // Saves newly generated hello events to the database.
     private async _saveEventInfoToDB(parsedData: Record<string, unknown>, height: number) {
 
         const lastEventHeight = await getLastEventHeight(this._db);
