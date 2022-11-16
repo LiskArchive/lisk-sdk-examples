@@ -1,9 +1,9 @@
-import { BaseMethod } from 'lisk-sdk';
+import { BaseMethod, ImmutableMethodContext } from 'lisk-sdk';
 import { MessageStore, MessageStoreData } from './stores/message';
 
 export class HelloMethod extends BaseMethod {
 	public async getHello(
-		methodContext,
+		methodContext: ImmutableMethodContext,
 		address: Buffer,
 	): Promise<MessageStoreData> {
 		const messageSubStore = this.stores.get(MessageStore);
