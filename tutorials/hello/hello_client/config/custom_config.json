@@ -2,7 +2,7 @@
 	"system": {
 		"dataPath": "/Users/mona/.lisk/beta-sdk-app",
 		"keepEventsForHeights": 300,
-		"logLevel": "info"
+		"logLevel": "debug"
 	},
 	"rpc": {
 		"modes": ["ipc", "ws", "http"],
