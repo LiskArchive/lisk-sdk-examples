@@ -17,37 +17,18 @@ export const createHelloSchema = {
 	},
 };
 
-export const newHelloEventSchema = {
-	$id: '/hello/events/new_hello',
-	type: 'object',
-	required: ['senderAddress', 'message'],
-	properties: {
-		senderAddress: {
-			dataType: 'bytes',
-			fieldNumber: 1,
-		},
-		message: {
-			dataType: 'string',
-			fieldNumber: 2,
-		},
-	},
-};
-
 export const configSchema = {
 	$id: '/hello/config',
 	type: 'object',
 	properties: {
 		maxMessageLength: {
-			dataType: 'uint32',
-			fieldNumber: 1,
+			type: 'uint32',
 		},
 		minMessageLength: {
-			dataType: 'uint32',
-			fieldNumber: 2,
+			type: 'uint32',
 		},
 		blacklist: {
 			type: 'array',
-			fieldNumber: 3,
 			items: {
 				dataType: 'string',
 				minLength: 1,
