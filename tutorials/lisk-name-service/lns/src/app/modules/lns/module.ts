@@ -2,7 +2,7 @@
 import {
 	BaseModule, BlockVerifyContext, InsertAssetContext, ModuleInitArgs,
 	ModuleMetadata,
-	// TransactionVerifyContext, VerificationResult,
+	TransactionVerifyContext, VerificationResult,
 	// TransactionExecuteContext, BlockAfterExecuteContext, BlockExecuteContext, GenesisBlockExecuteContext
 } from 'lisk-sdk';
 import { RegisterCommand } from "./commands/register_command";
@@ -13,7 +13,7 @@ import { LnsMethod } from './method';
 import { LNSAccountStore } from './stores/lnsAccount';
 import { LNSNodeStore } from './stores/lnsNode';
 import {
-lnsNodeJSONSchema,
+lnsNodeStoreSchema,
 lookupAddressParamsSchema,
 resolveNameParamsSchema,
 resolveNodeParamsSchema,
@@ -42,17 +42,17 @@ export class LnsModule extends BaseModule {
 				{
 					name: 'lookupAddress',
 					request: lookupAddressParamsSchema,
-					response: lnsNodeJSONSchema,
+					response: lnsNodeStoreSchema,
 				},
 				{
 					name: 'resolveName',
 					request: resolveNameParamsSchema,
-					response: lnsNodeJSONSchema,
+					response: lnsNodeStoreSchema,
 				},
 				{
 					name: 'resolveNode',
 					request: resolveNodeParamsSchema,
-					response: lnsNodeJSONSchema,
+					response: lnsNodeStoreSchema,
 				}
 			],
 			commands: this.commands.map(command => ({
@@ -81,14 +81,12 @@ export class LnsModule extends BaseModule {
 	}
 
     // Lifecycle hooks
-	// public async verifyTransaction(context: TransactionVerifyContext): Promise<VerificationResult> {
-	// 	// verify transaction will be called multiple times in the transaction pool
-	// 	context.logger.info('verify transaction', JSON.stringify(context.transaction));
-
-	// 	return {
-	// 		status: 1,
-	// 	};
-	// }
+	public async verifyTransaction(context: TransactionVerifyContext): Promise<VerificationResult> {
+		// verify transaction will be called multiple times in the transaction pool
+		return {
+			status: 1,
+		};
+	}
 
 	// public async beforeCommandExecute(_context: TransactionExecuteContext): Promise<void> {}
 

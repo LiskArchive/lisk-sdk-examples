@@ -4,6 +4,7 @@ import {
 	VerificationResult,
 	CommandExecuteContext,
 } from 'lisk-sdk';
+import { VerifyStatus } from 'lisk-framework';
 import { addYears } from 'date-fns';
 import { RegisterCommandParams } from '../types';
 import { registerCommandParamsSchema } from '../schemas';
@@ -19,21 +20,21 @@ export class RegisterCommand extends BaseCommand {
 	public async verify(context: CommandVerifyContext<RegisterCommandParams>): Promise<VerificationResult> {
 		if (context.params.ttl < MIN_TTL_VALUE) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error(`Must set TTL value larger or equal to ${MIN_TTL_VALUE}`)
 			}
 		}
 
 		if (context.params.registerFor < 1) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error('You can register name at least for 1 year.')
 			}
 		}
 
 		if (context.params.registerFor > 5) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error('You can register name maximum for 5 year.')
 			}
 		}
@@ -42,31 +43,29 @@ export class RegisterCommand extends BaseCommand {
 
 		if (chunks.length > 2) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error('You can only register second level domain name.')
 			}
 		}
 
 		if (!VALID_TLDS.includes(chunks[1])) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error(`Invalid TLD found "${chunks[1]}". Valid TLDs are "${VALID_TLDS.join()}"`)
 			}
 		}
 		return {
-			status: 1,
+			status: VerifyStatus.OK,
 		}
 	}
 
 	public async execute(context: CommandExecuteContext<RegisterCommandParams>): Promise <void> {
 		// Get namehash output of the domain name
 		const node = getNodeForName(context.params.name);
-		context.logger.info(' => REGISTER: node', node.toString('hex'));
 
 		// Check if this domain is already registered on the blockchain
 		const lnsNodeSubStore = this.stores.get(LNSNodeStore);
 		const domainExists = await lnsNodeSubStore.has(context, node);
-		context.logger.info(' => REGISTER: exists', JSON.stringify(domainExists));
 		if (domainExists) {
 				throw new Error(`The name "${context.params.name}" already registered`);
 		}
@@ -79,19 +78,17 @@ export class RegisterCommand extends BaseCommand {
 				ownerAddress: context.transaction.senderAddress,
 				records: [],
 		};
+
+		// Store the LNS object on the blockchain
 		await lnsNodeSubStore.createLNSObject(context, lnsObject);
 
-		context.logger.info(' ======> REGISTER: TX sender ',  context.transaction.senderAddress.toString('hex'));
-		// Get the sender account
+		// Store the Account object on the blockchain
 		const lnsAccountSubStore = this.stores.get(LNSAccountStore);
-		let sender;
-		try {
-			sender = await lnsAccountSubStore.get(context, context.transaction.senderAddress);
+		const lnsAccountExist = await lnsAccountSubStore.has(context, context.transaction.senderAddress);
+		if (lnsAccountExist) {
+			const sender = await lnsAccountSubStore.get(context, context.transaction.senderAddress);
 			sender.lns.ownNodes = [...sender.lns.ownNodes, node];
-			await lnsAccountSubStore.set(context, context.transaction.senderAddress, sender);
-		} catch (e) {
-			context.logger.info(' ======> REGISTER: User did not exist ');
-
+		} else {
 			await lnsAccountSubStore.set(context, context.transaction.senderAddress, {
 				lns: {
 					ownNodes: [node],

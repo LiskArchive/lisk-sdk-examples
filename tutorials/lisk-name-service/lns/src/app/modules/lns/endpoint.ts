@@ -27,14 +27,10 @@ export class LnsEndpoint extends BaseEndpoint {
 		}
 
     cryptoAddress.validateLisk32Address(address);
-    ctx.logger.info('=> 1Address: ', address);
-    const results = await accountSubStore.has(ctx, cryptoAddress.getAddressFromLisk32Address(address));
-    ctx.logger.info('=> Iterated <= ', JSON.stringify(results));
 		const accountData: LNSAccount = await accountSubStore.get(
 			ctx,
 			cryptoAddress.getAddressFromLisk32Address(address),
 		);
-    ctx.logger.info('=> 2Address: ');
 
     if (accountData.lns.reverseLookup === EMPTY_BUFFER) {
       throw new Error(`Account "${address.toString()}" is not associated with any LNS object.`);
@@ -49,7 +45,9 @@ export class LnsEndpoint extends BaseEndpoint {
       throw new Error(`Problem looking up node "${accountData.lns.reverseLookup.toString()}"`);
     }
 
-    const lnsNode = codec.decode<LNSNodeJSON>(lnsNodeStoreSchema, Buffer.from(lnsNodeData));
+
+    const lnsNode: LNSNodeJSON = codec.toJSON(lnsNodeStoreSchema, lnsNodeData);
+    // const lnsNode = codec.decode<LNSNodeJSON>(lnsNodeStoreSchema, Buffer.from(lnsNodeData));
     if (isExpired(lnsNode)) {
       throw new Error(`Account "${address.toString()}" is associated to an expired LNS object.`);
     }
@@ -59,39 +57,25 @@ export class LnsEndpoint extends BaseEndpoint {
 
   public async resolveName(ctx: ModuleEndpointContext): Promise<LNSNodeJSON> {
     const lnsNodeSubStore = this.stores.get(LNSNodeStore);
-    // const accountSubStore = this.stores.get(LNSAccountStore);
-    ctx.logger.info('ENDPOINT: resolveName');
 
     const { name } = ctx.params;
-    ctx.logger.info('=> Name: ', name as string);
 
     if (typeof name !== 'string') {
 			throw new Error('Parameter name must be a string1.');
 		}
 
-    // const results = await accountSubStore.iterate(ctx, {});
-
-    ctx.logger.info('=> Iterated <= ');
-
     const node = getNodeForName(name);
-    ctx.logger.info('=> Node: ', node.toString('hex'));
-
-    const domainExists = await lnsNodeSubStore.has(ctx, node);
-    ctx.logger.info('=> domainExists: ', JSON.stringify(domainExists));
 
     const nodeData: LNSNode = await lnsNodeSubStore.get(
 			ctx,
 			node,
 		)
 
-    ctx.logger.info('-> name: ', nodeData.ownerAddress.toString('hex'));
-
-    const lnsNode = codec.decode<LNSNodeJSON>(lnsNodeStoreSchema, Buffer.from(nodeData));
-
+    const lnsNode: LNSNodeJSON = codec.toJSON(lnsNodeStoreSchema, nodeData);
     if (isExpired(lnsNode)) {
       throw new Error(`Name "${name}" is associated to an expired LNS object.`);
     }
-
+    
     return lnsNode;
   }
 
@@ -112,7 +96,7 @@ export class LnsEndpoint extends BaseEndpoint {
       throw new Error(`Node "${node.toString('hex')}" could not resolve.`);
     }
 
-    const lnsNode = codec.decode<LNSNodeJSON>(lnsNodeStoreSchema, Buffer.from(nodeData));
+    const lnsNode: LNSNodeJSON = codec.toJSON(lnsNodeStoreSchema, nodeData);
 
     if (isExpired(lnsNode)) {
       throw new Error(`Node "${node.toString('hex')}" is associated to an expired LNS object.`);

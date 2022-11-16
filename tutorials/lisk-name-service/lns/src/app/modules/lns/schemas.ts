@@ -1,6 +1,7 @@
-import { EMPTY_BUFFER } from "./constants";
-
-export const lnsStoreSchema = {
+/**
+ * Stores schemas
+ */
+export const lnsRecordStoreSchema = {
 	$id: 'lns/lns',
 	type: 'object',
 	required: ['type', 'label', 'value'],
@@ -20,11 +21,79 @@ export const lnsStoreSchema = {
 	},
 };
 
-export const updateRecordsCommandParamsSchema = {
+export const lsnAccountStoreSchema = {
+	$id: 'lns/lnsAccount',
+	type: 'object',
+	required: ['lns'],
+	properties: {
+		lns: {
+			type: 'object',
+			required: ['ownNodes', 'reverseLookup'],
+			fieldNumber: 1,
+			properties: {
+				reverseLookup: {
+					dataType: 'bytes',
+					fieldNumber: 1,
+				},
+				ownNodes: {
+					type: 'array',
+					fieldNumber: 2,
+					items: {
+						dataType: 'bytes',
+					},
+				},
+			},
+		},
+	},
+};
+
+export const lnsNodeStoreSchema = {
+	$id: 'lns/lnsNode',
+	type: 'object',
+	required: ['ownerAddress', 'name', 'ttl', 'expiry', 'records', 'createdAt', 'updatedAt'],
+	properties: {
+		ownerAddress: {
+			dataType: 'bytes',
+			fieldNumber: 1,
+		},
+		name: {
+			dataType: 'string',
+			fieldNumber: 2,
+		},
+		ttl: {
+			dataType: 'uint32',
+			fieldNumber: 3,
+		},
+		expiry: {
+			dataType: 'uint32',
+			fieldNumber: 4,
+		},
+		createdAt: {
+			dataType: 'uint32',
+			fieldNumber: 5,
+		},
+		updatedAt: {
+			dataType: 'uint32',
+			fieldNumber: 6,
+		},
+		records: {
+			type: 'array',
+			fieldNumber: 7,
+			items: {
+				...lnsRecordStoreSchema,
+			},
+		},
+	},
+};
+
+/**
+ * Command params schemas
+ */
+ export const updateRecordsCommandParamsSchema = {
   $id: 'lns/command/update-records',
   title: 'UpdateRecordsCommand transaction asset for lns module',
   type: 'object',
-  required: ['records'],
+  required: ['name', 'records'],
   properties: {
     name: {
       dataType: 'string',
@@ -34,7 +103,7 @@ export const updateRecordsCommandParamsSchema = {
       type: 'array',
       fieldNumber: 2,
       items: {
-				...lnsStoreSchema,
+				...lnsRecordStoreSchema,
 			},
     }
   },
@@ -74,107 +143,9 @@ export const registerCommandParamsSchema = {
   },
 }
 
-export const lsnAccountStoreSchema = {
-	$id: 'lns/lnsAccount',
-	type: 'object',
-	required: ['ownNodes', 'reverseLookup'],
-	properties: {
-		reverseLookup: {
-			dataType: 'bytes',
-			fieldNumber: 1,
-		},
-		ownNodes: {
-			type: 'array',
-			fieldNumber: 2,
-			items: {
-				dataType: 'bytes',
-			},
-		},
-	},
-	default: {
-    reverseLookup: EMPTY_BUFFER,
-		ownNodes: [],
-	},
-};
-
-export const lnsNodeStoreSchema = {
-	$id: 'lns/lnsNode',
-	type: 'object',
-	required: ['ownerAddress', 'name', 'ttl', 'expiry', 'records', 'createdAt', 'updatedAt'],
-	properties: {
-		ownerAddress: {
-			dataType: 'bytes',
-			fieldNumber: 1,
-		},
-		name: {
-			dataType: 'string',
-			fieldNumber: 2,
-		},
-		ttl: {
-			dataType: 'uint32',
-			fieldNumber: 3,
-		},
-		expiry: {
-			dataType: 'uint32',
-			fieldNumber: 4,
-		},
-		createdAt: {
-			dataType: 'uint32',
-			fieldNumber: 5,
-		},
-		updatedAt: {
-			dataType: 'uint32',
-			fieldNumber: 6,
-		},
-		records: {
-			type: 'array',
-			fieldNumber: 7,
-			items: {
-				...lnsStoreSchema,
-			},
-		},
-	},
-};
-
-export const lnsNodeJSONSchema = {
-	$id: 'lns/lnsNode',
-	type: 'object',
-	required: ['ownerAddress', 'name', 'ttl', 'expiry', 'records', 'createdAt', 'updatedAt'],
-	properties: {
-		ownerAddress: {
-			dataType: 'string',
-			fieldNumber: 1,
-		},
-		name: {
-			dataType: 'string',
-			fieldNumber: 2,
-		},
-		ttl: {
-			dataType: 'uint32',
-			fieldNumber: 3,
-		},
-		expiry: {
-			dataType: 'uint32',
-			fieldNumber: 4,
-		},
-		createdAt: {
-			dataType: 'uint32',
-			fieldNumber: 5,
-		},
-		updatedAt: {
-			dataType: 'uint32',
-			fieldNumber: 6,
-		},
-		records: {
-			type: 'array',
-			fieldNumber: 7,
-			items: {
-				...lnsStoreSchema,
-			},
-		},
-	},
-};
-
+/**
+ * Methods and endpoints schemas
+ */
 export const lookupAddressParamsSchema = {
 	$id: 'lns/endpoint/lookupAddress',
 	type: 'object',
@@ -211,6 +182,9 @@ export const resolveNodeParamsSchema = {
 	},
 };
 
+/**
+ * Events schemas
+ */
 export const registerLnsEventSchema = {
 	$id: 'lns/events/register',
 	type: 'object',

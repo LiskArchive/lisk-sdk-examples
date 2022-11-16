@@ -4,6 +4,7 @@ import {
 	VerificationResult,
 	CommandExecuteContext,
 } from 'lisk-sdk';
+import { VerifyStatus } from 'lisk-framework';
 import { UpdateRecordsCommandParams } from '../types';
 import { updateRecordsCommandParamsSchema } from '../schemas';
 import {
@@ -30,7 +31,7 @@ export class UpdateRecordsCommand extends BaseCommand {
 		const { params } = context;
 		if (params.records.length > MAX_RECORDS) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error(`Can associate maximum ${MAX_RECORDS} records. Got ${params.records.length}.`),
 			}
 		}
@@ -38,7 +39,7 @@ export class UpdateRecordsCommand extends BaseCommand {
 		const recordKeys = new Set(params.records.map(r => `${r.type.toString()}:${r.label}`));
 		if (recordKeys.size !== params.records.length) {
 			return {
-				status: -1,
+				status: VerifyStatus.FAIL,
 				error: new Error('Records should be unique among type and label'),
 			}
 		}
@@ -46,7 +47,7 @@ export class UpdateRecordsCommand extends BaseCommand {
 		for (const record of params.records) {
 			if (!VALID_RECORD_TYPES.includes(record.type)) {
 				return {
-					status: -1,
+					status: VerifyStatus.FAIL,
 					error: new Error(
 						`Invalid record type "${record.type}". Valid record types are ${VALID_RECORD_TYPES.join()}`,
 					),
@@ -58,7 +59,7 @@ export class UpdateRecordsCommand extends BaseCommand {
 				record.label.length < MIN_RECORD_LABEL_LENGTH
 			) {
 				return {
-					status: -1,
+					status: VerifyStatus.FAIL,
 					error: new Error(
 						`Record label can be between ${MIN_RECORD_LABEL_LENGTH}-${MAX_RECORD_LABEL_LENGTH}.`,
 					),
@@ -70,7 +71,7 @@ export class UpdateRecordsCommand extends BaseCommand {
 				record.value.length < MIN_RECORD_VALUE_LENGTH
 			) {
 				return {
-					status: -1,
+					status: VerifyStatus.FAIL,
 					error: new Error(
 						`Record value can be between ${MIN_RECORD_VALUE_LENGTH}-${MAX_RECORD_VALUE_LENGTH}.`,
 					),
@@ -79,15 +80,12 @@ export class UpdateRecordsCommand extends BaseCommand {
 		}
 
 		return {
-			status: 1,
+			status: VerifyStatus.OK,
 		}
 	}
 
 	public async execute(context: CommandExecuteContext<UpdateRecordsCommandParams>): Promise <void> {
 		const { params, transaction } = context;
-		// Get the sender account
-		// const lnsAccountSubStore = this.stores.get(LNSAccountStore);
-		// const sender = await lnsAccountSubStore.get(context, transaction.senderAddress);
 	
 		const node = getNodeForName(params.name);
 		const lnsNodeSubStore = this.stores.get(LNSNodeStore);
@@ -97,7 +95,6 @@ export class UpdateRecordsCommand extends BaseCommand {
 			throw new Error(`LNS object with name "${params.name}" is not registered`);
 		}
 
-		// @todo change transaction.senderAddress to sender.address
 		if (!lnsObject.ownerAddress.equals(transaction.senderAddress)) {
 			throw new Error('Only owner of hte LNS object can update records.');
 		}
