@@ -22,10 +22,10 @@ export const configSchema = {
 	type: 'object',
 	properties: {
 		maxMessageLength: {
-			type: 'uint32',
+			type: 'integer',
 		},
 		minMessageLength: {
-			type: 'uint32',
+			type: 'integer',
 		},
 		blacklist: {
 			type: 'array',

@@ -61,7 +61,7 @@ export class HelloModule extends BaseModule {
 		// Overwrite the default module config with values from config.json, if set
 		const config = utils.objects.mergeDeep({}, defaultConfig, moduleConfig) as ModuleConfigJSON;
 		// Validate the provided config with the config schema
-		validator.validate<ModuleConfig>(configSchema, config);
+		validator.validate<ModuleConfigJSON>(configSchema, config);
 		// Call the command init() method with config values as parameters
 		this.commands[0].init(config).catch(err => {
 			console.log("Error: ", err);
