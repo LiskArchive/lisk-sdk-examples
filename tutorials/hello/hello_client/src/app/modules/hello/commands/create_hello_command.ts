@@ -28,19 +28,16 @@ export class CreateHelloCommand extends BaseCommand {
 		this.schema.properties.message.maxLength = config.maxMessageLength;
 		// Set the min message length to the value defined in the module config
 		this.schema.properties.message.minLength = config.minMessageLength;
-		console.log("this.schema: ", this.schema);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async verify(context: CommandVerifyContext<Params>): Promise<VerificationResult> {
 		let validation: VerificationResult;
-		context.logger.info("HELLO TX VERIFICATION");
+		context.logger.info("==== HELLO TX VERIFICATION ====");
 		const wordList = context.params.message.split(" ");
-		context.logger.info(wordList,"wordList");
-		context.logger.info(this._blacklist,"this._blacklist");
 		const found = this._blacklist.filter(value => wordList.includes(value));
 		if (found.length > 0) {
-		  context.logger.info("======FOUND============");
+		  context.logger.info("==== FOUND: Message contains a blacklisted word ====");
 			validation = {
 				status: VerifyStatus.FAIL,
 				error: new Error(
@@ -48,13 +45,13 @@ export class CreateHelloCommand extends BaseCommand {
 				)
 			};
 		} else {
-		  context.logger.info("======NOT FOUND============");
+		  context.logger.info("==== NOT FOUND: Message contains no blacklisted words ====");
 			validation = {
 				status: VerifyStatus.OK
 			};
 		}
-		context.logger.info("==================");
 		context.logger.info(validation,"validation");
+		context.logger.info("==================");
 		return validation;
 	}
 
@@ -62,9 +59,7 @@ export class CreateHelloCommand extends BaseCommand {
 		// 1. Get account data of the sender of the Hello transaction.
 		const {senderAddress} = context.transaction;
 		// 2. Get message and counter stores.
-		context.logger.info("====== this.stores.get(MessageStore) ======");
 		const messageSubstore = this.stores.get(MessageStore);
-		context.logger.info("====== this.stores.get(CounterStore) ======");
 		const counterSubstore = this.stores.get(CounterStore);
 
 		// 3. Save the Hello message to the message store, using the senderAddress as key, and the message as value.
@@ -74,21 +69,16 @@ export class CreateHelloCommand extends BaseCommand {
 
 		// 3. Get the Hello counter from the counter store.
 		const helloBuffer = Buffer.from('hello','utf8');
-		context.logger.info(helloBuffer,"====== counterSubstore.get(context, helloBuffer) ======");
 		let helloCounter: CounterStoreData;
 		try {
 			helloCounter = await counterSubstore.get(context, helloBuffer);
 		} catch (error) {
-			context.logger.info(error,"====== ERROR ======");
 			helloCounter = {
 				counter: 0,
 			}
 		}
 		// 5. Increment the Hello counter +1.
 		helloCounter.counter+=1;
-		context.logger.info("====== helloCounter ======");
-		context.logger.info(helloCounter);
-		context.logger.info("====== helloCounter ======");
 
 		// 6. Save the Hello counter to the counter store.
 		await counterSubstore.set(context, helloBuffer, helloCounter);
