@@ -16,7 +16,7 @@ export const configSchema = {
 export const chainEventSchema = {
     $id: '/helloInfo/new_hello/chainEvent',
     type: 'object',
-    // required: ['senderAddress', 'message'],
+    required: ['senderAddress', 'message'],
     properties: {
         senderAddress: {
             dataType: 'bytes',

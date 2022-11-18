@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { codec, db as liskDB } from 'lisk-sdk';
+import { codec, db as liskDB, cryptography } from 'lisk-sdk';
 import * as os from 'os';
 import { join } from 'path';
 import { ensureDir } from 'fs-extra';
@@ -29,7 +29,7 @@ export const getDBInstance = async (
 // Returns event's data stored in the database.
 export const getEventHelloInfo = async (db: KVStore, lastCounter: number): Promise<Event> => {
     try {
-        let dbKey = Buffer.from(lastCounter.toString());
+        let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
         dbKey = Buffer.concat([dbKey, Buffer.from(':', 'utf8'), DB_KEY_ADDRESS_INFO]);
         const encodedAddressInfo = await db.get(dbKey);
         return codec.decode<Event>(newHelloEventSchema, encodedAddressInfo);
@@ -42,7 +42,7 @@ export const getEventHelloInfo = async (db: KVStore, lastCounter: number): Promi
 export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number): Promise<Event> => {
     try {
         const encodedAddressInfo = codec.encode(newHelloEventSchema, { senderAddress: _lskAddress, message: _message, height: _eventHeight });
-        let dbKey = Buffer.from(lastCounter.toString());
+        let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
         dbKey = Buffer.concat([dbKey, Buffer.from(':', 'utf8'), DB_KEY_ADDRESS_INFO]);
         await db.set(dbKey, encodedAddressInfo);
         console.log("************************************** Event's Data saved successfully in the database **************************************");
