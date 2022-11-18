@@ -1,24 +1,5 @@
-/* eslint-disable prefer-destructuring */
-/* eslint-disable no-loop-func */
-/* eslint-disable @typescript-eslint/prefer-for-of */
-/* eslint-disable for-direction */
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable consistent-return */
-/* eslint-disable no-useless-return */
-/* eslint-disable import/namespace */
-/* eslint-disable @typescript-eslint/prefer-readonly */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable dot-notation */
-/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable spaced-comment */
-/* eslint-disable prefer-const */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable  @typescript-eslint/no-empty-function */
+
 import { BasePlugin, db as liskDB, PluginInitContext } from 'lisk-sdk';
 import {
 	getDBInstance,
@@ -53,19 +34,20 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 			if (lastCounter.counter > 0) {
 				console.log("Value of Last Counter is: ", lastCounter.counter);
 			} else {
-				let newCounter = 0;
+				const newCounter = 0;
 				await setLastCounter(this._addressPluginDB, newCounter);
 			}
 		} else {
 			console.log("");
-			console.log("*******************************************************************");
+			console.log("************************************************************************");
 			console.log("HelloInfo Plugin is disabled, please enable it in the config.json file.");
-			console.log("*******************************************************************");
+			console.log("************************************************************************");
 			console.log("");
 		}
 	}
-	// Unloads DB instance.
-	public async unload(): Promise<void> {
+
+	// eslint-disable-next-line @typescript-eslint/require-await
+	public async unload(): Promise<void> { 	// Unloads DB instance.
 		console.log("Program shutdown succesfull.")
 		this._addressPluginDB.close();
 	}
