@@ -36,8 +36,4 @@ export interface NewHelloEventData {
 
 export class NewHelloEvent extends BaseEvent<NewHelloEventData> {
 	public schema = newHelloEventSchema;
-
-	public log(ctx: EventQueuer, data: NewHelloEventData): void {
-		this.add(ctx, data, [data.senderAddress]);
-	}
 }
