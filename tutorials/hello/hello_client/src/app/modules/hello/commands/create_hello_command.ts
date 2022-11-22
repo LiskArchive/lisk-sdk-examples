@@ -11,6 +11,7 @@ import { createHelloSchema } from '../schema';
 import { MessageStore } from '../stores/message';
 import { CounterStore, CounterStoreData } from '../stores/counter';
 import { ModuleConfig } from '../types';
+import { NewHelloEvent } from '../events/new_hello';
 
 interface Params {
 	message: string;
@@ -33,31 +34,25 @@ export class CreateHelloCommand extends BaseCommand {
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async verify(context: CommandVerifyContext<Params>): Promise<VerificationResult> {
 		let validation: VerificationResult;
-		context.logger.info("==== HELLO TX VERIFICATION ====");
 		const wordList = context.params.message.split(" ");
 		const found = this._blacklist.filter(value => wordList.includes(value));
 		if (found.length > 0) {
 		  context.logger.info("==== FOUND: Message contains a blacklisted word ====");
-			validation = {
-				status: VerifyStatus.FAIL,
-				error: new Error(
+			throw new Error(
 					`Illegal word in hello message: ${  found.toString()}`
-				)
-			};
+				);
 		} else {
 		  context.logger.info("==== NOT FOUND: Message contains no blacklisted words ====");
 			validation = {
 				status: VerifyStatus.OK
 			};
 		}
-		context.logger.info(validation,"validation");
-		context.logger.info("==================");
 		return validation;
 	}
 
 	public async execute(context: CommandExecuteContext<Params>): Promise<void> {
 		// 1. Get account data of the sender of the Hello transaction.
-		const {senderAddress} = context.transaction;
+		const { senderAddress } = context.transaction;
 		// 2. Get message and counter stores.
 		const messageSubstore = this.stores.get(MessageStore);
 		const counterSubstore = this.stores.get(CounterStore);
@@ -82,5 +77,12 @@ export class CreateHelloCommand extends BaseCommand {
 
 		// 6. Save the Hello counter to the counter store.
 		await counterSubstore.set(context, helloBuffer, helloCounter);
+
+		// 7. Emit a "New Hello" event
+		const newHelloEvent = this.events.get(NewHelloEvent);
+		newHelloEvent.add(context, {
+			senderAddress: context.transaction.senderAddress,
+			message: context.params.message
+		},[context.transaction.senderAddress]);
 	}
 }

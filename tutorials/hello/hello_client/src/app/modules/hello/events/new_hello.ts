@@ -19,7 +19,7 @@ export const newHelloEventSchema = {
 	required: ['senderAddress', 'message'],
 	properties: {
 		senderAddress: {
-			dataType: 'bytes',
+			dataType: 'lisk32',
 			fieldNumber: 1,
 		},
 		message: {
