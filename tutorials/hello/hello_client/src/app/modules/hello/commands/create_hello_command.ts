@@ -63,10 +63,10 @@ export class CreateHelloCommand extends BaseCommand {
 		});
 
 		// 3. Get the Hello counter from the counter store.
-		const helloBuffer = Buffer.from('hello','utf8');
+		const helloCounterBuffer = Buffer.alloc(0);
 		let helloCounter: CounterStoreData;
 		try {
-			helloCounter = await counterSubstore.get(context, helloBuffer);
+			helloCounter = await counterSubstore.get(context, helloCounterBuffer);
 		} catch (error) {
 			helloCounter = {
 				counter: 0,
@@ -76,7 +76,7 @@ export class CreateHelloCommand extends BaseCommand {
 		helloCounter.counter+=1;
 
 		// 6. Save the Hello counter to the counter store.
-		await counterSubstore.set(context, helloBuffer, helloCounter);
+		await counterSubstore.set(context, helloCounterBuffer, helloCounter);
 
 		// 7. Emit a "New Hello" event
 		const newHelloEvent = this.events.get(NewHelloEvent);
