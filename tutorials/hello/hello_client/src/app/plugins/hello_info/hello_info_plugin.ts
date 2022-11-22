@@ -73,12 +73,6 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 						const height = result[3]['height'];
 						const parsedData = codec.decode(chainEventSchema, Buffer.from(dataElement, 'hex'));
 						this._saveEventInfoToDB(parsedData, height);
-					} else if (index === this.height - 1) {
-						console.log("");
-						console.log("****************************");
-						console.log("Please Send a Hello Message.");
-						console.log("****************************");
-						console.log("");
 					}
 				});
 			}
