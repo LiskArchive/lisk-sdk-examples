@@ -44,7 +44,8 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 		if (lastCounter.counter > 0) {
 			// Syncs plugin's database after an interval.
 			setInterval(() => { this._syncChainEvents(); }, this.config.syncInterval);
-		} else {
+		}
+		else {
 			const newCounter = 0;
 			await setLastCounter(this._pluginDB, newCounter);
 			// Syncs plugin's database after an interval.
