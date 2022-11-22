@@ -102,7 +102,7 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 		} else if (lastEventHeight.height === height) {
 			console.log("");
 			console.log("****************************");
-			console.log("Please Generate a new Event.");
+			console.log("No New Hello event since the last syncronization.");
 			console.log("****************************");
 			console.log("");
 		}
