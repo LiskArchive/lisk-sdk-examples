@@ -1,5 +1,5 @@
 export interface HelloInfoPluginConfig {
-    enablePlugin: boolean;
+    syncInterval: number;
 }
 
 export interface Event {

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
@@ -36,12 +37,13 @@ export const getEventHelloInfo = async (db: KVStore, lastCounter: number): Promi
 };
 
 // Stores event's data in the database.
-export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number): Promise<Event> => {
+export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number) => {
     try {
         const encodedAddressInfo = codec.encode(newHelloEventSchema, { senderAddress: _lskAddress, message: _message, height: _eventHeight });
         let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
         dbKey = Buffer.concat([dbKey, Buffer.from(':', 'utf8'), DB_KEY_ADDRESS_INFO]);
         await db.set(dbKey, encodedAddressInfo);
+        console.log("");
         console.log("************************************** Event's Data saved successfully in the database **************************************");
     } catch (error) {
         return (error);
@@ -53,6 +55,7 @@ export const setLastCounter = async (db: KVStore, lastCounter: number) => {
     try {
         const encodedCounterInfo = codec.encode(counterSchema, { counter: lastCounter });
         await db.set(DB_LAST_COUNTER_INFO, encodedCounterInfo);
+        console.log("");
         console.log("************************************** Counter saved successfully in the database **************************************");
     } catch (error) {
         return (error);
@@ -74,7 +77,9 @@ export const setLastEventHeight = async (db: KVStore, lastHeight: number) => {
     try {
         const encodedHeightInfo = codec.encode(heightSchema, { height: lastHeight });
         await db.set(DB_LAST_HEIGHT_INFO, encodedHeightInfo);
+        console.log("");
         console.log("************************************** Height saved successfully in the database **************************************");
+        console.log("");
     } catch (error) {
         return (error);
     }

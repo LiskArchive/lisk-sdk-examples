@@ -2,13 +2,13 @@ export const configSchema = {
     $id: '#/plugins/helloInfo/config',
     type: 'object',
     properties: {
-        enablePlugin: {
-            type: 'boolean',
+        syncInterval: {
+            type: 'integer',
         },
     },
-    required: ['enablePlugin'],
+    required: ['syncInterval'],
     default: {
-        enablePlugin: true,
+        syncInterval: 60000, // milliseconds
     },
 };
 
