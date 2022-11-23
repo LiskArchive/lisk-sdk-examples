@@ -17,6 +17,8 @@ export interface CounterStoreData {
 	counter: number;
 }
 
+export const counterKey = Buffer.alloc(0);
+
 export const counterStoreSchema = {
 	$id: '/hello/counter',
 	type: 'object',

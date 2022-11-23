@@ -1,5 +1,5 @@
 import { BaseEndpoint, ModuleEndpointContext, cryptography } from 'lisk-sdk';
-import { CounterStore, CounterStoreData } from './stores/counter';
+import { counterKey, CounterStore, CounterStoreData } from './stores/counter';
 import { MessageStore, MessageStoreData } from './stores/message';
 
 export class HelloEndpoint extends BaseEndpoint {
@@ -8,7 +8,7 @@ export class HelloEndpoint extends BaseEndpoint {
 
 		const helloCounter = await counterSubStore.get(
 			ctx,
-			Buffer.from('hello','utf8'),
+			counterKey,
 		);
 
 		return helloCounter;

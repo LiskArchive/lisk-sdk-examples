@@ -9,7 +9,7 @@ import {
 } from 'lisk-sdk';
 import { createHelloSchema } from '../schema';
 import { MessageStore } from '../stores/message';
-import { CounterStore, CounterStoreData } from '../stores/counter';
+import { counterKey, CounterStore, CounterStoreData } from '../stores/counter';
 import { ModuleConfig } from '../types';
 import { NewHelloEvent } from '../events/new_hello';
 
@@ -63,10 +63,9 @@ export class CreateHelloCommand extends BaseCommand {
 		});
 
 		// 3. Get the Hello counter from the counter store.
-		const helloCounterBuffer = Buffer.alloc(0);
 		let helloCounter: CounterStoreData;
 		try {
-			helloCounter = await counterSubstore.get(context, helloCounterBuffer);
+			helloCounter = await counterSubstore.get(context, counterKey);
 		} catch (error) {
 			helloCounter = {
 				counter: 0,
@@ -76,7 +75,7 @@ export class CreateHelloCommand extends BaseCommand {
 		helloCounter.counter+=1;
 
 		// 6. Save the Hello counter to the counter store.
-		await counterSubstore.set(context, helloCounterBuffer, helloCounter);
+		await counterSubstore.set(context, counterKey, helloCounter);
 
 		// 7. Emit a "New Hello" event
 		const newHelloEvent = this.events.get(NewHelloEvent);

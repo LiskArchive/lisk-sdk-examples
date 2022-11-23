@@ -11,7 +11,7 @@
  *
  * Removal or modification of this copyright notice is prohibited.
  */
-import { BaseEvent, EventQueuer } from 'lisk-sdk';
+import { BaseEvent } from 'lisk-sdk';
 
 export const newHelloEventSchema = {
 	$id: '/hello/events/new_hello',
@@ -19,7 +19,7 @@ export const newHelloEventSchema = {
 	required: ['senderAddress', 'message'],
 	properties: {
 		senderAddress: {
-			dataType: 'lisk32',
+			dataType: 'bytes',
 			fieldNumber: 1,
 		},
 		message: {
