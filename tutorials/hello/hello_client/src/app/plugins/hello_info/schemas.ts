@@ -8,7 +8,7 @@ export const configSchema = {
     },
     required: ['syncInterval'],
     default: {
-        syncInterval: 60000, // milliseconds
+        syncInterval: 120000, // milliseconds
     },
 };
 
