@@ -1,38 +1,6 @@
 {
 	"keys": [
 		{
-			"address": "lskqaxxmj78frvgpjgwvf4yqjjkcrr9yhn2sxxwm3",
-			"keyPath": "m/44'/134'/0'",
-			"publicKey": "6290c8b58de8b71fedb7e3cb9a6ee9426aa3e7ac0141f278526375d46705b546",
-			"privateKey": "759305903f7bbb449cf2fd22e6da476792b63e24558e266a4859f9ed3c91fd7e6290c8b58de8b71fedb7e3cb9a6ee9426aa3e7ac0141f278526375d46705b546",
-			"plain": {
-				"generatorKeyPath": "m/25519'/134'/0'/0'",
-				"generatorKey": "aaecd278a3fadc40a4a824d6f4aa24547d8fb9d075ec4d6967a7084f9a3f2541",
-				"generatorPrivateKey": "81316f0582fd2cc0a651318aa0041ce36e7b786033b98ec545ec04078fad67caaaecd278a3fadc40a4a824d6f4aa24547d8fb9d075ec4d6967a7084f9a3f2541",
-				"blsKeyPath": "m/12381/134/0/0",
-				"blsKey": "815a9e7643cf2bace98d1337f1dca8e39949592cd3fcb79bf3ab5784981468b9987b3340527bc9ca263a2fd061812024",
-				"blsProofOfPosession": "add8669bb57f3dceec04dc0f875906cb52a677f1df911536c01f447c8830bf27cd43713af18d84de5a64ec504aeaf9a30521c09438bb5a4d5fd634946c65e0fc4ea3681fdb4f6949cb6c1bc1ac1ddec3df058a13466af5a13d50737938fd7d5f",
-				"blsPrivateKey": "36506a53431665265ee03d7e19a5d44db3ff159d9aeee05727a8b24abc67651a"
-			},
-			"encrypted": {
-				"ciphertext": "c3009d4a505ac32a652ffce6aa718073c7ca75b00578420ba20c2533a83f38e2b3e20cf1d6f0c9905efe28b5276142b93fdbdd33134d37bcd2db23654da92bb2becd00971c49ecc749100748c93344477ea52f6073c3fefec7234962d0eccdaa6862d9d0da46dbfe85cef98ad6cab0f2c1cb1b54326617132bb950d1c14a774a1e6403e8fa1bf3a2c7c0d6856266cf738f41ac01b2217d93070c4079e1b82044d3a692ea225290c2b6bcb902e0ffb8132f4c0f29325e6a3a",
-				"mac": "2b3c65d0385a870ab499dfcddf411347506671015f412b35600153b132a455ea",
-				"kdf": "argon2id",
-				"kdfparams": {
-					"parallelism": 4,
-					"iterations": 1,
-					"memorySize": 2024,
-					"salt": "a5598628001346f608b3f57dd38b8611"
-				},
-				"cipher": "aes-256-gcm",
-				"cipherparams": {
-					"iv": "683600a199d154e51c0f97e6",
-					"tag": "32807058f7f89921b4839fc39256cd24"
-				},
-				"version": "1"
-			}
-		},
-		{
 			"address": "lsk37njad9f4c84fatqump4m7sceau5uumz6e7mrx",
 			"keyPath": "m/44'/134'/0'",
 			"publicKey": "2ae9973b6567b8972ed06bbc64661aacf0b3de248dacbae0343950aac2fd713e",
