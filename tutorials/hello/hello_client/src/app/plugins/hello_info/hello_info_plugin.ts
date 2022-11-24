@@ -26,6 +26,7 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 	public endpoint = new Endpoint();
 	public counter = 0;
 	private height = 0;
+	private lastCheckedHeight = 1;
 	private _pluginDB!: liskDB.Database;
 
 	public get nodeModulePath(): string {
@@ -42,13 +43,15 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 		this.endpoint.init(this._pluginDB);
 		this._getLastCounter(this.counter);
 		this._getLastHeight(this.height);
+
 		// Syncs plugin's database after an interval.
 		setInterval(() => { this._syncChainEvents(); }, this.config.syncInterval);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async unload(): Promise<void> { 	// Unloads DB instance.
-		console.log("Program shutdown succesfull.")
+	public async unload(): Promise<void> {
+		// Store last checked height & Unloads DB instance.
+		await setLastEventHeight(this._pluginDB, this.height);
 		this._pluginDB.close();
 	}
 
@@ -59,17 +62,29 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 			const heightObj = this._getLastHeight(this.height);
 			const lastStoredHeight = (await heightObj).height + 1;
 			this.height = res['header']['height'];
-			for (let index = lastStoredHeight; index <= this.height; index += 1) {
+			if (lastStoredHeight > 1) {
+				this.lastCheckedHeight = lastStoredHeight;
+			}
+			// Loop through new blocks, starting from the lastStoredHeight + 1
+			for (let index = this.lastCheckedHeight; index <= this.height; index += 1) {
 				this.apiClient.invoke("chain_getEvents", {
 					height: index
-				}).then(result => {
+				}).then(async result => {
 					if (result[3] !== undefined) {
 						const dataElement = result[3]['data'];
 						const chainHeight = result[3]['height'];
 						const parsedData = codec.decode(chainEventSchema, Buffer.from(dataElement, 'hex'));
-						this._saveEventInfoToDB(parsedData, chainHeight, lastStoredHeight);
+						console.log("THIS IS PARSED DATA: ", index, parsedData);
+						const counterObj = this._getLastCounter(this.counter);
+						const counterValue = (await counterObj).counter + 1;
+						await this._saveEventInfoToDB(parsedData, chainHeight, lastStoredHeight, index, counterValue);
 					}
 				});
+				if (index === this.height) {
+					// Store last block height in DB after finishing the interval.
+					this.lastCheckedHeight = this.height + 1;
+					await setLastEventHeight(this._pluginDB, this.height);
+				}
 			}
 		});
 	}
@@ -93,22 +108,20 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private async _saveEventInfoToDB(parsedData: any, _chainHeight: number, _lastStoredHeight: number) {    // Saves newly generated hello events to the database.
-		if (_lastStoredHeight === _chainHeight) {
-			console.log("");
-			console.log("*************************************************");
-			console.log("No New Hello event since the last syncronization.");
-			console.log("*************************************************");
-			console.log("");
-		}
-		else if (_chainHeight > _lastStoredHeight) {
-			const senderAddress = parsedData['senderAddress'];
-			const message = parsedData['message'].toString();
-			const lastCounter = await getLastCounter(this._pluginDB);
-			await setEventHelloInfo(this._pluginDB, senderAddress, message, _chainHeight, lastCounter.counter += 1);
-			await setLastCounter(this._pluginDB, lastCounter.counter);
-			await setLastEventHeight(this._pluginDB, _chainHeight);
-		}
+	private async _saveEventInfoToDB(parsedData: any, _chainHeight: number, _lastStoredHeight: number, _lastBlockchecked: number, _counterValue: number): Promise<string> {
+		// Saves newly generated hello events to the database.
+
+		const senderAddress = parsedData['senderAddress'];
+		const message = parsedData['message'].toString();
+
+		await setEventHelloInfo(this._pluginDB, senderAddress, message, _chainHeight, _counterValue
+		).then(async (result) => {
+			console.log(result);
+			await setLastCounter(this._pluginDB, _counterValue + 1);
+		}).then(async () => {
+			await setLastEventHeight(this._pluginDB, _lastBlockchecked);
+		});
+		return "Data Saved";
 	}
 }
 

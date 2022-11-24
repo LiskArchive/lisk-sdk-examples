@@ -44,7 +44,7 @@
 	},
 	"plugins": {
 		"helloInfo": {
-			"syncInterval": 30000
+			"syncInterval": 60000
 		}
 	}
 }

@@ -37,14 +37,19 @@ export const getEventHelloInfo = async (db: KVStore, lastCounter: number): Promi
 };
 
 // Stores event's data in the database.
-export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number) => {
+export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number): Promise<string> => {
     try {
         const encodedAddressInfo = codec.encode(newHelloEventSchema, { senderAddress: _lskAddress, message: _message, height: _eventHeight });
+        console.log("DB FUNCTION setEVENTHELLOINFO");
+        console.log(_lskAddress);
+        console.log(_message);
+        console.log(_eventHeight);
         let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
         dbKey = Buffer.concat([dbKey, Buffer.from(':', 'utf8'), DB_KEY_ADDRESS_INFO]);
         await db.set(dbKey, encodedAddressInfo);
         console.log("");
         console.log("************************************** Event's Data saved successfully in the database **************************************");
+        return "An event was Saved";
     } catch (error) {
         return (error);
     }
@@ -53,6 +58,7 @@ export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _messa
 // Stores lastCounter for key generation.
 export const setLastCounter = async (db: KVStore, lastCounter: number) => {
     try {
+        console.log("COUNTER IN DB: ", lastCounter);
         const encodedCounterInfo = codec.encode(counterSchema, { counter: lastCounter });
         await db.set(DB_LAST_COUNTER_INFO, encodedCounterInfo);
         console.log("");

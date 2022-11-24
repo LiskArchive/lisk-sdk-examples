@@ -36,8 +36,11 @@ export class Endpoint extends BasePluginEndpoint {
             blockHeight;
         }[] = [];
         const lastCounter = await getLastCounter(this._pluginDB);
+        console.log(lastCounter);
         for (let index = 1; index <= lastCounter.counter; index += 1) {
+
             addressList = await getEventHelloInfo(this._pluginDB, index);
+            console.log(addressList);
             data.push({
                 ID: index,
                 senderAddress: cryptography.address.getLisk32AddressFromAddress(addressList['senderAddress']),
