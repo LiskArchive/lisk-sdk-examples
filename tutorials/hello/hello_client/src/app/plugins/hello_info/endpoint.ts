@@ -8,11 +8,8 @@ import {
 } from 'lisk-sdk';
 import {
     getEventHelloInfo,
-    getLastCounter,
 
 } from './db';
-
-import { Event as helloEvent } from './types';
 
 
 export class Endpoint extends BasePluginEndpoint {
@@ -28,21 +25,16 @@ export class Endpoint extends BasePluginEndpoint {
 
     // Returns all Sender Addresses, Hello Messages and Block Height of the block where the Hello Event was emitted.
     public async getMessageList(_context: PluginEndpointContext): Promise<unknown[]> {
-        let addressList: helloEvent;
         const data: {
             ID: number;
             senderAddress: string;
             message: string;
             blockHeight;
         }[] = [];
-        const lastCounter = await getLastCounter(this._pluginDB);
-        console.log(lastCounter);
-        for (let index = 1; index <= lastCounter.counter; index += 1) {
-
-            addressList = await getEventHelloInfo(this._pluginDB, index);
-            console.log(addressList);
+        const results = await getEventHelloInfo(this._pluginDB, 0);
+        for (const addressList of results) {
             data.push({
-                ID: index,
+                ID: addressList.id.readUInt32BE(0),
                 senderAddress: cryptography.address.getLisk32AddressFromAddress(addressList['senderAddress']),
                 message: addressList['message'],
                 blockHeight: addressList['height'],

@@ -25,34 +25,39 @@ export const getDBInstance = async (
 };
 
 // Returns event's data stored in the database.
-export const getEventHelloInfo = async (db: KVStore, lastCounter: number): Promise<Event> => {
-    try {
-        let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
-        dbKey = Buffer.concat([dbKey, Buffer.from(':', 'utf8'), DB_KEY_ADDRESS_INFO]);
-        const encodedAddressInfo = await db.get(dbKey);
-        return codec.decode<Event>(newHelloEventSchema, encodedAddressInfo);
-    } catch (error) {
-        return error;
-    }
+export const getEventHelloInfo = async (db: KVStore, _lastCounter: number): Promise<(Event & { id: Buffer })[]> => {
+    const stream =  db.createReadStream({
+        gte: Buffer.concat([DB_KEY_ADDRESS_INFO, Buffer.alloc(4, 0)]),
+        lte: Buffer.concat([DB_KEY_ADDRESS_INFO, Buffer.alloc(4, 255)]),
+    });
+    const results = await new Promise<(Event& { id: Buffer })[]>((resolve, reject) => {
+        const ids: (Event& { id: Buffer })[] = [];
+        stream
+            .on('data', ({ key, value }: { key: Buffer; value: Buffer }) => {
+                ids.push({ ...codec.decode<Event>(newHelloEventSchema, value), id: key.slice(DB_KEY_ADDRESS_INFO.length) });
+            })
+            .on('error', error => {
+                reject(error);
+            })
+            .on('end', () => {
+                resolve(ids);
+            });
+    });
+    return results;
 };
 
 // Stores event's data in the database.
-export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number): Promise<string> => {
-    try {
-        const encodedAddressInfo = codec.encode(newHelloEventSchema, { senderAddress: _lskAddress, message: _message, height: _eventHeight });
-        console.log("DB FUNCTION setEVENTHELLOINFO");
-        console.log(_lskAddress);
-        console.log(_message);
-        console.log(_eventHeight);
-        let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
-        dbKey = Buffer.concat([dbKey, Buffer.from(':', 'utf8'), DB_KEY_ADDRESS_INFO]);
-        await db.set(dbKey, encodedAddressInfo);
-        console.log("");
-        console.log("************************************** Event's Data saved successfully in the database **************************************");
-        return "An event was Saved";
-    } catch (error) {
-        return (error);
-    }
+export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number): Promise<void> => {
+    const encodedAddressInfo = codec.encode(newHelloEventSchema, { senderAddress: _lskAddress, message: _message, height: _eventHeight });
+    console.log("DB FUNCTION setEVENTHELLOINFO");
+    console.log(_lskAddress);
+    console.log(_message);
+    console.log(_eventHeight);
+    let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
+    dbKey = Buffer.concat([DB_KEY_ADDRESS_INFO, dbKey]);
+    await db.set(dbKey, encodedAddressInfo);
+    console.log("");
+    console.log("************************************** Event's Data saved successfully in the database **************************************");
 };
 
 // Stores lastCounter for key generation.
@@ -70,12 +75,8 @@ export const setLastCounter = async (db: KVStore, lastCounter: number) => {
 
 // Returns lastCounter.
 export const getLastCounter = async (db: KVStore): Promise<Counter> => {
-    try {
-        const encodedCounterInfo = await db.get(DB_LAST_COUNTER_INFO);
-        return codec.decode<Counter>(counterSchema, encodedCounterInfo);
-    } catch (error) {
-        return error;
-    }
+    const encodedCounterInfo = await db.get(DB_LAST_COUNTER_INFO);
+    return codec.decode<Counter>(counterSchema, encodedCounterInfo);
 }
 
 // Stores height of block where hello event exists.
@@ -93,10 +94,6 @@ export const setLastEventHeight = async (db: KVStore, lastHeight: number) => {
 
 // Returns height of block where hello event exists.
 export const getLastEventHeight = async (db: KVStore): Promise<Height> => {
-    try {
-        const encodedHeightInfo = await db.get(DB_LAST_HEIGHT_INFO);
-        return codec.decode<Height>(heightSchema, encodedHeightInfo);
-    } catch (error) {
-        return error;
-    }
+    const encodedHeightInfo = await db.get(DB_LAST_HEIGHT_INFO);
+    return codec.decode<Height>(heightSchema, encodedHeightInfo);
 }
