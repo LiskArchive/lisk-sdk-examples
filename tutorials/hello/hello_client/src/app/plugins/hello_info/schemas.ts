@@ -12,7 +12,6 @@ export const configSchema = {
     },
 };
 
-
 export const chainEventSchema = {
     $id: '/helloInfo/new_hello/chainEvent',
     type: 'object',

@@ -1,8 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-
-
 import { codec, db as liskDB, cryptography } from 'lisk-sdk';
 import * as os from 'os';
 import { join } from 'path';
@@ -26,12 +24,12 @@ export const getDBInstance = async (
 
 // Returns event's data stored in the database.
 export const getEventHelloInfo = async (db: KVStore, _lastCounter: number): Promise<(Event & { id: Buffer })[]> => {
-    const stream =  db.createReadStream({
+    const stream = db.createReadStream({
         gte: Buffer.concat([DB_KEY_ADDRESS_INFO, Buffer.alloc(4, 0)]),
         lte: Buffer.concat([DB_KEY_ADDRESS_INFO, Buffer.alloc(4, 255)]),
     });
-    const results = await new Promise<(Event& { id: Buffer })[]>((resolve, reject) => {
-        const ids: (Event& { id: Buffer })[] = [];
+    const results = await new Promise<(Event & { id: Buffer })[]>((resolve, reject) => {
+        const ids: (Event & { id: Buffer })[] = [];
         stream
             .on('data', ({ key, value }: { key: Buffer; value: Buffer }) => {
                 ids.push({ ...codec.decode<Event>(newHelloEventSchema, value), id: key.slice(DB_KEY_ADDRESS_INFO.length) });
@@ -49,28 +47,17 @@ export const getEventHelloInfo = async (db: KVStore, _lastCounter: number): Prom
 // Stores event's data in the database.
 export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number): Promise<void> => {
     const encodedAddressInfo = codec.encode(newHelloEventSchema, { senderAddress: _lskAddress, message: _message, height: _eventHeight });
-    console.log("DB FUNCTION setEVENTHELLOINFO");
-    console.log(_lskAddress);
-    console.log(_message);
-    console.log(_eventHeight);
     let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
     dbKey = Buffer.concat([DB_KEY_ADDRESS_INFO, dbKey]);
     await db.set(dbKey, encodedAddressInfo);
-    console.log("");
     console.log("************************************** Event's Data saved successfully in the database **************************************");
 };
 
 // Stores lastCounter for key generation.
-export const setLastCounter = async (db: KVStore, lastCounter: number) => {
-    try {
-        console.log("COUNTER IN DB: ", lastCounter);
-        const encodedCounterInfo = codec.encode(counterSchema, { counter: lastCounter });
-        await db.set(DB_LAST_COUNTER_INFO, encodedCounterInfo);
-        console.log("");
-        console.log("************************************** Counter saved successfully in the database **************************************");
-    } catch (error) {
-        return (error);
-    }
+export const setLastCounter = async (db: KVStore, lastCounter: number): Promise<void> => {
+    const encodedCounterInfo = codec.encode(counterSchema, { counter: lastCounter });
+    await db.set(DB_LAST_COUNTER_INFO, encodedCounterInfo);
+    console.log("************************************** Counter saved successfully in the database **************************************");
 }
 
 // Returns lastCounter.
@@ -80,16 +67,10 @@ export const getLastCounter = async (db: KVStore): Promise<Counter> => {
 }
 
 // Stores height of block where hello event exists.
-export const setLastEventHeight = async (db: KVStore, lastHeight: number) => {
-    try {
-        const encodedHeightInfo = codec.encode(heightSchema, { height: lastHeight });
-        await db.set(DB_LAST_HEIGHT_INFO, encodedHeightInfo);
-        console.log("");
-        console.log("************************************** Height saved successfully in the database **************************************");
-        console.log("");
-    } catch (error) {
-        return (error);
-    }
+export const setLastEventHeight = async (db: KVStore, lastHeight: number): Promise<void> => {
+    const encodedHeightInfo = codec.encode(heightSchema, { height: lastHeight });
+    await db.set(DB_LAST_HEIGHT_INFO, encodedHeightInfo);
+    console.log("************************************** Height saved successfully in the database **************************************");
 }
 
 // Returns height of block where hello event exists.

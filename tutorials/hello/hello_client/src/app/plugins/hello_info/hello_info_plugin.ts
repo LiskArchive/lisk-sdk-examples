@@ -1,13 +1,4 @@
-/* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable no-console */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable dot-notation */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { BasePlugin, db as liskDB, codec } from 'lisk-sdk';
 import {
 	getDBInstance,
@@ -57,15 +48,11 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 			const result = await this.apiClient.invoke<{ data: string; height: number; module: string; name: string }[]>("chain_getEvents", {
 				height: index
 			});
-				console.log({ result })
 			const helloEvents = result.filter(e => e.module === 'hello' && e.name === 'newHello');
 			for (const helloEvent of helloEvents) {
-				console.log({ helloEvent })
 				const parsedData = codec.decode<{ senderAddress: Buffer; message: string }>(chainEventSchema, Buffer.from(helloEvent.data, 'hex'));
-				console.log("THIS IS PARSED DATA: ", index, parsedData);
 				const { counter } = await this._getLastCounter();
-				console.log({ counter })
-				await this._saveEventInfoToDB(parsedData, helloEvent.height, lastStoredHeight, index, counter + 1);
+				await this._saveEventInfoToDB(parsedData, helloEvent.height, counter + 1);
 			}
 		}
 		await setLastEventHeight(this._pluginDB, height);
@@ -86,8 +73,8 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 
 	private async _getLastHeight(): Promise<Height> {
 		try {
-		 const height = await getLastEventHeight(this._pluginDB);
-		 return height;
+			const height = await getLastEventHeight(this._pluginDB);
+			return height;
 		} catch (error) {
 			if (!(error instanceof liskDB.NotFoundError)) {
 				throw error;
@@ -98,14 +85,12 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private async _saveEventInfoToDB(parsedData: { senderAddress: Buffer; message: string }, _chainHeight: number, _lastStoredHeight: number, _lastBlockchecked: number, _counterValue: number): Promise<string> {
+	private async _saveEventInfoToDB(parsedData: { senderAddress: Buffer; message: string }, chainHeight: number, counterValue: number): Promise<string> {
 		// Saves newly generated hello events to the database.
-
 		const { senderAddress, message } = parsedData;
-
-		await setEventHelloInfo(this._pluginDB, senderAddress, message, _chainHeight, _counterValue);
-		await setLastCounter(this._pluginDB, _counterValue);
-		await setLastEventHeight(this._pluginDB, _lastBlockchecked);
+		await setEventHelloInfo(this._pluginDB, senderAddress, message, chainHeight, counterValue);
+		await setLastCounter(this._pluginDB, counterValue);
+		await setLastEventHeight(this._pluginDB, chainHeight);
 		return "Data Saved";
 	}
 }

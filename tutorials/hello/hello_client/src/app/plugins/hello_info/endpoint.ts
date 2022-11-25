@@ -11,16 +11,11 @@ import {
 
 } from './db';
 
-
 export class Endpoint extends BasePluginEndpoint {
-    // private _client!: BasePlugin['apiClient'];
     private _pluginDB!: liskDB.Database;
 
-
-    // public init(db: liskDB.Database, apiClient: BasePlugin['apiClient']) {
     public init(db: liskDB.Database) {
         this._pluginDB = db;
-        // this._client = apiClient;
     }
 
     // Returns all Sender Addresses, Hello Messages and Block Height of the block where the Hello Event was emitted.
@@ -32,12 +27,12 @@ export class Endpoint extends BasePluginEndpoint {
             blockHeight;
         }[] = [];
         const results = await getEventHelloInfo(this._pluginDB, 0);
-        for (const addressList of results) {
+        for (const messageList of results) {
             data.push({
-                ID: addressList.id.readUInt32BE(0),
-                senderAddress: cryptography.address.getLisk32AddressFromAddress(addressList['senderAddress']),
-                message: addressList['message'],
-                blockHeight: addressList['height'],
+                ID: messageList.id.readUInt32BE(0),
+                senderAddress: cryptography.address.getLisk32AddressFromAddress(messageList['senderAddress']),
+                message: messageList['message'],
+                blockHeight: messageList['height'],
             })
         }
         return data;
