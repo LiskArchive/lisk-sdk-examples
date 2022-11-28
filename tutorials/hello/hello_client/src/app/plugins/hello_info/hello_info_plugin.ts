@@ -15,7 +15,7 @@ import { Endpoint } from './endpoint';
 export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 	public configSchema = configSchema;
 	public endpoint = new Endpoint();
-	public counter = 0;
+	// public counter = 0;
 	private _pluginDB!: liskDB.Database;
 
 	public get nodeModulePath(): string {
