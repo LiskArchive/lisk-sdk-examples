@@ -38,16 +38,19 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 
 	// Syncs on-chain event's data with plugin's database.
 	private async _syncChainEvents(): Promise<void> {
+		// 1. Get latest block height from the sidechain 
 		const res = await this.apiClient.invoke<{ header: { height: number } }>("chain_getLastBlock", {
 		})
+		// 2. Get block height stored in the database
 		const heightObj = await this._getLastHeight();
 		const lastStoredHeight = heightObj.height + 1;
 		const { height } = res.header;
-		// Loop through new blocks, starting from the lastStoredHeight + 1
+		// 3. Loop through new blocks, starting from the lastStoredHeight + 1
 		for (let index = lastStoredHeight; index <= height; index += 1) {
 			const result = await this.apiClient.invoke<{ data: string; height: number; module: string; name: string }[]>("chain_getEvents", {
 				height: index
 			});
+			// 3a. Once an event is found, decode it's data and pass it to the _saveEventInfoToDB() function
 			const helloEvents = result.filter(e => e.module === 'hello' && e.name === 'newHello');
 			for (const helloEvent of helloEvents) {
 				const parsedData = codec.decode<{ senderAddress: Buffer; message: string }>(chainEventSchema, Buffer.from(helloEvent.data, 'hex'));
@@ -55,6 +58,7 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 				await this._saveEventInfoToDB(parsedData, helloEvent.height, counter + 1);
 			}
 		}
+		// 4. At the end of the loop, save the last checked block height in the database.
 		await setLastEventHeight(this._pluginDB, height);
 	}
 
@@ -86,10 +90,12 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private async _saveEventInfoToDB(parsedData: { senderAddress: Buffer; message: string }, chainHeight: number, counterValue: number): Promise<string> {
-		// Saves newly generated hello events to the database.
+		// 1. Saves newly generated hello events to the database
 		const { senderAddress, message } = parsedData;
 		await setEventHelloInfo(this._pluginDB, senderAddress, message, chainHeight, counterValue);
+		// 2. Saves incremented counter value
 		await setLastCounter(this._pluginDB, counterValue);
+		// 3. Saves last checked block's height
 		await setLastEventHeight(this._pluginDB, chainHeight);
 		return "Data Saved";
 	}

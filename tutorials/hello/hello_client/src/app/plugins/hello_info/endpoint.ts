@@ -4,7 +4,6 @@ import {
     PluginEndpointContext,
     db as liskDB,
     cryptography,
-
 } from 'lisk-sdk';
 import {
     getEventHelloInfo,
@@ -26,13 +25,15 @@ export class Endpoint extends BasePluginEndpoint {
             message: string;
             blockHeight;
         }[] = [];
-        const results = await getEventHelloInfo(this._pluginDB, 0);
-        for (const messageList of results) {
+        // 1. Get all the stored events from database.
+        const messageList = await getEventHelloInfo(this._pluginDB);
+        // 2. Push them into an array for presentation.
+        for (const helloMessage of messageList) {
             data.push({
-                ID: messageList.id.readUInt32BE(0),
-                senderAddress: cryptography.address.getLisk32AddressFromAddress(messageList['senderAddress']),
-                message: messageList['message'],
-                blockHeight: messageList['height'],
+                ID: helloMessage.id.readUInt32BE(0),
+                senderAddress: cryptography.address.getLisk32AddressFromAddress(helloMessage['senderAddress']),
+                message: helloMessage['message'],
+                blockHeight: helloMessage['height'],
             })
         }
         return data;

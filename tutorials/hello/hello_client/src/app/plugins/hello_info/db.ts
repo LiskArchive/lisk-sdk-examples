@@ -23,11 +23,13 @@ export const getDBInstance = async (
 };
 
 // Returns event's data stored in the database.
-export const getEventHelloInfo = async (db: KVStore, _lastCounter: number): Promise<(Event & { id: Buffer })[]> => {
+export const getEventHelloInfo = async (db: KVStore): Promise<(Event & { id: Buffer })[]> => {
+    // 1. Look for all the given key-value pairs in the database
     const stream = db.createReadStream({
         gte: Buffer.concat([DB_KEY_ADDRESS_INFO, Buffer.alloc(4, 0)]),
         lte: Buffer.concat([DB_KEY_ADDRESS_INFO, Buffer.alloc(4, 255)]),
     });
+    // 2. Get event's data out of the collected stream and push it in an array.    
     const results = await new Promise<(Event & { id: Buffer })[]>((resolve, reject) => {
         const ids: (Event & { id: Buffer })[] = [];
         stream
