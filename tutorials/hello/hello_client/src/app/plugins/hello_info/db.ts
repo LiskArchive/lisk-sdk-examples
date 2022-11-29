@@ -50,16 +50,17 @@ export const getEventHelloInfo = async (db: KVStore): Promise<(Event & { id: Buf
 export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number): Promise<void> => {
     const encodedAddressInfo = codec.encode(newHelloEventSchema, { senderAddress: _lskAddress, message: _message, height: _eventHeight });
     let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
+    // Create unique key of each event.
     dbKey = Buffer.concat([DB_KEY_ADDRESS_INFO, dbKey]);
     await db.set(dbKey, encodedAddressInfo);
-    console.log("************************************** Event's Data saved successfully in the database **************************************");
+    console.log("** Event's Data saved successfully in the database **");
 };
 
 // Stores lastCounter for key generation.
 export const setLastCounter = async (db: KVStore, lastCounter: number): Promise<void> => {
     const encodedCounterInfo = codec.encode(counterSchema, { counter: lastCounter });
     await db.set(DB_LAST_COUNTER_INFO, encodedCounterInfo);
-    console.log("************************************** Counter saved successfully in the database **************************************");
+    console.log("** Counter saved successfully in the database **");
 }
 
 // Returns lastCounter.
@@ -72,7 +73,7 @@ export const getLastCounter = async (db: KVStore): Promise<Counter> => {
 export const setLastEventHeight = async (db: KVStore, lastHeight: number): Promise<void> => {
     const encodedHeightInfo = codec.encode(heightSchema, { height: lastHeight });
     await db.set(DB_LAST_HEIGHT_INFO, encodedHeightInfo);
-    console.log("************************************** Height saved successfully in the database **************************************");
+    console.log("**Height saved successfully in the database **");
 }
 
 // Returns height of block where hello event exists.
