@@ -46,14 +46,14 @@ export const getEventHelloInfo = async (db: KVStore): Promise<(Event & { id: Buf
     return results;
 };
 
-// Stores event's data in the database.
+// Stores event data in the database.
 export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number): Promise<void> => {
     const encodedAddressInfo = codec.encode(newHelloEventSchema, { senderAddress: _lskAddress, message: _message, height: _eventHeight });
     let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
-    // Create unique key of each event.
+    // Create a unique key of each event.
     dbKey = Buffer.concat([DB_KEY_ADDRESS_INFO, dbKey]);
     await db.set(dbKey, encodedAddressInfo);
-    console.log("** Event's Data saved successfully in the database **");
+    console.log("** Event data saved successfully in the database **");
 };
 
 // Stores lastCounter for key generation.

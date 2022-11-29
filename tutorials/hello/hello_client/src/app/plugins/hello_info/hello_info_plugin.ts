@@ -15,14 +15,13 @@ import { Endpoint } from './endpoint';
 export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 	public configSchema = configSchema;
 	public endpoint = new Endpoint();
-	// public counter = 0;
 	private _pluginDB!: liskDB.Database;
 
 	public get nodeModulePath(): string {
 		return __filename;
 	}
 
-	// loads DB instances and initiates counter for first run.
+	// loads DB instances and initiates endpoint.
 	public async load(): Promise<void> {
 		this._pluginDB = await getDBInstance(this.dataPath);
 		this.endpoint.init(this._pluginDB);
@@ -50,7 +49,7 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 			const result = await this.apiClient.invoke<{ data: string; height: number; module: string; name: string }[]>("chain_getEvents", {
 				height: index
 			});
-			// 3a. Once an event is found, decode it's data and pass it to the _saveEventInfoToDB() function
+			// 3a. Once an event is found, decode its data and pass it to the _saveEventInfoToDB() function
 			const helloEvents = result.filter(e => e.module === 'hello' && e.name === 'newHello');
 			for (const helloEvent of helloEvents) {
 				const parsedData = codec.decode<{ senderAddress: Buffer; message: string }>(chainEventSchema, Buffer.from(helloEvent.data, 'hex'));
