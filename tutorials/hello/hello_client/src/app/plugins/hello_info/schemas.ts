@@ -28,7 +28,7 @@ export const chainEventSchema = {
     },
 };
 
-export const newHelloEventSchema = {
+export const storedEventSchema = {
     $id: '/helloInfo/new_hello',
     type: 'object',
     required: ['senderAddress', 'message', 'height'],
