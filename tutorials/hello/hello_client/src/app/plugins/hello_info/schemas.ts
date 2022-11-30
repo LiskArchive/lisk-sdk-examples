@@ -12,7 +12,7 @@ export const configSchema = {
     },
 };
 
-export const chainEventSchema = {
+export const onChainEventSchema = {
     $id: '/helloInfo/new_hello/chainEvent',
     type: 'object',
     required: ['senderAddress', 'message'],
@@ -28,7 +28,7 @@ export const chainEventSchema = {
     },
 };
 
-export const storedEventSchema = {
+export const offChainEventSchema = {
     $id: '/helloInfo/new_hello',
     type: 'object',
     required: ['senderAddress', 'message', 'height'],

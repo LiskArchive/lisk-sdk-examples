@@ -8,7 +8,7 @@ import {
 	setLastCounter,
 	setLastEventHeight
 } from './db';
-import { configSchema, chainEventSchema } from './schemas';
+import { configSchema, onChainEventSchema } from './schemas';
 import { HelloInfoPluginConfig, Height, Counter } from './types';
 import { Endpoint } from './endpoint';
 
@@ -52,7 +52,7 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 			// 3a. Once an event is found, decode its data and pass it to the _saveEventInfoToDB() function
 			const helloEvents = result.filter(e => e.module === 'hello' && e.name === 'newHello');
 			for (const helloEvent of helloEvents) {
-				const parsedData = codec.decode<{ senderAddress: Buffer; message: string }>(chainEventSchema, Buffer.from(helloEvent.data, 'hex'));
+				const parsedData = codec.decode<{ senderAddress: Buffer; message: string }>(onChainEventSchema, Buffer.from(helloEvent.data, 'hex'));
 				const { counter } = await this._getLastCounter();
 				await this._saveEventInfoToDB(parsedData, helloEvent.height, counter + 1);
 			}

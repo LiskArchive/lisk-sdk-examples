@@ -5,7 +5,7 @@ import { codec, db as liskDB, cryptography } from 'lisk-sdk';
 import * as os from 'os';
 import { join } from 'path';
 import { ensureDir } from 'fs-extra';
-import { storedEventSchema, counterSchema, heightSchema } from './schemas';
+import { offChainEventSchema, counterSchema, heightSchema } from './schemas';
 import { Event, Counter, Height } from './types';
 import { DB_KEY_ADDRESS_INFO, DB_LAST_COUNTER_INFO, DB_LAST_HEIGHT_INFO } from './constants';
 
@@ -34,7 +34,7 @@ export const getEventHelloInfo = async (db: KVStore): Promise<(Event & { id: Buf
         const ids: (Event & { id: Buffer })[] = [];
         stream
             .on('data', ({ key, value }: { key: Buffer; value: Buffer }) => {
-                ids.push({ ...codec.decode<Event>(storedEventSchema, value), id: key.slice(DB_KEY_ADDRESS_INFO.length) });
+                ids.push({ ...codec.decode<Event>(offChainEventSchema, value), id: key.slice(DB_KEY_ADDRESS_INFO.length) });
             })
             .on('error', error => {
                 reject(error);
@@ -48,7 +48,7 @@ export const getEventHelloInfo = async (db: KVStore): Promise<(Event & { id: Buf
 
 // Stores event data in the database.
 export const setEventHelloInfo = async (db: KVStore, _lskAddress: Buffer, _message: string, _eventHeight: number, lastCounter: number): Promise<void> => {
-    const encodedAddressInfo = codec.encode(storedEventSchema, { senderAddress: _lskAddress, message: _message, height: _eventHeight });
+    const encodedAddressInfo = codec.encode(offChainEventSchema, { senderAddress: _lskAddress, message: _message, height: _eventHeight });
     let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
     // Create a unique key of each event.
     dbKey = Buffer.concat([DB_KEY_ADDRESS_INFO, dbKey]);
