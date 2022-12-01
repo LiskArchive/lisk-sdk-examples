@@ -6,7 +6,7 @@ import {
 	getLastEventHeight,
 	setEventHelloInfo,
 	setLastCounter,
-	setLastEventHeight
+	setLastEventHeight,
 } from './db';
 import { configSchema, onChainEventSchema } from './schemas';
 import { HelloInfoPluginConfig, Height, Counter } from './types';
@@ -27,7 +27,9 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 		this.endpoint.init(this._pluginDB);
 
 		// Syncs plugin's database after an interval.
-		setInterval(() => { this._syncChainEvents(); }, this.config.syncInterval);
+		setInterval(() => {
+			this._syncChainEvents();
+		}, this.config.syncInterval);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/require-await
@@ -37,22 +39,29 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 
 	// Syncs on-chain event's data with plugin's database.
 	private async _syncChainEvents(): Promise<void> {
-		// 1. Get latest block height from the sidechain 
-		const res = await this.apiClient.invoke<{ header: { height: number } }>("chain_getLastBlock", {
-		})
+		// 1. Get latest block height from the sidechain
+		const res = await this.apiClient.invoke<{ header: { height: number } }>(
+			'chain_getLastBlock',
+			{},
+		);
 		// 2. Get block height stored in the database
 		const heightObj = await this._getLastHeight();
 		const lastStoredHeight = heightObj.height + 1;
 		const { height } = res.header;
 		// 3. Loop through new blocks, starting from the lastStoredHeight + 1
 		for (let index = lastStoredHeight; index <= height; index += 1) {
-			const result = await this.apiClient.invoke<{ data: string; height: number; module: string; name: string }[]>("chain_getEvents", {
-				height: index
+			const result = await this.apiClient.invoke<
+				{ data: string; height: number; module: string; name: string }[]
+			>('chain_getEvents', {
+				height: index,
 			});
 			// 3a. Once an event is found, decode its data and pass it to the _saveEventInfoToDB() function
 			const helloEvents = result.filter(e => e.module === 'hello' && e.name === 'newHello');
 			for (const helloEvent of helloEvents) {
-				const parsedData = codec.decode<{ senderAddress: Buffer; message: string }>(onChainEventSchema, Buffer.from(helloEvent.data, 'hex'));
+				const parsedData = codec.decode<{ senderAddress: Buffer; message: string }>(
+					onChainEventSchema,
+					Buffer.from(helloEvent.data, 'hex'),
+				);
 				const { counter } = await this._getLastCounter();
 				await this._saveEventInfoToDB(parsedData, helloEvent.height, counter + 1);
 			}
@@ -88,7 +97,11 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private async _saveEventInfoToDB(parsedData: { senderAddress: Buffer; message: string }, chainHeight: number, counterValue: number): Promise<string> {
+	private async _saveEventInfoToDB(
+		parsedData: { senderAddress: Buffer; message: string },
+		chainHeight: number,
+		counterValue: number,
+	): Promise<string> {
 		// 1. Saves newly generated hello events to the database
 		const { senderAddress, message } = parsedData;
 		await setEventHelloInfo(this._pluginDB, senderAddress, message, chainHeight, counterValue);
@@ -96,7 +109,6 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 		await setLastCounter(this._pluginDB, counterValue);
 		// 3. Saves last checked block's height
 		await setLastEventHeight(this._pluginDB, chainHeight);
-		return "Data Saved";
+		return 'Data Saved';
 	}
 }
-
