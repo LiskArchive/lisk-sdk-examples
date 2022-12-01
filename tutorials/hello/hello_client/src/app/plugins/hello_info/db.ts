@@ -17,7 +17,7 @@ export const getDBInstance = async (
 	dataPath: string,
 	dbName = 'lisk-framework-helloInfo-plugin.db',
 ): Promise<KVStore> => {
-	const dirPath = join(dataPath.replace('~', os.homedir()), 'plugins/data', dbName);
+	const dirPath = join(dataPath.replace('~', os.homedir()), 'database', dbName);
 	await ensureDir(dirPath);
 	return new Database(dirPath);
 };
@@ -31,10 +31,10 @@ export const getEventHelloInfo = async (db: KVStore): Promise<(Event & { id: Buf
 	});
 	// 2. Get event's data out of the collected stream and push it in an array.
 	const results = await new Promise<(Event & { id: Buffer })[]>((resolve, reject) => {
-		const ids: (Event & { id: Buffer })[] = [];
+		const events: (Event & { id: Buffer })[] = [];
 		stream
 			.on('data', ({ key, value }: { key: Buffer; value: Buffer }) => {
-				ids.push({
+				events.push({
 					...codec.decode<Event>(offChainEventSchema, value),
 					id: key.slice(DB_KEY_ADDRESS_INFO.length),
 				});
@@ -43,7 +43,7 @@ export const getEventHelloInfo = async (db: KVStore): Promise<(Event & { id: Buf
 				reject(error);
 			})
 			.on('end', () => {
-				resolve(ids);
+				resolve(events);
 			});
 	});
 	return results;
@@ -62,9 +62,11 @@ export const setEventHelloInfo = async (
 		message: _message,
 		height: _eventHeight,
 	});
-	let dbKey = cryptography.utils.intToBuffer(lastCounter, 4);
-	// Create a unique key of each event.
-	dbKey = Buffer.concat([DB_KEY_ADDRESS_INFO, dbKey]);
+	// Creates a unique key for each event
+	const dbKey = Buffer.concat([
+		DB_KEY_ADDRESS_INFO,
+		cryptography.utils.intToBuffer(lastCounter, 4),
+	]);
 	await db.set(dbKey, encodedAddressInfo);
 	console.log('** Event data saved successfully in the database **');
 };
