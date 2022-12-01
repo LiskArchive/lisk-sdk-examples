@@ -1,5 +1,5 @@
 export const configSchema = {
-    $id: '#/plugins/helloInfo/config',
+    $id: '/plugins/helloInfo/config',
     type: 'object',
     properties: {
         syncInterval: {
@@ -13,7 +13,7 @@ export const configSchema = {
 };
 
 export const onChainEventSchema = {
-    $id: '/helloInfo/new_hello/chainEvent',
+    $id: '/helloInfo/newHello/chainEvent',
     type: 'object',
     required: ['senderAddress', 'message'],
     properties: {
@@ -29,7 +29,7 @@ export const onChainEventSchema = {
 };
 
 export const offChainEventSchema = {
-    $id: '/helloInfo/new_hello',
+    $id: '/helloInfo/newHello',
     type: 'object',
     required: ['senderAddress', 'message', 'height'],
     properties: {
