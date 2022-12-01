@@ -7,7 +7,7 @@ import { join } from 'path';
 import { ensureDir } from 'fs-extra';
 import { offChainEventSchema, counterSchema, heightSchema } from './schemas';
 import { Event, Counter, Height } from './types';
-import { DB_KEY_ADDRESS_INFO, DB_LAST_COUNTER_INFO, DB_LAST_HEIGHT_INFO } from './constants';
+import { DB_KEY_EVENT_INFO, DB_LAST_COUNTER_INFO, DB_LAST_HEIGHT_INFO } from './constants';
 
 const { Database } = liskDB;
 type KVStore = liskDB.Database;
@@ -26,8 +26,8 @@ export const getDBInstance = async (
 export const getEventHelloInfo = async (db: KVStore): Promise<(Event & { id: Buffer })[]> => {
 	// 1. Look for all the given key-value pairs in the database
 	const stream = db.createReadStream({
-		gte: Buffer.concat([DB_KEY_ADDRESS_INFO, Buffer.alloc(4, 0)]),
-		lte: Buffer.concat([DB_KEY_ADDRESS_INFO, Buffer.alloc(4, 255)]),
+		gte: Buffer.concat([DB_KEY_EVENT_INFO, Buffer.alloc(4, 0)]),
+		lte: Buffer.concat([DB_KEY_EVENT_INFO, Buffer.alloc(4, 255)]),
 	});
 	// 2. Get event's data out of the collected stream and push it in an array.
 	const results = await new Promise<(Event & { id: Buffer })[]>((resolve, reject) => {
@@ -36,7 +36,7 @@ export const getEventHelloInfo = async (db: KVStore): Promise<(Event & { id: Buf
 			.on('data', ({ key, value }: { key: Buffer; value: Buffer }) => {
 				events.push({
 					...codec.decode<Event>(offChainEventSchema, value),
-					id: key.slice(DB_KEY_ADDRESS_INFO.length),
+					id: key.slice(DB_KEY_EVENT_INFO.length),
 				});
 			})
 			.on('error', error => {
@@ -63,10 +63,7 @@ export const setEventHelloInfo = async (
 		height: _eventHeight,
 	});
 	// Creates a unique key for each event
-	const dbKey = Buffer.concat([
-		DB_KEY_ADDRESS_INFO,
-		cryptography.utils.intToBuffer(lastCounter, 4),
-	]);
+	const dbKey = Buffer.concat([DB_KEY_EVENT_INFO, cryptography.utils.intToBuffer(lastCounter, 4)]);
 	await db.set(dbKey, encodedAddressInfo);
 	console.log('** Event data saved successfully in the database **');
 };
