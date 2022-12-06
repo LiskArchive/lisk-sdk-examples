@@ -8,7 +8,8 @@ import {
 	setLastCounter,
 	setLastEventHeight,
 } from './db';
-import { configSchema, onChainEventSchema } from './schemas';
+import { configSchema } from './schemas';
+import { newHelloEventSchema } from '../../modules/hello/schema';
 import { HelloInfoPluginConfig, Height, Counter } from './types';
 import { Endpoint } from './endpoint';
 
@@ -59,7 +60,7 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 			const helloEvents = result.filter(e => e.module === 'hello' && e.name === 'newHello');
 			for (const helloEvent of helloEvents) {
 				const parsedData = codec.decode<{ senderAddress: Buffer; message: string }>(
-					onChainEventSchema,
+					newHelloEventSchema,
 					Buffer.from(helloEvent.data, 'hex'),
 				);
 				const { counter } = await this._getLastCounter();
