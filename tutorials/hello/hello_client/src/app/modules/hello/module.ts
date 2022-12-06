@@ -4,11 +4,11 @@ import {
     BaseModule, BlockAfterExecuteContext, BlockExecuteContext, BlockVerifyContext,
     GenesisBlockExecuteContext, InsertAssetContext, ModuleInitArgs,
     ModuleMetadata, TransactionExecuteContext, TransactionVerifyContext,
-    VerificationResult, codec, utils
+    VerificationResult, utils
 } from 'lisk-sdk';
 import { validator } from '@liskhq/lisk-validator';
 import { CreateHelloCommand } from "./commands/create_hello_command";
-import { createHelloSchema, CreateHelloParams, configSchema } from './schema';
+import { configSchema, getHelloRequestSchema, getHelloCounterResponseSchema, getHelloResponseSchema } from './schema';
 import { ModuleConfigJSON } from './types';
 import { HelloEndpoint } from './endpoint';
 import { NewHelloEvent } from './events/new_hello';
@@ -29,7 +29,7 @@ export class HelloModule extends BaseModule {
 
 	public constructor() {
 		super();
-		// registeration of stores and events
+		// registration of stores and events
 		this.stores.register(CounterStore, new CounterStore(this.name));
 		this.stores.register(MessageStore, new MessageStore(this.name));
 		this.events.register(NewHelloEvent, new NewHelloEvent(this.name));
@@ -38,7 +38,17 @@ export class HelloModule extends BaseModule {
 	public metadata(): ModuleMetadata {
 		return {
 			name: this.name,
-			endpoints: [],
+			endpoints: [
+				{
+					name: this.endpoint.getHello.name,
+					response: getHelloCounterResponseSchema,
+				},
+				{
+					name: this.endpoint.getHelloCounter.name,
+					request: getHelloRequestSchema,
+					response: getHelloResponseSchema,
+				},
+			],
 			commands: this.commands.map(command => ({
 				name: command.name,
 				params: command.schema,
@@ -56,12 +66,10 @@ export class HelloModule extends BaseModule {
 	public async init(args: ModuleInitArgs): Promise<void> {
 		// Get the module config defined in the config.json file
 		const { moduleConfig } = args;
-		console.log("defaultConfig: ", defaultConfig);
-		console.log("moduleConfig: ", moduleConfig);
 		// Overwrite the default module config with values from config.json, if set
 		const config = utils.objects.mergeDeep({}, defaultConfig, moduleConfig) as ModuleConfigJSON;
 		// Validate the provided config with the config schema
-		validator.validate(configSchema, config);
+		validator.validate<ModuleConfigJSON>(configSchema, config);
 		// Call the command init() method with config values as parameters
 		this.commands[0].init(config).catch(err => {
 			console.log("Error: ", err);
@@ -89,16 +97,9 @@ export class HelloModule extends BaseModule {
 	public async beforeCommandExecute(_context: TransactionExecuteContext): Promise<void> {
 	}
 
-	public async afterCommandExecute(context: TransactionExecuteContext): Promise<void> {
-		const newHelloEvent = this.events.get(NewHelloEvent);
-		const createHelloParams: CreateHelloParams = codec.decode<CreateHelloParams>(createHelloSchema, context.transaction.params);
-		context.logger.info(createHelloParams,"createHelloParams")
-		newHelloEvent.log(context.getMethodContext(), {
-			senderAddress: context.transaction.senderAddress,
-			message: createHelloParams.message
-		});
-
+	public async afterCommandExecute(_context: TransactionExecuteContext): Promise<void> {
 	}
+
 	public async initGenesisState(_context: GenesisBlockExecuteContext): Promise<void> {
 
 	}

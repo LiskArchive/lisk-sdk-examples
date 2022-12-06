@@ -14,7 +14,7 @@
 import { BaseStore } from 'lisk-sdk';
 
 export interface MessageStoreData {
-	message: String;
+	message: string;
 }
 
 export const messageStoreSchema = {

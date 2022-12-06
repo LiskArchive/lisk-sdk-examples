@@ -103,12 +103,12 @@
 		"@oclif/command": "1.8.16",
 		"@oclif/plugin-autocomplete": "1.2.0",
 		"@oclif/plugin-help": "5.1.12",
-		"axios": "0.21.1",
+		"axios": "0.21.2",
 		"fs-extra": "9.1.0",
 		"inquirer": "7.3.2",
 		"lisk-commander": "^5.1.10",
 		"lisk-sdk": "^5.2.2",
-		"tar": "6.0.2",
+		"tar": "6.1.9",
 		"tslib": "1.13.0"
 	},
 	"devDependencies": {

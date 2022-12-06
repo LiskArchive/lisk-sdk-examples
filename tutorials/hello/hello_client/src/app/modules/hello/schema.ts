@@ -17,39 +17,22 @@ export const createHelloSchema = {
 	},
 };
 
-export const newHelloEventSchema = {
-	$id: '/hello/events/new_hello',
-	type: 'object',
-	required: ['senderAddress', 'message'],
-	properties: {
-		senderAddress: {
-			dataType: 'bytes',
-			fieldNumber: 1,
-		},
-		message: {
-			dataType: 'string',
-			fieldNumber: 2,
-		},
-	},
-};
-
 export const configSchema = {
 	$id: '/hello/config',
 	type: 'object',
 	properties: {
 		maxMessageLength: {
-			dataType: 'uint32',
-			fieldNumber: 1,
+			type: 'integer',
+			format: 'uint32',
 		},
 		minMessageLength: {
-			dataType: 'uint32',
-			fieldNumber: 2,
+			type: 'integer',
+			format: 'uint32',
 		},
 		blacklist: {
 			type: 'array',
-			fieldNumber: 3,
 			items: {
-				dataType: 'string',
+				type: 'string',
 				minLength: 1,
 				maxLength: 40,
 			},
@@ -60,4 +43,40 @@ export const configSchema = {
 		'minMessageLength',
 		'blacklist'
 	],
+};
+
+export const getHelloCounterResponseSchema = {
+	$id: 'modules/hello/endpoint/getHelloCounter',
+	type: 'object',
+	required: ['counter'],
+	properties: {
+		counter: {
+			type: 'number',
+			format: 'uint32'
+		},
+	},
+};
+
+export const getHelloResponseSchema = {
+	$id: 'modules/hello/endpoint/getHello',
+	type: 'object',
+	required: ['message'],
+	properties: {
+		message: {
+			type: 'string',
+			format: 'utf8'
+		},
+	},
+};
+
+export const getHelloRequestSchema = {
+	$id: 'modules/hello/endpoint/getHelloRequest',
+	type: 'object',
+	required: ['address'],
+	properties: {
+		address: {
+			type: 'string',
+			format: 'lisk32',
+		},
+	},
 };

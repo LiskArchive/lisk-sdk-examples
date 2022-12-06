@@ -9,8 +9,9 @@ import {
 } from 'lisk-sdk';
 import { createHelloSchema } from '../schema';
 import { MessageStore } from '../stores/message';
-import { CounterStore, CounterStoreData } from '../stores/counter';
+import { counterKey, CounterStore, CounterStoreData } from '../stores/counter';
 import { ModuleConfig } from '../types';
+import { NewHelloEvent } from '../events/new_hello';
 
 interface Params {
 	message: string;
@@ -28,43 +29,32 @@ export class CreateHelloCommand extends BaseCommand {
 		this.schema.properties.message.maxLength = config.maxMessageLength;
 		// Set the min message length to the value defined in the module config
 		this.schema.properties.message.minLength = config.minMessageLength;
-		console.log("this.schema: ", this.schema);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async verify(context: CommandVerifyContext<Params>): Promise<VerificationResult> {
 		let validation: VerificationResult;
-		context.logger.info("HELLO TX VERIFICATION");
 		const wordList = context.params.message.split(" ");
-		context.logger.info(wordList,"wordList");
-		context.logger.info(this._blacklist,"this._blacklist");
 		const found = this._blacklist.filter(value => wordList.includes(value));
 		if (found.length > 0) {
-		  context.logger.info("======FOUND============");
-			validation = {
-				status: VerifyStatus.FAIL,
-				error: new Error(
+		  context.logger.info("==== FOUND: Message contains a blacklisted word ====");
+			throw new Error(
 					`Illegal word in hello message: ${  found.toString()}`
-				)
-			};
+				);
 		} else {
-		  context.logger.info("======NOT FOUND============");
+		  context.logger.info("==== NOT FOUND: Message contains no blacklisted words ====");
 			validation = {
 				status: VerifyStatus.OK
 			};
 		}
-		context.logger.info("==================");
-		context.logger.info(validation,"validation");
 		return validation;
 	}
 
 	public async execute(context: CommandExecuteContext<Params>): Promise<void> {
 		// 1. Get account data of the sender of the Hello transaction.
-		const {senderAddress} = context.transaction;
+		const { senderAddress } = context.transaction;
 		// 2. Get message and counter stores.
-		context.logger.info("====== this.stores.get(MessageStore) ======");
 		const messageSubstore = this.stores.get(MessageStore);
-		context.logger.info("====== this.stores.get(CounterStore) ======");
 		const counterSubstore = this.stores.get(CounterStore);
 
 		// 3. Save the Hello message to the message store, using the senderAddress as key, and the message as value.
@@ -73,24 +63,25 @@ export class CreateHelloCommand extends BaseCommand {
 		});
 
 		// 3. Get the Hello counter from the counter store.
-		const helloBuffer = Buffer.from('hello','utf8');
-		context.logger.info(helloBuffer,"====== counterSubstore.get(context, helloBuffer) ======");
 		let helloCounter: CounterStoreData;
 		try {
-			helloCounter = await counterSubstore.get(context, helloBuffer);
+			helloCounter = await counterSubstore.get(context, counterKey);
 		} catch (error) {
-			context.logger.info(error,"====== ERROR ======");
 			helloCounter = {
 				counter: 0,
 			}
 		}
 		// 5. Increment the Hello counter +1.
 		helloCounter.counter+=1;
-		context.logger.info("====== helloCounter ======");
-		context.logger.info(helloCounter);
-		context.logger.info("====== helloCounter ======");
 
 		// 6. Save the Hello counter to the counter store.
-		await counterSubstore.set(context, helloBuffer, helloCounter);
+		await counterSubstore.set(context, counterKey, helloCounter);
+
+		// 7. Emit a "New Hello" event
+		const newHelloEvent = this.events.get(NewHelloEvent);
+		newHelloEvent.add(context, {
+			senderAddress: context.transaction.senderAddress,
+			message: context.params.message
+		},[context.transaction.senderAddress]);
 	}
 }

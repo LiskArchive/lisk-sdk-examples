@@ -11,14 +11,29 @@
  *
  * Removal or modification of this copyright notice is prohibited.
  */
-import { BaseEvent, EventQueuer } from 'lisk-sdk';
-import { newHelloEventSchema } from '../schema';
-import { NewHelloEventData } from '../types';
+import { BaseEvent } from 'lisk-sdk';
+
+export const newHelloEventSchema = {
+	$id: '/hello/events/new_hello',
+	type: 'object',
+	required: ['senderAddress', 'message'],
+	properties: {
+		senderAddress: {
+			dataType: 'bytes',
+			fieldNumber: 1,
+		},
+		message: {
+			dataType: 'string',
+			fieldNumber: 2,
+		},
+	},
+};
+
+export interface NewHelloEventData {
+	senderAddress: Buffer;
+	message: string;
+}
 
 export class NewHelloEvent extends BaseEvent<NewHelloEventData> {
 	public schema = newHelloEventSchema;
-
-	public log(ctx: EventQueuer, data: NewHelloEventData): void {
-		this.add(ctx, data, [data.senderAddress]);
-	}
 }
