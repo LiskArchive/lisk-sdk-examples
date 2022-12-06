@@ -12,22 +12,6 @@ export const configSchema = {
 	},
 };
 
-export const onChainEventSchema = {
-	$id: '/helloInfo/newHello/chainEvent',
-	type: 'object',
-	required: ['senderAddress', 'message'],
-	properties: {
-		senderAddress: {
-			dataType: 'bytes',
-			fieldNumber: 1,
-		},
-		message: {
-			dataType: 'string',
-			fieldNumber: 2,
-		},
-	},
-};
-
 export const offChainEventSchema = {
 	$id: '/helloInfo/newHello',
 	type: 'object',
