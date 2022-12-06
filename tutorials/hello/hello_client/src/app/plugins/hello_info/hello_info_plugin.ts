@@ -9,7 +9,7 @@ import {
 	setLastEventHeight,
 } from './db';
 import { configSchema } from './schemas';
-import { newHelloEventSchema } from '../../modules/hello/schema';
+import { newHelloEventSchema } from '../../modules/hello/events/new_hello';
 import { HelloInfoPluginConfig, Height, Counter } from './types';
 import { Endpoint } from './endpoint';
 
