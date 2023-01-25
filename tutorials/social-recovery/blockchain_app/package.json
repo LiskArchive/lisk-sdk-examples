@@ -21,7 +21,7 @@
     "@liskhq/lisk-utils": "^0.1.0",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "lisk-sdk": "^5.0.5"
+    "express": "^4.17.3",
+    "lisk-sdk": "^5.2.2"
   }
 }
