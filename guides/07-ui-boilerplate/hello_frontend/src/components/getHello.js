@@ -1,5 +1,4 @@
 import FixedMenuLayout from '../layout/header';
-import FixedFooter from '../layout/footer';
 
 function GetHello() {
     return (
@@ -7,8 +6,8 @@ function GetHello() {
             <FixedMenuLayout />
             <div>
                 <h1>Get all the Hello Messages</h1>
+                <p>On this page, you can retrieve all the Hello messages sent to the network.</p>
             </div>
-            <FixedFooter />
         </div>
 
 

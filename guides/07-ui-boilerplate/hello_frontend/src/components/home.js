@@ -1,5 +1,4 @@
 import FixedMenuLayout from '../layout/header';
-import FixedFooter from '../';
 import { Container, List, Divider } from 'semantic-ui-react';
 import {
     Link
@@ -11,9 +10,7 @@ function Home() {
         <div>
             <FixedMenuLayout />
             <Container >
-                {/* <Image src='../logo.png'></Image> */}
                 <img src={logo} alt="Lisk Logo" width="100" />
-                {/* <img src="https://reactjs.org/logo-og.png" alt="React Image" /> */}
                 <h1>Welcome to the Hello World Application</h1>
                 <Divider>
                 </Divider>
@@ -35,10 +32,6 @@ function Home() {
                     </List.Item>
                     <List.Item as={Link} to="/faucet">Faucet</List.Item>
                 </List>
-
-                {/* <p>
-                    By the example of the "Hello World" client, it is explained how to build a very simple sidechain client step by step in the following chapters.
-                </p> */}
             </Container>
         </div >
     );

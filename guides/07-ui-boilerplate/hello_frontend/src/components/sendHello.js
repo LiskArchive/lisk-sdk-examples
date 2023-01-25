@@ -1,5 +1,4 @@
 import FixedMenuLayout from '../layout/header';
-import FixedFooter from '../layout/footer';
 import { Form, Button, Grid } from 'semantic-ui-react';
 
 function SendHello() {
@@ -26,7 +25,6 @@ function SendHello() {
                     </Grid.Column>
                 </Grid>
             </div>
-            <FixedFooter />
         </div>
     );
 }

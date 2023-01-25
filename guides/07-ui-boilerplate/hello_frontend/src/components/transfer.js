@@ -1,5 +1,4 @@
 import FixedMenuLayout from '../layout/header';
-// import FixedFooter from '../layout/footer';
 import { Form, Button, Grid } from 'semantic-ui-react';
 
 function Transfer() {
@@ -27,9 +26,7 @@ function Transfer() {
                     </Form>
                 </Grid.Column>
             </Grid>
-            {/* <FixedFooter /> */}
         </div >
-
     );
 }
 

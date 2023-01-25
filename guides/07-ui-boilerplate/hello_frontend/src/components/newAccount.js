@@ -1,5 +1,4 @@
 import FixedMenuLayout from '../layout/header';
-import FixedFooter from '../layout/footer';
 import { Form, Button, Grid } from 'semantic-ui-react';
 
 function NewAccount() {
@@ -16,7 +15,6 @@ function NewAccount() {
                         </Form>
                     </Grid.Column>
                 </Grid>
-                {/* <pre>{JSON.stringify(credentials, null, 2)}</pre> */}
             </div>
         </div>
     );
