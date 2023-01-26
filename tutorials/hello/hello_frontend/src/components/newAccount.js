@@ -1,8 +1,23 @@
-import FixedMenuLayout from '../layout/header';
-import FixedFooter from '../layout/footer';
 import { Form, Button, Grid } from 'semantic-ui-react';
+import { passphrase, cryptography } from 'lisk-elements';
+import FixedMenuLayout from '../layout/header';
+
+const newCredentials = () => {
+    const pass = passphrase.Mnemonic.generateMnemonic();
+    const keys = cryptography.getPrivateAndPublicKeyFromPassphrase(pass);
+    const credentials = {
+        address: cryptography.getBase32AddressFromPassphrase(pass),
+        binaryAddress: cryptography.getAddressFromPassphrase(pass).toString("hex"),
+        passphrase: pass,
+        publicKey: keys.publicKey.toString("hex"),
+        privateKey: keys.privateKey.toString("hex")
+    };
+    return credentials;
+};
+
 
 function NewAccount() {
+    const credentials = newCredentials();
     return (
         <div className="App">
             <FixedMenuLayout />
@@ -16,7 +31,7 @@ function NewAccount() {
                         </Form>
                     </Grid.Column>
                 </Grid>
-                {/* <pre>{JSON.stringify(credentials, null, 2)}</pre> */}
+                <pre>{JSON.stringify(credentials, null, 2)}</pre>
             </div>
         </div>
     );

@@ -1,5 +1,4 @@
 import FixedMenuLayout from '../layout/header';
-import FixedFooter from '../';
 import { Container, List, Divider } from 'semantic-ui-react';
 import {
     Link
