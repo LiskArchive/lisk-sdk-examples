@@ -2,7 +2,6 @@ import FixedMenuLayout from '../layout/header';
 import React, { useState } from "react";
 import { Form, Button, Grid, Container } from 'semantic-ui-react';
 import { cryptography, transactions } from '@liskhq/lisk-client/browser';
-// import { utils } from '@liskhq/lisk-utils';
 import * as api from '../api';
 
 function SendHello() {
@@ -25,7 +24,7 @@ function SendHello() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const client = await api.getClient();
-        const passphrase = 'weasel balance horse obtain love diary lesson reflect connect scheme decrease wrestle team sphere spring desert quote fever penalty rookie liquid harvest ride omit'
+        const passphrase = 'weasel balance horse obtain love diary lesson reflect connect scheme decrease wrestle team sphere spring desert quote fever penalty rookie liquid harvest ride omit';
         const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, "m/44'/134'/0'");
         const tx = await client.transaction.create({
             module: 'hello',
