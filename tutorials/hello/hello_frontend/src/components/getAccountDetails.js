@@ -7,7 +7,7 @@ import * as api from '../api';
 function GetAccountDetails() {
 
     const [state, updateState] = useState({
-        address: 'lsko5v2u2wjswjogxgxdr79c45kewprypouyaky76',
+        address: '',
         account: {},
         auth: {},
     });
@@ -39,7 +39,6 @@ function GetAccountDetails() {
             auth: authenticationDetails
         });
     };
-
     return (
         <div>
             <FixedMenuLayout />
