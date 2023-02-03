@@ -9,6 +9,7 @@ function GetAccountDetails() {
     const [state, updateState] = useState({
         address: 'lsko5v2u2wjswjogxgxdr79c45kewprypouyaky76',
         account: {},
+        auth: {},
     });
 
     const handleChange = (event) => {
@@ -23,14 +24,21 @@ function GetAccountDetails() {
         event.preventDefault();
         const client = await api.getClient();
         // Retrieves the account details from the blockchain application, based on the address provided.
-        const account = await client.account.get(state.address);
+        const account = await client.invoke("token_getBalance", {
+            address: state.address,
+            tokenID: "0000000000000000"
+        })
+        const authenticationDetails = await client.invoke("auth_getAuthAccount", {
+            address: state.address,
+            tokenID: "0000000000000000"
+        })
+
         updateState({
             ...state,
-            account: client.account.toJSON(account),
+            account: account,
+            auth: authenticationDetails
         });
     };
-
-
 
     return (
         <div>
@@ -49,6 +57,7 @@ function GetAccountDetails() {
                             </Form>
                             <div>
                                 <pre>Account: {JSON.stringify(state.account, null, 2)}</pre>
+                                <pre>Authentication details: {JSON.stringify(state.auth, null, 2)}</pre>
                             </div>
                         </Grid.Column>
                     </Grid>

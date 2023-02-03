@@ -9,11 +9,11 @@ import { Buffer } from 'buffer';
 
 function Transfer() {
     const [state, updateState] = useState({
-        address: 'lsko5v2u2wjswjogxgxdr79c45kewprypouyaky76',
-        amount: '10',
-        accountInitializationFee: '1',
-        fee: '1',
-        passphrase: 'weasel balance horse obtain love diary lesson reflect connect scheme decrease wrestle team sphere spring desert quote fever penalty rookie liquid harvest ride omit',
+        address: '',
+        amount: '',
+        accountInitializationFee: '',
+        fee: '',
+        passphrase: '',
         transaction: {},
         response: {}
     });
@@ -31,12 +31,11 @@ function Transfer() {
 
         const client = await api.getClient();
         const address = state.address;
-        const passphrase = state.passphrase;
+        const passphrase = 'weasel balance horse obtain love diary lesson reflect connect scheme decrease wrestle team sphere spring desert quote fever penalty rookie liquid harvest ride omit';
         const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, "m/44'/134'/0'");
         const signedTx = await client.transaction.create({
             module: 'token',
             command: 'transfer',
-
             fee: BigInt(transactions.convertLSKToBeddows(state.fee)),
             params: {
                 tokenID: Buffer.from('0000000000000000', 'hex'),
