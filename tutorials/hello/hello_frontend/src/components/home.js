@@ -11,9 +11,14 @@ function Home() {
             <FixedMenuLayout />
             <Container >
                 {/* <Image src='../logo.png'></Image> */}
-                <img src={logo} alt="Lisk Logo" width="100" />
+                {/* <img src={logo} alt="Lisk Logo" width="100" /> */}
                 {/* <img src="https://reactjs.org/logo-og.png" alt="React Image" /> */}
-                <h1>Welcome to the Hello World Application</h1>
+                {/* <h1>Welcome to the Hello World Application</h1> */}
+
+                <span>
+
+                    <h1><img src={logo} alt="Lisk Logo" width="35" style={{ display: 'inline', verticalAlign: 'middle' }} /> Welcome to the Hello World Application</h1>
+                </span>
                 <Divider>
                 </Divider>
                 <h3>The Hello World Application allows you to do the following: </h3>

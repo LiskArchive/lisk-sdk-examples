@@ -35,13 +35,21 @@ function NewAccount() {
         <div>
             <FixedMenuLayout />
             <Container>
+
                 <div>
+
+                    <div class="ui green segment">
+                        <i class="lightbulb outline icon"></i><strong>TIP:</strong> Reload the page to generate a new account.
+
+                    </div>
+
                     <h2>New account created!</h2>
                     <Divider></Divider>
                     <div className='App'>
                         <pre>{JSON.stringify(accounts, null, 2)}</pre>
                     </div>
                 </div>
+
             </Container>
         </div>
     );

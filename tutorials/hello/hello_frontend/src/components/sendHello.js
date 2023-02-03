@@ -1,6 +1,6 @@
 import FixedMenuLayout from '../layout/header';
 import React, { useState } from "react";
-import { Form, Button, Grid, Container } from 'semantic-ui-react';
+import { Form, Button, Grid, Container, Divider } from 'semantic-ui-react';
 import { cryptography, transactions } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
 
@@ -56,9 +56,13 @@ function SendHello() {
             <Container>
                 <div>
                     <h1>Send Hello Message</h1>
+                    <Divider></Divider>
                     {/* <p>Send a Hello transaction.</p> */}
-                    <Grid style={{ height: 'max', overflow: 'hidden' }} verticalAlign='middle'>
-                        <Grid.Column style={{ maxWidth: 500 }}>
+                    {/* <Grid style={{ height: 'max', overflow: 'hidden' }} verticalAlign='middle'>
+                        <Grid.Column style={{ maxWidth: 500 }}> */}
+                    <div class="ui two column doubling stackable grid container">
+                        <div class="column">
+                            <h4>Please fill the following form to send a "Hello" message.</h4>
                             <Form onSubmit={handleSubmit} class="ui form">
 
                                 <Form.Field class="field">
@@ -75,16 +79,35 @@ function SendHello() {
                                 </Form.Field>
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>
-                            <div>
+                        </div>
+                        <div className='column'>
+
+                            { if (state.transaction.length > 0) {
+    return (<>
+                                <h4>Your account details are:</h4>
+                                <div class="ui raised segment" style={{ overflow: 'scroll' }}>
+                                    <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
+                                    <pre>Response: {JSON.stringify(state.response, null, 2)}</pre>
+                                </div>
+                            </>
+                            );}
+}
+                            {/* 
+                            <h4>Your account details are:</h4>
+                            <div class="ui raised segment" style={{ overflow: 'scroll' }}>
                                 <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
                                 <pre>Response: {JSON.stringify(state.response, null, 2)}</pre>
-                            </div>
-                        </Grid.Column>
-                    </Grid>
+                            </div> */}
+                        </div>
+                    </div>
+                    {/* </Grid.Column>
+                </Grid> */}
                 </div>
             </Container>
         </>
     );
 }
 
+
+//style={{ backgroundColor: '#0C152E', color: 'white' }}
 export default SendHello;
