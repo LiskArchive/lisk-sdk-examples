@@ -1,6 +1,6 @@
 import FixedMenuLayout from '../layout/header';
 import React, { useState } from "react";
-import { Form, Button, Grid, Container, Divider } from 'semantic-ui-react';
+import { Form, Button, Container, Divider } from 'semantic-ui-react';
 import { cryptography, transactions } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
 
@@ -75,7 +75,7 @@ function SendHello() {
                                 </Form.Field>
                                 <Form.Field class="field">
                                     <label>Passphrase:</label>
-                                    <input placeholder='Passphrase of your hello_client' type="text" id="passphrase" name="passphrase" onChange={handleChange} value={state.passphrase} />
+                                    <input placeholder='Passphrase of your hello_client' type="password" id="passphrase" name="passphrase" onChange={handleChange} value={state.passphrase} />
                                 </Form.Field>
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>

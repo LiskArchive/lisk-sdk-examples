@@ -1,6 +1,6 @@
 import FixedMenuLayout from '../layout/header';
 import React, { useState } from "react";
-import { Form, Button, Grid, Container } from 'semantic-ui-react';
+import { Form, Button, Divider, Container } from 'semantic-ui-react';
 import { cryptography, transactions } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
 import { Buffer } from 'buffer';
@@ -62,36 +62,55 @@ function Faucet() {
         });
     };
 
-
+    const displayData = () => {
+        if (typeof state.transaction !== 'undefined' && state.transaction.fee > 0) {
+            return (
+                <>
+                    <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
+                    <pre>Response: {JSON.stringify(state.response, null, 2)}</pre>
+                </>
+            )
+        }
+        else {
+            return (<p></p>)
+        }
+    }
 
     return (
         <>
             <FixedMenuLayout />
             <Container>
-                <h1>Faucet</h1>
-                <h4>The faucet transfers tokens from the genesis account to another.</h4>
+                <h2>Faucet</h2>
+                <p>The faucet transfers tokens from the genesis account to another.</p>
+                <Divider></Divider>
                 <div>
-                    <Grid style={{ height: 'max', overflow: 'hidden' }} verticalAlign='middle'>
-                        <Grid.Column style={{ maxWidth: 500 }}>
+                    <div class="ui two column doubling stackable grid container">
+                        <div class="column">
                             <Form onSubmit={handleSubmit}>
                                 <Form.Field>
+                                    <label>Recipient's Lisk32 Address:</label>
                                     <input placeholder="Recipient's Lisk32 Address" id="address" name="address" onChange={handleChange} value={state.address} />
                                 </Form.Field>
                                 <Form.Field>
-                                    <input placeholder='Amount (1 = 10^8 tokens):' id="amount" name="amount" onChange={handleChange} value={state.amount} />
+                                    <label>Amount:</label>
+                                    <input placeholder='Amount (1 = 10^8 tokens)' id="amount" name="amount" onChange={handleChange} value={state.amount} />
                                 </Form.Field>
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>
-                        </Grid.Column>
-                    </Grid>
-                    {state.transaction &&
-                        <div>
-                            <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
-                            <pre>Response: {JSON.stringify(state.response, null, 2)}</pre>
                         </div>
-                    }
+
+                        <div className='column'>
+                            <h3>Your transaction's details are:</h3>
+                            <div class="ui raised segment" style={{ overflow: 'scroll' }}>
+                                <>
+                                    {displayData()}
+                                </>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </Container>
+
         </>
     );
 }
