@@ -24,7 +24,7 @@ function SendHello() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const client = await api.getClient();
-        const passphrase = 'weasel balance horse obtain love diary lesson reflect connect scheme decrease wrestle team sphere spring desert quote fever penalty rookie liquid harvest ride omit';
+        const passphrase = state.passphrase;
         const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, "m/44'/134'/0'");
         const tx = await client.transaction.create({
             module: 'hello',
@@ -82,7 +82,7 @@ function SendHello() {
                         </div>
                         <div className='column'>
 
-                            { if (state.transaction.length > 0) {
+                            {/* { if (state.transaction.length > 0) {
     return (<>
                                 <h4>Your account details are:</h4>
                                 <div class="ui raised segment" style={{ overflow: 'scroll' }}>
@@ -91,7 +91,7 @@ function SendHello() {
                                 </div>
                             </>
                             );}
-}
+} */}
                             {/* 
                             <h4>Your account details are:</h4>
                             <div class="ui raised segment" style={{ overflow: 'scroll' }}>

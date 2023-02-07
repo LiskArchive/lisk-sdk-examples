@@ -1,8 +1,8 @@
 import FixedMenuLayout from '../layout/header';
-import { Form, Button, Grid, Container, Divider } from 'semantic-ui-react';
+import { Form, Button, Container, Divider } from 'semantic-ui-react';
 import React, { useState } from "react";
-// import { cryptography } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
+
 
 function GetAccountDetails() {
 
@@ -39,35 +39,46 @@ function GetAccountDetails() {
             auth: authenticationDetails
         });
     };
+
+    const displayData = () => {
+        if (typeof state.account !== 'undefined' && state.account.availableBalance > 0) {
+            return (
+                <>
+                    <pre>Account: {JSON.stringify(state.account, null, 2)}</pre>
+                    <pre>Authentication details: {JSON.stringify(state.auth, null, 2)}</pre>
+                </>
+            )
+        }
+        else {
+            return (<p></p>)
+        }
+    }
+
     return (
         <div>
             <FixedMenuLayout />
             <Container>
                 <h2>Account Details</h2>
+                <p>Get account details by submitting a Lisk32 address.</p>
                 <Divider></Divider>
                 <div class="ui two column doubling stackable grid container">
-
-                    {/* <Grid style={{ height: 'max', overflow: 'hidden' }} verticalAlign='middle'> */}
-                    {/* <Grid.Column style={{ maxWidth: 500 }}> */}
                     <div class="column">
 
-                        <h3>Get account details by submitting a Lisk32 address.</h3>
                         <Form onSubmit={handleSubmit}>
                             <Form.Field>
+                                <label>Lisk32 Address:</label>
                                 <input placeholder="Lisk32 Address" id="address" name="address" onChange={handleChange} value={state.address} />
                             </Form.Field>
                             <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                         </Form>
                     </div>
 
-                    {/* </Grid.Column>
-
-                    </Grid> */}
                     <div className='column'>
                         <h3>Your account details are:</h3>
                         <div class="ui raised segment" style={{ overflow: 'scroll' }}>
-                            <pre>Account: {JSON.stringify(state.account, null, 2)}</pre>
-                            <pre>Authentication details: {JSON.stringify(state.auth, null, 2)}</pre>
+                            <>
+                                {displayData()}
+                            </>
                         </div>
                     </div>
                 </div>
