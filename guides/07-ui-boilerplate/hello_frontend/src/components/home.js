@@ -10,11 +10,12 @@ function Home() {
         <div>
             <FixedMenuLayout />
             <Container >
-                <img src={logo} alt="Lisk Logo" width="100" />
-                <h1>Welcome to the Hello World Application</h1>
+                <span>
+                    <h1><img src={logo} alt="Lisk Logo" width="35" style={{ display: 'inline', verticalAlign: 'middle' }} /> Welcome to the Hello sidechain application!</h1>
+                </span>
                 <Divider>
                 </Divider>
-                <h3>The Hello World Application allows you to do the following: </h3>
+                <h4>The Hello sidechain application allows you to do the following: </h4>
                 <List bulleted style={{ fontSize: 'medium' }}>
                     <List.Item>Account Operations
                         <List.List>
