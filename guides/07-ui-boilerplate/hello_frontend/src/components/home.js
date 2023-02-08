@@ -25,7 +25,7 @@ function Home() {
                         </List.List>
                     </List.Item>
                     <List.Item>
-                        Transactions
+                        Hello Message
                         <List.List>
                             <List.Item as={Link} to="/sendHello">Send Hello Message</List.Item>
                             <List.Item as={Link} to="/getHello">Get Hello Messages</List.Item>

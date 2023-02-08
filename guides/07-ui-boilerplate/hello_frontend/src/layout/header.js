@@ -29,7 +29,7 @@ const FixedMenuLayout = () => (
                     </Dropdown.Menu>
                 </Dropdown>
 
-                <Dropdown item simple text='Transaction'>
+                <Dropdown item simple text='Hello Message'>
                     <Dropdown.Menu>
                         <Dropdown.Item as={Link} to="/sendHello">Send Hello Message</Dropdown.Item>
                         <Dropdown.Item as={Link} to="/getHello">Get Hello Messages</Dropdown.Item>
