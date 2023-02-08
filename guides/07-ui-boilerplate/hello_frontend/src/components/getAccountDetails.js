@@ -1,25 +1,36 @@
 import FixedMenuLayout from '../layout/header';
-import { Form, Button, Grid } from 'semantic-ui-react';
+import { Form, Button, Container, Divider } from 'semantic-ui-react';
 
 function GetAccountDetails() {
     return (
-        <div className="App">
+        <div>
             <FixedMenuLayout />
-            <div>
-                <h2>Account Details</h2>
-                <p>Get account details by submitting the Lisk32 address</p>
-                <Grid textAlign='center' style={{ height: 'max', overflow: 'hidden' }} verticalAlign='middle'>
-                    <Grid.Column style={{ maxWidth: 500 }}>
-                        <Form>
+            <Container>
+                <h2>Account details</h2>
+                <p>Get account details by submitting a Lisk32 address.</p>
+                <Divider></Divider>
+                <div class="ui two column doubling stackable grid container">
+                    <div class="column">
+                        <Form >
                             <Form.Field>
-                                <input placeholder="Lisk32 Address" />
+                                <label>Lisk32 address:</label>
+                                <input placeholder="Lisk32 address" id="address" name="address" />
                             </Form.Field>
                             <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                         </Form>
-                    </Grid.Column>
-                </Grid>
-            </div>
-        </div>
+                    </div>
+
+                    <div className='column'>
+                        <h3>Your account details are:</h3>
+                        <div class="ui raised segment" style={{ overflow: 'scroll' }}>
+                            <>
+
+                            </>
+                        </div>
+                    </div>
+                </div>
+            </Container >
+        </div >
     );
 }
 

@@ -32,7 +32,9 @@ function Faucet() {
                         <div className='column'>
                             <h3>Your transaction's details are:</h3>
                             <div class="ui raised segment" style={{ overflow: 'scroll' }}>
+                                <>
 
+                                </>
                             </div>
                         </div>
                     </div>

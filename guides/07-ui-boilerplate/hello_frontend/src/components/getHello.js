@@ -1,16 +1,20 @@
 import FixedMenuLayout from '../layout/header';
+import { Divider, Container } from 'semantic-ui-react';
+import MessageTimeline from './messageTimeline';
 
 function GetHello() {
     return (
-        <div className="App">
+        <div>
             <FixedMenuLayout />
-            <div>
-                <h1>Get all the Hello Messages</h1>
-                <p>On this page, you can retrieve all the Hello messages sent to the network.</p>
-            </div>
+            <Container >
+                <div>
+                    <h1>Hello messages sent so far!</h1>
+                    <Divider>
+                    </Divider>
+                    <MessageTimeline messages />
+                </div>
+            </Container>
         </div>
-
-
     );
 }
 
