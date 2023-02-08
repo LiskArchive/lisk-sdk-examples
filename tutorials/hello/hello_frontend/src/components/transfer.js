@@ -1,7 +1,7 @@
 import FixedMenuLayout from '../layout/header';
 import React, { useState } from "react";
 import { Form, Button, Divider, Container } from 'semantic-ui-react';
-import { cryptography, transactions } from '@liskhq/lisk-client/browser';
+import { transactions } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
 import { Buffer } from 'buffer';
 
@@ -41,7 +41,7 @@ function Transfer() {
                 amount: BigInt(transactions.convertLSKToBeddows(state.amount)),
                 recipientAddress: address,
                 accountInitializationFee: BigInt(transactions.convertLSKToBeddows(state.accountInitializationFee)),
-                data: 'Please accept this grant from Lisk.'
+                data: 'Hey! I am sending you LSKs. Enjoy!'
             }
         }, privateKey);
 

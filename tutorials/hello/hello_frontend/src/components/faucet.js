@@ -1,7 +1,7 @@
 import FixedMenuLayout from '../layout/header';
 import React, { useState } from "react";
 import { Form, Button, Divider, Container } from 'semantic-ui-react';
-import { cryptography, transactions } from '@liskhq/lisk-client/browser';
+import { transactions } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
 import { Buffer } from 'buffer';
 
@@ -9,6 +9,7 @@ function Faucet() {
     const [state, updateState] = useState({
         address: '',
         amount: '',
+        privateKey: '',
         transaction: {},
         response: {}
     });
@@ -26,8 +27,7 @@ function Faucet() {
 
         const client = await api.getClient();
         const address = state.address;
-        const passphrase = 'weasel balance horse obtain love diary lesson reflect connect scheme decrease wrestle team sphere spring desert quote fever penalty rookie liquid harvest ride omit';
-        const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, "m/44'/134'/0'");
+        const privateKey = state.privateKey;
         const signedTx = await client.transaction.create({
             module: 'token',
             command: 'transfer',
@@ -41,9 +41,6 @@ function Faucet() {
                 data: 'Please accept this grant from Lisk faucet.'
             }
         }, privateKey);
-
-
-        console.log("Signed Transaction:\n", signedTx);
 
         let res;
         try {
@@ -94,6 +91,10 @@ function Faucet() {
                                 <Form.Field>
                                     <label>Amount:</label>
                                     <input placeholder='Amount (1 = 10^8 tokens)' id="amount" name="amount" onChange={handleChange} value={state.amount} />
+                                </Form.Field>
+                                <Form.Field class="field">
+                                    <label>Sender's private key:</label>
+                                    <input placeholder="Private key of sender's account" type="password" id="privateKey" name="privateKey" onChange={handleChange} value={state.privateKey} />
                                 </Form.Field>
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>

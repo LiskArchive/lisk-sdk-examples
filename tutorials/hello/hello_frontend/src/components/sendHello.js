@@ -1,7 +1,7 @@
 import FixedMenuLayout from '../layout/header';
 import React, { useState } from "react";
 import { Form, Button, Container, Divider } from 'semantic-ui-react';
-import { cryptography, transactions } from '@liskhq/lisk-client/browser';
+import { transactions } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
 
 function SendHello() {
@@ -33,7 +33,7 @@ function SendHello() {
                 "message": state.hello,
             },
         }, privateKey);
-        console.log('Transaction object: ', tx);
+
         let res = '';
         try {
             res = await client.transaction.send(tx);
