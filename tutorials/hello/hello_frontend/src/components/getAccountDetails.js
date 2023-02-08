@@ -58,7 +58,7 @@ function GetAccountDetails() {
         <div>
             <FixedMenuLayout />
             <Container>
-                <h2>Account Details</h2>
+                <h2>Account details</h2>
                 <p>Get account details by submitting a Lisk32 address.</p>
                 <Divider></Divider>
                 <div class="ui two column doubling stackable grid container">
@@ -66,8 +66,8 @@ function GetAccountDetails() {
 
                         <Form onSubmit={handleSubmit}>
                             <Form.Field>
-                                <label>Lisk32 Address:</label>
-                                <input placeholder="Lisk32 Address" id="address" name="address" onChange={handleChange} value={state.address} />
+                                <label>Lisk32 address:</label>
+                                <input placeholder="Lisk32 address" id="address" name="address" onChange={handleChange} value={state.address} />
                             </Form.Field>
                             <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                         </Form>

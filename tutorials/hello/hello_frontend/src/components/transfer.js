@@ -13,7 +13,7 @@ function Transfer() {
         amount: '',
         accountInitializationFee: '',
         fee: '',
-        passphrase: '',
+        privateKey: '',
         transaction: {},
         response: {}
     });
@@ -31,8 +31,7 @@ function Transfer() {
 
         const client = await api.getClient();
         const address = state.address;
-        const passphrase = state.passphrase;
-        const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, "m/44'/134'/0'");
+        const privateKey = state.privateKey;
         const signedTx = await client.transaction.create({
             module: 'token',
             command: 'transfer',
@@ -62,7 +61,7 @@ function Transfer() {
             address: '',
             amount: '',
             fee: '',
-            passphrase: '',
+            privateKey: '',
         });
     };
 
@@ -106,8 +105,8 @@ function Transfer() {
                                     <input placeholder='Fee (1 = 10^8 tokens)' id="fee" name="fee" onChange={handleChange} value={state.fee} />
                                 </Form.Field>
                                 <Form.Field class="field">
-                                    <label>Passphrase:</label>
-                                    <input placeholder='Passphrase of the hello_client' id="passphrase" name="passphrase" onChange={handleChange} value={state.passphrase} type="password" />
+                                    <label>Sender's private key:</label>
+                                    <input placeholder="Private key of sender's account" type="password" id="privateKey" name="privateKey" onChange={handleChange} value={state.privateKey} />
                                 </Form.Field>
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>

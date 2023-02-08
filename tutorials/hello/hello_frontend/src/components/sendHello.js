@@ -8,7 +8,7 @@ function SendHello() {
     const [state, updateState] = useState({
         hello: '',
         fee: '',
-        passphrase: '',
+        privateKey: '',
         transaction: {},
         response: {}
     });
@@ -24,8 +24,7 @@ function SendHello() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const client = await api.getClient();
-        const passphrase = state.passphrase;
-        const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, "m/44'/134'/0'");
+        const privateKey = state.privateKey;
         const tx = await client.transaction.create({
             module: 'hello',
             command: 'createHello',
@@ -46,9 +45,24 @@ function SendHello() {
             response: res,
             hello: '',
             fee: '',
-            passphrase: '',
+            privateKey: '',
         });
     };
+
+
+    const displayData = () => {
+        if (typeof state.transaction !== 'undefined' && state.transaction.fee > 0) {
+            return (
+                <>
+                    <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
+                    <pre>Response: {JSON.stringify(state.response, null, 2)}</pre>
+                </>
+            )
+        }
+        else {
+            return (<p></p>)
+        }
+    }
 
     return (
         <>
@@ -56,13 +70,11 @@ function SendHello() {
             <Container>
                 <div>
                     <h1>Send Hello Message</h1>
+                    <p>Please fill the following form to send a "Hello" message.</p>
                     <Divider></Divider>
-                    {/* <p>Send a Hello transaction.</p> */}
-                    {/* <Grid style={{ height: 'max', overflow: 'hidden' }} verticalAlign='middle'>
-                        <Grid.Column style={{ maxWidth: 500 }}> */}
                     <div class="ui two column doubling stackable grid container">
                         <div class="column">
-                            <h4>Please fill the following form to send a "Hello" message.</h4>
+
                             <Form onSubmit={handleSubmit} class="ui form">
 
                                 <Form.Field class="field">
@@ -71,18 +83,25 @@ function SendHello() {
                                 </Form.Field >
                                 <Form.Field class="field">
                                     <label>Fee:</label>
-                                    <input placeholder='Fee (1 = 10^8 tokens):' type="text" id="fee" name="fee" onChange={handleChange} value={state.fee} />
+                                    <input placeholder='Fee (1 = 10^8 tokens)' type="text" id="fee" name="fee" onChange={handleChange} value={state.fee} />
                                 </Form.Field>
                                 <Form.Field class="field">
-                                    <label>Passphrase:</label>
-                                    <input placeholder='Passphrase of your hello_client' type="password" id="passphrase" name="passphrase" onChange={handleChange} value={state.passphrase} />
+                                    <label>Sender's private key:</label>
+                                    <input placeholder="Private key of sender's account" type="password" id="privateKey" name="privateKey" onChange={handleChange} value={state.privateKey} />
                                 </Form.Field>
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>
                         </div>
                         <div className='column'>
+                            <h3>Your transaction's details are:</h3>
+                            <div class="ui raised segment" style={{ overflow: 'scroll' }}>
+                                <>
+                                    {displayData()}
+                                </>
+                            </div>
+                        </div>
 
-                            {/* { if (state.transaction.length > 0) {
+                        {/* { if (state.transaction.length > 0) {
     return (<>
                                 <h4>Your account details are:</h4>
                                 <div class="ui raised segment" style={{ overflow: 'scroll' }}>
@@ -92,13 +111,12 @@ function SendHello() {
                             </>
                             );}
 } */}
-                            {/* 
+                        {/* 
                             <h4>Your account details are:</h4>
                             <div class="ui raised segment" style={{ overflow: 'scroll' }}>
                                 <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
                                 <pre>Response: {JSON.stringify(state.response, null, 2)}</pre>
                             </div> */}
-                        </div>
                     </div>
                     {/* </Grid.Column>
                 </Grid> */}
