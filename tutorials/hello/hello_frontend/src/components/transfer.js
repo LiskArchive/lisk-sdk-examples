@@ -5,8 +5,6 @@ import { transactions } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
 import { Buffer } from 'buffer';
 
-// Buffer needs to be installed via npm install --save buffer
-
 function Transfer() {
     const [state, updateState] = useState({
         address: '',
@@ -45,9 +43,6 @@ function Transfer() {
             }
         }, privateKey);
 
-
-        console.log("Signed Transaction:\n", signedTx);
-
         let res;
         try {
             res = await client.transaction.send(signedTx);
@@ -64,7 +59,6 @@ function Transfer() {
             privateKey: '',
         });
     };
-
 
     const displayData = () => {
         if (typeof state.transaction !== 'undefined' && state.transaction.fee > 0) {

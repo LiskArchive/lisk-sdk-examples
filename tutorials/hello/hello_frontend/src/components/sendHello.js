@@ -74,9 +74,7 @@ function SendHello() {
                     <Divider></Divider>
                     <div class="ui two column doubling stackable grid container">
                         <div class="column">
-
                             <Form onSubmit={handleSubmit} class="ui form">
-
                                 <Form.Field class="field">
                                     <label>Your message:</label>
                                     <input placeholder="Hello Message" id="hello" name="hello" onChange={handleChange} value={state.hello} />
@@ -92,6 +90,7 @@ function SendHello() {
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>
                         </div>
+
                         <div className='column'>
                             <h3>Your transaction's details are:</h3>
                             <div class="ui raised segment" style={{ overflow: 'scroll' }}>
@@ -100,32 +99,11 @@ function SendHello() {
                                 </>
                             </div>
                         </div>
-
-                        {/* { if (state.transaction.length > 0) {
-    return (<>
-                                <h4>Your account details are:</h4>
-                                <div class="ui raised segment" style={{ overflow: 'scroll' }}>
-                                    <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
-                                    <pre>Response: {JSON.stringify(state.response, null, 2)}</pre>
-                                </div>
-                            </>
-                            );}
-} */}
-                        {/* 
-                            <h4>Your account details are:</h4>
-                            <div class="ui raised segment" style={{ overflow: 'scroll' }}>
-                                <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
-                                <pre>Response: {JSON.stringify(state.response, null, 2)}</pre>
-                            </div> */}
                     </div>
-                    {/* </Grid.Column>
-                </Grid> */}
                 </div>
             </Container>
         </>
     );
 }
 
-
-//style={{ backgroundColor: '#0C152E', color: 'white' }}
 export default SendHello;
