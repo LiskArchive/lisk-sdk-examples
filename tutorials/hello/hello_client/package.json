@@ -110,7 +110,6 @@
 		"@liskhq/lisk-framework-faucet-plugin": "0.2.0-canary.32988",
 		"@liskhq/lisk-framework-monitor-plugin": "0.3.0-canary.32988",
 		"@liskhq/lisk-framework-forger-plugin": "0.3.0-alpha.6",
-		"@liskhq/lisk-framework-monitor-plugin": "0.3.0-alpha.6",
 		"@liskhq/lisk-framework-report-misbehavior-plugin": "0.3.0-alpha.6",
 		"@oclif/core": "1.16.1",
 		"@oclif/plugin-autocomplete": "1.3.0",
