@@ -8,7 +8,7 @@ function GetHello() {
             <FixedMenuLayout />
             <Container >
                 <div>
-                    <h1>Hello messages sent so far!</h1>
+                    <h2>Hello messages sent so far!</h2>
                     <Divider>
                     </Divider>
                     <MessageTimeline messages />

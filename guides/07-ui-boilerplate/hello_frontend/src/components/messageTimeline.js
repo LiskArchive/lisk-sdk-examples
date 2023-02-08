@@ -23,7 +23,7 @@ export default function MessageTimeline(props) {
                 })
             )
         } else {
-            return (<h3>No Hello messages have been sent so far!</h3>)
+            return (<h4>No Hello messages have been sent so far!</h4>)
         }
     }
     return (

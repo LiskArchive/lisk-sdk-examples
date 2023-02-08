@@ -6,9 +6,7 @@ function NewAccount() {
         <div>
             <FixedMenuLayout />
             <Container>
-
                 <div>
-
                     <div class="ui green segment">
                         <i class="lightbulb outline icon"></i><strong>TIP:</strong> Reload the page to generate a new account.
                     </div>

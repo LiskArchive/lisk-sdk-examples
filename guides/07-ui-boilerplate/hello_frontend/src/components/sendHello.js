@@ -7,7 +7,7 @@ function SendHello() {
             <FixedMenuLayout />
             <Container>
                 <div>
-                    <h1>Send Hello Message</h1>
+                    <h2>Send Hello Message</h2>
                     <p>Please fill the following form to send a "Hello" message.</p>
                     <Divider></Divider>
                     <div class="ui two column doubling stackable grid container">
