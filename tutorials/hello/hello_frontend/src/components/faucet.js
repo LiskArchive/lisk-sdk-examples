@@ -54,13 +54,6 @@ function Faucet() {
             });
         }
 
-        // let res;
-        // try {
-        //     res = await client.transaction.send(signedTx);
-        // } catch (error) {
-        //     res = error;
-        // }
-
         updateState({
             transaction: signedTx,
             response: txResponse,
