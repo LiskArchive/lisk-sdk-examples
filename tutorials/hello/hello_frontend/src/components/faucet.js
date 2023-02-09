@@ -10,6 +10,7 @@ function Faucet() {
         address: '',
         amount: '',
         privateKey: '',
+        error: '',
         transaction: {},
         response: {}
     });
@@ -28,6 +29,7 @@ function Faucet() {
         const client = await api.getClient();
         const address = state.address;
         const privateKey = state.privateKey;
+        let responseError = '';
         const signedTx = await client.transaction.create({
             module: 'token',
             command: 'transfer',
@@ -40,18 +42,29 @@ function Faucet() {
                 accountInitializationFee: BigInt(transactions.convertLSKToBeddows('0.01')),
                 data: 'Please accept this grant from Lisk faucet.'
             }
-        }, privateKey);
+        }, privateKey).catch(err => {
+            responseError = err.message;
+        });
 
-        let res;
-        try {
-            res = await client.transaction.send(signedTx);
-        } catch (error) {
-            res = error;
+        let txResponse = '';
+        if (typeof signedTx !== "undefined") {
+            txResponse = await client.transaction.send(signedTx).catch(result => {
+                console.log(result)
+                responseError = result.message;
+            });
         }
+
+        // let res;
+        // try {
+        //     res = await client.transaction.send(signedTx);
+        // } catch (error) {
+        //     res = error;
+        // }
 
         updateState({
             transaction: signedTx,
-            response: res,
+            response: txResponse,
+            error: responseError,
             address: '',
             amount: '',
             fee: '',
@@ -60,11 +73,27 @@ function Faucet() {
     };
 
     const displayData = () => {
-        if (typeof state.transaction !== 'undefined' && state.transaction.fee > 0) {
+
+        if (state.error !== '') {
             return (
                 <>
-                    <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
-                    <pre>Response: {JSON.stringify(state.response, null, 2)}</pre>
+                    <div class="ui red segment" style={{ overflow: 'auto' }}>
+                        <h3>Something went wrong! :(</h3>
+                        <pre><strong>Error:</strong> {JSON.stringify(state.error, null, 2)}</pre>
+                    </div>
+                </>
+            )
+        }
+
+        else if (typeof state.transaction !== 'undefined' && state.transaction.fee > 0) {
+            return (
+                <>
+                    <h3>Your transaction's details are:</h3>
+                    <div class="ui green segment" style={{ overflow: 'auto' }}>
+                        <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
+                        <pre>Response: {
+                            JSON.stringify(state.response, null, 2)}</pre>
+                    </div>
                 </>
             )
         }
@@ -101,12 +130,9 @@ function Faucet() {
                         </div>
 
                         <div className='column'>
-                            <h3>Your transaction's details are:</h3>
-                            <div class="ui raised segment" style={{ overflow: 'scroll' }}>
-                                <>
-                                    {displayData()}
-                                </>
-                            </div>
+                            <>
+                                {displayData()}
+                            </>
                         </div>
                     </div>
                 </div>

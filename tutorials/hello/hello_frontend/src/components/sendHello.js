@@ -29,7 +29,7 @@ function SendHello() {
         const privateKey = state.privateKey;
         let responseError = '';
 
-        const tx = await client.transaction.create({
+        const signedTx = await client.transaction.create({
             module: 'hello',
             command: 'createHello',
             fee: BigInt(transactions.convertLSKToBeddows(state.fee)),
@@ -40,15 +40,15 @@ function SendHello() {
             responseError = err.message;
         })
         let txResponse = '';
-        if (typeof tx !== "undefined") {
-            txResponse = await client.transaction.send(tx).catch(result => {
+        if (typeof signedTx !== "undefined") {
+            txResponse = await client.transaction.send(signedTx).catch(result => {
                 console.log(result)
                 responseError = result.message;
             });
         }
 
         updateState({
-            transaction: tx,
+            transaction: signedTx,
             response: txResponse,
             error: responseError,
             hello: '',
@@ -110,11 +110,9 @@ function SendHello() {
                         </div>
 
                         <div className='column'>
-
                             <>
                                 {displayData()}
                             </>
-
                         </div>
                     </div>
                 </div>
