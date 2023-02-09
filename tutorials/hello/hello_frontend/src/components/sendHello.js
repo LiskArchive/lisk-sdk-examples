@@ -1,5 +1,5 @@
 import FixedMenuLayout from '../layout/header';
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Form, Button, Container, Divider } from 'semantic-ui-react';
 import { transactions } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
@@ -9,6 +9,7 @@ function SendHello() {
         hello: '',
         fee: '',
         privateKey: '',
+        error: '',
         transaction: {},
         response: {}
     });
@@ -23,8 +24,11 @@ function SendHello() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         const client = await api.getClient();
         const privateKey = state.privateKey;
+        let responseError = '';
+
         const tx = await client.transaction.create({
             module: 'hello',
             command: 'createHello',
@@ -32,35 +36,49 @@ function SendHello() {
             params: {
                 "message": state.hello,
             },
-        }, privateKey);
-
-        let res = '';
-        try {
-            res = await client.transaction.send(tx);
-        } catch (error) {
-            res = error;
+        }, privateKey).catch(err => {
+            responseError = err.message;
+        })
+        let txResponse = '';
+        if (typeof tx !== "undefined") {
+            txResponse = await client.transaction.send(tx).catch(result => {
+                console.log(result)
+                responseError = result.message;
+            });
         }
+
         updateState({
             transaction: tx,
-            response: res,
+            response: txResponse,
+            error: responseError,
             hello: '',
             fee: '',
             privateKey: '',
         });
     };
 
-
     const displayData = () => {
-        if (typeof state.transaction !== 'undefined' && state.transaction.fee > 0) {
+        if (state.error !== '') {
             return (
                 <>
-                    <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
-                    <pre>Response: {JSON.stringify(state.response, null, 2)}</pre>
+                    <div class="ui red segment" style={{ overflow: 'auto' }}>
+                        <h3>Something went wrong! :(</h3>
+                        <pre><strong>Error:</strong> {JSON.stringify(state.error, null, 2)}</pre>
+                    </div>
                 </>
             )
         }
-        else {
-            return (<p></p>)
+        else if (typeof state.transaction !== 'undefined' && state.transaction.fee > 0) {
+            return (
+                <>
+                    <h3>Your transaction's details are:</h3>
+                    <div class="ui green segment" style={{ overflow: 'auto' }}>
+                        <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
+                        <pre>Response: {
+                            JSON.stringify(state.response, null, 2)}</pre>
+                    </div>
+                </>
+            )
         }
     }
 
@@ -92,12 +110,11 @@ function SendHello() {
                         </div>
 
                         <div className='column'>
-                            <h3>Your transaction's details are:</h3>
-                            <div class="ui raised segment" style={{ overflow: 'scroll' }}>
-                                <>
-                                    {displayData()}
-                                </>
-                            </div>
+
+                            <>
+                                {displayData()}
+                            </>
+
                         </div>
                     </div>
                 </div>
