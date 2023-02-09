@@ -8,6 +8,7 @@ function GetAccountDetails() {
 
     const [state, updateState] = useState({
         address: '',
+        error: '',
         account: {},
         auth: {},
     });
@@ -23,18 +24,20 @@ function GetAccountDetails() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const client = await api.getClient();
+        let responseError = '';
         // Retrieves the account details from the blockchain application, based on the address provided.
         const account = await client.invoke("token_getBalance", {
             address: state.address,
             tokenID: "0000000000000000"
-        })
+        });
         const authenticationDetails = await client.invoke("auth_getAuthAccount", {
             address: state.address,
             tokenID: "0000000000000000"
-        })
+        });
 
         updateState({
             ...state,
+            error: responseError,
             account: account,
             auth: authenticationDetails
         });
@@ -44,8 +47,11 @@ function GetAccountDetails() {
         if (typeof state.account !== 'undefined' && state.account.availableBalance > 0) {
             return (
                 <>
-                    <pre>Account: {JSON.stringify(state.account, null, 2)}</pre>
-                    <pre>Authentication details: {JSON.stringify(state.auth, null, 2)}</pre>
+                    <h3>Your account details are:</h3>
+                    <div className="ui green segment" style={{ overflow: 'auto' }}>
+                        <pre>Account: {JSON.stringify(state.account, null, 2)}</pre>
+                        <pre>Authentication details: {JSON.stringify(state.auth, null, 2)}</pre>
+                    </div>
                 </>
             )
         }
@@ -61,8 +67,8 @@ function GetAccountDetails() {
                 <h2>Account details</h2>
                 <p>Get account details by submitting a Lisk32 address.</p>
                 <Divider></Divider>
-                <div class="ui two column doubling stackable grid container">
-                    <div class="column">
+                <div className="ui two column doubling stackable grid container">
+                    <div className="column">
 
                         <Form onSubmit={handleSubmit}>
                             <Form.Field>
@@ -74,12 +80,9 @@ function GetAccountDetails() {
                     </div>
 
                     <div className='column'>
-                        <h3>Your account details are:</h3>
-                        <div class="ui raised segment" style={{ overflow: 'scroll' }}>
-                            <>
-                                {displayData()}
-                            </>
-                        </div>
+                        <>
+                            {displayData()}
+                        </>
                     </div>
                 </div>
             </Container >
