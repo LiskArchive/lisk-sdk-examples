@@ -14,7 +14,7 @@ function NewAccount() {
 
     const createAccount = async () => {
         const accountKeyPath = "m/44'/134'/0'";
-        const mnemonicPassphrase = passphrase.Mnemonic.generateMnemonic(256);
+        const mnemonicPassphrase = 'weasel balance horse obtain love diary lesson reflect connect scheme decrease wrestle team sphere spring desert quote fever penalty rookie liquid harvest ride omit';
         const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(
             mnemonicPassphrase,
             accountKeyPath,
