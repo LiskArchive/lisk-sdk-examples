@@ -22,20 +22,26 @@ function SendHello() {
                                     <input placeholder='Fee (1 = 10^8 tokens)' type="text" id="fee" name="fee" />
                                 </Form.Field>
                                 <Form.Field class="field">
-                                    <label>Sender's private key:</label>
-                                    <input placeholder="Private key of sender's account" type="password" id="privateKey" name="privateKey" />
+                                    <label>Sender's Passphrase:</label>
+                                    <input placeholder='Passphrase of the hello_client' id="passphrase" name="passphrase" type="password" />
+                                </Form.Field>
+                                <Form.Field class="field">
+                                    <label>Sender's keyPath:</label>
+                                    <div class="ui labeled input">
+                                        <div class="ui label">
+                                            m/44'/134'/
+                                        </div>
+                                        <input placeholder='Enter any number from 0-102' id="keyPath" name="keyPath" type="text" />
+                                        <div class="ui label">
+                                            '
+                                        </div>
+                                    </div>
                                 </Form.Field>
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>
                         </div>
 
                         <div className='column'>
-                            <h3>Your transaction's details are:</h3>
-                            <div class="ui raised segment" style={{ overflow: 'scroll' }}>
-                                <>
-
-                                </>
-                            </div>
                         </div>
                     </div>
                 </div>

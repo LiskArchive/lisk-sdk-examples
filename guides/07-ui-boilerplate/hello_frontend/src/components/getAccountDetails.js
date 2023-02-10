@@ -21,12 +21,6 @@ function GetAccountDetails() {
                     </div>
 
                     <div className='column'>
-                        <h3>Your account details are:</h3>
-                        <div class="ui raised segment" style={{ overflow: 'scroll' }}>
-                            <>
-
-                            </>
-                        </div>
                     </div>
                 </div>
             </Container >
