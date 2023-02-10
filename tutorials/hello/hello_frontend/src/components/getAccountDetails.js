@@ -29,7 +29,7 @@ function GetAccountDetails() {
 
         // Retrieves the account details from the blockchain application, based on the address provided.
 
-        const account = await client.invoke("token_getBalance", {
+        await client.invoke("token_getBalance", {
             address: state.address,
             tokenID: "0000000000000000"
         }).then(async response => {
