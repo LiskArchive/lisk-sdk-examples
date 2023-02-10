@@ -45,10 +45,6 @@ function GetAccountDetails() {
             }
             return [response, authenticationDetails];
         })
-        // const authenticationDetails = await client.invoke("auth_getAuthAccount", {
-        //     address: state.address,
-        //     tokenID: "0000000000000000"
-        // });
 
         updateState({
             ...state,
