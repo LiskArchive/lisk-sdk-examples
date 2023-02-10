@@ -8,6 +8,7 @@ function SendHello() {
     const [state, updateState] = useState({
         hello: '',
         fee: '',
+        error: '',
         passphrase: '',
         keyPath: '',
         transaction: {},
