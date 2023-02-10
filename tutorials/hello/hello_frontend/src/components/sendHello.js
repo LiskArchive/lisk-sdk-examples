@@ -1,15 +1,15 @@
 import FixedMenuLayout from '../layout/header';
 import React, { useState, Fragment } from "react";
 import { Form, Button, Container, Divider } from 'semantic-ui-react';
-import { transactions } from '@liskhq/lisk-client/browser';
+import { cryptography, transactions } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
 
 function SendHello() {
     const [state, updateState] = useState({
         hello: '',
         fee: '',
-        privateKey: '',
-        error: '',
+        passphrase: '',
+        keyPath: '',
         transaction: {},
         response: {}
     });
@@ -26,7 +26,8 @@ function SendHello() {
         event.preventDefault();
 
         const client = await api.getClient();
-        const privateKey = state.privateKey;
+        const passphrase = state.passphrase;
+        const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, "m/44'/134'/" + state.keyPath + "'");
         let responseError = '';
 
         const signedTx = await client.transaction.create({
@@ -53,7 +54,8 @@ function SendHello() {
             error: responseError,
             hello: '',
             fee: '',
-            privateKey: '',
+            passphrase: '',
+            keyPath: '',
         });
     };
 
@@ -102,8 +104,20 @@ function SendHello() {
                                     <input placeholder='Fee (1 = 10^8 tokens)' type="text" id="fee" name="fee" onChange={handleChange} value={state.fee} />
                                 </Form.Field>
                                 <Form.Field class="field">
-                                    <label>Sender's private key:</label>
-                                    <input placeholder="Private key of sender's account" type="password" id="privateKey" name="privateKey" onChange={handleChange} value={state.privateKey} />
+                                    <label>Sender's Passphrase:</label>
+                                    <input placeholder='Passphrase of the hello_client' id="passphrase" name="passphrase" onChange={handleChange} value={state.passphrase} type="password" />
+                                </Form.Field>
+                                <Form.Field class="field">
+                                    <label>Sender's keyPath:</label>
+                                    <div class="ui labeled input">
+                                        <div class="ui label">
+                                            m/44'/134'/
+                                        </div>
+                                        <input placeholder='Enter any number from 0-102' id="keyPath" name="keyPath" onChange={handleChange} value={state.keyPath} type="text" />
+                                        <div class="ui label">
+                                            '
+                                        </div>
+                                    </div>
                                 </Form.Field>
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>
