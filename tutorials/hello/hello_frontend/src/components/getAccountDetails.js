@@ -3,7 +3,6 @@ import { Form, Button, Container, Divider } from 'semantic-ui-react';
 import React, { useState } from "react";
 import * as api from '../api';
 
-
 function GetAccountDetails() {
 
     const [state, updateState] = useState({
@@ -25,26 +24,52 @@ function GetAccountDetails() {
         event.preventDefault();
         const client = await api.getClient();
         let responseError = '';
+        let authenticationDetails;
+        let balance;
+
         // Retrieves the account details from the blockchain application, based on the address provided.
+
         const account = await client.invoke("token_getBalance", {
             address: state.address,
             tokenID: "0000000000000000"
-        });
-        const authenticationDetails = await client.invoke("auth_getAuthAccount", {
-            address: state.address,
-            tokenID: "0000000000000000"
-        });
+        }).then(async response => {
+            if (typeof response.error !== 'undefined') {
+                responseError = response.error.message
+            } else {
+                balance = response;
+                const authDetails = await client.invoke("auth_getAuthAccount", {
+                    address: state.address,
+                    tokenID: "0000000000000000"
+                });
+                authenticationDetails = authDetails;
+            }
+            return [response, authenticationDetails];
+        })
+        // const authenticationDetails = await client.invoke("auth_getAuthAccount", {
+        //     address: state.address,
+        //     tokenID: "0000000000000000"
+        // });
 
         updateState({
             ...state,
             error: responseError,
-            account: account,
+            account: balance,
             auth: authenticationDetails
         });
     };
 
     const displayData = () => {
-        if (typeof state.account !== 'undefined' && state.account.availableBalance > 0) {
+        if (state.error !== '') {
+            return (
+                <>
+                    <div class="ui red segment" style={{ overflow: 'auto' }}>
+                        <h3>Something went wrong! :(</h3>
+                        <pre><strong>Error:</strong> {JSON.stringify(state.error, null, 2)}</pre>
+                    </div>
+                </>
+            )
+        }
+        else if (typeof state.account !== 'undefined' && state.account.availableBalance > 0) {
             return (
                 <>
                     <h3>Your account details are:</h3>
