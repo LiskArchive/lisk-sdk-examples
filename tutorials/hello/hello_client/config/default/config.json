@@ -1,6 +1,6 @@
 {
 	"system": {
-		"dataPath": "/Users/mona/.lisk/beta-sdk-app",
+		"dataPath": "/Users/iamtalha/.lisk/beta-sdk-app",
 		"keepEventsForHeights": 300,
 		"logLevel": "info"
 	},
