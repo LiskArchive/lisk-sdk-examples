@@ -10,6 +10,7 @@ npx create-react-app hello_frontend
 
 - Install other dependencies:
 ```
+cd hello_frontend
 npm install semantic-ui-react semantic-ui-css
 npm i react-router
 npm i react-router-dom
