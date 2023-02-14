@@ -32,6 +32,7 @@ function Transfer() {
         const passphrase = state.passphrase;
         const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, "m/44'/134'/" + state.keyPath + "'");
         let responseError = '';
+
         const signedTx = await client.transaction.create({
             module: 'token',
             command: 'transfer',
@@ -40,7 +41,6 @@ function Transfer() {
                 tokenID: Buffer.from('0000000000000000', 'hex'),
                 amount: BigInt(transactions.convertLSKToBeddows(state.amount)),
                 recipientAddress: state.address,
-                accountInitializationFee: BigInt(transactions.convertLSKToBeddows('0.01')),
                 data: 'Hey! I am sending you LSKs. Enjoy!'
             }
         }, privateKey).catch(err => {

@@ -27,20 +27,18 @@ function Faucet() {
         event.preventDefault();
 
         const client = await api.getClient();
-        const address = state.address;
-        const passphrase = 'weasel balance horse obtain love diary lesson reflect connect scheme decrease wrestle team sphere spring desert quote fever penalty rookie liquid harvest ride omit';
+        const passphrase = "pet simple hour myth sing tattoo demand whale pride craft already actress purse awake advance frequent enroll oxygen enhance resemble arrow accident wave tuna";
         const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, "m/44'/134'/0'");
         let responseError = '';
+
         const signedTx = await client.transaction.create({
             module: 'token',
             command: 'transfer',
-
-            fee: BigInt(transactions.convertLSKToBeddows('0.01')),
+            fee: BigInt(transactions.convertLSKToBeddows('0.1')),
             params: {
                 tokenID: Buffer.from('0000000000000000', 'hex'),
                 amount: BigInt(transactions.convertLSKToBeddows(state.amount)),
-                recipientAddress: address,
-                accountInitializationFee: BigInt(transactions.convertLSKToBeddows('0.01')),
+                recipientAddress: state.address,
                 data: 'Please accept this grant from Lisk faucet.'
             }
         }, privateKey).catch(err => {

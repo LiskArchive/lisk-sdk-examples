@@ -65,7 +65,7 @@ function GetAccountDetails() {
                 </>
             )
         }
-        else if (typeof state.account !== 'undefined' && state.account.availableBalance > 0) {
+        else if (typeof state.account !== 'undefined' && state.account.availableBalance >= 0) {
             return (
                 <>
                     <h3>Your account details are:</h3>
