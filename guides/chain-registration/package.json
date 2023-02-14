@@ -1,0 +1,18 @@
+{
+  "name": "chain-registration",
+  "version": "1.0.0",
+  "description": "",
+  "main": "chain_registration.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.13.0"
+  },
+  "dependencies": {
+    "@liskhq/lisk-client": "^6.0.0-alpha.14",
+    "fs-extra": "^11.1.0"
+  }
+}
