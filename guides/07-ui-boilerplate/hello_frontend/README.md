@@ -1,12 +1,14 @@
+
 # Steps to re-create the Hello UI template
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and styled with [Semantic UI](https://semantic-ui.com/introduction/getting-started.html).
 
-- In the `hello` directory, run the following command: to bootstrap a react app:
+- In the `hello` directory, run the following command to bootstrap a react app:
 ```
 npx create-react-app hello_frontend
 ```
-- Install other dependencies
+
+- Install other dependencies:
 ```
 npm install semantic-ui-react semantic-ui-css
 npm i react-router
@@ -17,12 +19,14 @@ npm i react-router-dom
 ```
 mkdir layout
 ```
-  - Create a file: `header.js`, and paste the contents of [header.js](https://github.com/LiskHQ/lisk-sdk-examples/blob/development/guides/07-ui-boilerplate/hello_frontend/src/layout/header.js) in it.
+
+- Create a file: `header.js`, and paste the contents of [header.js](https://github.com/LiskHQ/lisk-sdk-examples/blob/development/guides/07-ui-boilerplate/hello_frontend/src/layout/header.js) in it.
 
 - Create the `components` folder inside the  `hello/hello_frontend/src` directory 
 ```
 mkdir components
 ```
+
 - Within the `components` folder, do the following:
   - Create [faucet.js](https://github.com/LiskHQ/lisk-sdk-examples/blob/development/guides/07-ui-boilerplate/hello_frontend/src/components/faucet.js) along with its content.
   - Create [getAccountDetails.js](https://github.com/LiskHQ/lisk-sdk-examples/blob/development/guides/07-ui-boilerplate/hello_frontend/src/components/getAccountDetails.js) along with its contents.
@@ -37,7 +41,12 @@ mkdir components
 
 - Update the `hello_frontend/src/App.js` file according to [App.css](https://github.com/LiskHQ/lisk-sdk-examples/blob/development/guides/07-ui-boilerplate/hello_frontend/src/App.js).
 
-Insert the following logo in the `hello_frontend/src/` directory
+- Insert the following logo in the `hello_frontend/src/` directory.
+
+![logo](https://user-images.githubusercontent.com/13951043/218746127-be241607-b647-4295-af65-ee113c140038.png)
 
 
-
+- Start `hello_frontend`.
+```
+npm start
+```
