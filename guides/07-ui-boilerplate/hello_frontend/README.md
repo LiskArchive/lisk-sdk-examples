@@ -46,6 +46,7 @@ mkdir components
 
 ![logo](https://user-images.githubusercontent.com/13951043/218746127-be241607-b647-4295-af65-ee113c140038.png)
 
+- Update the `hello_frontend/public/index.html` file according to [index.html](https://github.com/LiskHQ/lisk-sdk-examples/blob/development/guides/07-ui-boilerplate/hello_frontend/public/index.html).
 
 - Start `hello_frontend`.
 ```
