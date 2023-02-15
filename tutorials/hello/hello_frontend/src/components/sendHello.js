@@ -10,7 +10,7 @@ function SendHello() {
         fee: '',
         error: '',
         passphrase: '',
-        keyPath: '',
+        keyPath: '0',
         transaction: {},
         response: {}
     });
@@ -93,6 +93,7 @@ function SendHello() {
                     <h2>Send Hello Message</h2>
                     <p>Please fill the following form to send a "Hello" message.</p>
                     <Divider></Divider>
+
                     <div class="ui two column doubling stackable grid container">
                         <div class="column">
                             <Form onSubmit={handleSubmit} class="ui form">
@@ -108,7 +109,13 @@ function SendHello() {
                                     <label>Sender's Passphrase:</label>
                                     <input placeholder='Passphrase of the hello_client' id="passphrase" name="passphrase" onChange={handleChange} value={state.passphrase} type="password" />
                                 </Form.Field>
+
+
+
                                 <Form.Field class="field">
+                                    <div class="ui yellow segment">
+                                        <i class="lightbulb outline icon"></i>The <strong>Sender's keyPath</strong> value can be from <strong>0-102</strong>. A default value has been pre-filled, which can be changed accordingly.
+                                    </div>
                                     <label>Sender's keyPath:</label>
                                     <div class="ui labeled input">
                                         <div class="ui label">
@@ -120,6 +127,7 @@ function SendHello() {
                                         </div>
                                     </div>
                                 </Form.Field>
+
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>
                         </div>
