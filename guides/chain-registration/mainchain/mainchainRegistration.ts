@@ -1,7 +1,6 @@
-import { writeFileSync } from 'fs-extra';
-import { codec, cryptography, apiClient } from '../../../../repos/sdk/lisk-sdk/sdk/dist-node';
-import { keys as sidechainValidatorsKeys } from '../dev-validators.json';
-import { passphrase } from '../passphrase.json';
+const { writeFileSync } = require('fs-extra');
+const { codec, cryptography, apiClient } = require('@liskhq/lisk-client');
+const { keys: sidechainValidatorsKeys } =  require('../dev-validators.json');
 import { NodeInfo, BFTParametersJSON } from './extern_types';
 import { registrationSignatureMessageSchema } from './schemas';
 import { MESSAGE_TAG_CHAIN_REG } from './constants';
@@ -11,13 +10,13 @@ import { MESSAGE_TAG_CHAIN_REG } from './constants';
 
     const mainchainClient = await apiClient.createIPCClient('~/.lisk/pos-mainchain');
     const sidechainClient = await apiClient.createIPCClient('~/.lisk/apple');
-    const mainchainNodeInfo = await mainchainClient.invoke<NodeInfo>('system_getNodeInfo');
+    const mainchainNodeInfo = await mainchainClient.invoke('system_getNodeInfo');
     // Get active validators from mainchain
-    const { validators: mainchainActiveValidators, certificateThreshold: mainchainCertificateThreshold } = await mainchainClient.invoke<BFTParametersJSON>('consensus_getBFTParameters', { height: mainchainNodeInfo.height });
+    const { validators: mainchainActiveValidators, certificateThreshold: mainchainCertificateThreshold } = await mainchainClient.invoke('consensus_getBFTParameters', { height: mainchainNodeInfo.height });
 
     const paramsJSON = {
-        ownChainID: '04000001',
-        ownName: 'apple',
+        ownChainID: '03000008',
+        ownName: 'sidechain_8',
         mainchainValidators: mainchainActiveValidators.map(v => ({ blsKey: v.blsKey, bftWeight: v.bftWeight })).sort((a, b) => Buffer.from(a.blsKey, 'hex').compare(Buffer.from(b.blsKey, 'hex'))),
         mainchainCertificateThreshold,
     };
@@ -34,9 +33,9 @@ import { MESSAGE_TAG_CHAIN_REG } from './constants';
 
     const message = codec.encode(registrationSignatureMessageSchema, params);
     
-    const sidechainNodeInfo = await sidechainClient.invoke<NodeInfo>('system_getNodeInfo');
+    const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
     // Get active validators from sidechainchain
-    const { validators: sidehcainActiveValidators } = await sidechainClient.invoke<BFTParametersJSON>('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
+    const { validators: sidehcainActiveValidators } = await sidechainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
 
     const activeValidatorsWithPrivateKey: { blsPublicKey: Buffer; blsPrivateKey: Buffer; }[] = [];
     for (const v of sidehcainActiveValidators) {
@@ -94,7 +93,7 @@ import { MESSAGE_TAG_CHAIN_REG } from './constants';
 
     console.log('Mainchain registration file is created at ./config/default/chain_registration/mainchain_reg_params.json successfully.');
     
-    console.log(`Run below command to create transaction:\n "./bin/run transaction:create interoperability registerMainchain 20000000 --pretty --passphrase="${passphrase}" -f ./config/default/chain_registration/mainchain_reg_params.json"`);
+    console.log(`Run below command to create transaction:\n "./bin/run transaction:create interoperability registerMainchain 20000000 --pretty -f ./config/default/chain_registration/mainchain_reg_params.json"`);
     
     // Now run transaction:create command
     /**
