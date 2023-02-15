@@ -1,8 +1,9 @@
 
 # Steps to re-create the Hello UI template
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and styled with [Semantic UI](https://semantic-ui.com/introduction/getting-started.html).
+This project is bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and styled with [Semantic UI](https://semantic-ui.com/introduction/getting-started.html).
 
+## Installation
 - In the `hello` directory, run the following command to bootstrap a react app:
 ```
 npx create-react-app hello_frontend
@@ -16,6 +17,7 @@ npm i react-router
 npm i react-router-dom
 ```
 
+## Implementing a UI template
 - Create the `layout` folder inside the `hello/hello_frontend/src` folder.
 ```
 mkdir layout
@@ -48,7 +50,7 @@ mkdir components
 
 - Update the `hello_frontend/public/index.html` file according to [index.html](https://github.com/LiskHQ/lisk-sdk-examples/blob/development/guides/07-ui-boilerplate/hello_frontend/public/index.html).
 
-- Start `hello_frontend`.
+## Start `hello_frontend`.
 ```
 npm start
 ```
