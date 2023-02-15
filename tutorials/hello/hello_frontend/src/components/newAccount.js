@@ -13,7 +13,7 @@ function NewAccount() {
     }, [])
 
     const createAccount = async () => {
-        const accountKeyPath = "m/44'/134'/" + Math.floor(Math.random() * 103) + "'";
+        const accountKeyPath = "m/44'/134'/0'";
         const mnemonicPassphrase = passphrase.Mnemonic.generateMnemonic(256);
         const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(
             mnemonicPassphrase,
