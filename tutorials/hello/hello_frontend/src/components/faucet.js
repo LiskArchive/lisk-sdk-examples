@@ -1,6 +1,6 @@
 import FixedMenuLayout from '../layout/header';
-import React, { useState } from "react";
 import { Form, Button, Divider, Container } from 'semantic-ui-react';
+import React, { useState } from "react";
 import { cryptography, transactions } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
 import { Buffer } from 'buffer';
@@ -36,7 +36,7 @@ function Faucet() {
             fee: BigInt(transactions.convertLSKToBeddows('0.1')),
             params: {
                 tokenID: Buffer.from('0000000000000000', 'hex'),
-                amount: BigInt(transactions.convertLSKToBeddows('5')),
+                amount: BigInt(transactions.convertLSKToBeddows('10')),
                 recipientAddress: state.address,
                 data: 'Please accept this grant from Lisk faucet.'
             }
