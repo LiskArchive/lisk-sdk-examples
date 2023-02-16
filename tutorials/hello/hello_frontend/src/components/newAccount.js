@@ -38,8 +38,8 @@ function NewAccount() {
 
                 <div>
 
-                    <div class="ui green segment">
-                        <i class="lightbulb outline icon"></i><strong>TIP:</strong> Reload the page to generate a new account.
+                    <div className="ui green segment">
+                        <i className="lightbulb outline icon"></i><strong>TIP:</strong> Reload the page to generate a new account.
                     </div>
 
                     <h2>New account created!</h2>

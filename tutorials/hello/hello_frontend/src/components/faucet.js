@@ -8,7 +8,6 @@ import { Buffer } from 'buffer';
 function Faucet() {
     const [state, updateState] = useState({
         address: '',
-        amount: '',
         privateKey: '',
         error: '',
         transaction: {},
@@ -37,7 +36,7 @@ function Faucet() {
             fee: BigInt(transactions.convertLSKToBeddows('0.1')),
             params: {
                 tokenID: Buffer.from('0000000000000000', 'hex'),
-                amount: BigInt(transactions.convertLSKToBeddows(state.amount)),
+                amount: BigInt(transactions.convertLSKToBeddows('5')),
                 recipientAddress: state.address,
                 data: 'Please accept this grant from Lisk faucet.'
             }
@@ -69,7 +68,7 @@ function Faucet() {
         if (state.error !== '') {
             return (
                 <>
-                    <div class="ui red segment" style={{ overflow: 'auto' }}>
+                    <div className="ui red segment" style={{ overflow: 'auto' }}>
                         <h3>Something went wrong! :(</h3>
                         <pre><strong>Error:</strong> {JSON.stringify(state.error, null, 2)}</pre>
                     </div>
@@ -81,7 +80,7 @@ function Faucet() {
             return (
                 <>
                     <h3>Your transaction's details are:</h3>
-                    <div class="ui green segment" style={{ overflow: 'auto' }}>
+                    <div className="ui green segment" style={{ overflow: 'auto' }}>
                         <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
                         <pre>Response: {
                             JSON.stringify(state.response, null, 2)}</pre>
@@ -102,16 +101,12 @@ function Faucet() {
                 <p>The faucet transfers tokens from the genesis account to another.</p>
                 <Divider></Divider>
                 <div>
-                    <div class="ui two column doubling stackable grid container">
-                        <div class="column">
+                    <div className="ui two column doubling stackable grid container">
+                        <div className="column">
                             <Form onSubmit={handleSubmit}>
                                 <Form.Field>
                                     <label>Recipient's Lisk32 Address:</label>
                                     <input placeholder="Recipient's Lisk32 Address" id="address" name="address" onChange={handleChange} value={state.address} />
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>Amount:</label>
-                                    <input placeholder='Amount (1 = 10^8 tokens)' id="amount" name="amount" onChange={handleChange} value={state.amount} />
                                 </Form.Field>
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>

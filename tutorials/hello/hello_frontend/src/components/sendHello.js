@@ -64,7 +64,7 @@ function SendHello() {
         if (state.error !== '') {
             return (
                 <>
-                    <div class="ui red segment" style={{ overflow: 'auto' }}>
+                    <div className="ui red segment" style={{ overflow: 'auto' }}>
                         <h3>Something went wrong! :(</h3>
                         <pre><strong>Error:</strong> {JSON.stringify(state.error, null, 2)}</pre>
                     </div>
@@ -75,7 +75,7 @@ function SendHello() {
             return (
                 <>
                     <h3>Your transaction's details are:</h3>
-                    <div class="ui green segment" style={{ overflow: 'auto' }}>
+                    <div className="ui green segment" style={{ overflow: 'auto' }}>
                         <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
                         <pre>Response: {
                             JSON.stringify(state.response, null, 2)}</pre>
@@ -94,35 +94,35 @@ function SendHello() {
                     <p>Please fill the following form to send a "Hello" message.</p>
                     <Divider></Divider>
 
-                    <div class="ui two column doubling stackable grid container">
-                        <div class="column">
-                            <Form onSubmit={handleSubmit} class="ui form">
-                                <Form.Field class="field">
+                    <div className="ui two column doubling stackable grid container">
+                        <div className="column">
+                            <Form onSubmit={handleSubmit} className="ui form">
+                                <Form.Field className="field">
                                     <label>Your message:</label>
                                     <input placeholder="Hello Message" id="hello" name="hello" onChange={handleChange} value={state.hello} />
                                 </Form.Field >
-                                <Form.Field class="field">
+                                <Form.Field className="field">
                                     <label>Fee:</label>
                                     <input placeholder='Fee (1 = 10^8 tokens)' type="text" id="fee" name="fee" onChange={handleChange} value={state.fee} />
                                 </Form.Field>
-                                <Form.Field class="field">
+                                <Form.Field className="field">
                                     <label>Sender's Passphrase:</label>
                                     <input placeholder='Passphrase of the hello_client' id="passphrase" name="passphrase" onChange={handleChange} value={state.passphrase} type="password" />
                                 </Form.Field>
 
 
 
-                                <Form.Field class="field">
-                                    <div class="ui yellow segment">
-                                        <i class="lightbulb outline icon"></i>The <strong>Sender's keyPath</strong> value can be from <strong>0-102</strong>. A default value has been pre-filled, which can be changed accordingly.
+                                <Form.Field className="field">
+                                    <div className="ui yellow segment">
+                                        <i className="lightbulb outline icon"></i>The <strong>Sender's keyPath</strong> value can be from <strong>0-102</strong>. A default value has been pre-filled, which can be changed accordingly.
                                     </div>
                                     <label>Sender's keyPath:</label>
-                                    <div class="ui labeled input">
-                                        <div class="ui label">
+                                    <div className="ui labeled input">
+                                        <div className="ui label">
                                             m/44'/134'/
                                         </div>
                                         <input placeholder='Enter any number from 0-102' id="keyPath" name="keyPath" onChange={handleChange} value={state.keyPath} type="text" />
-                                        <div class="ui label">
+                                        <div className="ui label">
                                             '
                                         </div>
                                     </div>

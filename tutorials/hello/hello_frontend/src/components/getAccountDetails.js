@@ -58,7 +58,7 @@ function GetAccountDetails() {
         if (state.error !== '') {
             return (
                 <>
-                    <div class="ui red segment" style={{ overflow: 'auto' }}>
+                    <div className="ui red segment" style={{ overflow: 'auto' }}>
                         <h3>Something went wrong! :(</h3>
                         <pre><strong>Error:</strong> {JSON.stringify(state.error, null, 2)}</pre>
                     </div>
