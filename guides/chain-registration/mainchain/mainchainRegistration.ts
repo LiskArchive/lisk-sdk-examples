@@ -1,15 +1,14 @@
-const { writeFileSync } = require('fs-extra');
+const { writeFileSync, fs } = require('fs-extra');
 const { codec, cryptography, apiClient } = require('@liskhq/lisk-client');
-const { keys: sidechainValidatorsKeys } =  require('../dev-validators.json');
+const { keys:blsKeys } = require('keys.json');
 import { NodeInfo, BFTParametersJSON } from './extern_types';
 import { registrationSignatureMessageSchema } from './schemas';
 import { MESSAGE_TAG_CHAIN_REG } from './constants';
 
 (async () => {
     const { bls } = cryptography;
-
     const mainchainClient = await apiClient.createIPCClient('~/.lisk/pos-mainchain');
-    const sidechainClient = await apiClient.createIPCClient('~/.lisk/apple');
+    //const sidechainClient = await apiClient.createIPCClient('~/.lisk/apple');
     const mainchainNodeInfo = await mainchainClient.invoke('system_getNodeInfo');
     // Get active validators from mainchain
     const { validators: mainchainActiveValidators, certificateThreshold: mainchainCertificateThreshold } = await mainchainClient.invoke('consensus_getBFTParameters', { height: mainchainNodeInfo.height });
@@ -32,50 +31,65 @@ import { MESSAGE_TAG_CHAIN_REG } from './constants';
     };
 
     const message = codec.encode(registrationSignatureMessageSchema, params);
-    
-    const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
-    // Get active validators from sidechainchain
-    const { validators: sidehcainActiveValidators } = await sidechainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
 
-    const activeValidatorsWithPrivateKey: { blsPublicKey: Buffer; blsPrivateKey: Buffer; }[] = [];
-    for (const v of sidehcainActiveValidators) {
+    fs.readFile('registerMainchain.json', (err, data) => {
+        if (!err && data) {
+            console.log("data");
+            console.log(data);
+        } else {
+            console.log("first");
+
+            // Create first signature for the Registration CCM
+            const sidechainValidatorsSignatures: { publicKey: Buffer; signature: Buffer; }[] = [];
+            const signature = bls.signData(
+              MESSAGE_TAG_CHAIN_REG,
+              params.ownChainID,
+              message,
+              blsKeys[0].plain.blsPrivateKey,
+            );
+            sidechainValidatorsSignatures.push({ publicKey: blsKeys[0].plain.blsKey, signature });
+
+            // Create BLS public keys list
+            const publicKeysList = blsKeys[0].map(v => v.plain.blsPublicKey);
+
+            // Create an aggregated signature & aggregation bits
+            const { aggregationBits, signature:sig } = bls.createAggSig(
+              publicKeysList,
+              sidechainValidatorsSignatures,
+            );
+
+            console.log('Result after creating aggregate signature:\n"aggregationBits": ', aggregationBits.toString('hex'), '\n"signature":', signature.toString('hex'));
+
+            writeFileSync('./mainchain_reg_params.json',  JSON.stringify({ ...paramsJSON, signature: signature.toString('hex'), aggregationBits: aggregationBits.toString('hex')}));
+
+        }
+    });
+   // const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
+    // Get active validators from sidechainchain
+    //const { validators: sidehcainActiveValidators } = await sidechainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
+
+    /*for (const v of sidehcainActiveValidators) {
         const validatorInfo = sidechainValidatorsKeys.find(configValidator => configValidator.plain.blsKey === v.blsKey);
         if (validatorInfo) {
-            activeValidatorsWithPrivateKey.push({
-                blsPublicKey: Buffer.from(v.blsKey, 'hex'),
-                blsPrivateKey: Buffer.from(validatorInfo.plain.blsPrivateKey, 'hex'),
-            });
-        }
-    }
+     */
+
+     //   }
+   // }
     // Sort active validators from sidechainchain
-    activeValidatorsWithPrivateKey.sort((a, b) => a.blsPublicKey.compare(b.blsPublicKey));
+    //activeValidatorsWithPrivateKey.sort((a, b) => a.blsPublicKey.compare(b.blsPublicKey));
 
-    const keys: Buffer[] = [];
-    const weights: bigint[] = [];
-    const sidechainValidatorsSignatures: { publicKey: Buffer; signature: Buffer; }[] = [];
+    //const keys: Buffer[] = [];
+    //const weights: bigint[] = [];
     // Sign with each active validator
-    for (const validator of activeValidatorsWithPrivateKey) {
-        keys.push(validator.blsPublicKey);
-        weights.push(BigInt(1));
-        const signature = bls.signData(
-            MESSAGE_TAG_CHAIN_REG,
-            params.ownChainID,
-            message,
-            validator.blsPrivateKey,
-        );
-        sidechainValidatorsSignatures.push({ publicKey: validator.blsPublicKey, signature });
-    }
+    //for (const validator of activeValidatorsWithPrivateKey) {
+        //keys.push(validator.blsPublicKey);
+        //weights.push(BigInt(1));
 
-    const publicKeysList = activeValidatorsWithPrivateKey.map(v => v.blsPublicKey);
-    console.log('Total active sidechain validators:', sidechainValidatorsSignatures.length);
+    //}
 
-    // Create an aggregated signature
-    const { aggregationBits, signature } = bls.createAggSig(
-        publicKeysList,
-        sidechainValidatorsSignatures,
-    );
+
     
-    const verifyResult = bls.verifyWeightedAggSig(
+    /*const verifyResult = bls.verifyWeightedAggSig(
         keys,
         aggregationBits,
         signature,
@@ -85,11 +99,8 @@ import { MESSAGE_TAG_CHAIN_REG } from './constants';
         weights,
         BigInt(68),
     )
-    console.log('==SIGNATURE VERIFICATION RESULT====', verifyResult);
+    console.log('==SIGNATURE VERIFICATION RESULT====', verifyResult);*/
     
-    console.log('Result after creating aggregate signature:\n"aggregationBits": ', aggregationBits.toString('hex'), '\n"signature":', signature.toString('hex'));
-    
-    writeFileSync('./config/default/chain_registration/mainchain_reg_params.json',  JSON.stringify({ ...paramsJSON, signature: signature.toString('hex'), aggregationBits: aggregationBits.toString('hex')}));
 
     console.log('Mainchain registration file is created at ./config/default/chain_registration/mainchain_reg_params.json successfully.');
     
