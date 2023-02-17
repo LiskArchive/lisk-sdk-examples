@@ -1,6 +1,6 @@
 import FixedMenuLayout from '../layout/header';
-import React, { useState, Fragment } from "react";
 import { Form, Button, Container, Divider } from 'semantic-ui-react';
+import React, { useState } from "react";
 import { cryptography, transactions } from '@liskhq/lisk-client/browser';
 import * as api from '../api';
 
@@ -93,7 +93,6 @@ function SendHello() {
                     <h2>Send Hello Message</h2>
                     <p>Please fill the following form to send a "Hello" message.</p>
                     <Divider></Divider>
-
                     <div className="ui two column doubling stackable grid container">
                         <div className="column">
                             <Form onSubmit={handleSubmit} className="ui form">
@@ -109,9 +108,6 @@ function SendHello() {
                                     <label>Sender's Passphrase:</label>
                                     <input placeholder='Passphrase of the hello_client' id="passphrase" name="passphrase" onChange={handleChange} value={state.passphrase} type="password" />
                                 </Form.Field>
-
-
-
                                 <Form.Field className="field">
                                     <div className="ui yellow segment">
                                         <i className="lightbulb outline icon"></i>The <strong>Sender's keyPath</strong> value can be from <strong>0-102</strong>. A default value has been pre-filled, which can be changed accordingly.
@@ -127,11 +123,9 @@ function SendHello() {
                                         </div>
                                     </div>
                                 </Form.Field>
-
                                 <Button type='submit' fluid size='large' style={{ backgroundColor: '#2BD67B', color: 'white' }}>Submit</Button>
                             </Form>
                         </div>
-
                         <div className='column'>
                             <>
                                 {displayData()}

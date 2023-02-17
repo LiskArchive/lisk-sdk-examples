@@ -1,6 +1,6 @@
 import FixedMenuLayout from '../layout/header';
-import React, { useState, useEffect } from "react";
 import { Divider, Container } from 'semantic-ui-react';
+import React, { useState, useEffect } from "react";
 import MessageTimeline from './messageTimeline';
 import * as api from '../api';
 
