@@ -70,16 +70,14 @@ After performing all the aforementioned steps, your Hello UI should look like th
 ![Getdetails](https://user-images.githubusercontent.com/13951043/218956141-3a02c1a0-80d2-49b3-8711-165b8dcd8de0.jpg)
 
 ### Transfer LSKs Page:
-![Transfer](https://user-images.githubusercontent.com/13951043/218956255-9af4ff71-3e4e-4064-9b25-0d2c1cc1df99.jpg)
+![Transfer](https://user-images.githubusercontent.com/13951043/220293669-a2a94db8-fcd0-4cd7-9518-af5940102017.jpg)
 
 ### Send Hello Page:
-![SendHello](https://user-images.githubusercontent.com/13951043/218956299-98938097-6fc3-4034-9893-e11d0f8e27a4.jpg)
+![SendHello](https://user-images.githubusercontent.com/13951043/220293775-913d1864-7dc4-4487-8f7b-f5cdd94b1e11.jpg)
 
 ### Get Hello Page:
 ![GetHello](https://user-images.githubusercontent.com/13951043/218956363-155a2df5-a8ac-402e-9cda-8195ec729e2f.jpg)
 
 ### Faucet Page:
-![Faucet](https://user-images.githubusercontent.com/13951043/218956435-7cab3f8a-79be-4879-bf2d-089a700a1d47.jpg)
-
-
+![Faucet](https://user-images.githubusercontent.com/13951043/220293713-b1a459e3-cd28-4112-8027-20443b5b66aa.jpg)
 
