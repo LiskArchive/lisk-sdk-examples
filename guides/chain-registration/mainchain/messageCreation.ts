@@ -1,12 +1,9 @@
 const { writeFileSync, fs } = require('fs-extra');
 const { apiClient } = require('@liskhq/lisk-client');
-const { keys:blsKeys } = require('keys.json');
-import { NodeInfo, BFTParametersJSON } from './extern_types';
 
 (async () => {
 
 	const mainchainClient = await apiClient.createIPCClient('~/.lisk/pos-mainchain');
-	//const sidechainClient = await apiClient.createIPCClient('~/.lisk/apple');
 	const mainchainNodeInfo = await mainchainClient.invoke('system_getNodeInfo');
 	// Get active validators from mainchain
 	const {
@@ -24,8 +21,17 @@ import { NodeInfo, BFTParametersJSON } from './extern_types';
 		mainchainCertificateThreshold,
 	};
 
-	writeFileSync('./sidechainValidatorsSignatures.json',  JSON.stringify(sidechainValidatorsSignatures));
-	writeFileSync('./params.json',  JSON.stringify(paramsJSON));
+	const params = {
+		ownChainID: Buffer.from(paramsJSON.ownChainID, 'hex'),
+		ownName: paramsJSON.ownName,
+		mainchainValidators: paramsJSON.mainchainValidators.map(v => ({
+			blsKey: Buffer.from(v.blsKey, 'hex'),
+			bftWeight: BigInt(v.bftWeight),
+		})),
+		mainchainCertificateThreshold: paramsJSON.mainchainCertificateThreshold.toString(),
+	};
+
+	writeFileSync('./params.json',  JSON.stringify({paramsJSON, params}));
 
 	process.exit(0);
 })();
