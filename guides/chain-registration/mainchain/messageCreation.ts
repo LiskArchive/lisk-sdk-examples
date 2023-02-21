@@ -11,6 +11,7 @@ const { apiClient } = require('@liskhq/lisk-client');
 		certificateThreshold: mainchainCertificateThreshold
 	} = await mainchainClient.invoke('consensus_getBFTParameters', { height: mainchainNodeInfo.height });
 
+	//Create Registration message parameters in JSON format
 	const paramsJSON = {
 		ownChainID: '03000008',
 		ownName: 'sidechain_8',
@@ -21,6 +22,7 @@ const { apiClient } = require('@liskhq/lisk-client');
 		mainchainCertificateThreshold,
 	};
 
+	// Registration message params
 	const params = {
 		ownChainID: Buffer.from(paramsJSON.ownChainID, 'hex'),
 		ownName: paramsJSON.ownName,
@@ -31,6 +33,7 @@ const { apiClient } = require('@liskhq/lisk-client');
 		mainchainCertificateThreshold: paramsJSON.mainchainCertificateThreshold.toString(),
 	};
 
+	// Save params and params as JSON in a file params.json
 	writeFileSync('./params.json',  JSON.stringify({paramsJSON, params}));
 
 	process.exit(0);

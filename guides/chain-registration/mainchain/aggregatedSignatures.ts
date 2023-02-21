@@ -18,30 +18,35 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants');
         }
     });
 
+    // Create message by encoding params
     const message = codec.codec.encode(registrationSignatureMessageSchema, params);
 
     let sidechainValidatorsSignatures: { publicKey: Buffer; signature: Buffer; }[];
 
+    // Read the existing list of validator signatures, or create a new one if none exists, yet.
     fs.readFile('sidechainValidatorsSignatures.json', (err, data) => {
         if (!err && data) {
-            console.log("data");
-            console.log(data);
             sidechainValidatorsSignatures = data;
+            console.log("sidechain validators signatures list:");
+            console.log(sidechainValidatorsSignatures);
         } else {
-            console.log("first");
+            console.log("First signature!");
+            console.log("Creating a fresh sidechainValidatorsSignatures.json ...");
 
-            // Create first signature for the Registration CCM
             sidechainValidatorsSignatures = [];
         }
 
+        // Create signature for the current validator
         const signature = bls.signData(
           MESSAGE_TAG_CHAIN_REG,
           params.ownChainID,
           message,
           blsKeys[0].plain.blsPrivateKey,
         );
+        // Add signature to the list of validator signatures
         sidechainValidatorsSignatures.push({ publicKey: blsKeys[0].plain.blsKey, signature });
 
+        // Save the list of validator signatures
         writeFileSync('./sidechainValidatorsSignatures.json',  JSON.stringify(sidechainValidatorsSignatures));
     });
 

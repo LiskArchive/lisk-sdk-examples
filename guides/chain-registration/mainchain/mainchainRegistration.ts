@@ -5,8 +5,14 @@ const { writeFileSync, fs } = require('fs-extra');
 const { BFTParametersJSON } = require('./extern_types');
 
 (async () => {
+	const sidechainClient = await apiClient.createIPCClient('~/.lisk/apple');
+	const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
+	// Get active validators from sidechain
+	const { validators } = await sidechainClient.invoke<typeof BFTParametersJSON>('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
+
 	const { bls } = cryptography;
 	let sidechainValidatorsSignatures;
+
 	fs.readFile('sidechainValidatorsSignatures.json', (err, data) => {
 		if (!err && data) {
 			console.log("data");
@@ -18,7 +24,7 @@ const { BFTParametersJSON } = require('./extern_types');
 		}
 	});
 
-	// Sort active validators from sidechainchain
+	// Sort validators from sidechain
 	sidechainValidatorsSignatures.sort((a, b) => a.publicKey.compare(b.publicKey));
 
 	// Create BLS public keys list
@@ -32,29 +38,6 @@ const { BFTParametersJSON } = require('./extern_types');
 
 	console.log('Result after creating aggregate signature:\n"aggregationBits": ', aggregationBits.toString('hex'), '\n"signature":', signature.toString('hex'));
 
-	const sidechainClient = await apiClient.createIPCClient('~/.lisk/apple');
-	const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
-
-	// Get active validators from sidechain
-	const { validators } = await sidechainClient.invoke<typeof BFTParametersJSON>('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
-
-	//Remove signatures of non-active validators
-	//? Do we actually need to check this if we verify the signature in the end?
-	for (const v of validators) {
-		const validatorInfo = sidechainValidatorsSignatures.find(scValidator => scValidator.publicKey === v.publicKey);
-		if (!validatorInfo) {
-			//Remove validator signature from sidechainValidatorsSignatures
-		}
-	}
-
-	// Create keys and weights lists
-	const keys: Buffer[] = [];
-	const weights: bigint[] = [];
-	for (const validator of sidechainValidatorsSignatures) {
-		keys.push(validator.publicKey);
-		weights.push(BigInt(1));
-	}
-
 	let params;
 	let paramsJSON;
 	//Read params
@@ -66,6 +49,25 @@ const { BFTParametersJSON } = require('./extern_types');
 			paramsJSON = data.paramsJSON;
 
 			const message = codec.codec.encode(registrationSignatureMessageSchema, params);
+
+			/*	****************** Signature verification ****************** */
+
+			//Remove signatures of non-active validators
+			//? Do we actually need to check this if we verify the signature in the end?
+			for (const v of validators) {
+				const validatorInfo = sidechainValidatorsSignatures.find(scValidator => scValidator.publicKey === v.publicKey);
+				if (!validatorInfo) {
+					//Remove validator signature from sidechainValidatorsSignatures
+				}
+			}
+
+			// Create keys and weights lists
+			const keys: Buffer[] = [];
+			const weights: bigint[] = [];
+			for (const validator of sidechainValidatorsSignatures) {
+				keys.push(validator.publicKey);
+				weights.push(BigInt(1));
+			}
 
 			// Verify the validity of the aggregated signature
 			const verifyResult = bls.verifyWeightedAggSig(
@@ -80,6 +82,7 @@ const { BFTParametersJSON } = require('./extern_types');
 			)
 
 			console.log('==SIGNATURE VERIFICATION RESULT====', verifyResult);
+			/*		****************** ******************	*/
 
 			console.log('Amount of signatures:', sidechainValidatorsSignatures.length);
 
