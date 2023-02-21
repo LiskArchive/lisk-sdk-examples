@@ -7,6 +7,14 @@ const { apiClient } = require('@liskhq/lisk-client');
     let chainID;
     let threshold;
 
+    if (process.argv.length < 4) {
+        console.log("Please provide all three required parameters when executing the script:");
+        console.log("node sidechainRegistration.ts NAME CHAINID THRESHOLD");
+        console.log("Example:");
+        console.log("node sidechainRegistration.ts sidechain_8 00000008 55");
+        process.exit(1);
+    }
+
     process.argv.forEach(function (val, index, array) {
         if (index === 2) {
             name = val;
@@ -38,4 +46,5 @@ const { apiClient } = require('@liskhq/lisk-client');
 })().then((res) => {
     //console.log(res);
     writeFileSync('./sidechain_reg_params.json',  JSON.stringify(res));
+    process.exit(0);
 });
