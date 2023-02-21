@@ -44,7 +44,7 @@ mkdir components
 
 - Update the `hello_frontend/src/App.js` file according to [App.css](https://github.com/LiskHQ/lisk-sdk-examples/blob/development/guides/07-ui-boilerplate/hello_frontend/src/App.js).
 
-- Insert the following `logo.png` inplace of the existing `logo.svg` in the `hello_frontend/src/` directory.
+- Insert the following `logo.png` in place of the existing `logo.svg` in the `hello_frontend/src/` directory.
 
 ![logo](https://user-images.githubusercontent.com/13951043/218746127-be241607-b647-4295-af65-ee113c140038.png)
 
