@@ -12,7 +12,6 @@ function Transfer() {
                     <Divider></Divider>
                     <div class="ui two column doubling stackable grid container">
                         <div class="column">
-
                             <Form class="ui form">
                                 <Form.Field class="field">
                                     <label>Recipient's Lisk32 Address:</label>
@@ -31,6 +30,9 @@ function Transfer() {
                                     <input placeholder='Passphrase of the hello_client' id="passphrase" name="passphrase" type="password" />
                                 </Form.Field>
                                 <Form.Field class="field">
+                                    <div class="ui yellow segment">
+                                        <i class="lightbulb outline icon"></i>The <strong>Sender's keyPath</strong> value can be from <strong>0-102</strong>. A default value has been pre-filled, which can be changed accordingly.
+                                    </div>
                                     <label>Sender's keyPath:</label>
                                     <div class="ui labeled input">
                                         <div class="ui label">
@@ -47,10 +49,12 @@ function Transfer() {
                         </div>
 
                         <div className='column'>
+                            <>
+                            </>
                         </div>
                     </div>
                 </Container>
-            </div>
+            </div >
         </>
     );
 }
