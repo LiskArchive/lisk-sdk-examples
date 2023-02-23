@@ -30,7 +30,6 @@ function GetAccountDetails() {
         let latestHello;
 
         // Retrieves the account details from the blockchain application, based on the address provided.
-
         await client.invoke("token_getBalance", {
             address: state.address,
             tokenID: "0000000000000000"
@@ -47,10 +46,13 @@ function GetAccountDetails() {
             }
             const helloMessage = await client.invoke("hello_getHello", {
                 address: state.address,
-            });
-            latestHello = helloMessage;
-            console.log(latestHello)
-
+            })
+            if (typeof helloMessage.message === 'string') {
+                latestHello = helloMessage;
+            }
+            else if (helloMessage.error.message.includes("does not exist")) {
+                latestHello = "message not found";
+            }
             return [response, authenticationDetails, latestHello];
         })
 
@@ -74,7 +76,18 @@ function GetAccountDetails() {
                 </>
             )
         }
-        else if (typeof state.account !== 'undefined' && state.account.availableBalance >= 0) {
+        else if (state.hello === 'message not found') {
+            return (
+                <>
+                    <h3>Your account details are:</h3>
+                    <div className="ui green segment" style={{ overflow: 'auto' }}>
+                        <pre>Account: {JSON.stringify(state.account, null, 2)}</pre>
+                        <pre>Authentication details: {JSON.stringify(state.auth, null, 2)}</pre>
+                    </div>
+                </>
+            )
+        }
+        else if (typeof state.account !== 'undefined' && state.account.availableBalance >= 0 && state.hello !== 'message not found') {
             return (
                 <>
                     <h3>Your account details are:</h3>
