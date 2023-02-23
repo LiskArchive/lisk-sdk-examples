@@ -79,7 +79,7 @@ function Faucet() {
         else if (typeof state.transaction !== 'undefined' && state.transaction.fee > 0) {
             return (
                 <>
-                    <h3>Your transaction's details are:</h3>
+                    <h3>Your transaction details are:</h3>
                     <div className="ui green segment" style={{ overflow: 'auto' }}>
                         <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
                         <pre>Response: {
@@ -98,7 +98,7 @@ function Faucet() {
             <FixedMenuLayout />
             <Container>
                 <h2>Faucet</h2>
-                <p>The faucet transfers tokens from the genesis account to another.</p>
+                <p>The faucet transfers tokens from the genesis account to another account.</p>
                 <Divider></Divider>
                 <div>
                     <div className="ui two column doubling stackable grid container">

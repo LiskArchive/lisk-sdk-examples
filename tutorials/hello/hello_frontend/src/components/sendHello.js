@@ -74,7 +74,7 @@ function SendHello() {
         else if (typeof state.transaction !== 'undefined' && state.transaction.fee > 0) {
             return (
                 <>
-                    <h3>Your transaction's details are:</h3>
+                    <h3>Your transaction details are:</h3>
                     <div className="ui green segment" style={{ overflow: 'auto' }}>
                         <pre>Transaction: {JSON.stringify(state.transaction, null, 2)}</pre>
                         <pre>Response: {
