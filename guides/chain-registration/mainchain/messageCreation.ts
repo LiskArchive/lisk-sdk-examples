@@ -1,9 +1,10 @@
 const { writeFileSync, fs } = require('fs-extra');
 const { apiClient } = require('@liskhq/lisk-client');
+const RPC_ENDPOINT = 'ws://142.93.230.246:4002/rpc-ws';
 
 (async () => {
 
-	const mainchainClient = await apiClient.createIPCClient('~/.lisk/pos-mainchain');
+	const mainchainClient = await apiClient.createWSClient(RPC_ENDPOINT);
 	const mainchainNodeInfo = await mainchainClient.invoke('system_getNodeInfo');
 	// Get active validators from mainchain
 	const {
@@ -11,7 +12,8 @@ const { apiClient } = require('@liskhq/lisk-client');
 		certificateThreshold: mainchainCertificateThreshold
 	} = await mainchainClient.invoke('consensus_getBFTParameters', { height: mainchainNodeInfo.height });
 
-	//Create Registration message parameters in JSON format
+	// Create Registration message parameters in JSON format
+	// Update ownChainID and ownName to equal the sidechain ID and name that were registered on the mainchain
 	const paramsJSON = {
 		ownChainID: '03000008',
 		ownName: 'sidechain_8',
@@ -22,19 +24,8 @@ const { apiClient } = require('@liskhq/lisk-client');
 		mainchainCertificateThreshold,
 	};
 
-	// Registration message params
-	const params = {
-		ownChainID: Buffer.from(paramsJSON.ownChainID, 'hex'),
-		ownName: paramsJSON.ownName,
-		mainchainValidators: paramsJSON.mainchainValidators.map(v => ({
-			blsKey: Buffer.from(v.blsKey, 'hex'),
-			bftWeight: BigInt(v.bftWeight),
-		})),
-		mainchainCertificateThreshold: paramsJSON.mainchainCertificateThreshold.toString(),
-	};
-
 	// Save params and params as JSON in a file params.json
-	writeFileSync('./params.json',  JSON.stringify({paramsJSON, params}));
+	writeFileSync('./params.json',  JSON.stringify(paramsJSON));
 
 	process.exit(0);
 })();

@@ -11,7 +11,15 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants');
         if (!err && data) {
             console.log("params:");
             console.log(data);
-            params = data.params;
+            params = {
+                ownChainID: Buffer.from(data.ownChainID, 'hex'),
+                ownName: data.ownName,
+                mainchainValidators: data.mainchainValidators.map(v => ({
+                    blsKey: Buffer.from(v.blsKey, 'hex'),
+                    bftWeight: BigInt(v.bftWeight),
+                })),
+                mainchainCertificateThreshold: data.mainchainCertificateThreshold.toString(),
+            };
         } else {
             console.log("params.json missing.");
             process.exit(1);

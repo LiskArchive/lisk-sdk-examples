@@ -45,8 +45,16 @@ const { BFTParametersJSON } = require('./extern_types');
 		if (!err && data) {
 			console.log("params:");
 			console.log(data);
-			params = data.params;
-			paramsJSON = data.paramsJSON;
+			paramsJSON = data;
+			params = {
+				ownChainID: Buffer.from(paramsJSON.ownChainID, 'hex'),
+				ownName: paramsJSON.ownName,
+				mainchainValidators: paramsJSON.mainchainValidators.map(v => ({
+					blsKey: Buffer.from(v.blsKey, 'hex'),
+					bftWeight: BigInt(v.bftWeight),
+				})),
+				mainchainCertificateThreshold: paramsJSON.mainchainCertificateThreshold.toString(),
+			};
 
 			const message = codec.codec.encode(registrationSignatureMessageSchema, params);
 
