@@ -10,6 +10,7 @@ function GetAccountDetails() {
         error: '',
         account: {},
         auth: {},
+        hello: {}
     });
 
     const handleChange = (event) => {
@@ -26,6 +27,7 @@ function GetAccountDetails() {
         let responseError = '';
         let authenticationDetails;
         let accountBalance;
+        let latestHello;
 
         // Retrieves the account details from the blockchain application, based on the address provided.
 
@@ -43,14 +45,21 @@ function GetAccountDetails() {
                 });
                 authenticationDetails = authDetails;
             }
-            return [response, authenticationDetails];
+            const helloMessage = await client.invoke("hello_getHello", {
+                address: state.address,
+            });
+            latestHello = helloMessage;
+            console.log(latestHello)
+
+            return [response, authenticationDetails, latestHello];
         })
 
         updateState({
             ...state,
             error: responseError,
             account: accountBalance,
-            auth: authenticationDetails
+            auth: authenticationDetails,
+            hello: latestHello
         });
     };
 
@@ -72,6 +81,7 @@ function GetAccountDetails() {
                     <div className="ui green segment" style={{ overflow: 'auto' }}>
                         <pre>Account: {JSON.stringify(state.account, null, 2)}</pre>
                         <pre>Authentication details: {JSON.stringify(state.auth, null, 2)}</pre>
+                        <pre>Latest Hello message: {JSON.stringify(state.hello, null, 2)}</pre>
                     </div>
                 </>
             )
