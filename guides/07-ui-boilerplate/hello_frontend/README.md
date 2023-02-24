@@ -9,6 +9,13 @@ This project is bootstrapped with [Create React App](https://github.com/facebook
 npx create-react-app hello_frontend
 ```
 
+- Once bootstrap is successful, the directory should look like the following:
+```
+hello/
+├── hello_client/
+└── hello_frontend/
+```
+
 - Install other dependencies:
 ```
 cd hello_frontend
