@@ -12,7 +12,9 @@
     "@types/node": "^18.13.0"
   },
   "dependencies": {
-    "@liskhq/lisk-client": "^6.0.0-alpha.14",
+    "@chainsafe/blst": "^0.2.6",
+    "@liskhq/lisk-codec": "^0.3.0-alpha.7",
+    "@liskhq/lisk-cryptography": "^4.0.0-alpha.6",
     "fs": "^0.0.1-security",
     "fs-extra": "^11.1.0"
   }
