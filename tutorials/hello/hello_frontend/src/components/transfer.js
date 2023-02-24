@@ -41,7 +41,7 @@ function Transfer() {
                 tokenID: Buffer.from('0000000000000000', 'hex'),
                 amount: BigInt(transactions.convertLSKToBeddows(state.amount)),
                 recipientAddress: state.address,
-                data: 'Hey! I am sending you LSKs. Enjoy!'
+                data: 'Hey! I am sending you tokens. Enjoy!'
             }
         }, privateKey).catch(err => {
             responseError = err.message;
@@ -102,8 +102,8 @@ function Transfer() {
             <div>
                 <FixedMenuLayout />
                 <Container>
-                    <h2>Send LSK tokens</h2>
-                    <p>On this page you can send LSK tokens to any address within the Hello sidechain.</p>
+                    <h2>Send tokens</h2>
+                    <p>On this page you can send tokens to any address within the Hello sidechain.</p>
                     <Divider></Divider>
                     <div class="ui two column doubling stackable grid container">
                         <div class="column">
