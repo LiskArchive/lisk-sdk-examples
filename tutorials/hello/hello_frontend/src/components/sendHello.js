@@ -91,7 +91,7 @@ function SendHello() {
             <Container>
                 <div>
                     <h2>Send Hello Message</h2>
-                    <p>Please fill the following form to send a "Hello" message.</p>
+                    <p>Please fill out the following form to send a "Hello" message.</p>
                     <Divider></Divider>
                     <div className="ui two column doubling stackable grid container">
                         <div className="column">
