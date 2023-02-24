@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@chainsafe/blst": "^0.2.6",
+    "@liskhq/lisk-api-client": "^6.0.0-alpha.14",
     "@liskhq/lisk-codec": "^0.3.0-alpha.7",
     "@liskhq/lisk-cryptography": "^4.0.0-alpha.6",
     "fs": "^0.0.1-security",

@@ -1,106 +1,95 @@
-import { cryptography, apiClient, codec } from '@liskhq/lisk-client';
-import { registrationSignatureMessageSchema } from './schemas';
-const { MESSAGE_TAG_CHAIN_REG } = require('./constants');
-const { writeFileSync, fs } = require('fs-extra');
-const { BFTParametersJSON } = require('./extern_types');
+const apiClient = require('@liskhq/lisk-api-client');
+const codec = require('@liskhq/lisk-codec');
+const cryptography = require('@liskhq/lisk-cryptography');
+const { registrationSignatureMessageSchema } = require('./schemas.ts');
+const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
+const fse = require('fs-extra');
+const paramsJSON = require('./params.json');
+const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.json');
 
 (async () => {
-	const sidechainClient = await apiClient.createIPCClient('~/.lisk/apple');
+	const sidechainClient = await apiClient.createIPCClient('~/.lisk/hello_client');
 	const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
 	// Get active validators from sidechain
-	const { validators } = await sidechainClient.invoke<typeof BFTParametersJSON>('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
+	const { validators } = await sidechainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
 
 	const { bls } = cryptography;
-	let sidechainValidatorsSignatures;
 
-	fs.readFile('sidechainValidatorsSignatures.json', (err, data) => {
-		if (!err && data) {
-			console.log("data");
-			console.log(data);
-			sidechainValidatorsSignatures = data;
-		} else {
-			console.log("sidechainValidatorsSignatures.json missing.");
-			process.exit(1);
-		}
+	console.log("sidechainValidatorsSignatures");
+	console.log(sidechainValidatorsSignatures);
+	// Sort validators from sidechain
+	sidechainValidatorsSignatures.sort((a, b) => {
+		a.publicKey.localeCompare(b.publicKey);
 	});
 
-	// Sort validators from sidechain
-	sidechainValidatorsSignatures.sort((a, b) => a.publicKey.compare(b.publicKey));
-
 	// Create BLS public keys list
-	const publicKeysList = sidechainValidatorsSignatures.map(v => v.publicKey);
+	const publicKeysList = sidechainValidatorsSignatures.map(v => Buffer.from(v.publicKey,'hex'));
+	//TODO: fix function
+	// Convert publickeys from string to Buffer
+	let validatorsSignatures = sidechainValidatorsSignatures.map(v => 1 == 1 ? {
+		...v,
+		publicKey: Buffer.from(v.publicKey,'hex')
+	} : v );
+	console.log("publicKeysList");
+	console.log(publicKeysList);
 
 	// Create an aggregated signature & aggregation bits
 	const { aggregationBits, signature } = bls.createAggSig(
 		publicKeysList,
-		sidechainValidatorsSignatures,
+		validatorsSignatures,
 	);
 
 	console.log('Result after creating aggregate signature:\n"aggregationBits": ', aggregationBits.toString('hex'), '\n"signature":', signature.toString('hex'));
 
-	let params;
-	let paramsJSON;
-	//Read params
-	fs.readFile('params.json', (err, data) => {
-		if (!err && data) {
-			console.log("params:");
-			console.log(data);
-			paramsJSON = data;
-			params = {
-				ownChainID: Buffer.from(paramsJSON.ownChainID, 'hex'),
-				ownName: paramsJSON.ownName,
-				mainchainValidators: paramsJSON.mainchainValidators.map(v => ({
-					blsKey: Buffer.from(v.blsKey, 'hex'),
-					bftWeight: BigInt(v.bftWeight),
-				})),
-				mainchainCertificateThreshold: paramsJSON.mainchainCertificateThreshold.toString(),
-			};
+	let	params = {
+			ownChainID: Buffer.from(paramsJSON.ownChainID, 'hex'),
+			ownName: paramsJSON.ownName,
+			mainchainValidators: paramsJSON.mainchainValidators.map(v => ({
+				blsKey: Buffer.from(v.blsKey, 'hex'),
+				bftWeight: BigInt(v.bftWeight),
+			})),
+			mainchainCertificateThreshold: paramsJSON.mainchainCertificateThreshold.toString(),
+		};
 
-			const message = codec.codec.encode(registrationSignatureMessageSchema, params);
+	const message = codec.codec.encode(registrationSignatureMessageSchema, params);
 
-			/*	****************** Signature verification ****************** */
+		/*	****************** Signature verification ****************** */
 
-			//Remove signatures of non-active validators
-			//? Do we actually need to check this if we verify the signature in the end?
-			for (const v of validators) {
-				const validatorInfo = sidechainValidatorsSignatures.find(scValidator => scValidator.publicKey === v.publicKey);
-				if (!validatorInfo) {
-					//Remove validator signature from sidechainValidatorsSignatures
-				}
-			}
-
-			// Create keys and weights lists
-			const keys: Buffer[] = [];
-			const weights: bigint[] = [];
-			for (const validator of sidechainValidatorsSignatures) {
-				keys.push(validator.publicKey);
-				weights.push(BigInt(1));
-			}
-
-			// Verify the validity of the aggregated signature
-			const verifyResult = bls.verifyWeightedAggSig(
-				keys,
-				aggregationBits,
-				signature,
-				MESSAGE_TAG_CHAIN_REG,
-				params.ownChainID,
-				message,
-				weights,
-				BigInt(68),
-			)
-
-			console.log('==SIGNATURE VERIFICATION RESULT====', verifyResult);
-			/*		****************** ******************	*/
-
-			console.log('Amount of signatures:', sidechainValidatorsSignatures.length);
-
-			writeFileSync('./mainchain_reg_params.json',  JSON.stringify({ ...paramsJSON, signature: signature.toString('hex'), aggregationBits: aggregationBits.toString('hex')}));
-
-		} else {
-			console.log("params.json missing.");
-			process.exit(1);
+		//Remove signatures of non-active validators
+		//? Do we actually need to check this if we verify the signature in the end?
+	for (const v of validators) {
+		const validatorInfo = sidechainValidatorsSignatures.find(scValidator => scValidator.publicKey === v.publicKey);
+		if (!validatorInfo) {
+			//Remove validator signature from sidechainValidatorsSignatures
 		}
-	});
+	}
+
+		// Create keys and weights lists
+	let keys = [];
+	let weights = [];
+	for (const validator of sidechainValidatorsSignatures) {
+		keys.push(validator.publicKey);
+		weights.push(BigInt(1));
+	}
+
+		// Verify the validity of the aggregated signature
+	const verifyResult = bls.verifyWeightedAggSig(
+		keys,
+		aggregationBits,
+		signature,
+		MESSAGE_TAG_CHAIN_REG,
+		params.ownChainID,
+		message,
+		weights,
+		BigInt(68),
+	)
+
+	console.log('==SIGNATURE VERIFICATION RESULT====', verifyResult);
+		/*		****************** ******************	*/
+
+	console.log('Amount of signatures:', sidechainValidatorsSignatures.length);
+
+	fse.writeFileSync('./mainchain_reg_params.json',  JSON.stringify({ ...paramsJSON, signature: signature.toString('hex'), aggregationBits: aggregationBits.toString('hex')}));
 
 	console.log('Mainchain registration file is created at ./mainchain_reg_params.json successfully.');
 
