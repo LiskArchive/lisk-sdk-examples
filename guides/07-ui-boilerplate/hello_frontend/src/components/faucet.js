@@ -7,7 +7,7 @@ function Faucet() {
             <FixedMenuLayout />
             <Container>
                 <h2>Faucet</h2>
-                <p>The faucet transfers tokens from the genesis account to another.</p>
+                <p>The faucet transfers tokens from the genesis account to another account.</p>
                 <Divider></Divider>
                 <div>
                     <div className="ui two column doubling stackable grid container">
