@@ -1,6 +1,7 @@
-//const { writeFileSync, readFile } = require('fs-extra');
-const fs = require('fs');
-const { codec, cryptography } = require('@liskhq/lisk-client');
+const fse = require('fs-extra');
+//const fs = require('fs');
+const codec = require('@liskhq/lisk-codec');
+const cryptography = require('@liskhq/lisk-cryptography');
 const { keys:blsKeys } = require('./keys.json');
 const paramsJSON = require('./params.json');
 const { registrationSignatureMessageSchema } = require('./schemas.ts');
@@ -24,10 +25,10 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
     // Create message by encoding params
     const message = codec.codec.encode(registrationSignatureMessageSchema, params);
 
-    let sidechainValidatorsSignatures = [];
+    let sidechainValidatorsSignatures;
 
     // Read the existing list of validator signatures, or create a new one if none exists, yet.
-    fs.readFile('./sidechainValidatorsSignatures.json', (err, data) => {
+    fse.readJSON('./sidechainValidatorsSignatures.json', (err, data) => {
         if (!err && data) {
             sidechainValidatorsSignatures = data;
             console.log("sidechain validators signatures list:");
@@ -45,7 +46,7 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
           MESSAGE_TAG_CHAIN_REG,
           params.ownChainID,
           message,
-          blsKeys[0].plain.blsPrivateKey,
+          Buffer.from(blsKeys[0].plain.blsPrivateKey,"hex"),
         );
         // Add signature to the list of validator signatures
         sidechainValidatorsSignatures.push({ publicKey: blsKeys[0].plain.blsKey, signature });
@@ -53,7 +54,7 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
         console.log("sidechainValidatorsSignatures");
         console.log(sidechainValidatorsSignatures);
         // Save the list of validator signatures
-        fs.writeFileSync('./sidechainValidatorsSignatures.json',  JSON.stringify(sidechainValidatorsSignatures));
+        fse.writeFileSync('./sidechainValidatorsSignatures.json',  JSON.stringify(sidechainValidatorsSignatures));
         console.log("end");
         process.exit(0);
     });
