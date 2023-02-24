@@ -1,38 +1,33 @@
-const { writeFileSync, fs } = require('fs-extra');
+//const { writeFileSync, readFile } = require('fs-extra');
+const fs = require('fs');
 const { codec, cryptography } = require('@liskhq/lisk-client');
-const { keys:blsKeys } = require('keys.json');
-const { registrationSignatureMessageSchema } = require('./schemas');
-const { MESSAGE_TAG_CHAIN_REG } = require('./constants');
+const { keys:blsKeys } = require('./keys.json');
+const paramsJSON = require('./params.json');
+const { registrationSignatureMessageSchema } = require('./schemas.ts');
+const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
 
 (async () => {
     const { bls } = cryptography;
     let params;
-    fs.readFile('params.json', (err, data) => {
-        if (!err && data) {
-            console.log("params:");
-            console.log(data);
-            params = {
-                ownChainID: Buffer.from(data.ownChainID, 'hex'),
-                ownName: data.ownName,
-                mainchainValidators: data.mainchainValidators.map(v => ({
-                    blsKey: Buffer.from(v.blsKey, 'hex'),
-                    bftWeight: BigInt(v.bftWeight),
-                })),
-                mainchainCertificateThreshold: data.mainchainCertificateThreshold.toString(),
-            };
-        } else {
-            console.log("params.json missing.");
-            process.exit(1);
-        }
-    });
+    console.log("params:");
+    //console.log(paramsJSON);
+    params = {
+        ownChainID: Buffer.from(paramsJSON.ownChainID, 'hex'),
+        ownName: paramsJSON.ownName,
+        mainchainValidators: paramsJSON.mainchainValidators.map(v => ({
+            blsKey: Buffer.from(v.blsKey, 'hex'),
+            bftWeight: BigInt(v.bftWeight),
+        })),
+        mainchainCertificateThreshold: paramsJSON.mainchainCertificateThreshold.toString(),
+    };
 
     // Create message by encoding params
     const message = codec.codec.encode(registrationSignatureMessageSchema, params);
 
-    let sidechainValidatorsSignatures: { publicKey: Buffer; signature: Buffer; }[];
+    let sidechainValidatorsSignatures = [];
 
     // Read the existing list of validator signatures, or create a new one if none exists, yet.
-    fs.readFile('sidechainValidatorsSignatures.json', (err, data) => {
+    fs.readFile('./sidechainValidatorsSignatures.json', (err, data) => {
         if (!err && data) {
             sidechainValidatorsSignatures = data;
             console.log("sidechain validators signatures list:");
@@ -44,6 +39,7 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants');
             sidechainValidatorsSignatures = [];
         }
 
+        console.log("pieps");
         // Create signature for the current validator
         const signature = bls.signData(
           MESSAGE_TAG_CHAIN_REG,
@@ -54,9 +50,11 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants');
         // Add signature to the list of validator signatures
         sidechainValidatorsSignatures.push({ publicKey: blsKeys[0].plain.blsKey, signature });
 
+        console.log("sidechainValidatorsSignatures");
+        console.log(sidechainValidatorsSignatures);
         // Save the list of validator signatures
-        writeFileSync('./sidechainValidatorsSignatures.json',  JSON.stringify(sidechainValidatorsSignatures));
+        fs.writeFileSync('./sidechainValidatorsSignatures.json',  JSON.stringify(sidechainValidatorsSignatures));
+        console.log("end");
+        process.exit(0);
     });
-
-    process.exit(0);
 })();

@@ -1,6 +1,6 @@
-import { CHAIN_ID_LENGTH, MIN_CHAIN_NAME_LENGTH, MAX_CHAIN_NAME_LENGTH, BLS_PUBLIC_KEY_LENGTH, NUMBER_ACTIVE_VALIDATORS_MAINCHAIN } from "./constants";
+const { CHAIN_ID_LENGTH, MIN_CHAIN_NAME_LENGTH, MAX_CHAIN_NAME_LENGTH, BLS_PUBLIC_KEY_LENGTH, NUMBER_ACTIVE_VALIDATORS_MAINCHAIN } = require("./constants.ts");
 
-export const mainchainRegParams = {
+const mainchainRegParams = {
 	$id: '/modules/interoperability/sidechain/mainchainRegistration',
 	type: 'object',
 	required: [
@@ -63,7 +63,7 @@ export const mainchainRegParams = {
 	},
 };
 
-export const registrationSignatureMessageSchema = {
+const registrationSignatureMessageSchema = {
 	$id: '/modules/interoperability/sidechain/registrationSignatureMessage',
 	type: 'object',
 	required: ['ownChainID', 'ownName', 'mainchainValidators', 'mainchainCertificateThreshold'],
@@ -108,3 +108,5 @@ export const registrationSignatureMessageSchema = {
 		},
 	},
 };
+
+module.exports = { registrationSignatureMessageSchema, mainchainRegParams }

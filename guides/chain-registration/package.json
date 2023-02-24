@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@liskhq/lisk-client": "^6.0.0-alpha.14",
+    "fs": "^0.0.1-security",
     "fs-extra": "^11.1.0"
   }
 }
