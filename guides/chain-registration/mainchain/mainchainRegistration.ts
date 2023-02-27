@@ -15,12 +15,13 @@ const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.j
 
 	const { bls } = cryptography;
 
-	// Create BLS public keys list
+  // Create BLS public keys list
 	const publicKeysList = sidechainValidatorsSignatures.map(v => Buffer.from(v.publicKey,'hex'));
 	const validatorsSignaturesBuffer = sidechainValidatorsSignatures.map(v => ({
 		signature: Buffer.from(v.signature,'hex'),
 		publicKey: Buffer.from(v.publicKey,'hex')
 	}));
+
 
 	// Create an aggregated signature & aggregation bits
 	const { aggregationBits, signature } = bls.createAggSig(
@@ -49,21 +50,17 @@ const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.j
 
 		/*	****************** Signature verification ****************** */
 
-	console.log("validators");
-	console.log(validators);
-	console.log("sidechainValidatorsSignatures");
-	console.log(sidechainValidatorsSignatures);
 		//Remove signatures of non-active validators
 		//? Do we actually need to check this if we verify the signature in the end?
-	for (const v of sidechainValidatorsSignatures) {
-		const validatorInfo = validators.find(scValidator => scValidator.blsKey === v.publicKey);
+	/*for (const v of sidechainValidatorsSignatures) {
+		const validatorInfo = validators.find(scValidator => scValidator.blsKey === v.publicKey.toString("hex"));
 		if (!validatorInfo) {
 			//Remove validator signature from sidechainValidatorsSignatures
 			console.log("remove sig")
 		} else {
 			console.log("FOUND sig")
 		}
-	}
+	}*/
 
 		// Create keys and weights lists
 	let keys = [];
