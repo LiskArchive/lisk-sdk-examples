@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
 
 import {
-    BaseModule, BlockAfterExecuteContext, BlockExecuteContext, BlockVerifyContext,
-    GenesisBlockExecuteContext, InsertAssetContext, ModuleInitArgs,
-    ModuleMetadata, TransactionExecuteContext, TransactionVerifyContext,
-    VerificationResult, utils
+	BaseModule, BlockAfterExecuteContext, BlockExecuteContext, BlockVerifyContext,
+	GenesisBlockExecuteContext, InsertAssetContext, ModuleInitArgs,
+	ModuleMetadata, TransactionExecuteContext, TransactionVerifyContext,
+	VerificationResult, utils
 } from 'lisk-sdk';
 import { validator } from '@liskhq/lisk-validator';
 import { CreateHelloCommand } from "./commands/create_hello_command";
@@ -37,7 +37,6 @@ export class HelloModule extends BaseModule {
 
 	public metadata(): ModuleMetadata {
 		return {
-			name: this.name,
 			endpoints: [
 				{
 					name: this.endpoint.getHello.name,
@@ -58,6 +57,7 @@ export class HelloModule extends BaseModule {
 				data: v.schema,
 			})),
 			assets: [],
+			stores: []
 		};
 	}
 
@@ -84,7 +84,7 @@ export class HelloModule extends BaseModule {
 		// verify block
 	}
 
-    // Lifecycle hooks
+	// Lifecycle hooks
 	public async verifyTransaction(context: TransactionVerifyContext): Promise<VerificationResult> {
 		// verify transaction will be called multiple times in the transaction pool
 		context.logger.info("TX VERIFICATION");
