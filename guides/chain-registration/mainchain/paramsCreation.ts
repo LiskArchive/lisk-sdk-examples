@@ -1,6 +1,7 @@
 const { writeFileSync, fs } = require('fs-extra');
 const { apiClient } = require('@liskhq/lisk-client');
 const RPC_ENDPOINT = 'ws://142.93.230.246:4002/rpc-ws';
+const { SC_CHAIN_ID, SC_NAME } = require('./constants.ts');
 
 (async () => {
 
@@ -15,8 +16,8 @@ const RPC_ENDPOINT = 'ws://142.93.230.246:4002/rpc-ws';
 	// Create Registration message parameters in JSON format
 	// Update ownChainID and ownName to equal the sidechain ID and name that were registered on the mainchain
 	const paramsJSON = {
-		ownChainID: '03000008',
-		ownName: 'sidechain_8',
+		ownChainID: SC_CHAIN_ID,
+		ownName: SC_NAME,
 		mainchainValidators: mainchainActiveValidators.map(v => ({
 			blsKey: v.blsKey,
 			bftWeight: v.bftWeight

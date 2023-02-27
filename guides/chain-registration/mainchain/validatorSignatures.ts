@@ -42,6 +42,7 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
         }
 
 /*        // ***********
+        //Code for automatically signing with devnet validators
         const sidechainClient = await apiClient.createIPCClient('~/.lisk/hello_client');
         const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
         // Get active validators from sidechainchain
