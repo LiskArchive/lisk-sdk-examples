@@ -10,8 +10,6 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
 (async () => {
     const { bls } = cryptography;
     let params;
-    console.log("params:");
-    //console.log(paramsJSON);
     params = {
         ownChainID: Buffer.from(paramsJSON.ownChainID, 'hex'),
         ownName: paramsJSON.ownName,
@@ -40,7 +38,6 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
             sidechainValidatorsSignatures = [];
         }
 
-        console.log("pieps");
         // Create signature for the current validator
         const signature = bls.signData(
           MESSAGE_TAG_CHAIN_REG,
@@ -50,6 +47,11 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
         );
         // Add signature to the list of validator signatures
         sidechainValidatorsSignatures.push({ publicKey: blsKeys[0].plain.blsKey, signature });
+
+        // Sort validators from sidechain
+        sidechainValidatorsSignatures.sort((a, b) => {
+            a.publicKey.localeCompare(b.publicKey);
+        });
 
         console.log("sidechainValidatorsSignatures");
         console.log(sidechainValidatorsSignatures);

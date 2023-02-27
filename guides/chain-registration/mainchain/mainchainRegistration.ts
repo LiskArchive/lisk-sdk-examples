@@ -15,28 +15,17 @@ const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.j
 
 	const { bls } = cryptography;
 
-	//console.log("sidechainValidatorsSignatures");
-	//console.log(sidechainValidatorsSignatures);
-	// Sort validators from sidechain
-	sidechainValidatorsSignatures.sort((a, b) => {
-		a.publicKey.localeCompare(b.publicKey);
-	});
-
 	// Create BLS public keys list
 	const publicKeysList = sidechainValidatorsSignatures.map(v => Buffer.from(v.publicKey,'hex'));
-	let validatorsSignatures = sidechainValidatorsSignatures.map(v => ({
-		...v,
+	const validatorsSignaturesBuffer = sidechainValidatorsSignatures.map(v => ({
+		signature: Buffer.from(v.signature,'hex'),
 		publicKey: Buffer.from(v.publicKey,'hex')
 	}));
-	console.log("validatorsSignatures");
-	console.log(validatorsSignatures);
-	console.log("publicKeysList");
-	console.log(publicKeysList);
 
 	// Create an aggregated signature & aggregation bits
 	const { aggregationBits, signature } = bls.createAggSig(
 		publicKeysList,
-		validatorsSignatures,
+		validatorsSignaturesBuffer,
 	);
 
 	console.log('Result after creating aggregate signature:\n"aggregationBits": ', aggregationBits.toString('hex'), '\n"signature":', signature.toString('hex'));
@@ -51,16 +40,28 @@ const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.j
 			mainchainCertificateThreshold: paramsJSON.mainchainCertificateThreshold.toString(),
 		};
 
+	// Sort validators from mainchain
+	params.mainchainValidators.sort((a, b) => {
+		a.blsKey.compare(b.blsKey);
+	});
+
 	const message = codec.codec.encode(registrationSignatureMessageSchema, params);
 
 		/*	****************** Signature verification ****************** */
 
+	console.log("validators");
+	console.log(validators);
+	console.log("sidechainValidatorsSignatures");
+	console.log(sidechainValidatorsSignatures);
 		//Remove signatures of non-active validators
 		//? Do we actually need to check this if we verify the signature in the end?
-	for (const v of validators) {
-		const validatorInfo = sidechainValidatorsSignatures.find(scValidator => scValidator.publicKey === v.publicKey);
+	for (const v of sidechainValidatorsSignatures) {
+		const validatorInfo = validators.find(scValidator => scValidator.blsKey === v.publicKey);
 		if (!validatorInfo) {
 			//Remove validator signature from sidechainValidatorsSignatures
+			console.log("remove sig")
+		} else {
+			console.log("FOUND sig")
 		}
 	}
 
