@@ -15,8 +15,8 @@ const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.j
 
 	const { bls } = cryptography;
 
-	console.log("sidechainValidatorsSignatures");
-	console.log(sidechainValidatorsSignatures);
+	//console.log("sidechainValidatorsSignatures");
+	//console.log(sidechainValidatorsSignatures);
 	// Sort validators from sidechain
 	sidechainValidatorsSignatures.sort((a, b) => {
 		a.publicKey.localeCompare(b.publicKey);
@@ -24,12 +24,12 @@ const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.j
 
 	// Create BLS public keys list
 	const publicKeysList = sidechainValidatorsSignatures.map(v => Buffer.from(v.publicKey,'hex'));
-	//TODO: fix function
-	// Convert publickeys from string to Buffer
-	let validatorsSignatures = sidechainValidatorsSignatures.map(v => 1 == 1 ? {
+	let validatorsSignatures = sidechainValidatorsSignatures.map(v => ({
 		...v,
 		publicKey: Buffer.from(v.publicKey,'hex')
-	} : v );
+	}));
+	console.log("validatorsSignatures");
+	console.log(validatorsSignatures);
 	console.log("publicKeysList");
 	console.log(publicKeysList);
 
