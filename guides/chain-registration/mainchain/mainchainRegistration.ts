@@ -8,11 +8,6 @@ const paramsJSON = require('./params.json');
 const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.json');
 
 (async () => {
-	const sidechainClient = await apiClient.createIPCClient('~/.lisk/hello_client');
-	const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
-	// Get active validators from sidechain
-	const { validators } = await sidechainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
-
 	const { bls } = cryptography;
 
   // Create BLS public keys list
