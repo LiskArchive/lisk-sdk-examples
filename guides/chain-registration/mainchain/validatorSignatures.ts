@@ -1,13 +1,10 @@
-//const apiClient =  require('@liskhq/lisk-api-client');
 const fse = require('fs-extra');
-//const fs = require('fs');
 const codec = require('@liskhq/lisk-codec');
 const cryptography = require('@liskhq/lisk-cryptography');
 const { keys:blsKeys } = require('./keys.json');
 const paramsJSON = require('./params.json');
 const { registrationSignatureMessageSchema } = require('./schemas.ts');
 const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
-//const { keys: sidechainValidatorsKeys } =  require('./dev-validators.json');
 
 
 (async () => {
@@ -40,37 +37,6 @@ const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
 
             sidechainValidatorsSignatures = [];
         }
-
-/*        // ***********
-        //Code for automatically signing with devnet validators
-        const sidechainClient = await apiClient.createIPCClient('~/.lisk/hello_client');
-        const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
-        // Get active validators from sidechainchain
-        const { validators: sidehcainActiveValidators } = await sidechainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
-
-        let activeValidatorsWithPrivateKey = [];
-        for (const v of sidehcainActiveValidators) {
-            const validatorInfo = sidechainValidatorsKeys.find(configValidator => configValidator.plain.blsKey === v.blsKey);
-            if (validatorInfo) {
-                activeValidatorsWithPrivateKey.push({
-                    blsPublicKey: Buffer.from(v.blsKey, 'hex'),
-                    blsPrivateKey: Buffer.from(validatorInfo.plain.blsPrivateKey, 'hex'),
-                });
-            }
-        }
-        // Sort active validators from sidechainchain
-        activeValidatorsWithPrivateKey.sort((a, b) => a.blsPublicKey.compare(b.blsPublicKey));
-
-        for (const validator of activeValidatorsWithPrivateKey) {
-            const signature = bls.signData(
-              MESSAGE_TAG_CHAIN_REG,
-              params.ownChainID,
-              message,
-              validator.blsPrivateKey,
-            );
-            sidechainValidatorsSignatures.push({ publicKey: validator.blsPublicKey, signature });
-        }
-        // ************/
 
         // Create signature for the current validator
         const signature = bls.signData(

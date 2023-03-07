@@ -1,4 +1,3 @@
-const apiClient = require('@liskhq/lisk-api-client');
 const codec = require('@liskhq/lisk-codec');
 const cryptography = require('@liskhq/lisk-cryptography');
 const { registrationSignatureMessageSchema } = require('./schemas.ts');
@@ -43,20 +42,6 @@ const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.j
 
 	const message = codec.codec.encode(registrationSignatureMessageSchema, params);
 
-		/*	****************** Signature verification ****************** */
-
-		//Remove signatures of non-active validators
-		//? Do we actually need to check this if we verify the signature in the end?
-	/*for (const v of sidechainValidatorsSignatures) {
-		const validatorInfo = validators.find(scValidator => scValidator.blsKey === v.publicKey.toString("hex"));
-		if (!validatorInfo) {
-			//Remove validator signature from sidechainValidatorsSignatures
-			console.log("remove sig")
-		} else {
-			console.log("FOUND sig")
-		}
-	}*/
-
 		// Create keys and weights lists
 	let keys = [];
 	let weights = [];
@@ -78,7 +63,6 @@ const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.j
 	)
 
 	console.log('==SIGNATURE VERIFICATION RESULT====', verifyResult);
-		/*		****************** ******************	*/
 
 	console.log('Amount of signatures:', sidechainValidatorsSignatures.length);
 
