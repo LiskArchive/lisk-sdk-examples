@@ -10,26 +10,28 @@ const getClient = async () => {
 	return clientCache;
 };
 
-// Paste the passphrase of sender account here
-//const passphrase = '';
-
 const calcMinFee = async (client) => {
-	console.log(client);
-	const tx = await client.transaction.create({
+	const tx = {
 		module: 'token',
 		command: 'transfer',
-		//fee: BigInt(transactions.convertLSKToBeddows("1")),
+		senderPublicKey: '1234567890123456789012345678901234567890123456789012345678901234',
+		nonce: 0,
+		fee: 0,
 		params: {
-			message: "Hello World!"
+			data: "Hello World!"
 		}
-	});
+	};
 
 	return client.transaction.computeMinFee(tx);
 }
 
 getClient().then(client => {
 	calcMinFee(client).then(minFee => {
-		console.log("The minimum fee for the given transaction is: ", minFee, " Beddows");
+		console.log("The minimum fee for the given transaction is: ", minFee, " Beddows, i.e. ", transactions.convertBeddowsToLSK(minFee.toString()), " LSK.");
+		process.exit(0);
 	})
-})
+}).catch(error => {
+	console.log("Error: " + error);
+	process.exit(1);
+});
 
