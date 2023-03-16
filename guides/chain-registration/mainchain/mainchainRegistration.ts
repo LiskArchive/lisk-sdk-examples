@@ -1,7 +1,4 @@
-const codec = require('@liskhq/lisk-codec');
 const cryptography = require('@liskhq/lisk-cryptography');
-const { registrationSignatureMessageSchema } = require('./schemas.ts');
-const { MESSAGE_TAG_CHAIN_REG } = require('./constants.ts');
 const fse = require('fs-extra');
 const paramsJSON = require('./params.json');
 const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.json');

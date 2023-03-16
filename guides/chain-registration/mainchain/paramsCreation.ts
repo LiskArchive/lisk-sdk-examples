@@ -1,12 +1,20 @@
 const { writeFileSync, fs } = require('fs-extra');
 const { apiClient } = require('@liskhq/lisk-client');
-const RPC_ENDPOINT = 'ws://142.93.230.246:4002/rpc-ws';
-const { SC_CHAIN_ID, SC_NAME } = require('./constants.ts');
+
+// In case you want to access a remote node, use an RPC Websocket URL
+// const RPC_ENDPOINT = 'ws://142.93.230.246:4002/rpc-ws';
+
+const SC_CHAIN_ID = "00000001";
+const SC_NAME = "sidechain1";
 
 (async () => {
 
-	const mainchainClient = await apiClient.createWSClient(RPC_ENDPOINT);
+	// For Using RPC Client with a remote node address.
+	// const mainchainClient = await apiClient.createWSClient(RPC_ENDPOINT);
+
+	const mainchainClient = await apiClient.createIPCClient('~/.lisk/lisk-core');
 	const mainchainNodeInfo = await mainchainClient.invoke('system_getNodeInfo');
+
 	// Get active validators from mainchain
 	const {
 		validators: mainchainActiveValidators,
