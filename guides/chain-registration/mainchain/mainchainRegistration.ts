@@ -40,30 +40,6 @@ const sidechainValidatorsSignatures = require('./sidechainValidatorsSignatures.j
 		a.blsKey.compare(b.blsKey);
 	});
 
-	const message = codec.codec.encode(registrationSignatureMessageSchema, params);
-
-		// Create keys and weights lists
-	let keys = [];
-	let weights = [];
-	for (const validator of sidechainValidatorsSignatures) {
-		keys.push(validator.publicKey);
-		weights.push(BigInt(1));
-	}
-
-		// Verify the validity of the aggregated signature
-	const verifyResult = bls.verifyWeightedAggSig(
-		keys,
-		aggregationBits,
-		signature,
-		MESSAGE_TAG_CHAIN_REG,
-		params.ownChainID,
-		message,
-		weights,
-		BigInt(68),
-	)
-
-	console.log('==SIGNATURE VERIFICATION RESULT====', verifyResult);
-
 	console.log('Amount of signatures:', sidechainValidatorsSignatures.length);
 
 	fse.writeFileSync('./mainchain_reg_params.json',  JSON.stringify({ ...paramsJSON, signature: signature.toString('hex'), aggregationBits: aggregationBits.toString('hex')}));
