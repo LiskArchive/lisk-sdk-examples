@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@liskhq/lisk-client": "^5.2.0"
+    "@liskhq/lisk-client": "^v6.0.0-alpha.15"
   }
 }
