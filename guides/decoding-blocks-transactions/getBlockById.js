@@ -1,4 +1,5 @@
 const { apiClient } = require('@liskhq/lisk-client');
+const assert = require("assert");
 let clientCache;
 const nodeAPIURL = 'ws://localhost:7887/rpc-ws';
 
@@ -16,16 +17,26 @@ if (process.argv.length < 3) {
 const blockId = process.argv[2];
 
 getClient().then((client) => {
+	// Returns the block in JSON format
 	client.invoke("chain_getBlockByID", {
 		id: blockId
-	}).then(res => {
-		const blockObject = client.block.fromJSON(res);
-		const encodedBlockObject = client.block.encode(blockObject);
-		const encodedBlockAsHexString = encodedBlockObject.toString('hex');
-		console.log("Block(JSON): ", res)
+	}).then(block => {
+		// Block as object
+		const blockObject = client.block.fromJSON(block);
+		// Block as JSON
+		const jsonBlock = client.block.toJSON(blockObject);
+		// Encode block object to Buffer
+		const encodedBlock = client.block.encode(blockObject);
+		// Decode block from Buffer to object
+		const decodedBlock = client.block.decode(encodedBlock);
+		// Block as Hex String
+		const blockHexString = encodedBlock.toString('hex');
+		console.log("Block: ", block);
 		console.log("Block(Object): ", blockObject);
-		console.log("Block(Buffer): ", encodedBlockObject);
-		console.log("Block(Hex String): ", encodedBlockAsHexString)
+		console.log("Block(JSON): ", jsonBlock)
+		console.log("Block(Buffer): ", encodedBlock);
+		console.log("Block(Hex String): ", blockHexString);
+		console.log("blockObject = decodedBlock? - ", assert.deepStrictEqual(blockObject,decodedBlock));
 		process.exit(0);
 	}).catch(err => {
 		console.log("Error: ", err);
