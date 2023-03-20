@@ -1,75 +1,76 @@
 const transactionSchema = {
-  "$id":"lisk/transaction",
-  "type":"object",
-  "required":[
-    "moduleID",
-    "assetID",
-    "nonce",
-    "fee",
-    "senderPublicKey",
-    "asset"
-  ],
-  "properties":{
-    "moduleID":{
-      "dataType":"uint32",
-      "fieldNumber":1,
-      "minimum":2
+  $id: '/lisk/transaction',
+  type: 'object',
+  required: ['module', 'command', 'nonce', 'fee', 'senderPublicKey', 'params'],
+  properties: {
+    module: {
+      dataType: 'string',
+      fieldNumber: 1,
+      minLength: 1,
+      maxLength: 32,
     },
-    "assetID":{
-      "dataType":"uint32",
-      "fieldNumber":2
+    command: {
+      dataType: 'string',
+      fieldNumber: 2,
+      minLength: 1,
+      maxLength: 32,
     },
-    "nonce":{
-      "dataType":"uint64",
-      "fieldNumber":3
+    nonce: {
+      dataType: 'uint64',
+      fieldNumber: 3,
     },
-    "fee":{
-      "dataType":"uint64",
-      "fieldNumber":4
+    fee: {
+      dataType: 'uint64',
+      fieldNumber: 4,
     },
-    "senderPublicKey":{
-      "dataType":"bytes",
-      "fieldNumber":5,
-      "minLength":32,
-      "maxLength":32
+    senderPublicKey: {
+      dataType: 'bytes',
+      fieldNumber: 5,
+      minLength: 32,
+      maxLength: 32,
     },
-    "asset":{
-      "dataType":"bytes",
-      "fieldNumber":6
+    params: {
+      dataType: 'bytes',
+      fieldNumber: 6,
     },
-    "signatures":{
-      "type":"array",
-      "items":{
-        "dataType":"bytes"
+    signatures: {
+      type: 'array',
+      items: {
+        dataType: 'bytes',
       },
-      "fieldNumber":7
-    }
-  }
+      fieldNumber: 7,
+    },
+  },
 };
 
-const transferAssetSchema = {
-  $id: 'lisk/transfer-asset',
-  title: 'Transfer transaction asset',
+const transferParamsSchema = {
+  $id: '/lisk/transferParams',
+  title: 'Transfer transaction params',
   type: 'object',
-  required: ['amount', 'recipientAddress', 'data'],
+  required: ['tokenID', 'amount', 'recipientAddress', 'data'],
   properties: {
+    tokenID: {
+      dataType: 'bytes',
+      fieldNumber: 1,
+      minLength: 8,
+      maxLength: 8,
+    },
     amount: {
       dataType: 'uint64',
-      fieldNumber: 1,
+      fieldNumber: 2,
     },
     recipientAddress: {
       dataType: 'bytes',
-      fieldNumber: 2,
-      minLength: 20,
-      maxLength: 20,
+      fieldNumber: 3,
+      format: 'lisk32',
     },
     data: {
       dataType: 'string',
-      fieldNumber: 3,
+      fieldNumber: 4,
       minLength: 0,
       maxLength: 64,
     },
   },
 };
 
-module.exports = {transactionSchema,transferAssetSchema}
+module.exports = { transferParamsSchema, transactionSchema };

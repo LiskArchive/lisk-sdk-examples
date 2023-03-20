@@ -1,6 +1,5 @@
-const { validator, codec, transactions } = require('@liskhq/lisk-client');
-const { transactionSchema, transferAssetSchema } = require('./schemas');
-const { getClient } = require('./api-client');
+const { validator, transactions } = require('@liskhq/lisk-client');
+const { transactionSchema, transferParamsSchema } = require('./schemas');
 
 // Example account credentials
 const account = {
@@ -11,33 +10,33 @@ const account = {
   "address": "lskuwzrd73pc8z4jnj4sgwgjrjnagnf8nhrovbwdn"
 };
 
-// Create the unsigned transaction object manually
+// Create the unsigned transaction manually
 const unsignedTransaction = {
-  moduleID: Number(2),
-  assetID: Number(0), // aka Token Transfer transaction
+  module: "token",
+  command: "transfer",
   fee: BigInt(10000000),
   nonce: BigInt(23),
   senderPublicKey: Buffer.from(account.publicKey,'hex'),
-  asset: Buffer.alloc(0),
+  params: Buffer.alloc(0),
   signatures: [],
 };
 
-// Validate the transaction oject
+// Validate the transaction
 const transactionErrors = validator.validator.validate(transactionSchema, unsignedTransaction);
 
-if (transactionErrors.length) {
+if (transactionErrors && transactionErrors.length) {
   throw new validator.LiskValidationError([...transactionErrors]);
 }
 
 // Create the asset for the Token Transfer transaction
-const transferAsset = {
+const transferParams = {
   amount: BigInt(2000000000),
   recipientAddress: Buffer.from(account.binaryAddress,'hex'),
   data: 'Happy birthday!'
 };
 
 // Add the transaction asset to the transaction object
-unsignedTransaction.asset = transferAsset;
+unsignedTransaction.params = transferParams;
 
 console.log(unsignedTransaction);
 /*
@@ -57,13 +56,13 @@ console.log(unsignedTransaction);
 */
 
 // Sign the transaction
-const networkIdTestnet = '15f0dacc1060e91818224a94286b13aa04279c640bd5d6f193182031d133df7c';
+const chainID = '00000000';
 
 const signedTransaction = transactions.signTransaction(
-  transferAssetSchema,
   unsignedTransaction,
-  Buffer.from(networkIdTestnet, 'hex'),
-  account.passphrase,
+  Buffer.from(chainID, 'hex'),
+  Buffer.from(account.privateKey,'hex'),
+  transferParamsSchema
 );
 
 console.log(signedTransaction);
@@ -86,13 +85,3 @@ console.log(signedTransaction);
   id: <Buffer 95 d2 d3 29 90 cd c7 f3 ae e5 54 b3 f5 23 7b fb f3 4c 33 48 e5 83 72 7a ce dd e5 b3 b6 e3 e7 25>
 }
 */
-
-// Use the API client to send the transaction to a node
-getClient().then(async client => {
-  try {
-    res = await client.transaction.send(signedTransaction);
-    console.log(res);
-  } catch (error) {
-    console.log(error);
-  }
-});
