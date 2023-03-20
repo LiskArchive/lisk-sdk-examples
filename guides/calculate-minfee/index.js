@@ -1,8 +1,9 @@
 const { apiClient, transactions } = require('@liskhq/lisk-client');
 
 let clientCache;
-const nodeAPIURL = 'ws://localhost:8080/ws'
+const nodeAPIURL = 'ws://localhost:7887/rpc-ws'
 
+// Connects to a node API
 const getClient = async () => {
 	if (!clientCache) {
 		clientCache = await apiClient.createWSClient(nodeAPIURL);
@@ -10,44 +11,28 @@ const getClient = async () => {
 	return clientCache;
 };
 
-// Paste the passphrase of sender account here
-const passphrase = '';
+// Transaction to calculate the minimum fee for
+const tx = {
+	module: 'token',
+	command: 'transfer',
+	senderPublicKey: '1234567890123456789012345678901234567890123456789012345678901234',
+	nonce: 0,
+	fee: 0,
+	params: {
+		amount:100000000,
+		tokenID: "0300000000000000",
+		recipientAddress: "lskycz7hvr8yfu74bcwxy2n4mopfmjancgdvxq8xz",
+		data: "Hello World!"
+	}
+};
 
-const calcMinFee = async (client) => {
-	const signedTxWithSomeFee = await client.transaction.create({
-		moduleID: 1000,
-		assetID: 0,
-		fee: BigInt(transactions.convertLSKToBeddows("1")),
-		asset: {
-			helloString: "Hello World!"
-		}
-	}, passphrase);
-
-	return client.transaction.computeMinFee(signedTxWithSomeFee);
-}
-
-const postTx = async (client, minFee) => {
-	const signedTx = await client.transaction.create({
-		moduleID: 1000,
-		assetID: 0,
-		fee: minFee,
-		asset: {
-			helloString: "Hello World!"
-		}
-	}, passphrase);
-
-	return client.transaction.send(signedTx).then(res => {
-		return res;
-	});
-}
-
+// Calculate and return the minimum fee
 getClient().then(client => {
-	calcMinFee(client).then(minFee => {
-		console.log("Minimum fee: ", minFee);
-		postTx(client, minFee).then((res) => {
-			console.log(res);
-			process.exit(0);
-		});
-	})
-})
+	const minFee = client.transaction.computeMinFee(tx);
+	console.log("The minimum fee for the given transaction is: ", minFee, " Beddows, i.e. ", transactions.convertBeddowsToLSK(minFee.toString()), " LSK.");
+	process.exit(0);
+}).catch(error => {
+	console.log("Error: " + error);
+	process.exit(1);
+});
 
