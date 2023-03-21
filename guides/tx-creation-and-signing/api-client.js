@@ -1,4 +1,4 @@
- const { apiClient, transactions } = require('@liskhq/lisk-client');
+const { apiClient } = require('@liskhq/lisk-client');
 
 const RPC_ENDPOINT = 'ws://localhost:7887/rpc-ws';
 let clientCache;
