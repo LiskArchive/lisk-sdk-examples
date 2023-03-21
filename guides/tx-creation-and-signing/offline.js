@@ -1,5 +1,6 @@
 const { validator, transactions } = require('@liskhq/lisk-client');
 const { transactionSchema, transferParamsSchema } = require('./schemas');
+const { getClient } = require('./api-client')
 
 // Example account credentials
 const account = {
@@ -87,3 +88,13 @@ console.log(signedTransaction);
   id: <Buffer a0 a8 07 5e 9b 6f 51 6f c2 78 fb ac bb bb d6 d3 66 10 89 5d ae e4 a7 d6 7b a5 79 dd c3 a6 86 c0>
 }
 */
+getClient().then(client => {
+  const encTx = client.transaction.encode(signedTransaction);
+  client.invoke('txpool_dryRunTransaction',{"transaction":encTx.toString("hex") }).then(res => {
+    console.log("Dry-un result: ", res);
+    process.exit(0);
+  }).catch(err => {
+    console.log("Error1: " + err);
+    process.exit(1);
+  });
+});
