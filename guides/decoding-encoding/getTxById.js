@@ -1,14 +1,5 @@
-const { apiClient } = require('@liskhq/lisk-client');
+const { getClient } = require('./api-client');
 const assert = require("assert");
-let clientCache;
-const nodeAPIURL = 'ws://localhost:7887/rpc-ws';
-
-const getClient = async () => {
-	if (!clientCache) {
-		clientCache = await apiClient.createWSClient(nodeAPIURL);
-	}
-	return clientCache;
-};
 
 if (process.argv.length < 3) {
 	console.error("Please provide the transaction ID to be decoded.")
@@ -17,7 +8,7 @@ if (process.argv.length < 3) {
 const txId = process.argv[2];
 
 getClient().then((client) => {
-	// Returns the transaction in JSON format
+	// Returns the transaction
 	client.invoke("chain_getTransactionByID", {
 		id: txId
 	}).then(tx => {
