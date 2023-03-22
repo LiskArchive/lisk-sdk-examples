@@ -8,26 +8,27 @@ if (process.argv.length < 3) {
 const blockId = process.argv[2];
 
 getClient().then((client) => {
-	// Returns the block in JSON format
+	// Returns the block
 	client.invoke("chain_getBlockByID", {
 		id: blockId
 	}).then(block => {
-		// Block as object
+		// Decoded block as Object
 		const blockObject = client.block.fromJSON(block);
-		// Block as JSON
+		// Decoded block as JSON
 		const jsonBlock = client.block.toJSON(blockObject);
-		// Encode block object to Buffer
+		// Encoded block as Buffer
 		const encodedBlock = client.block.encode(blockObject);
-		// Decode block from Buffer to object
+		// Decoded block as Object
 		const decodedBlock = client.block.decode(encodedBlock);
-		// Block as Hex String
+		// Encoded block as Hex String
 		const blockHexString = encodedBlock.toString('hex');
 		console.log("Block: ", block);
-		console.log("Block(Object): ", blockObject);
-		console.log("Block(JSON): ", jsonBlock)
-		console.log("Block(Buffer): ", encodedBlock);
-		console.log("Block(Hex String): ", blockHexString);
-		console.log("blockObject = decodedBlock? - ", assert.deepStrictEqual(blockObject,decodedBlock));
+		console.log("Decoded Block(Object): ", blockObject);
+		console.log("Decoded Block(JSON): ", jsonBlock)
+		console.log("Encoded Block(Buffer): ", encodedBlock);
+		console.log("Encoded Block(Hex String): ", blockHexString);
+		const checkEqual = !assert.deepStrictEqual(blockObject, decodedBlock);
+		console.log("blockObject = decodedBlock? - ", checkEqual);
 		process.exit(0);
 	}).catch(err => {
 		console.log("Error: ", err);
