@@ -1,6 +1,6 @@
-const { validator, codec, transactions } = require('@liskhq/lisk-client');
-const { transactionSchema, transferAssetSchema } = require('./schemas');
-const { getClient } = require('./api-client');
+const { validator, transactions } = require('@liskhq/lisk-client');
+const { transactionSchema, transferParamsSchema } = require('./schemas');
+const { getClient } = require('./api-client')
 
 // Example account credentials
 const account = {
@@ -11,44 +11,46 @@ const account = {
   "address": "lskuwzrd73pc8z4jnj4sgwgjrjnagnf8nhrovbwdn"
 };
 
-// Create the unsigned transaction object manually
+// Create the unsigned transaction manually
 const unsignedTransaction = {
-  moduleID: Number(2),
-  assetID: Number(0), // aka Token Transfer transaction
+  module: "token",
+  command: "transfer",
   fee: BigInt(10000000),
   nonce: BigInt(23),
   senderPublicKey: Buffer.from(account.publicKey,'hex'),
-  asset: Buffer.alloc(0),
+  params: Buffer.alloc(0),
   signatures: [],
 };
 
-// Validate the transaction oject
+// Validate the transaction
 const transactionErrors = validator.validator.validate(transactionSchema, unsignedTransaction);
 
-if (transactionErrors.length) {
+if (transactionErrors && transactionErrors.length) {
   throw new validator.LiskValidationError([...transactionErrors]);
 }
 
 // Create the asset for the Token Transfer transaction
-const transferAsset = {
+const transferParams = {
+  tokenID: Buffer.from('0000000000000000','hex'),
   amount: BigInt(2000000000),
   recipientAddress: Buffer.from(account.binaryAddress,'hex'),
   data: 'Happy birthday!'
 };
 
 // Add the transaction asset to the transaction object
-unsignedTransaction.asset = transferAsset;
+unsignedTransaction.params = transferParams;
 
 console.log(unsignedTransaction);
 /*
 {
-  moduleID: 2,
-  assetID: 0,
-  nonce: 1n,
+  module: 'token',
+  command: 'transfer',
   fee: 10000000n,
+  nonce: 23n,
   senderPublicKey: <Buffer 84 0c 66 74 1a 76 f9 36 be d0 a4 c3 08 e4 f6 70 15 6e 1e 1f 6b 91 64 0b b8 d3 dd 0a e2 b3 58 1e>,
-  asset: {
-    amount: 20n,
+  params: {
+    tokenID: <Buffer 00 00 00 00 00 00 00 00>,
+    amount: 2000000000n,
     recipientAddress: <Buffer 85 c1 2d 39 04 1b c0 9e 1f 89 df ef fe 4b 87 cf cf e7 9f b2>,
     data: 'Happy birthday!'
   },
@@ -57,42 +59,42 @@ console.log(unsignedTransaction);
 */
 
 // Sign the transaction
-const networkIdTestnet = '15f0dacc1060e91818224a94286b13aa04279c640bd5d6f193182031d133df7c';
+const chainID = '00000000';
 
 const signedTransaction = transactions.signTransaction(
-  transferAssetSchema,
   unsignedTransaction,
-  Buffer.from(networkIdTestnet, 'hex'),
-  account.passphrase,
+  Buffer.from(chainID, 'hex'),
+  Buffer.from(account.privateKey,'hex'),
+  transferParamsSchema
 );
 
 console.log(signedTransaction);
-
 /*
 {
-  moduleID: 2,
-  assetID: 0,
+  module: 'token',
+  command: 'transfer',
   fee: 10000000n,
   nonce: 23n,
   senderPublicKey: <Buffer 84 0c 66 74 1a 76 f9 36 be d0 a4 c3 08 e4 f6 70 15 6e 1e 1f 6b 91 64 0b b8 d3 dd 0a e2 b3 58 1e>,
-  asset: {
+  params: {
+    tokenID: <Buffer 00 00 00 00 00 00 00 00>,
     amount: 2000000000n,
-    recipientAddress: <Buffer 3e 56 5c 6f 2d 22 e0 a3 c1 e4 71 76 72 ec 8a c6 1c 26 60 f2>,
+    recipientAddress: <Buffer 85 c1 2d 39 04 1b c0 9e 1f 89 df ef fe 4b 87 cf cf e7 9f b2>,
     data: 'Happy birthday!'
   },
   signatures: [
-    <Buffer 3c 77 8c e7 b9 8e 72 e6 6b e1 83 86 b4 c1 97 b0 79 3d dc 33 ac ad 8d df 38 d3 52 9f 6a 76 ba 5e 5a ed 54 22 3f b8 36 81 61 b0 2c 71 68 88 3b 09 df b3 ... 14 more bytes>
+    <Buffer c4 9c c0 7a 53 f9 79 8e c6 29 b5 08 2c a3 c5 e6 c9 22 a7 7b 40 84 f2 53 67 e4 53 9d 35 49 ca b7 ef fd 93 84 1e 3d 6b a6 aa 7d 7a d7 26 35 d7 fd d6 9d ... 14 more bytes>
   ],
-  id: <Buffer 95 d2 d3 29 90 cd c7 f3 ae e5 54 b3 f5 23 7b fb f3 4c 33 48 e5 83 72 7a ce dd e5 b3 b6 e3 e7 25>
+  id: <Buffer a0 a8 07 5e 9b 6f 51 6f c2 78 fb ac bb bb d6 d3 66 10 89 5d ae e4 a7 d6 7b a5 79 dd c3 a6 86 c0>
 }
 */
-
-// Use the API client to send the transaction to a node
-getClient().then(async client => {
-  try {
-    res = await client.transaction.send(signedTransaction);
-    console.log(res);
-  } catch (error) {
-    console.log(error);
-  }
+getClient().then(client => {
+  const encTx = client.transaction.encode(signedTransaction);
+  client.invoke('txpool_dryRunTransaction',{"transaction":encTx.toString("hex") }).then(res => {
+    console.log("Dry-un result: ", res);
+    process.exit(0);
+  }).catch(err => {
+    console.log("Error1: " + err);
+    process.exit(1);
+  });
 });
