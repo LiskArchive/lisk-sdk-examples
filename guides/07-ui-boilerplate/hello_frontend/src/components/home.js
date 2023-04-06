@@ -11,11 +11,11 @@ function Home() {
             <FixedMenuLayout />
             <Container >
                 <span>
-                    <h1><img src={logo} alt="Lisk Logo" width="35" style={{ display: 'inline', verticalAlign: 'middle' }} /> Welcome to the Hello sidechain application!</h1>
+                    <h1><img src={logo} alt="Lisk Logo" width="35" style={{ display: 'inline', verticalAlign: 'middle' }} /> Welcome to the Hello Lisk application!</h1>
                 </span>
                 <Divider>
                 </Divider>
-                <h4>The Hello sidechain application allows you to do the following: </h4>
+                <h4>The Hello application allows you to do the following: </h4>
                 <List bulleted style={{ fontSize: 'medium' }}>
                     <List.Item>Account Operations
                         <List.List>

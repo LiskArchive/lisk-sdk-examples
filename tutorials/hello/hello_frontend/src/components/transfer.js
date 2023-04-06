@@ -103,7 +103,7 @@ function Transfer() {
                 <FixedMenuLayout />
                 <Container>
                     <h2>Send tokens</h2>
-                    <p>On this page you can send tokens to any address within the Hello sidechain.</p>
+                    <p>On this page you can send tokens to any address within the Hello World blockchain.</p>
                     <Divider></Divider>
                     <div class="ui two column doubling stackable grid container">
                         <div class="column">
