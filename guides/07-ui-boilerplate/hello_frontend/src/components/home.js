@@ -15,7 +15,7 @@ function Home() {
                 </span>
                 <Divider>
                 </Divider>
-                <h4>The Hello application allows you to do the following: </h4>
+                <h4>The Hello Lisk application allows you to do the following: </h4>
                 <List bulleted style={{ fontSize: 'medium' }}>
                     <List.Item>Account Operations
                         <List.List>
