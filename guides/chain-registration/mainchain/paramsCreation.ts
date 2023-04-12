@@ -12,14 +12,14 @@ const SC_NAME = "sidechain1";
 	// For Using RPC Client with a remote node address.
 	// const mainchainClient = await apiClient.createWSClient(RPC_ENDPOINT);
 
-	const mainchainClient = await apiClient.createIPCClient('~/.lisk/lisk-core');
-	const mainchainNodeInfo = await mainchainClient.invoke('system_getNodeInfo');
+	const blockchainClient = await apiClient.createIPCClient('~/.lisk/lisk-core');
+	const mainchainNodeInfo = await blockchainClient.invoke('system_getNodeInfo');
 
 	// Get active validators from mainchain
 	const {
 		validators: mainchainActiveValidators,
 		certificateThreshold: mainchainCertificateThreshold
-	} = await mainchainClient.invoke('consensus_getBFTParameters', { height: mainchainNodeInfo.height });
+	} = await blockchainClient.invoke('consensus_getBFTParameters', { height: mainchainNodeInfo.height });
 
 	// Create Registration message parameters in JSON format
 	// Update ownChainID and ownName to equal the sidechain ID and name that were registered on the mainchain
@@ -34,7 +34,7 @@ const SC_NAME = "sidechain1";
 	};
 
 	// Save params and params as JSON in a file params.json
-	writeFileSync('./params.json',  JSON.stringify(paramsJSON));
+	writeFileSync('./params.json', JSON.stringify(paramsJSON));
 
 	process.exit(0);
 })();

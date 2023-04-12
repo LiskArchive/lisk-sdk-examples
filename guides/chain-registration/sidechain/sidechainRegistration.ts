@@ -25,26 +25,26 @@ const { apiClient } = require('@liskhq/lisk-client');
         }
     });
 
-    const sidechainClient = await apiClient.createIPCClient('~/.lisk/sidechain');
+    const blockchainClient = await apiClient.createIPCClient('~/.lisk/sidechain');
 
-    const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
+    const sidechainNodeInfo = await blockchainClient.invoke('system_getNodeInfo');
 
     // Get active validators from sidechain
-    const { validators: sidehcainActiveValidators } = await sidechainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
+    const { validators: sidechainActiveValidators } = await blockchainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
 
     // Sort active validators from sidechain
-    sidehcainActiveValidators.sort((a, b) => a.blsKey.localeCompare(b.blsKey));
+    sidechainActiveValidators.sort((a, b) => a.blsKey.localeCompare(b.blsKey));
 
     const scReg = {
         "chainID": chainID.toString(),
         "name": name,
-        "sidechainValidators": sidehcainActiveValidators,
+        "sidechainValidators": sidechainActiveValidators,
         "sidechainCertificateThreshold": threshold.toString()
     };
 
     return scReg;
 })().then((res) => {
     //console.log(res);
-    writeFileSync('./sidechain_reg_params.json',  JSON.stringify(res));
+    writeFileSync('./sidechain_reg_params.json', JSON.stringify(res));
     process.exit(0);
 });

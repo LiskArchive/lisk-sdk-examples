@@ -40,7 +40,7 @@ export class HelloInfoPlugin extends BasePlugin<HelloInfoPluginConfig> {
 
 	// Syncs on-chain event's data with plugin's database.
 	private async _syncChainEvents(): Promise<void> {
-		// 1. Get latest block height from the blockchain
+		// 1. Get the latest block height from the blockchain
 		const res = await this.apiClient.invoke<{ header: { height: number } }>(
 			'chain_getLastBlock',
 			{},
