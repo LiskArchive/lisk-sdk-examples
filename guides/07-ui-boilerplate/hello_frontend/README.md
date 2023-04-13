@@ -67,23 +67,24 @@ npm start
 After performing all the aforementioned steps, your Hello UI should look like the following:
 
 ### Homepage:
-![Home](https://user-images.githubusercontent.com/13951043/218956511-b32e13d6-719a-4dc8-a6d2-d005565d6988.jpg)
+![Home](https://user-images.githubusercontent.com/13951043/231733085-de331057-79d5-45e2-b95d-c123b4f7e6ef.jpg)
 
 ### New Account Page:
-![NewAccount](https://user-images.githubusercontent.com/13951043/218956076-37bc039d-4f13-4486-b13d-f061b4283744.jpg)
+![NewAccount](https://user-images.githubusercontent.com/13951043/231734900-c021b62f-64dc-4e49-8b57-846a6b3fb2cc.jpg)
 
 ### Get Account Details Page:
-![Getdetails](https://user-images.githubusercontent.com/13951043/218956141-3a02c1a0-80d2-49b3-8711-165b8dcd8de0.jpg)
+![Getdetails](https://user-images.githubusercontent.com/13951043/231735345-72080b2e-a8c0-4a3c-8d27-ed1795465668.jpg)
 
 ### Transfer tokens Page:
-![Transfer](https://user-images.githubusercontent.com/13951043/221137789-6ce40601-63ac-4b74-bb3a-8c270244632c.jpg)
+![Transfer](https://user-images.githubusercontent.com/13951043/231735536-8ae8343b-d9ae-424c-97f4-f1b27732fe6e.jpg)
 
 ### Send Hello Page:
-![SendHello](https://user-images.githubusercontent.com/13951043/221137689-9b5bd369-e4c3-4c29-8121-cace2985113b.jpg)
+![SendHello](https://user-images.githubusercontent.com/13951043/231735690-f386eab9-472d-4aca-b50a-5d3421ef6a64.jpg)
 
 ### Get Hello Page:
-![GetHello](https://user-images.githubusercontent.com/13951043/218956363-155a2df5-a8ac-402e-9cda-8195ec729e2f.jpg)
+![GetHello](https://user-images.githubusercontent.com/13951043/231735871-9f424f3b-cbe1-4282-a94a-893772a47d9e.jpg)
 
 ### Faucet Page:
-![Faucet](https://user-images.githubusercontent.com/13951043/221137631-26fed096-1e35-47bd-81f4-6ecd3b79483c.jpg)
+![Faucet](https://user-images.githubusercontent.com/13951043/231736064-cee2b2ad-a304-4202-baf7-d8e91e8444b9.jpg)
+
 
