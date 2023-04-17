@@ -30,7 +30,7 @@ const { apiClient } = require('@liskhq/lisk-client');
     const sidechainNodeInfo = await blockchainClient.invoke('system_getNodeInfo');
 
     // Get active validators from sidechain
-    const { validators: sidechainActiveValidators } = await blockchainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
+    const { validators: sidechainActiveValidators } = await sidechainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
 
     // Sort active validators from sidechain
     sidechainActiveValidators.sort((a, b) => a.blsKey.localeCompare(b.blsKey));
