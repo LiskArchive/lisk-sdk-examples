@@ -3,13 +3,13 @@ const { apiClient } = require('@liskhq/lisk-client');
 const RPC_ENDPOINT = 'ws://142.93.230.246:4002/rpc-ws';
 
 (async () => {
-	const blockchainClient = await apiClient.createWSClient(RPC_ENDPOINT);
-	const mainchainNodeInfo = await blockchainClient.invoke('system_getNodeInfo');
+	const mainchainClient = await apiClient.createWSClient(RPC_ENDPOINT);
+	const mainchainNodeInfo = await mainchainClient.invoke('system_getNodeInfo');
 	// Get active validators from mainchain
 	const {
 		validators: mainchainActiveValidators,
 		certificateThreshold: mainchainCertificateThreshold
-	} = await blockchainClient.invoke('consensus_getBFTParameters', { height: mainchainNodeInfo.height });
+	} = await mainchainClient.invoke('consensus_getBFTParameters', { height: mainchainNodeInfo.height });
 
 	// Calculate the aggregated BFT weight
 	let aggregateBFTWeight = BigInt(0);

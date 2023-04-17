@@ -25,9 +25,9 @@ const { apiClient } = require('@liskhq/lisk-client');
         }
     });
 
-    const blockchainClient = await apiClient.createIPCClient('~/.lisk/sidechain');
+    const sidechainClient = await apiClient.createIPCClient('~/.lisk/sidechain');
 
-    const sidechainNodeInfo = await blockchainClient.invoke('system_getNodeInfo');
+    const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
 
     // Get active validators from sidechain
     const { validators: sidechainActiveValidators } = await sidechainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
