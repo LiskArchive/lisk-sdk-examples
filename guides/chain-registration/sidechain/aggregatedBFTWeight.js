@@ -2,8 +2,8 @@ const { apiClient } = require('@liskhq/lisk-client');
 
 (async () => {
 	// Update the path to point to your sidechain client's data folder
-	const blockchainClient = await apiClient.createIPCClient('~/.lisk/hello_client');
-	const blockchainNodeInfo = await blockchainClient.invoke('system_getNodeInfo');
+	const sidechainClient = await apiClient.createIPCClient('~/.lisk/hello_client');
+	const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
 	// Get active validators from sidechain
 	const bftParams = await sidechainClient.invoke('consensus_getBFTParameters', { height: sidechainNodeInfo.height });
 
