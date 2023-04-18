@@ -11,7 +11,7 @@ const RPC_ENDPOINT = 'ws://142.93.230.246:4002/rpc-ws';
 		certificateThreshold: mainchainCertificateThreshold
 	} = await mainchainClient.invoke('consensus_getBFTParameters', { height: mainchainNodeInfo.height });
 
- // Calculate the aggregated BFT weight
+	// Calculate the aggregated BFT weight
 	let aggregateBFTWeight = BigInt(0);
 	for (const validator of mainchainActiveValidators) {
 		aggregateBFTWeight += BigInt(validator.bftWeight);
@@ -19,7 +19,7 @@ const RPC_ENDPOINT = 'ws://142.93.230.246:4002/rpc-ws';
 
 	console.log("certificateThreshold:");
 	console.log("min:");
-	console.log(aggregateBFTWeight/BigInt(3) + BigInt(1));
+	console.log(aggregateBFTWeight / BigInt(3) + BigInt(1));
 	console.log("max:");
 	console.log(aggregateBFTWeight);
 	process.exit(0);

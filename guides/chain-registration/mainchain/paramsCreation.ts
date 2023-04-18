@@ -34,7 +34,7 @@ const SC_NAME = "sidechain1";
 	};
 
 	// Save params and params as JSON in a file params.json
-	writeFileSync('./params.json',  JSON.stringify(paramsJSON));
+	writeFileSync('./params.json', JSON.stringify(paramsJSON));
 
 	process.exit(0);
 })();

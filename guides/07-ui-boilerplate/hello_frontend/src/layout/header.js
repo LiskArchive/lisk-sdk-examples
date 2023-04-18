@@ -17,7 +17,7 @@ const FixedMenuLayout = () => (
             <Container>
                 <Menu.Item as={Link} to="/" >
                     <Image src={logo} size='mini' style={{ marginRight: '1.5em', }} />
-                    Hello Sidechain Application
+                    Hello Lisk Application
                 </Menu.Item>
                 <Dropdown item simple text='Account'>
                     <Dropdown.Menu>

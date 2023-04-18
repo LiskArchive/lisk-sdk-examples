@@ -1,7 +1,7 @@
 const { apiClient } = require('@liskhq/lisk-client');
 
 (async () => {
-	// Update the path to point to your sidechain app data folder
+	// Update the path to point to your sidechain client's data folder
 	const sidechainClient = await apiClient.createIPCClient('~/.lisk/hello_client');
 	const sidechainNodeInfo = await sidechainClient.invoke('system_getNodeInfo');
 	// Get active validators from sidechain
@@ -15,7 +15,7 @@ const { apiClient } = require('@liskhq/lisk-client');
 
 	console.log("certificateThreshold:");
 	console.log("min:");
-	console.log(aggregateBFTWeight/BigInt(3) + BigInt(1));
+	console.log(aggregateBFTWeight / BigInt(3) + BigInt(1));
 	console.log("max:");
 	console.log(aggregateBFTWeight);
 	process.exit(0);
