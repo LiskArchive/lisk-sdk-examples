@@ -65,7 +65,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@svgr/webpack": "^6.2.1",
+    "@svgr/webpack": "^7.0.0",
     "@types/enzyme": "^3.10.12",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^28.1.1",
