@@ -28,7 +28,7 @@
 		"blockTime": 10,
 		"bftBatchSize": 103,
 		"maxTransactionsSize": 15360,
-		"chainID": "00000000"
+		"chainID": "00000001"
 	},
 	"generator": {
 		"keys": {
