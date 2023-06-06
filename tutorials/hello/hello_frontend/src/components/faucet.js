@@ -26,7 +26,7 @@ function Faucet() {
         event.preventDefault();
 
         const client = await api.getClient();
-        const passphrase = "pet simple hour myth sing tattoo demand whale pride craft already actress purse awake advance frequent enroll oxygen enhance resemble arrow accident wave tuna";
+        const passphrase = "mention adjust identify fatal execute road hurt seminar artist happy agree village whale govern monkey yard fluid amount sure enlist cabbage fold genius example";
         const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, "m/44'/134'/0'");
         let responseError = '';
 
@@ -35,7 +35,7 @@ function Faucet() {
             command: 'transfer',
             fee: BigInt(transactions.convertLSKToBeddows('0.1')),
             params: {
-                tokenID: Buffer.from('0000000000000000', 'hex'),
+                tokenID: Buffer.from('0000000100000000', 'hex'),
                 amount: BigInt(transactions.convertLSKToBeddows('10')),
                 recipientAddress: state.address,
                 data: 'Please accept this grant from Lisk faucet.'
