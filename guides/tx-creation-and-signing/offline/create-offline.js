@@ -16,11 +16,7 @@ const createTxOffline = () => {
 	};
 
 	// Validate the transaction
-	const transactionErrors = validator.validator.validate(transactionSchema, unsignedTransaction);
-
-	if (transactionErrors && transactionErrors.length) {
-		throw new validator.LiskValidationError([...transactionErrors]);
-	}
+	validator.validator.validate(transactionSchema, unsignedTransaction);
 
 	// Create the asset for the Token Transfer transaction
 	const transferParams = {
