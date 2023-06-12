@@ -38,7 +38,7 @@ function Transfer() {
             command: 'transfer',
             fee: BigInt(transactions.convertLSKToBeddows(state.fee)),
             params: {
-                tokenID: Buffer.from('0000000000000000', 'hex'),
+                tokenID: Buffer.from('0000000100000000', 'hex'),
                 amount: BigInt(transactions.convertLSKToBeddows(state.amount)),
                 recipientAddress: state.address,
                 data: 'Hey! I am sending you tokens. Enjoy!'
