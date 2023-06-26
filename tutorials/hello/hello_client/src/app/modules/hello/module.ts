@@ -49,12 +49,12 @@ export class HelloModule extends BaseModule {
 			endpoints: [
 				{
 					name: this.endpoint.getHello.name,
-					response: getHelloCounterResponseSchema,
+					request: getHelloRequestSchema,
+					response: getHelloResponseSchema,
 				},
 				{
 					name: this.endpoint.getHelloCounter.name,
-					request: getHelloRequestSchema,
-					response: getHelloResponseSchema,
+					response: getHelloCounterResponseSchema,
 				},
 			],
 			commands: this.commands.map(command => ({
