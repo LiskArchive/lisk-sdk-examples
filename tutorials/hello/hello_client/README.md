@@ -11,17 +11,9 @@ This project was bootstrapped with [Lisk SDK](https://github.com/LiskHQ/lisk-sdk
 ### Add a new module
 
 ```
-lisk generate:module ModuleName ModuleID
+lisk generate:module ModuleName
 // Example
-lisk generate:module token 1
-```
-
-### Add a new asset
-
-```
-lisk generate:asset ModuleName AssetName AssetID
-// Example
-lisk generate:asset token transfer 1
+lisk generate:module hello
 ```
 
 ### Add a new plugin
@@ -29,7 +21,7 @@ lisk generate:asset token transfer 1
 ```
 lisk generate:plugin PluginName
 // Example
-lisk generate:plugin httpAPI
+lisk generate:plugin helloInfo
 ```
 
 ## Learn More
