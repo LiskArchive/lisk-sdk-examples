@@ -2,10 +2,16 @@
 
 This project was bootstrapped with [Lisk SDK](https://github.com/LiskHQ/lisk-sdk)
 
+### Build the code
+
+```
+npm run build
+```
+
 ### Start a node
 
 ```
-./bin/run start
+./bin/run start --config=config/custom_config.json
 ```
 
 ### Add a new module
