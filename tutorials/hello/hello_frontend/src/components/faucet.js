@@ -26,7 +26,7 @@ function Faucet() {
         event.preventDefault();
 
         const client = await api.getClient();
-        const passphrase = "mention adjust identify fatal execute road hurt seminar artist happy agree village whale govern monkey yard fluid amount sure enlist cabbage fold genius example";
+        const passphrase = "weather ordinary pistol basic afford result crater bring issue food wedding angle north humble know build shaft virus version walnut correct fish flock finger";
         const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, "m/44'/134'/0'");
         let responseError = '';
 
