@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Lisk SDK](https://github.com/LiskHQ/lisk-sdk)
 
+### Install packages
+
+```
+npm install
+```
+
 ### Build the code
 
 ```
