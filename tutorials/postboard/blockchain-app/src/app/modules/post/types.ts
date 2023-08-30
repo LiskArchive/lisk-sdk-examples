@@ -2,7 +2,7 @@ export interface PostboardAccountProps {
 	address: Buffer;
 	keys: {
 		mandatoryKeys: Buffer[];
-		numberOfSignatures: string;
+		numberOfSignatures: number;
 		optionalKeys: Buffer[];
 	};
 	sequence: {
@@ -12,11 +12,11 @@ export interface PostboardAccountProps {
 		balance: string;
 	};
 	post: {
-		following: Buffer[];
-		followers: Buffer[];
-		posts: string[];
-		replies: string[];
-		likes: string[];
+		following: Buffer[]; // User Buffer
+		followers: Buffer[]; // User Buffer
+		posts: string[]; // PostId
+		replies: string[]; // PostId#replyId
+		likes: string[]; // PostId
 	};
 }
 

@@ -1,6 +1,6 @@
 {
 	"name": "postboard",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "Lisk-SDK Application",
 	"author": "mona",
 	"license": "ISC",
@@ -14,7 +14,7 @@
 	"homepage": "",
 	"repository": {},
 	"engines": {
-		"node": ">=16.14.1 <=16",
+		"node": ">=18.12.0 <=18",
 		"npm": ">=8.1.0"
 	},
 	"main": "dist/index.js",
@@ -30,7 +30,8 @@
 		"test:coverage": "jest --passWithNoTests --coverage=true --coverage-reporters=text",
 		"test:ci": "jest --passWithNoTests --coverage=true --coverage-reporters=json --verbose",
 		"version": "oclif-dev readme --multi --dir=docs/commands && git add README.md docs",
-		"prepublishOnly": "npm ci && npm run lint && npm run build"
+		"prepublishOnly": "npm ci && npm run lint && npm run build",
+		"run": "./bin/run start --api-http --api-ipc"
 	},
 	"bin": {
 		"postboard": "./bin/run"
@@ -98,16 +99,21 @@
 		}
 	},
 	"dependencies": {
-		"@liskhq/lisk-framework-dashboard-plugin": "^0.1.7",
-		"@liskhq/lisk-framework-faucet-plugin": "^0.1.7",
+		"@liskhq/lisk-framework-dashboard-plugin": "0.2.0-beta.7",
+		"@liskhq/lisk-framework-faucet-plugin": "0.2.0-beta.7",
+		"@liskhq/lisk-chain": "^0.4.0-beta.6",
+		"@liskhq/lisk-validator": "0.7.0-beta.5",
+		"@liskhq/lisk-framework-forger-plugin": "^0.3.0-beta.1",
+		"@liskhq/lisk-framework-monitor-plugin": "^0.3.0-beta.1",
+		"@liskhq/lisk-framework-report-misbehavior-plugin": "^0.3.0-beta.1",
 		"@oclif/command": "1.8.16",
 		"@oclif/plugin-autocomplete": "1.2.0",
 		"@oclif/plugin-help": "5.1.12",
 		"axios": "0.21.2",
 		"fs-extra": "9.1.0",
 		"inquirer": "7.3.2",
-		"lisk-commander": "^5.1.10",
-		"lisk-sdk": "^5.2.2",
+		"lisk-commander": "6.0.0-beta.7",
+		"lisk-sdk": "6.0.0-beta.7",
 		"tar": "6.1.9",
 		"tslib": "1.13.0"
 	},

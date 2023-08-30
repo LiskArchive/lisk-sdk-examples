@@ -195,3 +195,93 @@ export const allPostsSchema = {
 		},
 	},
 };
+
+export const getPostSchema = {
+	$id: '/postboard/getPost',
+	type: 'object',
+	required: ['id'],
+	properties: {
+		id: {
+			dataType: 'string',
+			fieldNumber: 1,
+		},
+	},
+};
+
+export const getLatestPostsSchema = {
+	$id: '/postboard/getLatestPosts',
+	type: 'object',
+	required: ['address'],
+	properties: {
+		address: {
+			type: 'string',
+			format: 'lisk32',
+			fieldNumber: 1,
+		},
+	},
+};
+
+export const accountSchema = {
+	$id: '/postboard/account',
+	type: 'object',
+	required: ['address', 'keys', 'sequence', 'token', 'post'],
+	properties: {
+		address: {
+			dataType: 'bytes',
+			format: 'lisk32',
+			fieldNumber: 1,
+		},
+		keys: {
+			type: 'object',
+			fieldNumber: 2,
+			properties: {
+				numberOfSignatures: {
+					dataType: 'uint32',
+					fieldNumber: 1,
+				},
+				mandatoryKeys: {
+					type: 'array',
+					items: {
+						dataType: 'bytes',
+						minLength: 32,
+						maxLength: 32,
+					},
+					fieldNumber: 2,
+				},
+				optionalKeys: {
+					type: 'array',
+					items: {
+						dataType: 'bytes',
+						minLength: 32,
+						maxLength: 32,
+					},
+					fieldNumber: 3,
+				},
+			},
+		},
+		sequence: {
+			type: 'object',
+			fieldNumber: 3,
+			properties: {
+				nonce: {
+					dataType: 'uint64',
+					fieldNumber: 1,
+				},
+			},
+		},
+		token: {
+			type: 'object',
+			fieldNumber: 4,
+			properties: {
+				balance: {
+					dataType: 'uint64',
+					fieldNumber: 1,
+				},
+			},
+		},
+		post: {
+			fieldNumber: 5,
+			...postboardAccountPropsSchema,
+		},
+	},
+};

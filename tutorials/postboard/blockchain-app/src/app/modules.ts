@@ -4,5 +4,5 @@ import { Application } from 'lisk-sdk';
 import { PostModule } from './modules/post/post_module';
 
 export const registerModules = (app: Application): void => {
-	app.registerModule(PostModule);
+	app.registerModule(new PostModule());
 };

@@ -1,118 +1,67 @@
+import { BaseModule, ModuleMetadata } from 'lisk-sdk';
 import {
-	AfterBlockApplyContext,
-	AfterGenesisBlockApplyContext,
-	BaseModule,
-	BeforeBlockApplyContext,
-	codec,
-	cryptography,
-	TransactionApplyContext,
-} from 'lisk-sdk';
-import { CreatePostAsset } from './assets/create_post_asset';
-import { FollowAsset } from './assets/follow_asset';
-import { LikeAsset } from './assets/like_asset';
-import { ReplyAsset } from './assets/reply_asset';
-import { RepostAsset } from './assets/repost_asset';
-import { allPostsSchema, postboardAccountPropsSchema, postPropsSchema } from './schemas';
-import { AllPosts, PostboardAccountProps, PostProps, PostPropsJSON } from './types';
-
-const stringifyPost = (post: PostProps): PostPropsJSON => ({
-	author: cryptography.getLisk32AddressFromAddress(post.author),
-	content: post.content,
-	date: post.date,
-	id: post.id,
-	likes: post.likes.map(l => cryptography.getLisk32AddressFromAddress(l)),
-	replies: post.replies.map(r => ({ ...r, author: cryptography.getLisk32AddressFromAddress(r.author) })),
-	reposts: post.reposts.map(p => cryptography.getLisk32AddressFromAddress(p)),
-});
+	accountSchema,
+	allPostsSchema,
+	getLatestPostsSchema,
+	getPostSchema,
+	postPropsSchema,
+} from './schemas';
+import { PostEndpoint } from './endpoint';
+import { PostMethod } from './method';
+import { CreatePostCommand } from './commands/create_post';
+import { PostStore } from './stores/post';
+import { AllPostsStore } from './stores/all_posts';
+import { AccountStore } from './stores/account';
+import { FollowCommand } from './commands/follow';
+import { LikeCommand } from './commands/like';
+import { ReplyCommand } from './commands/reply';
+import { RepostCommand } from './commands/repost';
 
 export class PostModule extends BaseModule {
-	public actions = {
-		// Get post by ID
-		getPost: async (params: Record<string, unknown>) => {
-			const encodedPost = await this._dataAccess.getChainState(params.id as string);
-			if (!encodedPost) {
-				return {};
-			}
-			const decodedPost = codec.decode<PostProps>(postPropsSchema, encodedPost);
+	public endpoint = new PostEndpoint(this.stores, this.offchainStores);
+	public method = new PostMethod(this.stores, this.events);
 
-			return stringifyPost(decodedPost);
-		},
-		// Get latests posts
-		getLatestPosts: async (params: Record<string, unknown>) => {
-			const { account: address } = params as { account: string };
-			if (address) {
-				const account:
-					| PostboardAccountProps
-					| undefined = await this._dataAccess.getAccountByAddress(Buffer.from(address, 'hex'));
-				return account.post.posts;
-			}
-			const allPostsBuffer: Buffer | undefined = await this._dataAccess.getChainState('post/all');
-			if (allPostsBuffer) {
-				const allPosts: AllPosts = codec.decode(allPostsSchema, allPostsBuffer);
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-				return allPosts.posts;
-			}
-			return [];
-		},
-	};
-	public reducers = {
-		// Example below
-		// getBalance: async (
-		// 	params: Record<string, unknown>,
-		// 	stateStore: StateStore,
-		// ): Promise<bigint> => {
-		// 	const { address } = params;
-		// 	if (!Buffer.isBuffer(address)) {
-		// 		throw new Error('Address must be a buffer');
-		// 	}
-		// 	const account = await stateStore.account.getOrDefault<TokenAccount>(address);
-		// 	return account.token.balance;
-		// },
-	};
-	public name = 'post';
-	public transactionAssets = [
-		new CreatePostAsset(),
-		new RepostAsset(),
-		new ReplyAsset(),
-		new LikeAsset(),
-		new FollowAsset(),
+	public _createPostCommand = new CreatePostCommand(this.stores, this.events);
+	public _followCommand = new FollowCommand(this.stores, this.events);
+	public _likeCommand = new LikeCommand(this.stores, this.events);
+	public _replyCommand = new ReplyCommand(this.stores, this.events);
+	public _repostCommand = new RepostCommand(this.stores, this.events);
+	public commands = [
+		this._createPostCommand,
+		this._followCommand,
+		this._likeCommand,
+		this._replyCommand,
+		this._repostCommand,
 	];
-	public events = [
-		// Example below
-		// 'post:newBlock',
-	];
-	public id = 1000;
-	public accountSchema = postboardAccountPropsSchema;
-	// public constructor(genesisConfig: GenesisConfig) {
-	//     super(genesisConfig);
-	// }
 
-	// Lifecycle hooks
-	public async beforeBlockApply(_input: BeforeBlockApplyContext) {
-		// Get any data from stateStore using block info, below is an example getting a generator
-		// const generatorAddress = getAddressFromPublicKey(_input.block.header.generatorPublicKey);
-		// const generator = await _input.stateStore.account.get<TokenAccount>(generatorAddress);
+	public constructor() {
+		super();
+		this.stores.register(PostStore, new PostStore(this.name, 0));
+		this.stores.register(AllPostsStore, new AllPostsStore(this.name, 1));
+		this.stores.register(AccountStore, new AccountStore(this.name, 2));
 	}
 
-	public async afterBlockApply(_input: AfterBlockApplyContext) {
-		// Get any data from stateStore using block info, below is an example getting a generator
-		// const generatorAddress = getAddressFromPublicKey(_input.block.header.generatorPublicKey);
-		// const generator = await _input.stateStore.account.get<TokenAccount>(generatorAddress);
-	}
-
-	// eslint-disable-next-line @typescript-eslint/require-await
-	public async beforeTransactionApply(_input: TransactionApplyContext) {
-		// Get any data from stateStore using transaction info, below is an example
-		// const sender = await _input.stateStore.account.getOrDefault<TokenAccount>(_input.transaction.senderAddress);
-	}
-
-	public async afterTransactionApply(_input: TransactionApplyContext) {
-		// Get any data from stateStore using transaction info, below is an example
-		// const sender = await _input.stateStore.account.getOrDefault<TokenAccount>(_input.transaction.senderAddress);
-	}
-
-	public async afterGenesisBlockApply(_input: AfterGenesisBlockApplyContext) {
-		// Get any data from genesis block, for example get all genesis accounts
-		// const genesisAccounts = genesisBlock.header.asset.accounts;
+	public metadata(): ModuleMetadata {
+		return {
+			...this.baseMetadata(),
+			endpoints: [
+				{
+					name: this.endpoint.getPost.name,
+					request: getPostSchema,
+					response: postPropsSchema,
+				},
+				{
+					name: this.endpoint.getLatestPosts.name,
+					request: getLatestPostsSchema,
+					response: allPostsSchema,
+				},
+				{
+					name: this.endpoint.getAccount.name,
+					request: getLatestPostsSchema,
+					response: accountSchema,
+				},
+			],
+			assets: [],
+		};
 	}
 }
