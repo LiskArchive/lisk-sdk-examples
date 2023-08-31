@@ -13,7 +13,8 @@ let paramsStr = {
 	"mandatoryKeys": [],
 	"optionalKeys": [
 		"61d320f822fcc163489499200ae6c99a66296513b1ca1066e49a37a026434ac0",
-		"dfbe4e3999138d62047c23f61f222a91b24d9d056db055be24f9ab6d95d7aa78"
+		"dfbe4e3999138d62047c23f61f222a91b24d9d056db055be24f9ab6d95d7aa78",
+		"e57a23f897b13bdeef27439bb9f4e29ac0828018d27d6b39ade342879928b46a"
 	],
 	"signatures": []
 };
@@ -22,7 +23,8 @@ let params = {
 	...paramsStr,
 	optionalKeys: [
 		Buffer.from("61d320f822fcc163489499200ae6c99a66296513b1ca1066e49a37a026434ac0", "hex"),
-		Buffer.from("dfbe4e3999138d62047c23f61f222a91b24d9d056db055be24f9ab6d95d7aa78","hex")
+		Buffer.from("dfbe4e3999138d62047c23f61f222a91b24d9d056db055be24f9ab6d95d7aa78","hex"),
+		Buffer.from("e57a23f897b13bdeef27439bb9f4e29ac0828018d27d6b39ade342879928b46a","hex"),
 	]
 }
 
@@ -72,12 +74,13 @@ rl.question("Confirm parameters with 'yes'", function(confirmed) {
 		);
 
 		console.log("Signature:");
-		console.log(signature);
+		console.log(signature.toString("hex"));
 
-		params.signatures.push(signature);
+		//params.signatures.push(signature);
+		paramsStr.signatures.push(signature.toString("hex"))
 
 		console.log("Parameters with the appended signature:");
-		console.log(params);
+		console.log(paramsStr);
 	}
 
 	rl.close();
