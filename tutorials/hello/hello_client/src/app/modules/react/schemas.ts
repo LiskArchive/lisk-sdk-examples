@@ -8,7 +8,7 @@ export const crossChainReactParamsSchema = {
 	/** The required parameters for the command. */
 	required: [
 		'reactionType',
-		'postID',
+		'helloMessageID',
 		'receivingChainID',
 		'data',
 		'messageFee',
@@ -21,9 +21,9 @@ export const crossChainReactParamsSchema = {
 			fieldNumber: 1,
 		},
 		/**
-		 * ID of the post.
+		 * ID of the message.
 		 */
-		postID: {
+		helloMessageID: {
 			dataType: 'bytes',
 			fieldNumber: 2,
 		},
@@ -60,7 +60,7 @@ export const crossChainReactParamsSchema = {
 
 export interface CCReactMessageParams {
 	reactionType: number;
-	postID: Buffer;
+	helloMessageID: Buffer;
 	receivingChainID: Buffer;
 	senderAddress: Buffer;
 	message: string;

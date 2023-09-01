@@ -23,6 +23,7 @@ import {
 } from './schema';
 import { CounterStore } from './stores/counter';
 import { MessageStore } from './stores/message';
+import { ReactionStore } from './stores/reaction';
 import { ModuleConfigJSON } from './types';
 
 export const defaultConfig = {
@@ -37,6 +38,7 @@ export class HelloModule extends BaseModule {
 		// registration of stores and events
 		this.stores.register(CounterStore, new CounterStore(this.name, 0));
 		this.stores.register(MessageStore, new MessageStore(this.name, 1));
+		this.stores.register(ReactionStore, new ReactionStore(this.name, 2));
 		this.events.register(NewHelloEvent, new NewHelloEvent(this.name));
 	}
 

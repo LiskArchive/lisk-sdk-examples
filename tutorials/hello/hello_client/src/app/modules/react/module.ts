@@ -17,10 +17,10 @@ export class ReactModule extends BaseInteroperableModule {
 
 		public crossChainMethod = new ReactInteroperableMethod(this.stores, this.events);
 
-	// public constructor() {
-	// 	super();
-	// 	// registeration of stores and events
-	// }
+		public constructor() {
+			super();
+			this.stores.register(ReactionStore, new ReactionStore(this.name, 0));
+	 }
 
 	public metadata(): ModuleMetadata {
 		return {

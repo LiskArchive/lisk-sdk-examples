@@ -15,7 +15,7 @@ import { 	InteroperabilityMethod } from '../types'
 
 interface Params {
 	reactionType: number;
-	postID: Buffer;
+	helloMessageID: Buffer;
 	amount: bigint;
 	receivingChainID: Buffer;
 	message: string;
@@ -77,7 +77,7 @@ export class ReactCrossChainCommand extends BaseCommand {
 			message: params.message,
 			receivingChainID: params.receivingChainID,
 			senderAddress,
-			postID: params.postID,
+			helloMessageID: params.helloMessageID,
 		};
 
 		await this._interoperabilityMethod.send(
