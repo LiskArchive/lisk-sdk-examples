@@ -1,33 +1,29 @@
 /* eslint-disable class-methods-use-this */
 
-import {
-	BaseModule,
-	BlockAfterExecuteContext,
-	BlockExecuteContext,
-	BlockVerifyContext,
-	GenesisBlockExecuteContext,
-	InsertAssetContext,
-	ModuleInitArgs,
-	ModuleMetadata,
-	TransactionExecuteContext,
-	TransactionVerifyContext,
-	VerificationResult,
-	utils,
-} from 'lisk-sdk';
 import { validator } from '@liskhq/lisk-validator';
-import { CreateHelloCommand } from './commands/create_hello_command';
 import {
-	configSchema,
-	getHelloRequestSchema,
-	getHelloCounterResponseSchema,
-	getHelloResponseSchema,
-} from './schema';
-import { ModuleConfigJSON } from './types';
+    BaseModule,
+    BlockAfterExecuteContext,
+    BlockExecuteContext,
+    BlockVerifyContext,
+    GenesisBlockExecuteContext,
+    InsertAssetContext,
+    ModuleInitArgs,
+    ModuleMetadata,
+    TransactionExecuteContext,
+    TransactionVerifyContext, utils, VerificationResult
+} from 'lisk-sdk';
+import { CreateHelloCommand } from './commands/create_hello_command';
+import { ReactCommand } from "./commands/react_command";
 import { HelloEndpoint } from './endpoint';
 import { NewHelloEvent } from './events/new_hello';
 import { HelloMethod } from './method';
+import {
+    configSchema, getHelloCounterResponseSchema, getHelloRequestSchema, getHelloResponseSchema
+} from './schema';
 import { CounterStore } from './stores/counter';
 import { MessageStore } from './stores/message';
+import { ModuleConfigJSON } from './types';
 
 export const defaultConfig = {
 	maxMessageLength: 256,
@@ -125,5 +121,5 @@ export class HelloModule extends BaseModule {
 
 	public endpoint = new HelloEndpoint(this.stores, this.offchainStores);
 	public method = new HelloMethod(this.stores, this.events);
-	public commands = [new CreateHelloCommand(this.stores, this.events)];
+	public commands = [new CreateHelloCommand(this.stores, this.events), new ReactCommand(this.stores, this.events)];
 }

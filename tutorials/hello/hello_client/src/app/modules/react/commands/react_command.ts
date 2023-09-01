@@ -18,7 +18,7 @@ interface Params {
 	postID: Buffer;
 	amount: bigint;
 	receivingChainID: Buffer;
-	data: string;
+	message: string;
 	messageFee: bigint;
 	messageFeeTokenID: Buffer;
 }
