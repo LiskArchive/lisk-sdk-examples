@@ -1,4 +1,4 @@
-export const postboardAccountPropsSchema = {
+export const postboardAccountSchema = {
 	type: 'object',
 	properties: {
 		following: {
@@ -46,7 +46,7 @@ export const postboardAccountPropsSchema = {
 	},
 };
 
-export const createPostPropsSchema = {
+export const createPostSchema = {
 	$id: 'post/createPost-asset',
 	title: 'CreatePostAsset transaction asset for post module',
 	type: 'object',
@@ -61,7 +61,7 @@ export const createPostPropsSchema = {
 	},
 };
 
-export const repostPropsSchema = {
+export const repostSchema = {
 	$id: 'post/repost-asset',
 	title: 'Repost transaction asset for post module',
 	type: 'object',
@@ -74,7 +74,7 @@ export const repostPropsSchema = {
 	},
 };
 
-export const replyPropsSchema = {
+export const replySchema = {
 	$id: 'post/reply-asset',
 	title: 'Reply transaction asset for post module',
 	type: 'object',
@@ -93,7 +93,7 @@ export const replyPropsSchema = {
 	},
 };
 
-export const likePropsSchema = {
+export const likeSchema = {
 	$id: 'post/like-asset',
 	title: 'Like transaction asset for post module',
 	type: 'object',
@@ -106,7 +106,7 @@ export const likePropsSchema = {
 	},
 };
 
-export const followPropsSchema = {
+export const followSchema = {
 	$id: 'post/follow-asset',
 	title: 'Follow transaction asset for post module',
 	type: 'object',
@@ -119,7 +119,7 @@ export const followPropsSchema = {
 	},
 };
 
-export const postPropsSchema = {
+export const postSchema = {
 	$id: 'post/posts',
 	title: 'CreatePostAsset transaction asset for post module',
 	type: 'object',
@@ -211,7 +211,7 @@ export const getPostSchema = {
 export const getLatestPostsSchema = {
 	$id: '/postboard/getLatestPosts',
 	type: 'object',
-	required: ['address'],
+	required: [],
 	properties: {
 		address: {
 			type: 'string',
@@ -224,64 +224,16 @@ export const getLatestPostsSchema = {
 export const accountSchema = {
 	$id: '/postboard/account',
 	type: 'object',
-	required: ['address', 'keys', 'sequence', 'token', 'post'],
+	required: ['address', 'post'],
 	properties: {
 		address: {
 			dataType: 'bytes',
 			format: 'lisk32',
 			fieldNumber: 1,
 		},
-		keys: {
-			type: 'object',
-			fieldNumber: 2,
-			properties: {
-				numberOfSignatures: {
-					dataType: 'uint32',
-					fieldNumber: 1,
-				},
-				mandatoryKeys: {
-					type: 'array',
-					items: {
-						dataType: 'bytes',
-						minLength: 32,
-						maxLength: 32,
-					},
-					fieldNumber: 2,
-				},
-				optionalKeys: {
-					type: 'array',
-					items: {
-						dataType: 'bytes',
-						minLength: 32,
-						maxLength: 32,
-					},
-					fieldNumber: 3,
-				},
-			},
-		},
-		sequence: {
-			type: 'object',
-			fieldNumber: 3,
-			properties: {
-				nonce: {
-					dataType: 'uint64',
-					fieldNumber: 1,
-				},
-			},
-		},
-		token: {
-			type: 'object',
-			fieldNumber: 4,
-			properties: {
-				balance: {
-					dataType: 'uint64',
-					fieldNumber: 1,
-				},
-			},
-		},
 		post: {
 			fieldNumber: 5,
-			...postboardAccountPropsSchema,
+			...postboardAccountSchema,
 		},
 	},
 };

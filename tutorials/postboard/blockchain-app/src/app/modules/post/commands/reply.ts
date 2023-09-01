@@ -5,16 +5,16 @@ import {
 	VerificationResult,
 	VerifyStatus,
 } from 'lisk-sdk';
-import { ReplyProps } from '../types';
+import { Reply } from '../types';
 import { AccountStore } from '../stores/account';
-import { replyPropsSchema } from '../schemas';
+import { replySchema } from '../schemas';
 import { PostStore } from '../stores/post';
 
 export class ReplyCommand extends BaseCommand {
-	public schema = replyPropsSchema;
+	public schema = replySchema;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async verify(context: CommandVerifyContext<ReplyProps>): Promise<VerificationResult> {
+	public async verify(context: CommandVerifyContext<Reply>): Promise<VerificationResult> {
 		const { params } = context;
 		const { postId } = params;
 
@@ -29,7 +29,7 @@ export class ReplyCommand extends BaseCommand {
 		};
 	}
 
-	public async execute(context: CommandExecuteContext<ReplyProps>): Promise<void> {
+	public async execute(context: CommandExecuteContext<Reply>): Promise<void> {
 		const { params, transaction, header } = context;
 		const { postId, content } = params;
 

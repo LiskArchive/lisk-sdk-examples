@@ -5,16 +5,16 @@ import {
 	VerificationResult,
 	VerifyStatus,
 } from 'lisk-sdk';
-import { RepostProps } from '../types';
+import { Repost } from '../types';
 import { AccountStore } from '../stores/account';
-import { repostPropsSchema } from '../schemas';
+import { repostSchema } from '../schemas';
 import { PostStore } from '../stores/post';
 
 export class RepostCommand extends BaseCommand {
-	public schema = repostPropsSchema;
+	public schema = repostSchema;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async verify(context: CommandVerifyContext<RepostProps>): Promise<VerificationResult> {
+	public async verify(context: CommandVerifyContext<Repost>): Promise<VerificationResult> {
 		const { params } = context;
 		const { postId } = params;
 
@@ -29,7 +29,7 @@ export class RepostCommand extends BaseCommand {
 		};
 	}
 
-	public async execute(context: CommandExecuteContext<RepostProps>): Promise<void> {
+	public async execute(context: CommandExecuteContext<Repost>): Promise<void> {
 		const { params, transaction } = context;
 		const { postId } = params;
 

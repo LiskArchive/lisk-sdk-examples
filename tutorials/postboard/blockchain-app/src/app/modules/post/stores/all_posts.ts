@@ -1,15 +1,12 @@
 import { BaseStore, ImmutableStoreGetter, StoreGetter } from 'lisk-sdk';
 import { allPostsSchema } from '../schemas';
-
-export interface AllPosts {
-	posts: string[];
-}
+import { AllPosts } from '../types';
 
 const DEFAULT_KEY = Buffer.alloc(0);
 
 export class AllPostsStore extends BaseStore<AllPosts> {
 	public schema = allPostsSchema;
-	// public schema
+
 	public async getAllPosts(context: ImmutableStoreGetter): Promise<AllPosts> {
 		if (!(await this.has(context, DEFAULT_KEY))) {
 			return {

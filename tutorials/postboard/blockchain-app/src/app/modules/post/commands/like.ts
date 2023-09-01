@@ -5,16 +5,16 @@ import {
 	VerificationResult,
 	VerifyStatus,
 } from 'lisk-sdk';
-import { LikeProps } from '../types';
+import { Like } from '../types';
 import { AccountStore } from '../stores/account';
-import { likePropsSchema } from '../schemas';
+import { likeSchema } from '../schemas';
 import { PostStore } from '../stores/post';
 
 export class LikeCommand extends BaseCommand {
-	public schema = likePropsSchema;
+	public schema = likeSchema;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async verify(context: CommandVerifyContext<LikeProps>): Promise<VerificationResult> {
+	public async verify(context: CommandVerifyContext<Like>): Promise<VerificationResult> {
 		const { params } = context;
 		const { postId } = params;
 
@@ -29,7 +29,7 @@ export class LikeCommand extends BaseCommand {
 		};
 	}
 
-	public async execute(context: CommandExecuteContext<LikeProps>): Promise<void> {
+	public async execute(context: CommandExecuteContext<Like>): Promise<void> {
 		const { params, transaction } = context;
 		const { postId } = params;
 

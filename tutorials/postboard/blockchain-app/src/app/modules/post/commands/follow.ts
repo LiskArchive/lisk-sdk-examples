@@ -6,21 +6,21 @@ import {
 	VerificationResult,
 	VerifyStatus,
 } from 'lisk-sdk';
-import { FollowProps } from '../types';
+import { Follow } from '../types';
 import { AccountStore } from '../stores/account';
-import { followPropsSchema } from '../schemas';
+import { followSchema } from '../schemas';
 
 export class FollowCommand extends BaseCommand {
-	public schema = followPropsSchema;
+	public schema = followSchema;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async verify(_context: CommandVerifyContext<FollowProps>): Promise<VerificationResult> {
+	public async verify(_context: CommandVerifyContext<Follow>): Promise<VerificationResult> {
 		return {
 			status: VerifyStatus.OK,
 		};
 	}
 
-	public async execute(context: CommandExecuteContext<FollowProps>): Promise<void> {
+	public async execute(context: CommandExecuteContext<Follow>): Promise<void> {
 		const { params, transaction } = context;
 
 		const accountStore = this.stores.get(AccountStore);

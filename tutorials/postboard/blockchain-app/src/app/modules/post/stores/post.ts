@@ -1,5 +1,5 @@
 import { BaseStore } from 'lisk-sdk';
-import { postPropsSchema } from '../schemas';
+import { postSchema } from '../schemas';
 
 export interface Post {
 	id: string;
@@ -16,5 +16,5 @@ export interface Post {
 }
 
 export class PostStore extends BaseStore<Post> {
-	public schema = postPropsSchema;
+	public schema = postSchema;
 }

@@ -1,16 +1,5 @@
-export interface PostboardAccountProps {
+export interface PostboardAccount {
 	address: Buffer;
-	keys: {
-		mandatoryKeys: Buffer[];
-		numberOfSignatures: number;
-		optionalKeys: Buffer[];
-	};
-	sequence: {
-		nonce: string;
-	};
-	token: {
-		balance: string;
-	};
 	post: {
 		following: Buffer[]; // User Buffer
 		followers: Buffer[]; // User Buffer
@@ -20,28 +9,39 @@ export interface PostboardAccountProps {
 	};
 }
 
-export interface RepostProps {
+export interface PostboardAccountJSON {
+	address: string;
+	post: {
+		following: string[]; // User Buffer
+		followers: string[]; // User Buffer
+		posts: string[]; // PostId
+		replies: string[]; // PostId#replyId
+		likes: string[]; // PostId
+	};
+}
+
+export interface Repost {
 	postId: string;
 }
 
-export interface ReplyProps {
+export interface Reply {
 	postId: string;
 	content: string;
 }
 
-export interface LikeProps {
+export interface Like {
 	postId: string;
 }
 
-export interface FollowProps {
+export interface Follow {
 	account: string;
 }
 
-export interface CreatePostProps {
+export interface CreatePost {
 	message: string;
 }
 
-export interface PostProps {
+export interface Post {
 	id: string;
 	content: string;
 	date: number;
@@ -55,21 +55,7 @@ export interface PostProps {
 	likes: Buffer[];
 }
 
-export interface PostPropsJSON {
-	id: string;
-	content: string;
-	date: number;
-	author: string;
-	replies: {
-		author: string;
-		date: number;
-		content: string;
-	}[];
-	reposts: string[];
-	likes: string[];
-}
-
-export interface StringProps {
+export interface PostJSON {
 	id: string;
 	content: string;
 	date: number;

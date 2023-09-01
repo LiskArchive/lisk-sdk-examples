@@ -1,12 +1,15 @@
 import { NotFoundError } from '@liskhq/lisk-chain';
 import { BaseStore, ImmutableStoreGetter } from 'lisk-sdk';
-import { PostboardAccountProps } from '../types';
+import { PostboardAccount } from '../types';
 import { accountSchema } from '../schemas';
 
-export class AccountStore extends BaseStore<PostboardAccountProps> {
+export class AccountStore extends BaseStore<PostboardAccount> {
 	public schema = accountSchema;
 
-	public async getOrDefault(context: ImmutableStoreGetter, address: Buffer) {
+	public async getOrDefault(
+		context: ImmutableStoreGetter,
+		address: Buffer,
+	): Promise<PostboardAccount> {
 		try {
 			const authAccount = await this.get(context, address);
 			return authAccount;
@@ -17,17 +20,6 @@ export class AccountStore extends BaseStore<PostboardAccountProps> {
 
 			return {
 				address,
-				keys: {
-					numberOfSignatures: 0,
-					mandatoryKeys: [],
-					optionalKeys: [],
-				},
-				sequence: {
-					nonce: '0',
-				},
-				token: {
-					balance: '0',
-				},
 				post: {
 					following: [],
 					followers: [],
@@ -35,7 +27,7 @@ export class AccountStore extends BaseStore<PostboardAccountProps> {
 					replies: [],
 					likes: [],
 				},
-			} as PostboardAccountProps;
+			};
 		}
 	}
 }

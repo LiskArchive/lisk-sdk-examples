@@ -6,8 +6,8 @@ import {
 	VerificationResult,
 	VerifyStatus,
 } from 'lisk-sdk';
-import { createPostPropsSchema } from '../schemas';
-import { CreatePostProps } from '../types';
+import { createPostSchema } from '../schemas';
+import { CreatePost } from '../types';
 import { AccountStore } from '../stores/account';
 import { PostStore } from '../stores/post';
 import { AllPostsStore } from '../stores/all_posts';
@@ -20,19 +20,16 @@ const getIDForPost = (address: Buffer, nonce: bigint): Buffer => {
 };
 
 export class CreatePostCommand extends BaseCommand {
-	// Define schema for asset
-	public schema = createPostPropsSchema;
+	public schema = createPostSchema;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async verify(
-		_context: CommandVerifyContext<CreatePostProps>,
-	): Promise<VerificationResult> {
+	public async verify(_context: CommandVerifyContext<CreatePost>): Promise<VerificationResult> {
 		return {
 			status: VerifyStatus.OK,
 		};
 	}
 
-	public async execute(context: CommandExecuteContext<CreatePostProps>): Promise<void> {
+	public async execute(context: CommandExecuteContext<CreatePost>): Promise<void> {
 		const { params, transaction, header } = context;
 		const accountStore = this.stores.get(AccountStore);
 		const senderProps = await accountStore.getOrDefault(context, transaction.senderAddress);

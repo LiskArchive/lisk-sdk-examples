@@ -1,17 +1,3 @@
-/*
- * Copyright © 2023 Lisk Foundation
- *
- * See the LICENSE file at the top-level directory of this distribution
- * for licensing information.
- *
- * Unless otherwise agreed in a custom licensing agreement with the Lisk Foundation,
- * no part of this software, including this file, may be copied, modified,
- * propagated, or distributed except according to the terms contained in the
- * LICENSE file.
- *
- * Removal or modification of this copyright notice is prohibited.
- */
-
 import { validator } from '@liskhq/lisk-validator';
 import { BaseEndpoint, cryptography, ModuleEndpointContext } from 'lisk-sdk';
 import { getLatestPostsSchema, getPostSchema } from './schemas';
@@ -19,9 +5,10 @@ import { PostStore } from './stores/post';
 import { stringifyPost } from './utils';
 import { AllPostsStore } from './stores/all_posts';
 import { AccountStore } from './stores/account';
+import { PostboardAccountJSON, PostJSON } from './types';
 
 export class PostEndpoint extends BaseEndpoint {
-	public async getPost(context: ModuleEndpointContext) {
+	public async getPost(context: ModuleEndpointContext): Promise<PostJSON> {
 		validator.validate<{ id: string }>(getPostSchema, context.params);
 		const { id } = context.params;
 
@@ -30,7 +17,7 @@ export class PostEndpoint extends BaseEndpoint {
 		return stringifyPost(post);
 	}
 
-	public async getLatestPosts(context: ModuleEndpointContext) {
+	public async getLatestPosts(context: ModuleEndpointContext): Promise<string[]> {
 		validator.validate<{ address: string }>(getLatestPostsSchema, context.params);
 		const { address } = context.params;
 
@@ -44,7 +31,7 @@ export class PostEndpoint extends BaseEndpoint {
 		return posts;
 	}
 
-	public async getAccount(context: ModuleEndpointContext) {
+	public async getAccount(context: ModuleEndpointContext): Promise<PostboardAccountJSON> {
 		validator.validate<{ address: string }>(getLatestPostsSchema, context.params);
 		const { address } = context.params;
 
@@ -54,12 +41,6 @@ export class PostEndpoint extends BaseEndpoint {
 		return {
 			...account,
 			address: cryptography.address.getLisk32AddressFromAddress(account.address),
-			sequence: {
-				nonce: account.sequence.nonce.toString(),
-			},
-			token: {
-				balance: account.token.balance.toString(),
-			},
 			post: {
 				...account.post,
 				following: account.post.following.map(followAddress =>

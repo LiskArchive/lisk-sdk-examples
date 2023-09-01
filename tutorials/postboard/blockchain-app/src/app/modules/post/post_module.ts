@@ -4,7 +4,7 @@ import {
 	allPostsSchema,
 	getLatestPostsSchema,
 	getPostSchema,
-	postPropsSchema,
+	postSchema,
 } from './schemas';
 import { PostEndpoint } from './endpoint';
 import { PostMethod } from './method';
@@ -21,17 +21,12 @@ export class PostModule extends BaseModule {
 	public endpoint = new PostEndpoint(this.stores, this.offchainStores);
 	public method = new PostMethod(this.stores, this.events);
 
-	public _createPostCommand = new CreatePostCommand(this.stores, this.events);
-	public _followCommand = new FollowCommand(this.stores, this.events);
-	public _likeCommand = new LikeCommand(this.stores, this.events);
-	public _replyCommand = new ReplyCommand(this.stores, this.events);
-	public _repostCommand = new RepostCommand(this.stores, this.events);
 	public commands = [
-		this._createPostCommand,
-		this._followCommand,
-		this._likeCommand,
-		this._replyCommand,
-		this._repostCommand,
+		new CreatePostCommand(this.stores, this.events),
+		new FollowCommand(this.stores, this.events),
+		new LikeCommand(this.stores, this.events),
+		new ReplyCommand(this.stores, this.events),
+		new RepostCommand(this.stores, this.events),
 	];
 
 	public constructor() {
@@ -48,7 +43,7 @@ export class PostModule extends BaseModule {
 				{
 					name: this.endpoint.getPost.name,
 					request: getPostSchema,
-					response: postPropsSchema,
+					response: postSchema,
 				},
 				{
 					name: this.endpoint.getLatestPosts.name,
