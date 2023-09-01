@@ -2,19 +2,19 @@
 
 import { validator } from '@liskhq/lisk-validator';
 import {
-    BaseModule,
-    BlockAfterExecuteContext,
-    BlockExecuteContext,
-    BlockVerifyContext,
-    GenesisBlockExecuteContext,
-    InsertAssetContext,
-    ModuleInitArgs,
-    ModuleMetadata,
-    TransactionExecuteContext,
-    TransactionVerifyContext, utils, VerificationResult
+	BaseInteroperableModule,
+	BlockAfterExecuteContext,
+	BlockExecuteContext,
+	BlockVerifyContext,
+	GenesisBlockExecuteContext,
+	InsertAssetContext,
+	ModuleInitArgs,
+	ModuleMetadata,
+	TransactionExecuteContext,
+	TransactionVerifyContext, utils, VerificationResult,
 } from 'lisk-sdk';
 import { CreateHelloCommand } from './commands/create_hello_command';
-import { ReactCommand } from "./commands/react_command";
+import { ReactCCCommand } from "./cc_commands/react_command";
 import { HelloEndpoint } from './endpoint';
 import { NewHelloEvent } from './events/new_hello';
 import { HelloMethod } from './method';
@@ -25,6 +25,7 @@ import { CounterStore } from './stores/counter';
 import { MessageStore } from './stores/message';
 import { ReactionStore } from './stores/reaction';
 import { ModuleConfigJSON } from './types';
+import { HelloInteroperableMethod } from '../cc_method';
 
 export const defaultConfig = {
 	maxMessageLength: 256,
@@ -32,7 +33,7 @@ export const defaultConfig = {
 	blacklist: ['illegalWord1'],
 };
 
-export class HelloModule extends BaseModule {
+export class HelloModule extends BaseInteroperableModule {
 	public constructor() {
 		super();
 		// registration of stores and events
@@ -123,5 +124,8 @@ export class HelloModule extends BaseModule {
 
 	public endpoint = new HelloEndpoint(this.stores, this.offchainStores);
 	public method = new HelloMethod(this.stores, this.events);
-	public commands = [new CreateHelloCommand(this.stores, this.events), new ReactCommand(this.stores, this.events)];
+	public commands = [new CreateHelloCommand(this.stores, this.events)];
+	public reactCCCommand = new ReactCCCommand(this.stores, this.events);
+	public crossChainMethod = new HelloInteroperableMethod(this.stores, this.events);
+
 }

@@ -9,7 +9,7 @@ import { crossChainReactParamsSchema, CCReactMessageParams } from '../schemas'
 import { MAX_RESERVED_ERROR_STATUS, CCM_STATUS_OK } from '../../react/constants'
 import { ReactionStore } from '../stores/reaction';
 
-export class ReactCommand extends BaseCCCommand {
+export class ReactCCCommand extends BaseCCCommand {
 	public schema = crossChainReactParamsSchema;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
