@@ -1,14 +1,9 @@
 {
-  "name": "utils",
+  "name": "postboard-utils",
   "version": "1.0.0",
-  "description": "",
-  "main": "getAccount.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
+  "main": "index.js",
+  "license": "MIT",
   "dependencies": {
-    "@liskhq/lisk-client": "^5.2.2"
+    "@liskhq/lisk-client": "^6.0.0-beta.6"
   }
 }
