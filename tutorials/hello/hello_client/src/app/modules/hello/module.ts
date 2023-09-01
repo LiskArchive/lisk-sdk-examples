@@ -25,7 +25,7 @@ import { CounterStore } from './stores/counter';
 import { MessageStore } from './stores/message';
 import { ReactionStore } from './stores/reaction';
 import { ModuleConfigJSON } from './types';
-import { HelloInteroperableMethod } from '../cc_method';
+import { HelloInteroperableMethod } from './cc_method';
 
 export const defaultConfig = {
 	maxMessageLength: 256,
