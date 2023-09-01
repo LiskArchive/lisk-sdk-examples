@@ -1,0 +1,1 @@
+export const CROSS_CHAIN_COMMAND_NAME_REACT = 'reactCrossChain';
