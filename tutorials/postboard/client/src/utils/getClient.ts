@@ -2,7 +2,7 @@
 import { apiClient } from '@liskhq/lisk-client';
 
 let clientCache: any;
-const nodeAPIURL = 'ws://localhost:8080/ws';
+const nodeAPIURL = 'ws://localhost:7887/rpc-ws';
 
 export const getClient = async () => {
   if (!clientCache) {
