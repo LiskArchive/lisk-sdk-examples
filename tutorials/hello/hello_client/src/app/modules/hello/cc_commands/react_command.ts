@@ -5,8 +5,8 @@ import {
 	CrossChainMessageContext,
 	codec,
 } from 'lisk-sdk';
-import { crossChainReactParamsSchema, CCReactMessageParams } from '../schemas'
-import { MAX_RESERVED_ERROR_STATUS, CCM_STATUS_OK } from '../../react/constants'
+import { crossChainReactParamsSchema, CCReactMessageParams } from '../schema'
+import { MAX_RESERVED_ERROR_STATUS, CCM_STATUS_OK } from '../constants'
 import { ReactionStore } from '../stores/reaction';
 
 export class ReactCCCommand extends BaseCCCommand {

@@ -26,7 +26,7 @@ interface Params {
 export class ReactCrossChainCommand extends BaseCommand {
 	private _interoperabilityMethod!: InteroperabilityMethod;
 	private _moduleName!: string;
-	private _method!: ReactMethod;
+	//private _method!: ReactMethod;
 	public schema = crossChainReactParamsSchema;
 
 	public init(args: {
@@ -35,7 +35,7 @@ export class ReactCrossChainCommand extends BaseCommand {
 		interoperabilityMethod: InteroperabilityMethod;
 	}) {
 		this._moduleName = args.moduleName;
-		this._method = args.method;
+		//this._method = args.method;
 		this._interoperabilityMethod = args.interoperabilityMethod;
 	}
 
