@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { transactions } from '@liskhq/lisk-client/browser';
-import { AccountApiResponse, AccountType } from 'types/Account.type';
-import { extractHexAddress, getAddressFromHex } from 'utils/account';
+import { AccountType } from 'types/Account.type';
+//import { getAddressFromHex } from 'utils/account';
 import { getClient } from 'utils/getClient';
 import useAlert from './useAlert';
 
@@ -10,25 +10,30 @@ const useAccount = () => {
   const alert = useAlert();
 
   const getAccount = (address: string): Promise<AccountType> => {
-    const hexAddress = extractHexAddress(address);
+    //const hexAddress = extractHexAddress(address);
     setLoading(true);
     return new Promise((resolve) => {
       getClient().then((client) => {
         client
-          .invoke('app:getAccount', {
-            address: hexAddress,
+          .invoke('post_getAccount', {
+            address: address,
           })
           .then((res) => {
             setLoading(false);
-            const accObject = client.account.decode(res);
-            const accJSON: AccountApiResponse = client.account.toJSON(accObject);
+            console.log('ACCOUNT: ==>');
+            console.log(res);
+            //const accObject = client.account.decode(res);
+            //const accJSON: AccountApiResponse = client.account.toJSON(accObject);
             resolve({
-              username: accJSON.dpos.delegate.username,
-              address: accJSON.address,
-              followers: accJSON.post.followers.map((acc) => getAddressFromHex(Buffer.from(acc, 'hex'))),
-              following: accJSON.post.following.map((acc) => getAddressFromHex(Buffer.from(acc, 'hex'))),
-              posts: accJSON.post.posts,
-              replies: accJSON.post.replies,
+              username: res.address,
+              address: res.address,
+              followers: res.post.followers,
+              following: res.post.following,
+              /*
+              followers: res.followers.map((acc) => getAddressFromHex(Buffer.from(acc, 'hex'))),
+              following: res.following.map((acc) => getAddressFromHex(Buffer.from(acc, 'hex'))),*/
+              posts: res.post.posts,
+              replies: res.post.replies,
             });
           });
       });

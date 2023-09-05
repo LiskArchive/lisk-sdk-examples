@@ -15,7 +15,7 @@ const usePost = () => {
     new Promise((resolve) => {
       getClient().then((client) => {
         setIsLoading(false);
-        client.invoke('post:getPost', { id }).then((res: PostType) => {
+        client.invoke('post_getPost', { id }).then((res: PostType) => {
           resolve(res);
         });
       });
@@ -30,7 +30,7 @@ const usePost = () => {
     setIsLoading(true);
     getClient().then((client) => {
       setIsLoading(false);
-      client.invoke('post:getLatestPosts').then(async (res: Array<string>) => {
+      client.invoke('post_getLatestPosts').then(async (res: Array<string>) => {
         const data = await getPostsArrayByIds(res);
         postContext.dispatch({ type: types.GET_POSTS, payload: data });
       });

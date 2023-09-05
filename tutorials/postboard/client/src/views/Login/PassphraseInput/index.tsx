@@ -4,7 +4,7 @@ import Button from 'components/Button';
 import { AuthContext } from 'context/AuthContext';
 import types from 'context/types';
 import React, { ClipboardEventHandler, useContext, useState } from 'react';
-import { extractAddress, extractHexAddress } from 'utils/account';
+import { extractHexAddress, getAddressFromHex } from 'utils/account';
 import keyCodes from '../../../constants/keyCodes';
 import { getPassphraseValidationErrors } from '../../../utils/passphrase';
 
@@ -78,10 +78,10 @@ const PassphraseInput = ({ length = 12, maxInputsLength, closeModal }: Passphras
     setFocus(focus);
   };
 
-  const onFill = () => {
+  const onFill = async () => {
     const passphrase = values.join(' ').trim();
-    const address = extractAddress(passphrase);
-    const hexAddress = extractHexAddress(address);
+    const hexAddress = await extractHexAddress(passphrase);
+    const address = getAddressFromHex(hexAddress);
 
     if (address) {
       authContext.dispatch({ type: types.FETCH_ACCOUNT, payload: { address, passphrase, hexAddress } });
