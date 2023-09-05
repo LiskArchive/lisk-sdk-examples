@@ -4,6 +4,7 @@ import types from 'context/types';
 import { useContext, useState } from 'react';
 import { PostType } from 'types/Post.type';
 import { getClient } from 'utils/getClient';
+import { extractPrivateKey } from 'utils/account';
 import useAlert from './useAlert';
 
 const usePost = () => {
@@ -41,17 +42,23 @@ const usePost = () => {
     setIsLoading(true);
     getClient()
       .then(async (client) => {
+        console.log('BEFORE tx');
+        const sk = await extractPrivateKey(passphrase);
+        console.log(sk);
         const tx = await client.transaction.create(
           {
-            moduleID: 1000,
-            assetID: 0,
+            //tokenID: Buffer.from('0400000000000000', 'hex'),
+            module: 'post',
+            command: 'createPost',
             fee: BigInt(transactions.convertLSKToBeddows('0.1')),
-            asset: {
+            params: {
               message,
             },
           },
-          passphrase,
+          sk,
         );
+        console.log('<----------tx--------->');
+        console.log(tx);
         await client.transaction.send(tx);
         setIsLoading(false);
         alert.showSuccessAlert('Post created');
