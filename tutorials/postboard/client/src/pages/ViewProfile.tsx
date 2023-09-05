@@ -24,8 +24,6 @@ const ViewProfile = () => {
   }, [address]);
 
   useEffect(() => {
-    console.log('accoun++++++++++++++t');
-    console.log(account);
     if (account?.posts.length) {
       getPostsArrayByIds(account.posts).then((data) => {
         setPosts(data);

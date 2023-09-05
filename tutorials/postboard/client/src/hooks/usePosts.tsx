@@ -42,12 +42,9 @@ const usePost = () => {
     setIsLoading(true);
     getClient()
       .then(async (client) => {
-        console.log('BEFORE tx');
         const sk = await extractPrivateKey(passphrase);
-        console.log(sk);
         const tx = await client.transaction.create(
           {
-            //tokenID: Buffer.from('0400000000000000', 'hex'),
             module: 'post',
             command: 'createPost',
             fee: BigInt(transactions.convertLSKToBeddows('0.1')),
@@ -57,8 +54,6 @@ const usePost = () => {
           },
           sk,
         );
-        console.log('<----------tx--------->');
-        console.log(tx);
         await client.transaction.send(tx);
         setIsLoading(false);
         alert.showSuccessAlert('Post created');
@@ -71,17 +66,18 @@ const usePost = () => {
   const replyPost = (postId: string, content: string, passphrase: string, cb?: (id: string) => void) => {
     getClient()
       .then(async (client) => {
+        const sk = await extractPrivateKey(passphrase);
         const tx = await client.transaction.create(
           {
-            moduleID: 1000,
-            assetID: 2,
+            module: 'post',
+            command: 'reply',
             fee: BigInt(transactions.convertLSKToBeddows('0.1')),
-            asset: {
+            params: {
               postId,
               content,
             },
           },
-          passphrase,
+          sk,
         );
         const res = await client.transaction.send(tx);
         cb?.(res.transactionId);
@@ -95,16 +91,17 @@ const usePost = () => {
   const repost = (postId: string, passphrase: string, cb?: (id: string) => void) => {
     getClient()
       .then(async (client) => {
+        const sk = await extractPrivateKey(passphrase);
         const tx = await client.transaction.create(
           {
-            moduleID: 1000,
-            assetID: 1,
+            module: 'post',
+            command: 'repost',
             fee: BigInt(transactions.convertLSKToBeddows('0.1')),
-            asset: {
+            params: {
               postId,
             },
           },
-          passphrase,
+          sk,
         );
         const res = await client.transaction.send(tx);
         cb?.(res.transactionId);
@@ -118,16 +115,17 @@ const usePost = () => {
   const likePost = (postId: string, passphrase: string) => {
     getClient()
       .then(async (client) => {
+        const sk = await extractPrivateKey(passphrase);
         const tx = await client.transaction.create(
           {
-            moduleID: 1000,
-            assetID: 3,
+            module: 'post',
+            command: 'like',
             fee: BigInt(transactions.convertLSKToBeddows('0.1')),
             asset: {
               postId,
             },
           },
-          passphrase,
+          sk,
         );
         await client.transaction.send(tx);
         alert.showSuccessAlert('Liked');

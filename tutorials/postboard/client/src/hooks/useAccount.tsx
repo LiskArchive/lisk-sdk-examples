@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { transactions } from '@liskhq/lisk-client/browser';
 import { AccountType } from 'types/Account.type';
-//import { getAddressFromHex } from 'utils/account';
 import { getClient } from 'utils/getClient';
 import useAlert from './useAlert';
+import { extractPrivateKey } from 'app/utils/account';
 
 const useAccount = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const alert = useAlert();
 
   const getAccount = (address: string): Promise<AccountType> => {
-    //const hexAddress = extractHexAddress(address);
     setLoading(true);
     return new Promise((resolve) => {
       getClient().then((client) => {
@@ -20,10 +19,6 @@ const useAccount = () => {
           })
           .then((res) => {
             setLoading(false);
-            console.log('ACCOUNT: ==>');
-            console.log(res);
-            //const accObject = client.account.decode(res);
-            //const accJSON: AccountApiResponse = client.account.toJSON(accObject);
             resolve({
               username: res.address,
               address: res.address,
@@ -43,16 +38,17 @@ const useAccount = () => {
   const followAccount = (account: string, passphrase: string) => {
     getClient()
       .then(async (client) => {
+        const sk = await extractPrivateKey(passphrase);
         const tx = await client.transaction.create(
           {
-            moduleID: 1000,
-            assetID: 4,
+            module: 'post',
+            command: 'follow',
             fee: BigInt(transactions.convertLSKToBeddows('0.1')),
-            asset: {
+            params: {
               account,
             },
           },
-          passphrase,
+          sk,
         );
         console.log('Transaction object: ', tx);
         await client.transaction.send(tx);
