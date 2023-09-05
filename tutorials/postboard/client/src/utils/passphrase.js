@@ -1,4 +1,4 @@
-import * as Lisk from '@liskhq/lisk-client';
+import * as Lisk from '@liskhq/lisk-client/browser';
 
 /**
  * Checks validity of passphrase using to mnemonic

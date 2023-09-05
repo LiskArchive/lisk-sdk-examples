@@ -1,4 +1,4 @@
-import { transactions } from '@liskhq/lisk-client';
+import { transactions } from '@liskhq/lisk-client/browser';
 import { PostContext } from 'context/PostContext';
 import types from 'context/types';
 import { useContext, useState } from 'react';

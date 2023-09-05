@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { transactions } from '@liskhq/lisk-client';
+import { transactions } from '@liskhq/lisk-client/browser';
 import { AccountApiResponse, AccountType } from 'types/Account.type';
 import { extractHexAddress, getAddressFromHex } from 'utils/account';
 import { getClient } from 'utils/getClient';

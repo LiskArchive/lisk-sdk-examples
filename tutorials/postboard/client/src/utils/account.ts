@@ -1,5 +1,5 @@
-import * as Lisk from '@liskhq/lisk-client';
+import { cryptography } from '@liskhq/lisk-client/browser';
 
-export const extractAddress = (passphrase: string) => Lisk.cryptography.getBase32AddressFromPassphrase(passphrase);
-export const extractHexAddress = (address: string) => Lisk.cryptography.getAddressFromLisk32Address(address);
-export const getAddressFromHex = (address: Buffer) => Lisk.cryptography.getBase32AddressFromAddress(address);
+export const extractAddress = (passphrase: string) => cryptography.address.getBase32AddressFromPassphrase(passphrase);
+export const extractHexAddress = (address: string) => cryptography.address.getAddressFromLisk32Address(address);
+export const getAddressFromHex = (address: Buffer) => cryptography.address.getBase32AddressFromAddress(address);
