@@ -121,7 +121,7 @@ const usePost = () => {
             module: 'post',
             command: 'like',
             fee: BigInt(transactions.convertLSKToBeddows('0.1')),
-            asset: {
+            params: {
               postId,
             },
           },
