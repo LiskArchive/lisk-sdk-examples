@@ -1,10 +1,14 @@
 {
 	"system": {
-		"dataPath": "~/.lisk/pos-mainchain",
-		"enableMetrics": true
+		"dataPath": "~/.lisk/postboard-client",
+		"enableMetrics": true,
+		"keepEventsForHeights": 300,
+		"logLevel": "info"
 	},
 	"rpc": {
 		"modes": ["ipc"],
+		"port": 7887,
+		"host": "127.0.0.1",
 		"allowedMethods": ["*"]
 	},
 	"genesis": {
