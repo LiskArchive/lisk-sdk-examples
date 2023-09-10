@@ -25,6 +25,6 @@ export const getPassphraseValidationErrors = (passphrase) => {
     return [{ code: 'empty_value', message: 'Invalid Passphrase' }];
   }
   const numberOfWords = Math.ceil(passphrase.trim().split(' ').length / 3) * 3;
-  const validPassLength = Math.max(Math.min(numberOfWords, 24), 12);
+  const validPassLength = Math.max(Math.min(numberOfWords, 24), 24);
   return Lisk.passphrase.validation.getPassphraseValidationErrors(passphrase, undefined, validPassLength);
 };

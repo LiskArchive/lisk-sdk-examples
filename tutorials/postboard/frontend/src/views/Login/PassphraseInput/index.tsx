@@ -14,7 +14,7 @@ type PassphraseInputProps = {
   closeModal: () => void;
 };
 
-const PassphraseInput = ({ length = 12, maxInputsLength, closeModal }: PassphraseInputProps) => {
+const PassphraseInput = ({ length = 24, maxInputsLength, closeModal }: PassphraseInputProps) => {
   const [showPassphrase, setShowPassphrase] = useState<boolean>(false);
   const [values, setValues] = useState<Array<string>>([]);
   const [focus, setFocus] = useState<number>(0);

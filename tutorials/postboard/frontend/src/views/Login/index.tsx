@@ -29,7 +29,7 @@ const Login = () => {
             <h4>Login to Lisk Postboard</h4>
             <p>Enter your secret recovery phrase to sign in to your account.</p>
           </div>
-          <PassphraseInput length={12} maxInputsLength={24} closeModal={closeModal} />
+          <PassphraseInput length={24} maxInputsLength={24} closeModal={closeModal} />
         </div>
       </Overlay>
     </div>
