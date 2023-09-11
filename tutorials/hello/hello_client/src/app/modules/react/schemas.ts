@@ -39,7 +39,7 @@ export const crossChainReactParamsSchema = {
 			maxLength: 4,
 		},
 		/** Optional field for data / messages. */
-		message: {
+		data: {
 			dataType: 'string',
 			fieldNumber: 4,
 			minLength: 0,
@@ -63,5 +63,5 @@ export interface CCReactMessageParams {
 	helloMessageID: Buffer;
 	receivingChainID: Buffer;
 	senderAddress: Buffer;
-	message: string;
+	data: string;
 }

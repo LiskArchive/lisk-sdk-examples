@@ -23,7 +23,7 @@ import {
 } from './schema';
 import { CounterStore } from './stores/counter';
 import { MessageStore } from './stores/message';
-import { ReactionStore } from './stores/reaction';
+import { ReactionStore, reactionStoreSchema } from './stores/reaction';
 import { ModuleConfigJSON } from './types';
 import { HelloInteroperableMethod } from './cc_method';
 
@@ -50,6 +50,11 @@ export class HelloModule extends BaseInteroperableModule {
 					name: this.endpoint.getHello.name,
 					request: getHelloRequestSchema,
 					response: getHelloResponseSchema,
+				},
+				{
+					name: this.endpoint.getReactions.name,
+					request: getHelloRequestSchema,
+					response: reactionStoreSchema,
 				},
 				{
 					name: this.endpoint.getHelloCounter.name,

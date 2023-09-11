@@ -18,7 +18,7 @@ interface Params {
 	helloMessageID: Buffer;
 	amount: bigint;
 	receivingChainID: Buffer;
-	message: string;
+	data: string;
 	messageFee: bigint;
 	messageFeeTokenID: Buffer;
 }
@@ -74,7 +74,7 @@ export class ReactCrossChainCommand extends BaseCommand {
 
 		const reactCCM: CCReactMessageParams = {
 			reactionType: params.reactionType,
-			message: params.message,
+			data: params.data,
 			receivingChainID: params.receivingChainID,
 			senderAddress,
 			helloMessageID: params.helloMessageID,
