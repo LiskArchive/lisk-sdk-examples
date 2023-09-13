@@ -3,17 +3,20 @@
 
 import {
 		BaseInteroperableModule,
-    ModuleMetadata
+    ModuleMetadata,
+		ModuleInitArgs
 } from 'lisk-sdk';
 import { ReactCrossChainCommand } from "./commands/react_command";
 import { ReactEndpoint } from './endpoint';
 import { ReactMethod } from './method';
 import { ReactInteroperableMethod } from './cc_method';
+import { InteroperabilityMethod } from './types';
 
 export class ReactModule extends BaseInteroperableModule {
     public endpoint = new ReactEndpoint(this.stores, this.offchainStores);
     public method = new ReactMethod(this.stores, this.events);
     public commands = [new ReactCrossChainCommand(this.stores, this.events)];
+		private _interoperabilityMethod!: InteroperabilityMethod;
 
 		public crossChainMethod = new ReactInteroperableMethod(this.stores, this.events);
 
@@ -30,10 +33,20 @@ export class ReactModule extends BaseInteroperableModule {
 		};
 	}
 
-    // Lifecycle hooks
-    // public async init(_args: ModuleInitArgs): Promise<void> {
-	// 	// initialize this module when starting a node
-	// }
+	public addDependencies(interoperabilityMethod: InteroperabilityMethod) {
+		this._interoperabilityMethod = interoperabilityMethod;
+	}
+
+	// Lifecycle hooks
+	public async init(_args: ModuleInitArgs): Promise<void> {
+		console.log("+++++++++++++++++++++this._interoperabilityMethod+++++++++++++++++++++++++++++++");
+		console.log(this._interoperabilityMethod);
+		this.commands[0].init({
+			interoperabilityMethod: this._interoperabilityMethod,
+			method: this.method,
+			moduleName: this.name,
+		});
+	}
 
 	// public async insertAssets(_context: InsertAssetContext) {
 	// 	// initialize block generation, add asset

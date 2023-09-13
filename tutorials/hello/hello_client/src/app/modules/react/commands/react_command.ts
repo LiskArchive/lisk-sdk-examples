@@ -39,6 +39,10 @@ export class ReactCrossChainCommand extends BaseCommand {
 		this._interoperabilityMethod = args.interoperabilityMethod;
 	}
 
+	public addDependencies(interoperabilityMethod: InteroperabilityMethod) {
+		this._interoperabilityMethod = interoperabilityMethod;
+	}
+
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async verify(context: CommandVerifyContext<Params>): Promise<VerificationResult> {
 		const { params } = context;
