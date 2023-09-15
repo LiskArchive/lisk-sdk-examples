@@ -17,4 +17,3 @@ const { dryRun } = require('./dry-run');
 
 	process.exit(0);
 })();
-
