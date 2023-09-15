@@ -1,4 +1,4 @@
-const { validator, transactions } = require('@liskhq/lisk-client');
+const { validator } = require('@liskhq/lisk-client');
 const { transactionSchema } = require('../schemas');
 // Example account credentials
 const account = require('./account.json');
