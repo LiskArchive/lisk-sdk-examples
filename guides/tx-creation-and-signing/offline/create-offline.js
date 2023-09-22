@@ -10,7 +10,7 @@ const createTxOffline = () => {
 		command: "transfer",
 		fee: BigInt(10000000),
 		nonce: BigInt(23),
-		senderPublicKey: Buffer.from(account.publicKey,'hex'),
+		senderPublicKey: Buffer.from(account.publicKey, 'hex'),
 		params: Buffer.alloc(0),
 		signatures: [],
 	};
@@ -20,9 +20,9 @@ const createTxOffline = () => {
 
 	// Create the asset for the Token Transfer transaction
 	const transferParams = {
-		tokenID: Buffer.from('0000000000000000','hex'),
-		amount: BigInt(2000000000),
-		recipientAddress: Buffer.from(account.binaryAddress,'hex'),
+		tokenID: Buffer.from('0000000100000000', 'hex'),
+		amount: BigInt(1000),
+		recipientAddress: Buffer.from(account.binaryAddress, 'hex'),
 		data: 'Happy birthday!'
 	};
 
