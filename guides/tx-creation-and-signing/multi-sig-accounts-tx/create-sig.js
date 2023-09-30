@@ -11,11 +11,11 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
     const senderAccount = keys[0];
     const mandatoryAccount1 = keys[0];
     const mandatoryAccount2 = keys[1];
-    const optionalAccount1 = keys[2];
-    const optionalAccount2 = keys[3];
-    // const TAG_TRANSACTION = utils.createMessageTag('TX');
+    // const optionalAccount1 = keys[2];
+    // const optionalAccount2 = keys[3];
     const sortedMandatoryKeys = [Buffer.from(mandatoryAccount1.publicKey, 'hex'), Buffer.from(mandatoryAccount2.publicKey, 'hex')].sort((a, b) => a.compare(b));
-    const sortedOptionalKeys = [Buffer.from(optionalAccount1.publicKey, 'hex'), Buffer.from(optionalAccount2.publicKey, 'hex')].sort((a, b) => a.compare(b));
+    const sortedOptionalKeys = []
+    // const sortedOptionalKeys = [Buffer.from(optionalAccount1.publicKey, 'hex'), Buffer.from(optionalAccount2.publicKey, 'hex')].sort((a, b) => a.compare(b));
 
     const senderKeyInfo = keys[0];
     const { nonce } = await appClient.invoke('auth_getAuthAccount', {
@@ -24,7 +24,7 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
     const signData = {
         address: address.getAddressFromLisk32Address(senderAccount.address),
         nonce: BigInt(nonce),
-        numberOfSignatures: 3,
+        numberOfSignatures: 2,
         mandatoryKeys: sortedMandatoryKeys,
         optionalKeys: sortedOptionalKeys,
     };
@@ -43,17 +43,17 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
         ));
     }
 
-    for (const account of [optionalAccount1, optionalAccount2].sort((a, b) => Buffer.from(a.publicKey, 'hex').compare(Buffer.from(b.publicKey, 'hex')))) {
-        signatures.push(ed.signDataWithPrivateKey(
-            'LSK_RMSG_',
-            chainID,
-            msgBytes,
-            Buffer.from(account.privateKey, 'hex'),
-        ));
-    }
+    // for (const account of [optionalAccount1, optionalAccount2].sort((a, b) => Buffer.from(a.publicKey, 'hex').compare(Buffer.from(b.publicKey, 'hex')))) {
+    //     signatures.push(ed.signDataWithPrivateKey(
+    //         'LSK_RMSG_',
+    //         chainID,
+    //         msgBytes,
+    //         Buffer.from(account.privateKey, 'hex'),
+    //     ));
+    // }
 
     const params = {
-        numberOfSignatures: 3,
+        numberOfSignatures: 2,
         mandatoryKeys: sortedMandatoryKeys,
         optionalKeys: sortedOptionalKeys,
         signatures,

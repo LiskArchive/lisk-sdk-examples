@@ -1,68 +1,24 @@
 {
     "keys": [
         {
-            "address": "lskdz8euufb979rk9r89b2j2p6yfyyhhkoz92fhzp",
-            "keyPath": "m/44'/134'/0'",
-            "publicKey": "cfe3aae56c5b43ecd0d4ba3d84a9440c41a9884f8d96499d9e08e015b433dce7",
-            "privateKey": "0ba65a13c5a67137063ee28d0432d903cbca309fc80563bd0630394a84710653cfe3aae56c5b43ecd0d4ba3d84a9440c41a9884f8d96499d9e08e015b433dce7",
-            "plain": {
-                "generatorKeyPath": "m/25519'/134'/0'/0'",
-                "generatorKey": "a136fd16e02a443b2887bde7f3cf3fd172dbb55ce371926c2ac8fbfe84cdb38f",
-                "generatorPrivateKey": "706cec792a1d29adcf6c302a2feabeec46b86a132a5804b33daacf0f5ac5adf6a136fd16e02a443b2887bde7f3cf3fd172dbb55ce371926c2ac8fbfe84cdb38f",
-                "blsKeyPath": "m/12381/134/0/0",
-                "blsKey": "a2ac70cedd6c18b113bb510a69d7bef4cc3deecea377797ba41dd747a68fd36eac4729712bfbff281c148aa4057a53f5",
-                "blsProofOfPossession": "b449abaab602eb31b9e0efb93d3018abb5d3f78c3847afa5d4cab3a52eec22b9b97f7eaf8c637487f242c79b440dd78d00a9df68b793092a64f1eb2226ed89710a501c22a2f13a41307753c6fdd3b103d333bc7a19119a22041aafa843e70746",
-                "blsPrivateKey": "28a5a4bd4b9f41ea1c78dc3e3d4ab3d21fc6149c9d6f2bff85ee676cc6bcc603"
-            },
-            "encrypted": {}
+            "address": "lsk5x8t73kup89q3ktwyrearkzv62art29fchaj3r",
+            "publicKey": "8f5647ea5b8085db467e6554d903291059257480a1cad1b564e9ce28e5e04808",
+            "privateKey": "e2f99fc8d9c6371ea7f3fd70033a0a8f73adeb4804c2808db697e8a2790fa7638f5647ea5b8085db467e6554d903291059257480a1cad1b564e9ce28e5e04808"
         },
         {
-            "address": "lsk2q3d2mknn4nbjshzcnrbxbmda2ucmez6y9hw84",
-            "keyPath": "m/44'/134'/1'",
-            "publicKey": "79411dedbedf800fbf8c0ca0f3414a70c7deadd0b4269e80cddca18fb06b57e9",
-            "privateKey": "6dd3bf3548502feb9133b25bd3bd9b7e4aff9bb7e984ea2cc070d19fecc3692779411dedbedf800fbf8c0ca0f3414a70c7deadd0b4269e80cddca18fb06b57e9",
-            "plain": {
-                "generatorKeyPath": "m/25519'/134'/0'/1'",
-                "generatorKey": "096e158ae411a500ed403308a7c730c83daf25b164cea675f9eb2b2034837156",
-                "generatorPrivateKey": "d8582cfc9dbf63da069165e4e21458a2bd86025b1950ff8f52f08f0dc7374d5e096e158ae411a500ed403308a7c730c83daf25b164cea675f9eb2b2034837156",
-                "blsKeyPath": "m/12381/134/0/1",
-                "blsKey": "9629da5bd1b625183e5f3fbc6a4d838cb591cd0f48819d9d91ca7cd878994805e3b7ac06d5ae6e15eae0561843d98dba",
-                "blsProofOfPossession": "aad65f233e7da1f88ff9c7b7c3fea4f1fddf6896b541582f0079ae1b2fa56cca33b87a069210b8ce3cafec80d4fbdfb8179196d46419622d6ae3d57aea8d25f3037c6b6b1e1773cef5f700000f274522a87aa99127080a7647cb284b3b36faf8",
-                "blsPrivateKey": "71dc69c4939ac94b71ba84c2d589db0a4277cfeab0b83069e78984fad6e31594"
-            },
-            "encrypted": {}
+            "address": "lsk5sqag3ffmb7ruajfakoqduewy3ne7pqw7dcsaq",
+            "publicKey": "f145adb18f195628cb43d9e3fb2865abb60f0a96b636b1abcbaa8f0d9079794f",
+            "privateKey": "43b91858e7a8f5433cd006d068c95e077bd0b9bfbe626b303cb902cbf5158000f145adb18f195628cb43d9e3fb2865abb60f0a96b636b1abcbaa8f0d9079794f"
         },
         {
-            "address": "lskghjhpm8sxwhmnqjd6nez74jf8g58ne7p87z5bb",
-            "keyPath": "m/44'/134'/2'",
-            "publicKey": "cdcae255fd6122f70a3866740216b5e50904e7e462615098de64bda6fc1bb371",
-            "privateKey": "4c9f16969d3b302095e4cd302fa92a8bf76e8dab62f5397b7679fa8d14aea8ebcdcae255fd6122f70a3866740216b5e50904e7e462615098de64bda6fc1bb371",
-            "plain": {
-                "generatorKeyPath": "m/25519'/134'/0'/2'",
-                "generatorKey": "b9d2437f68cc1e0e2739a96c3b40af1b849e850418169e7509142cad4d06dd41",
-                "generatorPrivateKey": "4940049b728aeb5dd7a734c5a024fb3b943a4401b3fea9b7b7ce7993975ce9bfb9d2437f68cc1e0e2739a96c3b40af1b849e850418169e7509142cad4d06dd41",
-                "blsKeyPath": "m/12381/134/0/2",
-                "blsKey": "82f826c1ec668dff4524840eb7367a48db2bae864c5c0182cb77dea96bf6ee8a244aad520711ae9a6312a1d3fe213bac",
-                "blsProofOfPossession": "903fd4512e819b3d9090b946d1e0584e2034c7ef03748f6c5ef79aa86bd51c019ec062522e956cf8ba813b2f2f085da803b68976608c6f2b95117fd8cb0f58ff5cbf9b9a0288c258aa83215436b158df1b4b9ebb4202d418580150d861ceccac",
-                "blsPrivateKey": "0807546cf052ffca9aca3373191696dafd0d6a5331d1d925343a01c8184e797e"
-            },
-            "encrypted": {}
+            "address": "lskdqcap54eqw3szgd7r2fruxaxwp2p4ynwvrx4sy",
+            "publicKey": "29a0a6c4cb233167a23972b4f8ba90b1ab0f14519adf8e87178e95b0d58f60f1",
+            "privateKey": "fb3c5497c2c980ee7b23ff495fce973352d4549d01768cb95beddfa7eea1258f29a0a6c4cb233167a23972b4f8ba90b1ab0f14519adf8e87178e95b0d58f60f1"
         },
         {
-            "address": "lsk9wnrhkweoqva795xwmmbnaezdpeu3yw2874rav",
-            "keyPath": "m/44'/134'/3'",
-            "publicKey": "497e3f2d49dc7a61a9c727945c1fe03052fa77035f8ffa289aa2a600c8c8901e",
-            "privateKey": "e3bbcf91a7f2ae729df5afda76139d4d238fe0df6ea881063031c09b13720e13497e3f2d49dc7a61a9c727945c1fe03052fa77035f8ffa289aa2a600c8c8901e",
-            "plain": {
-                "generatorKeyPath": "m/25519'/134'/0'/3'",
-                "generatorKey": "73b6417f3c23bc434a3fcd1b235708c15497d600503149e0b0f1287337999d61",
-                "generatorPrivateKey": "80e641fd5e5fd19b0a52a2ac9d0157f11eb75d60e0256ad9971b7bea2b5ace2573b6417f3c23bc434a3fcd1b235708c15497d600503149e0b0f1287337999d61",
-                "blsKeyPath": "m/12381/134/0/3",
-                "blsKey": "b1d266b731ecf47d620224ab695ede4ce8e31f0e16c3b413fee51a4130a4927366c1edd35936e15cdff829a961ddfd4f",
-                "blsProofOfPossession": "a5024a1dacd21c6311c2a543db206d1c007c6561214049c1d8e389f2429bd017425b05cdea9e7ffbeb01c07142aaca2815664ce904573abea494a82af3ff1a12cdfb530fef88603a91cdd083469cb5664e75aa16249753bf6fad39182f7a5cf1",
-                "blsPrivateKey": "1abe3a1f5d494341ae9535cd601c88adef77653233ce865afac9d30db45f48c3"
-            },
-            "encrypted": {}
+            "address": "lskpgfsjb22hfk2jfc5ppwdnorfxq64yn6uaa45xk",
+            "publicKey": "80a4ad2abd6067328b456b4258509e036cb0d0aa0f166e7aefede745e710440c",
+            "privateKey": "2a04183dd2ef935387bf156272e90c5255700de62d367ecc624fcce275c2420580a4ad2abd6067328b456b4258509e036cb0d0aa0f166e7aefede745e710440c"
         }
     ]
 }
