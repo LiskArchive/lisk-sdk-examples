@@ -1,0 +1,14 @@
+{
+    "keys": [
+        {
+            "address": "lsk75ahtf6eoy28d9kyg6gcjs6ehkbsum7jdks4er",
+            "publicKey": "875ea16e356059dd9995aec3ee28a90fa59fce046e481bf742a2f9a5b5bde430",
+            "privateKey": "3594ffc2d95f91d0bf8409c572677de516b838fc91b06a784ff6cdaee1ec8380875ea16e356059dd9995aec3ee28a90fa59fce046e481bf742a2f9a5b5bde430"
+        },
+        {
+            "address": "lske53enem8tgqzbrsz73wssuvpprsepmhh5g3xvb",
+            "publicKey": "7e9c8397f4bd15debd8b04d63805bc6522d93a13be943b0ee9282c9029801ac8",
+            "privateKey": "3d7930e2eb187139eecfb7aa3d618980f668b73dac9be8c061c07b26cb73411c7e9c8397f4bd15debd8b04d63805bc6522d93a13be943b0ee9282c9029801ac8"
+        }
+    ]
+}
