@@ -48,7 +48,7 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
         transaction: transactions.getBytes(signedTX).toString('hex'),
     });
 
-    console.log(`Result from dry running the transaction is: `,
+    console.log('Result from dry running the transaction is: ',
         dryRunResult,
     );
 
@@ -56,7 +56,7 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
         transaction: transactions.getBytes(signedTX).toString('hex'),
     });
 
-    console.log(`Result from dry running the transaction is: `,
+    console.log('Result from posting the transaction is: ',
         postTransactionResult,
     );
 
