@@ -1,4 +1,4 @@
-const { apiClient, cryptography, codec, transactions, Transaction } = require('lisk-sdk');
+const { apiClient, cryptography, codec, transactions, Transaction, transfer } = require('lisk-sdk');
 const { accounts } = require('../accounts.json');
 const { transferParamsSchema } = require('../schemas');
 const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
@@ -38,9 +38,9 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
         signatures: [],
     });
 
-    const txWithOneSig = transactions.signMultiSignatureTransaction(unsignedTx, chainID, Buffer.from(mandatoryAccount2.privateKey, 'hex'), keys);
+    const txWithOneSig = transactions.signMultiSignatureTransaction(unsignedTx, chainID, Buffer.from(mandatoryAccount2.privateKey, 'hex'), keys, transferParamsSchema);
 
-    const signedTX = transactions.signMultiSignatureTransaction(txWithOneSig, chainID, Buffer.from(senderKeyInfo.privateKey, 'hex'), keys);
+    const signedTX = transactions.signMultiSignatureTransaction(txWithOneSig, chainID, Buffer.from(senderKeyInfo.privateKey, 'hex'), keys, transferParamsSchema);
 
     console.log(signedTX);
 
@@ -52,13 +52,13 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
         dryRunResult,
     );
 
-    const postTransactionResult = await appClient.invoke('txpool_postTransaction', {
-        transaction: transactions.getBytes(signedTX).toString('hex'),
-    });
+    // const postTransactionResult = await appClient.invoke('txpool_postTransaction', {
+    //     transaction: transactions.getBytes(signedTX).toString('hex'),
+    // });
 
-    console.log('Result from posting the transaction is: ',
-        postTransactionResult,
-    );
+    // console.log('Result from posting the transaction is: ',
+    //     postTransactionResult,
+    // );
 
     process.exit(0);
 })();

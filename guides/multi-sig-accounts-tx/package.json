@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lisk-sdk": "6.1.0-beta.1"
+    "lisk-sdk": "6.0.0-rc.3"
   }
 }

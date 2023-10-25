@@ -1,23 +1,23 @@
-const { apiClient, cryptography, codec } = require('@liskhq/lisk-client');
-const { Transaction } = require('@liskhq/lisk-chain')
+const { apiClient, cryptography, codec } = require('lisk-sdk');
+const { Transaction } = require('lisk-sdk')
 const { ed, address } = cryptography;
-const { keys } = require('./accounts.json');
+const { accounts } = require('./accounts.json');
 const { registerMultisignatureParamsSchema, multisigRegMsgSchema } = require('./schemas');
 const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
 
 (async () => {
     const appClient = await apiClient.createWSClient(RPC_ENDPOINT);
     const chainID = Buffer.from('12345678', 'hex');
-    const senderAccount = keys[0];
-    const mandatoryAccount1 = keys[0];
-    const mandatoryAccount2 = keys[1];
+    const senderAccount = accounts[0];
+    const mandatoryAccount1 = accounts[0];
+    const mandatoryAccount2 = accounts[1];
     // const optionalAccount1 = keys[2];
     // const optionalAccount2 = keys[3];
     const sortedMandatoryKeys = [Buffer.from(mandatoryAccount1.publicKey, 'hex'), Buffer.from(mandatoryAccount2.publicKey, 'hex')].sort((a, b) => a.compare(b));
     const sortedOptionalKeys = []
     // const sortedOptionalKeys = [Buffer.from(optionalAccount1.publicKey, 'hex'), Buffer.from(optionalAccount2.publicKey, 'hex')].sort((a, b) => a.compare(b));
 
-    const senderKeyInfo = keys[0];
+    const senderKeyInfo = accounts[0];
     const { nonce } = await appClient.invoke('auth_getAuthAccount', {
         address: address.getLisk32AddressFromPublicKey(Buffer.from(senderKeyInfo.publicKey, 'hex')),
     });
@@ -30,7 +30,7 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
     };
     console.log('sign data--------', signData);
 
-    const msgBytes = codec.codec.encode(multisigRegMsgSchema, signData);
+    const msgBytes = codec.encode(multisigRegMsgSchema, signData);
 
     var signatures = [];
 
@@ -64,7 +64,7 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
         module: 'auth',
         command: 'registerMultisignature',
         fee: BigInt(200000000),
-        params: codec.codec.encode(registerMultisignatureParamsSchema, params),
+        params: codec.encode(registerMultisignatureParamsSchema, params),
         nonce: BigInt(nonce),
         senderPublicKey: Buffer.from(senderKeyInfo.publicKey, 'hex'),
         signatures: [],

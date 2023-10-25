@@ -1,14 +1,16 @@
 {
     "accounts": [
         {
-            "address": "lsk75ahtf6eoy28d9kyg6gcjs6ehkbsum7jdks4er",
-            "publicKey": "875ea16e356059dd9995aec3ee28a90fa59fce046e481bf742a2f9a5b5bde430",
-            "privateKey": "3594ffc2d95f91d0bf8409c572677de516b838fc91b06a784ff6cdaee1ec8380875ea16e356059dd9995aec3ee28a90fa59fce046e481bf742a2f9a5b5bde430"
+            "address": "lsksrbokc7cez7utd6g4xke8nhofs566r2dhwcur9",
+            "keyPath": "m/44'/134'/0'",
+            "publicKey": "ca4a0fb32e382ead0e07959020571994143f806a691ee2d2c1e439c8f382e871",
+            "privateKey": "5b694dace23824b254ec48213326e1d8feb1f18ca4173cf2acd0e8bb0846ac3fca4a0fb32e382ead0e07959020571994143f806a691ee2d2c1e439c8f382e871"
         },
         {
-            "address": "lske53enem8tgqzbrsz73wssuvpprsepmhh5g3xvb",
-            "publicKey": "7e9c8397f4bd15debd8b04d63805bc6522d93a13be943b0ee9282c9029801ac8",
-            "privateKey": "3d7930e2eb187139eecfb7aa3d618980f668b73dac9be8c061c07b26cb73411c7e9c8397f4bd15debd8b04d63805bc6522d93a13be943b0ee9282c9029801ac8"
+            "address": "lsk2ht5fjh9j4ehh6etea9yf6ttsk8hpfgw4rc2kf",
+            "keyPath": "m/44'/134'/1'",
+            "publicKey": "8579a1fe88494437f8cc3e5b6115c9e277bc995ff54431d13e85428fdd02b34b",
+            "privateKey": "c66cc2b77efe06241c6ca19d3190ef128616eaa14aa73b4d49d4a4b405b3207b8579a1fe88494437f8cc3e5b6115c9e277bc995ff54431d13e85428fdd02b34b"
         }
     ]
 }
