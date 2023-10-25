@@ -1,4 +1,4 @@
-const { ED25519_PUBLIC_KEY_LENGTH, ED25519_SIGNATURE_LENGTH, ADDRESS_LENGTH, TOKEN_ID_LENGTH, MAX_DATA_LENGTH } = require('./constants');
+const { ED25519_PUBLIC_KEY_LENGTH, ED25519_SIGNATURE_LENGTH, TOKEN_ID_LENGTH, MAX_DATA_LENGTH } = require('./constants');
 
 const registerMultisignatureParamsSchema = {
     $id: '/auth/command/regMultisig',
@@ -45,47 +45,6 @@ const registerMultisignatureParamsSchema = {
     required: ['numberOfSignatures', 'mandatoryKeys', 'optionalKeys', 'signatures'],
 };
 
-const multisigRegMsgSchema = {
-    $id: '/auth/command/regMultisigMsg',
-    type: 'object',
-    required: ['address', 'nonce', 'numberOfSignatures', 'mandatoryKeys', 'optionalKeys'],
-    properties: {
-        address: {
-            dataType: 'bytes',
-            fieldNumber: 1,
-            minLength: ADDRESS_LENGTH,
-            maxLength: ADDRESS_LENGTH,
-        },
-        nonce: {
-            dataType: 'uint64',
-            fieldNumber: 2,
-        },
-        numberOfSignatures: {
-            dataType: 'uint32',
-            fieldNumber: 3,
-        },
-        mandatoryKeys: {
-            type: 'array',
-            items: {
-                dataType: 'bytes',
-                minLength: ED25519_PUBLIC_KEY_LENGTH,
-                maxLength: ED25519_PUBLIC_KEY_LENGTH,
-            },
-            fieldNumber: 4,
-        },
-        optionalKeys: {
-            type: 'array',
-            items: {
-                dataType: 'bytes',
-                minLength: ED25519_PUBLIC_KEY_LENGTH,
-                maxLength: ED25519_PUBLIC_KEY_LENGTH,
-            },
-            fieldNumber: 5,
-        },
-    },
-};
-
-
 const transferParamsSchema = {
     /** The unique identifier of the schema. */
     $id: '/lisk/transferParams',
@@ -130,4 +89,4 @@ const transferParamsSchema = {
     },
 };
 
-module.exports = { registerMultisignatureParamsSchema, multisigRegMsgSchema, transferParamsSchema };
+module.exports = { registerMultisignatureParamsSchema, transferParamsSchema };
