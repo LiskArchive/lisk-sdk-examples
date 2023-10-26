@@ -33,7 +33,7 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
         mandatoryKeys: sortedMandatoryKeys,
         optionalKeys: sortedOptionalKeys,
     };
-    console.log('Signed data -------->', unSignedData);
+    console.log('Unsigned data -------->', unSignedData);
 
     // Each multisig account registration data must be encoded with the multisigRegMsgSchema
     const msgBytes = codec.encode(multisigRegMsgSchema, unSignedData);
