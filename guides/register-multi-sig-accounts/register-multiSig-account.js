@@ -6,7 +6,7 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
 
 (async () => {
     const appClient = await apiClient.createWSClient(RPC_ENDPOINT);
-    const chainID = Buffer.from('12345678', 'hex');
+    const chainID = Buffer.from('00000001', 'hex');
 
     // The account which will be used to send the multiSignature account registration transaction.
     const senderKeyInfo = accounts[0];
