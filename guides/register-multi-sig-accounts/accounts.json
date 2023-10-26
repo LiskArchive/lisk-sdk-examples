@@ -1,16 +1,16 @@
 {
     "accounts": [
         {
-            "address": "lsksrbokc7cez7utd6g4xke8nhofs566r2dhwcur9",
+            "address": "lsk6oqambp2mgqvqxxxm5aohs6s6329sgwftax2rf",
             "keyPath": "m/44'/134'/0'",
-            "publicKey": "ca4a0fb32e382ead0e07959020571994143f806a691ee2d2c1e439c8f382e871",
-            "privateKey": "5b694dace23824b254ec48213326e1d8feb1f18ca4173cf2acd0e8bb0846ac3fca4a0fb32e382ead0e07959020571994143f806a691ee2d2c1e439c8f382e871"
+            "publicKey": "e98e8a6325730be6bf2644af83d5a0b004bb31c15858fedbd0ac2c1f89e2eece",
+            "privateKey": "5f6b8fab4419d78e7e5620c03dd4c54dbf82e14f7b18e68b983c1c1884252dd8e98e8a6325730be6bf2644af83d5a0b004bb31c15858fedbd0ac2c1f89e2eece"
         },
         {
-            "address": "lsk2ht5fjh9j4ehh6etea9yf6ttsk8hpfgw4rc2kf",
+            "address": "lskgmmkgyc67n5jrpf2trgtxtc4yjg7bpu992chba",
             "keyPath": "m/44'/134'/1'",
-            "publicKey": "8579a1fe88494437f8cc3e5b6115c9e277bc995ff54431d13e85428fdd02b34b",
-            "privateKey": "c66cc2b77efe06241c6ca19d3190ef128616eaa14aa73b4d49d4a4b405b3207b8579a1fe88494437f8cc3e5b6115c9e277bc995ff54431d13e85428fdd02b34b"
+            "publicKey": "c61cd862a8b7f73857b248a4358a7b35c29ca273d76ba3819e8c54b62801f16e",
+            "privateKey": "df4f52c787f9cb993384c42c2c146bd1d4d433790d1e175baa03c484543bf760c61cd862a8b7f73857b248a4358a7b35c29ca273d76ba3819e8c54b62801f16e"
         }
     ]
 }

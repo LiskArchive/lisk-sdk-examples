@@ -1,4 +1,4 @@
-const { ED25519_PUBLIC_KEY_LENGTH, ED25519_SIGNATURE_LENGTH, TOKEN_ID_LENGTH, MAX_DATA_LENGTH } = require('./constants');
+const { ED25519_PUBLIC_KEY_LENGTH, ED25519_SIGNATURE_LENGTH } = require('./constants');
 
 const registerMultisignatureParamsSchema = {
     $id: '/auth/command/regMultisig',
