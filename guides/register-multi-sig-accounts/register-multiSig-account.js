@@ -1,7 +1,7 @@
 const { apiClient, cryptography, codec, Transaction, multisigRegMsgSchema } = require('lisk-sdk');
 const { ed, address } = cryptography;
 const { accounts } = require('./accounts.json');
-const { registerMultisignatureParamsSchema, } = require('./schemas');
+const { registerMultisignatureParamsSchema, } = require('lisk-framework/dist-node/modules/auth/schemas');
 const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
 
 (async () => {
