@@ -1,17 +1,20 @@
 # Steps to execute the script
 
 - Install the `lisk-sdk` package by executing the following:
+
     ```
     npm install
     ```
-- Replace the account details available in the `accounts.json` file with the accounts of your node.
+- Replace the accounts details available in the `accounts.json` file with the accounts of your node.
 - Update the `chainID` in the `register-multiSig-account.js` script to match the `chainID` of the node being used to test the script.
 - Execute the aforementioned script to register a multi-signature account.
+
     ```
     node register-multiSig-account.js
     ```
 - Invoke `auth_getAuthAccount` to check the account's status.
 The response should be similar to the following:
+
     ```
     {
         "nonce": "1",
