@@ -29,7 +29,7 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
     const unSignedData = {
         address: address.getAddressFromLisk32Address(senderKeyInfo.address),
         nonce: BigInt(nonce),
-        numberOfSignatures: 2,
+        numberOfSignatures: sortedMandatoryKeys.length + sortedOptionalKeys.length,
         mandatoryKeys: sortedMandatoryKeys,
         optionalKeys: sortedOptionalKeys,
     };
