@@ -1,7 +1,7 @@
 const { apiClient, cryptography, codec, Transaction, multisigRegMsgSchema } = require('lisk-sdk');
 const { ed, address } = cryptography;
 const { accounts } = require('./accounts.json');
-const { registerMultisignatureParamsSchema, } = require('./schemas');
+const { registerMultisignatureParamsSchema, } = require('lisk-framework/dist-node/modules/auth/schemas');
 const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
 
 (async () => {
@@ -11,16 +11,17 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
     // The account which will be used to send the multiSignature account registration transaction.
     const senderKeyInfo = accounts[0];
 
-    // For this example, we are using two mandatory accounts. 
-    const mandatoryAccount1 = accounts[0];
-    const mandatoryAccount2 = accounts[1];
-    const sortedMandatoryKeys = [Buffer.from(mandatoryAccount1.publicKey, 'hex'), Buffer.from(mandatoryAccount2.publicKey, 'hex')].sort((a, b) => a.compare(b));
+    // const mandatoryAccount1 = accounts[0];
+    // const mandatoryAccount2 = accounts[1];
+    // const sortedMandatoryKeys = [Buffer.from(mandatoryAccount1.publicKey, 'hex'), Buffer.from(mandatoryAccount2.publicKey, 'hex')].sort((a, b) => a.compare(b));
+    const sortedMandatoryKeys = []; // In case you want to use multiple 'Mandatory' accounts, comment this line and un-comment + edit the 3 lines above.
 
-    // const optionalAccount1 = keys[2];
-    // const optionalAccount2 = keys[3];
-    // const sortedOptionalKeys = [Buffer.from(optionalAccount1.publicKey, 'hex'), Buffer.from(optionalAccount2.publicKey, 'hex')].sort((a, b) => a.compare(b));
+    // For this example, we are using three Optional accounts.
+    const optionalAccount1 = accounts[0];
+    const optionalAccount2 = accounts[1];
+    const optionalAccount3 = accounts[2];
 
-    const sortedOptionalKeys = []; // In case you want to use multiple 'Optional' accounts, comment this line and un-comment+edit the 3 lines above.
+    const sortedOptionalKeys = [Buffer.from(optionalAccount1.publicKey, 'hex'), Buffer.from(optionalAccount2.publicKey, 'hex'), Buffer.from(optionalAccount3.publicKey, 'hex')].sort((a, b) => a.compare(b));
 
     const { nonce } = await appClient.invoke('auth_getAuthAccount', {
         address: address.getLisk32AddressFromPublicKey(Buffer.from(senderKeyInfo.publicKey, 'hex')),
@@ -40,17 +41,7 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
 
     var signatures = [];
 
-    // Use the encoded msgBytes to push signatures from each mandatory account.
-    for (const account of [mandatoryAccount1, mandatoryAccount2].sort((a, b) => Buffer.from(a.publicKey, 'hex').compare(Buffer.from(b.publicKey, 'hex')))) {
-        signatures.push(ed.signDataWithPrivateKey(
-            'LSK_RMSG_',
-            chainID,
-            msgBytes,
-            Buffer.from(account.privateKey, 'hex'),
-        ));
-    }
-
-    // for (const account of [optionalAccount1, optionalAccount2].sort((a, b) => Buffer.from(a.publicKey, 'hex').compare(Buffer.from(b.publicKey, 'hex')))) {
+    // for (const account of [mandatoryAccount1, mandatoryAccount2].sort((a, b) => Buffer.from(a.publicKey, 'hex').compare(Buffer.from(b.publicKey, 'hex')))) {
     //     signatures.push(ed.signDataWithPrivateKey(
     //         'LSK_RMSG_',
     //         chainID,
@@ -59,11 +50,21 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
     //     ));
     // }
 
+    // Use the encoded msgBytes to push signatures from each Optional account.
+    for (const account of [optionalAccount1, optionalAccount2, optionalAccount3].sort((a, b) => Buffer.from(a.publicKey, 'hex').compare(Buffer.from(b.publicKey, 'hex')))) {
+        signatures.push(ed.signDataWithPrivateKey(
+            'LSK_RMSG_',
+            chainID,
+            msgBytes,
+            Buffer.from(account.privateKey, 'hex'),
+        ));
+    }
+
     const transactionParams = {
         numberOfSignatures: 2,
-        mandatoryKeys: sortedMandatoryKeys, // Contains keys of both mandatory accounts
-        optionalKeys: sortedOptionalKeys,   // Empty array
-        signatures,                         // Contains signatures from both mandatory accounts
+        mandatoryKeys: sortedMandatoryKeys, // Empty array
+        optionalKeys: sortedOptionalKeys,   // Contains public keys of all three optional accounts
+        signatures,                         // Contains signatures from all three optional accounts
     };
     console.log('Transaction params in script-------->', transactionParams);
 
