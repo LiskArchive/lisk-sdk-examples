@@ -108,11 +108,9 @@ rl.question("Confirm parameters with 'yes'", function (confirmed) {
 
 async function dryRun(fullySignedTxHex) {
     const appClient = await apiClient.createWSClient(RPC_ENDPOINT);
-    // const result = await appClient.invoke('system_getNodeInfo');
     const result = await appClient.invoke('txpool_dryRunTransaction', {
         transaction: fullySignedTxHex,
     });
     console.log('Result from dry running the transaction is: ', result);
-    console.log("\nBYE BYE !!!");
     process.exit(0);
 }
