@@ -61,7 +61,7 @@ fs.readFile('signedTx.json', (err, data) => {
     }
 })
 
-rl.question("Confirm parameters with 'yes'", function (confirmed) {
+rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
     confirmed = confirmed.toLowerCase();
     if (confirmed == "yes" || confirmed == "y") {
         process.argv.forEach(function (val, index) {
@@ -69,8 +69,6 @@ rl.question("Confirm parameters with 'yes'", function (confirmed) {
                 privateKeyStr = val;
             }
         });
-
-        console.log("Please only proceed to sign the registration message if you confirm the correctness of the following parameters for the multi-signature registration:");
 
         if (existingSignedTx == 2) {
             console.log("Running this!")
@@ -87,6 +85,7 @@ rl.question("Confirm parameters with 'yes'", function (confirmed) {
             } catch (err) {
                 console.error('Error writing the file:', err);
             }
+            process.exit(0);
         } else {
             console.log("Running THAT!")
             signedTX['nonce'] = BigInt(signedTX.nonce);
@@ -101,7 +100,6 @@ rl.question("Confirm parameters with 'yes'", function (confirmed) {
             const fullySignedTx = new Transaction(signedTX)
             const fullySignedTxHex = fullySignedTx.getBytes().toString('hex');
             dryRun(fullySignedTxHex)
-
         }
     }
 });
