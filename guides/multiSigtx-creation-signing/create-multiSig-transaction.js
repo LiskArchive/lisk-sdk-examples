@@ -87,7 +87,6 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             }
             process.exit(0);
         } else {
-            console.log("Running THAT!")
             signedTX['nonce'] = BigInt(signedTX.nonce);
             signedTX['fee'] = BigInt(signedTX.fee);
             signedTX['senderPublicKey'] = Buffer.from(signedTX.senderPublicKey, 'hex');
