@@ -1,11 +1,11 @@
 const { apiClient, cryptography, codec, Transaction, transactions } = require('lisk-sdk');
 const { transferParamsSchema } = require('lisk-framework/dist-node/modules/token/schemas');
 const { accounts } = require('./accounts.json');
-const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
 const signedTX = require('./signedTx.json');
-
 const readline = require("readline");
-const fs = require("fs")
+const fs = require("fs");
+
+const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
 let privateKeyStr;
 let existingSignedTx;
 const chainID = Buffer.from('00000001', 'hex');
@@ -16,10 +16,6 @@ const sortedOptionalKeys = [Buffer.from(optionalAccount1.publicKey, 'hex'), Buff
 const sortedMandatoryKeys = [];
 const senderKeyInfo = accounts[0];
 const latestNonce = BigInt(3);
-
-// const authAccountDetails = await appClient.invoke('auth_getAuthAccount', {
-//     address: mandatoryAccount1.address,
-// });
 
 const keys = {
     mandatoryKeys: sortedMandatoryKeys,
@@ -49,7 +45,7 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-// (async () => {
+
 if (process.argv.length < 3) {
     console.log("Please provide all the required parameter when executing the script:");
     console.log("node create-multiSig-transaction-offline.js PRIVATEKEY");
@@ -74,10 +70,10 @@ rl.question("Confirm parameters with 'yes'", function (confirmed) {
             }
         });
 
-        // const appClient = await apiClient.createWSClient(RPC_ENDPOINT);
         console.log("Please only proceed to sign the registration message if you confirm the correctness of the following parameters for the multi-signature registration:");
 
         if (existingSignedTx == 2) {
+            console.log("Running this!")
             let txWithOneSig = transactions.signMultiSignatureTransaction(unSignedTx, chainID, Buffer.from(privateKeyStr, 'hex'), keys);
             txWithOneSig['senderPublicKey'] = unSignedTx.senderPublicKey.toString('hex');
             txWithOneSig['signatures'][0] = unSignedTx.signatures[0].toString('hex');
@@ -92,6 +88,7 @@ rl.question("Confirm parameters with 'yes'", function (confirmed) {
                 console.error('Error writing the file:', err);
             }
         } else {
+            console.log("Running THAT!")
             signedTX['nonce'] = BigInt(signedTX.nonce);
             signedTX['fee'] = BigInt(signedTX.fee);
             signedTX['senderPublicKey'] = Buffer.from(signedTX.senderPublicKey, 'hex');
@@ -102,32 +99,20 @@ rl.question("Confirm parameters with 'yes'", function (confirmed) {
             signedTX['id'] = Buffer.from(signedTX.id, 'hex');
             transactions.signMultiSignatureTransaction(signedTX, chainID, Buffer.from(privateKeyStr, 'hex'), keys);
             const fullySignedTx = new Transaction(signedTX)
-            console.log("Transaction with BOTH signature ------>", fullySignedTx.getBytes().toString('hex'));
+            const fullySignedTxHex = fullySignedTx.getBytes().toString('hex');
+            dryRun(fullySignedTxHex)
+
         }
     }
-    rl.close();
 });
 
-rl.on("close", function () {
+async function dryRun(fullySignedTxHex) {
+    const appClient = await apiClient.createWSClient(RPC_ENDPOINT);
+    // const result = await appClient.invoke('system_getNodeInfo');
+    const result = await appClient.invoke('txpool_dryRunTransaction', {
+        transaction: fullySignedTxHex,
+    });
+    console.log('Result from dry running the transaction is: ', result);
     console.log("\nBYE BYE !!!");
     process.exit(0);
-});
-
-
-
-
-// const dryRunResult = await appClient.invoke('txpool_dryRunTransaction', {
-//     transaction: transactions.getSigningBytes(signedTX).toString('hex'),
-// });
-
-// console.log('Result from dry running the transaction is: ',
-//     dryRunResult,
-// );
-
-// const postTransactionResult = await appClient.invoke('txpool_postTransaction', {
-//     transaction: transactions.getSigningBytes(signedTX).toString('hex'),
-// });
-
-// console.log('Result from posting the transaction is: ',
-//     postTransactionResult,
-// );
+}
