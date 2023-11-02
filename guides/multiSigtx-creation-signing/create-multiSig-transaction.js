@@ -71,7 +71,6 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
         });
 
         if (existingSignedTx == 2) {
-            console.log("Running this!")
             let txWithOneSig = transactions.signMultiSignatureTransaction(unSignedTx, chainID, Buffer.from(privateKeyStr, 'hex'), keys);
             txWithOneSig['senderPublicKey'] = unSignedTx.senderPublicKey.toString('hex');
             txWithOneSig['signatures'][0] = unSignedTx.signatures[0].toString('hex');
@@ -82,6 +81,7 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             try {
                 fs.writeFileSync('signedTx.json', JSON.stringify(txWithOneSig, (_, v) => typeof v === 'bigint' ? v.toString() : v));
                 console.log('File written successfully');
+                console.log("Please now sign the transaction with a different Private Key!")
             } catch (err) {
                 console.error('Error writing the file:', err);
             }
