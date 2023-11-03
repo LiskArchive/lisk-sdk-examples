@@ -73,49 +73,5 @@ const transferParamsSchema = {
   },
 };
 
-const registerMultisignatureParamsSchema = {
-  $id: '/test/auth/command/regMultisig',
-  type: 'object',
-  properties: {
-    numberOfSignatures: {
-      dataType: 'uint32',
-      fieldNumber: 1,
-      minimum: 1,
-      maximum: 64,
-    },
-    mandatoryKeys: {
-      type: 'array',
-      items: {
-        dataType: 'bytes',
-        minLength: 32,
-        maxLength: 32,
-      },
-      fieldNumber: 2,
-      minItems: 0,
-      maxItems: 64,
-    },
-    optionalKeys: {
-      type: 'array',
-      items: {
-        dataType: 'bytes',
-        minLength: 32,
-        maxLength: 32,
-      },
-      fieldNumber: 3,
-      minItems: 0,
-      maxItems: 64,
-    },
-    signatures: {
-      type: 'array',
-      items: {
-        dataType: 'bytes',
-        minLength: 64,
-        maxLength: 64,
-      },
-      fieldNumber: 4,
-    },
-  },
-  required: ['numberOfSignatures', 'mandatoryKeys', 'optionalKeys', 'signatures'],
-};
 
-module.exports = { transferParamsSchema, transactionSchema, registerMultisignatureParamsSchema };
+module.exports = { transferParamsSchema, transactionSchema };
