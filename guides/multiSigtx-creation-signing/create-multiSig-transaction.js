@@ -80,7 +80,7 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             txWithOneSig['id'] = txWithOneSig.id.toString('hex');
             try {
                 fs.writeFileSync('signedTx.json', JSON.stringify(txWithOneSig, (_, v) => typeof v === 'bigint' ? v.toString() : v));
-                console.log('File written successfully');
+                console.log('The file is written successfully');
                 console.log("Please now sign the transaction with a different Private Key!")
             } catch (err) {
                 console.error('Error writing the file:', err);
@@ -104,7 +104,7 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             console.log(fullySignedTxHex);
             //dryRun(fullySignedTxHex);
             //postTransaction(fullySignedTxHex);
-            // process.exit(0);
+            process.exit(0);
         }
     }
 });

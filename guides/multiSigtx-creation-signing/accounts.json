@@ -3,20 +3,17 @@
         {
             "address": "lsk6oqambp2mgqvqxxxm5aohs6s6329sgwftax2rf",
             "keyPath": "m/44'/134'/0'",
-            "publicKey": "e98e8a6325730be6bf2644af83d5a0b004bb31c15858fedbd0ac2c1f89e2eece",
-            "privateKey": "5f6b8fab4419d78e7e5620c03dd4c54dbf82e14f7b18e68b983c1c1884252dd8e98e8a6325730be6bf2644af83d5a0b004bb31c15858fedbd0ac2c1f89e2eece"
+            "publicKey": "e98e8a6325730be6bf2644af83d5a0b004bb31c15858fedbd0ac2c1f89e2eece"
         },
         {
             "address": "lskgmmkgyc67n5jrpf2trgtxtc4yjg7bpu992chba",
             "keyPath": "m/44'/134'/1'",
-            "publicKey": "c61cd862a8b7f73857b248a4358a7b35c29ca273d76ba3819e8c54b62801f16e",
-            "privateKey": "df4f52c787f9cb993384c42c2c146bd1d4d433790d1e175baa03c484543bf760c61cd862a8b7f73857b248a4358a7b35c29ca273d76ba3819e8c54b62801f16e"
+            "publicKey": "c61cd862a8b7f73857b248a4358a7b35c29ca273d76ba3819e8c54b62801f16e"
         },
         {
             "address": "lskrw8gmg6fgdkkgj48q364quzkoqzya479x7rc3d",
             "keyPath": "m/44'/134'/2'",
-            "publicKey": "fad413df3fe5e7961b81ee8dc168d13d7e1f5cccdd062ed77da77142c7d571f0",
-            "privateKey": "dfe7b84b3a919bd7d170509072aaf92ab9a817384a0c315b72960f62764c13c4fad413df3fe5e7961b81ee8dc168d13d7e1f5cccdd062ed77da77142c7d571f0"
+            "publicKey": "fad413df3fe5e7961b81ee8dc168d13d7e1f5cccdd062ed77da77142c7d571f0"
         }
     ]
 }
