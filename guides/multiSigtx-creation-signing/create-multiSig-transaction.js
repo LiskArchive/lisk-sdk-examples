@@ -37,7 +37,7 @@ const unSignedTx = new Transaction({
     nonce: latestNonce,
     senderPublicKey: Buffer.from(senderKeyInfo.publicKey, 'hex'),
     fee: BigInt(1000000),
-    params: encodedTransferParams,
+    params: tokenTransferParams,
     signatures: [],
 });
 
@@ -71,12 +71,12 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
         });
 
         if (existingSignedTx == 2) {
-            let txWithOneSig = transactions.signMultiSignatureTransaction(unSignedTx, chainID, Buffer.from(privateKeyStr, 'hex'), keys);
+            let txWithOneSig = transactions.signMultiSignatureTransaction(unSignedTx, chainID, Buffer.from(privateKeyStr, 'hex'), keys, transferParamsSchema);
             txWithOneSig['senderPublicKey'] = unSignedTx.senderPublicKey.toString('hex');
             txWithOneSig['signatures'][0] = unSignedTx.signatures[0].toString('hex');
             txWithOneSig['signatures'][1] = unSignedTx.signatures[1].toString('hex');
             txWithOneSig['signatures'][2] = unSignedTx.signatures[2].toString('hex');
-            txWithOneSig['params'] = unSignedTx.params.toString('hex');
+            // txWithOneSig['params'] = unSignedTx.params.toString('hex');
             txWithOneSig['id'] = txWithOneSig.id.toString('hex');
             try {
                 fs.writeFileSync('signedTx.json', JSON.stringify(txWithOneSig, (_, v) => typeof v === 'bigint' ? v.toString() : v));
@@ -93,12 +93,18 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             signedTX['signatures'][0] = Buffer.from(signedTX.signatures[0], 'hex');
             signedTX['signatures'][1] = Buffer.from(signedTX.signatures[1], 'hex');
             signedTX['signatures'][2] = Buffer.from(signedTX.signatures[2], 'hex');
-            signedTX['params'] = Buffer.from(signedTX.params, 'hex');
+            signedTX['params']['tokenID'] = unSignedTx.params['tokenID'];
+            signedTX['params']['recipientAddress'] = unSignedTx.params['recipientAddress'];
+            signedTX['params']['amount'] = unSignedTx.params['amount'];
             signedTX['id'] = Buffer.from(signedTX.id, 'hex');
-            transactions.signMultiSignatureTransaction(signedTX, chainID, Buffer.from(privateKeyStr, 'hex'), keys);
+            transactions.signMultiSignatureTransaction(signedTX, chainID, Buffer.from(privateKeyStr, 'hex'), keys, transferParamsSchema);
             const fullySignedTx = new Transaction(signedTX)
+            fullySignedTx.params = encodedTransferParams
             const fullySignedTxHex = fullySignedTx.getBytes().toString('hex');
-            dryRun(fullySignedTxHex)
+            console.log(fullySignedTxHex);
+            //dryRun(fullySignedTxHex);
+            //postTransaction(fullySignedTxHex);
+            // process.exit(0);
         }
     }
 });
@@ -109,5 +115,12 @@ async function dryRun(fullySignedTxHex) {
         transaction: fullySignedTxHex,
     });
     console.log('Result from dry running the transaction is: ', result);
+}
+async function postTransaction(fullySignedTxHex) {
+    const appClient = await apiClient.createWSClient(RPC_ENDPOINT);
+    const result = await appClient.invoke('txpool_postTransaction', {
+        transaction: fullySignedTxHex,
+    });
+    console.log('Result from posting the transaction is: ', result);
     process.exit(0);
 }
