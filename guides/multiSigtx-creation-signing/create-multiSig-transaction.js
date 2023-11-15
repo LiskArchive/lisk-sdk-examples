@@ -74,6 +74,8 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             txWithOneSig['signatures'][2] = unSignedTx.signatures[2].toString('hex');
             // txWithOneSig['params'] = unSignedTx.params.toString('hex');
             txWithOneSig['id'] = txWithOneSig.id.toString('hex');
+            txWithOneSig['params']['tokenID'] = tokenTransferParams.tokenID.toString('hex');
+            txWithOneSig['params']['recipientAddress'] = tokenTransferParams.recipientAddress.toString('hex');
             try {
                 fs.writeFileSync('signedTx.json', JSON.stringify(txWithOneSig, (_, v) => typeof v === 'bigint' ? v.toString() : v));
                 console.log('The file is written successfully');
