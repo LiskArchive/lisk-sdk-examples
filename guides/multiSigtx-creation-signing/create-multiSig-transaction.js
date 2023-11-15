@@ -72,7 +72,6 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             txWithOneSig['signatures'][0] = unSignedTx.signatures[0].toString('hex');
             txWithOneSig['signatures'][1] = unSignedTx.signatures[1].toString('hex');
             txWithOneSig['signatures'][2] = unSignedTx.signatures[2].toString('hex');
-            // txWithOneSig['params'] = unSignedTx.params.toString('hex');
             txWithOneSig['id'] = txWithOneSig.id.toString('hex');
             txWithOneSig['params']['tokenID'] = tokenTransferParams.tokenID.toString('hex');
             txWithOneSig['params']['recipientAddress'] = tokenTransferParams.recipientAddress.toString('hex');
@@ -97,7 +96,6 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             signedTX['id'] = Buffer.from(signedTX.id, 'hex');
             transactions.signMultiSignatureTransaction(signedTX, chainID, Buffer.from(privateKeyStr, 'hex'), keys, transferParamsSchema);
             const fullySignedTx = new Transaction(signedTX)
-            console.log(fullySignedTx);
             fullySignedTx.params = encodedTransferParams
             const fullySignedTxHex = fullySignedTx.getBytes().toString('hex');
             console.log(fullySignedTxHex);
