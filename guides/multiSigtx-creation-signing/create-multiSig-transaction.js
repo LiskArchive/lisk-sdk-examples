@@ -64,11 +64,7 @@ fs.readFile('signedTx.json', (err, data) => {
 rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
     confirmed = confirmed.toLowerCase();
     if (confirmed == "yes" || confirmed == "y") {
-        process.argv.forEach(function (val, index) {
-            if (index === 2) {
-                privateKeyStr = val;
-            }
-        });
+        privateKeyStr = process.argv[2];
 
         if (existingSignedTx == 2) {
             let txWithOneSig = transactions.signMultiSignatureTransaction(unSignedTx, chainID, Buffer.from(privateKeyStr, 'hex'), keys, transferParamsSchema);

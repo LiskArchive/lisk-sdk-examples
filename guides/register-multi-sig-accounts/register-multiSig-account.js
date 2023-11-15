@@ -66,7 +66,7 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
         optionalKeys: sortedOptionalKeys,   // Contains public keys of all three optional accounts
         signatures,                         // Contains signatures from all three optional accounts
     };
-    console.log('Transaction params in script-------->', transactionParams);
+    console.log('Transaction params with signatures for all the given keys-------->', transactionParams);
 
     const transactionObject = new Transaction({
         module: 'auth',
@@ -82,6 +82,8 @@ const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
         chainID,
         Buffer.from(senderKeyInfo.privateKey, 'hex'),
     );
+
+    console.log("Signed Transaction with the sender's key ------->", transactionObject)
 
     const dryRunResult = await appClient.invoke('txpool_dryRunTransaction', {
         transaction: transactionObject.getBytes().toString('hex'),
