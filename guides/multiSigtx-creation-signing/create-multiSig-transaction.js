@@ -56,10 +56,7 @@ if (process.argv.length < 3) {
 }
 
 fs.readFile('signedTx.json', (err, data) => {
-    if (err) {
-        existingSignedTx = '';
-    }
-    else {
+    if (Object.keys(signedTX).length === 0) {
         existingSignedTx = data.byteLength;
     }
 })
@@ -100,6 +97,7 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             signedTX['id'] = Buffer.from(signedTX.id, 'hex');
             transactions.signMultiSignatureTransaction(signedTX, chainID, Buffer.from(privateKeyStr, 'hex'), keys, transferParamsSchema);
             const fullySignedTx = new Transaction(signedTX)
+            console.log(fullySignedTx);
             fullySignedTx.params = encodedTransferParams
             const fullySignedTxHex = fullySignedTx.getBytes().toString('hex');
             console.log(fullySignedTxHex);
