@@ -11,5 +11,5 @@
 - Update the values of the `chainID` and the `tokenID` in the script to match with the node being used to test the script.
 - To run the script, the signatory should pass their private key to the following command like this:
     ```
-    node create-multiSig-transaction.js SIGNATORY'S PRIVATE KEY
+    node create-multiSig-transaction.js SIGNATORY'S_PRIVATE_KEY
     ```

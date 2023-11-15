@@ -5,10 +5,13 @@ const signedTX = require('./signedTx.json');
 const readline = require("readline");
 const fs = require("fs");
 
+// Change these values as per your node.
 const RPC_ENDPOINT = 'ws://127.0.0.1:7887/rpc-ws';
+const chainID = Buffer.from('00000001', 'hex');
+const tokenID = Buffer.from('0000000100000000', 'hex');
+
 let privateKeyStr;
 let existingSignedTx;
-const chainID = Buffer.from('00000001', 'hex');
 const optionalAccount1 = accounts[0];
 const optionalAccount2 = accounts[1];
 const optionalAccount3 = accounts[2];
@@ -23,7 +26,7 @@ const keys = {
 };
 
 const tokenTransferParams = {
-    tokenID: Buffer.from('0000000100000000', 'hex'),
+    tokenID: tokenID,
     recipientAddress: cryptography.address.getAddressFromLisk32Address(accounts[1].address),
     amount: BigInt(20000000),
     data: 'Hello!',
