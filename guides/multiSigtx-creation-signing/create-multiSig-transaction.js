@@ -55,18 +55,12 @@ if (process.argv.length < 3) {
     process.exit(1);
 }
 
-fs.readFile('signedTx.json', (err, data) => {
-    if (Object.keys(signedTX).length === 0) {
-        existingSignedTx = data.byteLength;
-    }
-})
-
 rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
     confirmed = confirmed.toLowerCase();
     if (confirmed == "yes" || confirmed == "y") {
         privateKeyStr = process.argv[2];
 
-        if (existingSignedTx == 2) {
+        if (Object.keys(signedTX).length === 0) {
             let txWithOneSig = transactions.signMultiSignatureTransaction(unSignedTx, chainID, Buffer.from(privateKeyStr, 'hex'), keys, transferParamsSchema);
             txWithOneSig['senderPublicKey'] = unSignedTx.senderPublicKey.toString('hex');
             txWithOneSig['signatures'][0] = unSignedTx.signatures[0].toString('hex');
