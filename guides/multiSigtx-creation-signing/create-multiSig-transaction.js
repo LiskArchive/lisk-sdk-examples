@@ -93,8 +93,10 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             fullySignedTx.params = encodedTransferParams
             const fullySignedTxHex = fullySignedTx.getBytes().toString('hex');
             console.log(fullySignedTxHex);
-            //dryRun(fullySignedTxHex);
-            //postTransaction(fullySignedTxHex);
+
+            // Un-comment the following lines when in online mode and connected to a node to dry-run or post a transaction.
+            // dryRun(fullySignedTxHex);
+            // postTransaction(fullySignedTxHex);
             process.exit(0);
         }
     }
