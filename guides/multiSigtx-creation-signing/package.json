@@ -2,7 +2,7 @@
   "name": "multisigtx-creation-signing",
   "version": "1.0.0",
   "description": "",
-  "main": "create-multiSig-transaction-offline.js",
+  "main": "create-multiSig-transaction.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -51,7 +51,7 @@ const rl = readline.createInterface({
 
 if (process.argv.length < 3) {
     console.log("Please provide all the required parameter when executing the script:");
-    console.log("node create-multiSig-transaction-offline.js PRIVATEKEY");
+    console.log("node create-multiSig-transaction.js PRIVATEKEY");
     process.exit(1);
 }
 
