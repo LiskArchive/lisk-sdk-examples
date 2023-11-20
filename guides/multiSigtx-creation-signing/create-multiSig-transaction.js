@@ -11,7 +11,6 @@ const chainID = Buffer.from('00000001', 'hex');
 const tokenID = Buffer.from('0000000100000000', 'hex');
 
 let privateKeyStr;
-let existingSignedTx;
 const optionalAccount1 = accounts[0];
 const optionalAccount2 = accounts[1];
 const optionalAccount3 = accounts[2];
@@ -61,7 +60,10 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
         privateKeyStr = process.argv[2];
 
         if (Object.keys(signedTX).length === 0) {
+            // Take all the variables defined earlier and sign the transaction with the provided private key
             let txWithOneSig = transactions.signMultiSignatureTransaction(unSignedTx, chainID, Buffer.from(privateKeyStr, 'hex'), keys, transferParamsSchema);
+
+            // Convert the signed transaction object into a JSON object
             txWithOneSig['senderPublicKey'] = unSignedTx.senderPublicKey.toString('hex');
             txWithOneSig['signatures'][0] = unSignedTx.signatures[0].toString('hex');
             txWithOneSig['signatures'][1] = unSignedTx.signatures[1].toString('hex');
@@ -70,6 +72,7 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             txWithOneSig['params']['tokenID'] = tokenTransferParams.tokenID.toString('hex');
             txWithOneSig['params']['recipientAddress'] = tokenTransferParams.recipientAddress.toString('hex');
             try {
+                // Write the JSON object to the 'signedTx.json' file so that it can be shared with the other signatory.
                 fs.writeFileSync('signedTx.json', JSON.stringify(txWithOneSig, (_, v) => typeof v === 'bigint' ? v.toString() : v));
                 console.log('The file is written successfully');
                 console.log("Please now sign the transaction with a different Private Key!")
@@ -78,6 +81,7 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             }
             process.exit(0);
         } else {
+            // Convert the JSON object read on the 7th step back to the Lisk accepted format, for the signing process.
             signedTX['nonce'] = BigInt(signedTX.nonce);
             signedTX['fee'] = BigInt(signedTX.fee);
             signedTX['senderPublicKey'] = Buffer.from(signedTX.senderPublicKey, 'hex');
@@ -88,9 +92,13 @@ rl.question("Do you want to sign the transaction? 'yes'", function (confirmed) {
             signedTX['params']['recipientAddress'] = unSignedTx.params['recipientAddress'];
             signedTX['params']['amount'] = unSignedTx.params['amount'];
             signedTX['id'] = Buffer.from(signedTX.id, 'hex');
+
+            // Sign the transaction using the second signatory's private key
             transactions.signMultiSignatureTransaction(signedTX, chainID, Buffer.from(privateKeyStr, 'hex'), keys, transferParamsSchema);
             const fullySignedTx = new Transaction(signedTX)
             fullySignedTx.params = encodedTransferParams
+
+            // Get the hex string of the transaction which will be used in either dry running or sending the transaction to the node
             const fullySignedTxHex = fullySignedTx.getBytes().toString('hex');
             console.log(fullySignedTxHex);
 
