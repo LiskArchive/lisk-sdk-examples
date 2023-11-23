@@ -1,0 +1,14 @@
+{
+  "name": "multisigtx-creation-signing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "create-multiSig-transaction.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lisk-sdk": "6.0.0-rc.5"
+  }
+}

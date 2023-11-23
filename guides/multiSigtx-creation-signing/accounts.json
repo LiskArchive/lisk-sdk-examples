@@ -1,0 +1,19 @@
+{
+    "accounts": [
+        {
+            "address": "lsk6oqambp2mgqvqxxxm5aohs6s6329sgwftax2rf",
+            "keyPath": "m/44'/134'/0'",
+            "publicKey": "e98e8a6325730be6bf2644af83d5a0b004bb31c15858fedbd0ac2c1f89e2eece"
+        },
+        {
+            "address": "lskgmmkgyc67n5jrpf2trgtxtc4yjg7bpu992chba",
+            "keyPath": "m/44'/134'/1'",
+            "publicKey": "c61cd862a8b7f73857b248a4358a7b35c29ca273d76ba3819e8c54b62801f16e"
+        },
+        {
+            "address": "lskrw8gmg6fgdkkgj48q364quzkoqzya479x7rc3d",
+            "keyPath": "m/44'/134'/2'",
+            "publicKey": "fad413df3fe5e7961b81ee8dc168d13d7e1f5cccdd062ed77da77142c7d571f0"
+        }
+    ]
+}
