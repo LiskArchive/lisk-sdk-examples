@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable class-methods-use-this */
 
 import {
@@ -12,6 +13,7 @@ import { MessageStore } from '../stores/message';
 import { counterKey, CounterStore, CounterStoreData } from '../stores/counter';
 import { ModuleConfig } from '../types';
 import { NewHelloEvent } from '../events/new_hello';
+// import { Logger } from '@oclif/core/lib/errors';
 
 interface Params {
 	message: string;
@@ -21,7 +23,7 @@ export class CreateHelloCommand extends BaseCommand {
 	public schema = createHelloSchema;
 	private _blacklist!: string[];
 
-	// eslint-disable-next-line @typescript-eslint/require-await
+	// eslint-disable-next-line @typescript-eslint/require-await, @typescript-eslint/member-ordering
 	public async init(config: ModuleConfig): Promise<void> {
 		// Set _blacklist to the value of the blacklist defined in the module config
 		this._blacklist = config.blacklist;
@@ -33,21 +35,33 @@ export class CreateHelloCommand extends BaseCommand {
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async verify(context: CommandVerifyContext<Params>): Promise<VerificationResult> {
-		let validation: VerificationResult;
+		// let validation: VerificationResult;
 		const wordList = context.params.message.split(" ");
 		const found = this._blacklist.filter(value => wordList.includes(value));
 		if (found.length > 0) {
-		  context.logger.info("==== FOUND: Message contains a blacklisted word ====");
-			throw new Error(
-					`Illegal word in hello message: ${  found.toString()}`
-				);
-		} else {
-		  context.logger.info("==== NOT FOUND: Message contains no blacklisted words ====");
-			validation = {
-				status: VerifyStatus.OK
+			context.logger.info("==== FOUND: Message contains a blacklisted word ====");
+			const error = Error(
+				`Illegal word in hello message: ${found.toString()}`
+			);
+			// throw new Error(
+			// 	`Illegal word in hello message: ${found.toString()}`
+			// );
+			return {
+				status: VerifyStatus.FAIL,
+				error,
 			};
 		}
-		return validation;
+		context.logger.info("==== NOT FOUND: Message contains no blacklisted words ====");
+		return {
+			status: VerifyStatus.OK
+		};
+		// else {
+		// 	context.logger.info("==== NOT FOUND: Message contains no blacklisted words ====");
+		// 	validation = {
+		// 		status: VerifyStatus.OK
+		// 	};
+		// }
+		// return validation;
 	}
 
 	public async execute(context: CommandExecuteContext<Params>): Promise<void> {
@@ -72,7 +86,7 @@ export class CreateHelloCommand extends BaseCommand {
 			}
 		}
 		// 5. Increment the Hello counter +1.
-		helloCounter.counter+=1;
+		helloCounter.counter += 1;
 
 		// 6. Save the Hello counter to the counter store.
 		await counterSubstore.set(context, counterKey, helloCounter);
@@ -82,6 +96,6 @@ export class CreateHelloCommand extends BaseCommand {
 		newHelloEvent.add(context, {
 			senderAddress: context.transaction.senderAddress,
 			message: context.params.message
-		},[context.transaction.senderAddress]);
+		}, [context.transaction.senderAddress]);
 	}
 }

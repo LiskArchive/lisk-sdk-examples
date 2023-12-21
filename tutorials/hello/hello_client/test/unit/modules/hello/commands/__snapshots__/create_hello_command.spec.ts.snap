@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateHelloCommand constructor should have valid schema 1`] = `
+{
+  "$id": "hello/createHello-params",
+  "properties": {
+    "message": {
+      "dataType": "string",
+      "fieldNumber": 1,
+      "maxLength": undefined,
+      "minLength": undefined,
+    },
+  },
+  "required": [
+    "message",
+  ],
+  "title": "CreateHelloCommand transaction parameter for the Hello module",
+  "type": "object",
+}
+`;
