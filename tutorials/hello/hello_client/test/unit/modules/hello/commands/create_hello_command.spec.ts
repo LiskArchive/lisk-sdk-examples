@@ -58,15 +58,55 @@ describe('CreateHelloCommand', () => {
 			const result = await command.verify(context);
 			expect(result.status).toBe(VerifyStatus.FAIL);
 		});
+
+		it('Legal Message', async () => {
+			const LegalParam = codec.encode(createHelloSchema, { 'message': "Hello Lisk v6 " })
+			const transaction = new Transaction(getSampleTransaction(LegalParam));
+
+			const context = testing
+				.createTransactionContext({
+					stateStore,
+					transaction,
+					header: testing.createFakeBlockHeader({}),
+				})
+				.createCommandVerifyContext<CreateHelloParams>(createHelloSchema);
+
+			const result = await command.verify(context);
+			expect(result.status).toBe(VerifyStatus.OK);
+		});
 	});
 
 	describe('execute', () => {
-		describe('valid cases', () => {
-			it.todo('should update the state store');
+		it('Illegal Message', async () => {
+			const IllegalParam = codec.encode(createHelloSchema, { 'message': "badWord2" })
+			const transaction = new Transaction(getSampleTransaction(IllegalParam));
+
+			const context = testing
+				.createTransactionContext({
+					stateStore,
+					transaction,
+					header: testing.createFakeBlockHeader({}),
+				})
+				.createCommandVerifyContext<CreateHelloParams>(createHelloSchema);
+
+			const result = await command.verify(context);
+			expect(result.status).toBe(VerifyStatus.FAIL);
 		});
 
-		describe('invalid cases', () => {
-			it.todo('should throw error');
+		it('Legal Message', async () => {
+			const LegalParam = codec.encode(createHelloSchema, { 'message': "Hello Lisk v6 " })
+			const transaction = new Transaction(getSampleTransaction(LegalParam));
+
+			const context = testing
+				.createTransactionContext({
+					stateStore,
+					transaction,
+					header: testing.createFakeBlockHeader({}),
+				})
+				.createCommandVerifyContext<CreateHelloParams>(createHelloSchema);
+
+			const result = await command.verify(context);
+			expect(result.status).toBe(VerifyStatus.OK);
 		});
 	});
 });
