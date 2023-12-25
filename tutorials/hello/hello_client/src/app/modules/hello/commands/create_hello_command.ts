@@ -35,7 +35,6 @@ export class CreateHelloCommand extends BaseCommand {
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async verify(context: CommandVerifyContext<Params>): Promise<VerificationResult> {
-		// let validation: VerificationResult;
 		const wordList = context.params.message.split(" ");
 		const found = this._blacklist.filter(value => wordList.includes(value));
 		if (found.length > 0) {
@@ -43,9 +42,6 @@ export class CreateHelloCommand extends BaseCommand {
 			const error = Error(
 				`Illegal word in hello message: ${found.toString()}`
 			);
-			// throw new Error(
-			// 	`Illegal word in hello message: ${found.toString()}`
-			// );
 			return {
 				status: VerifyStatus.FAIL,
 				error,
@@ -55,13 +51,6 @@ export class CreateHelloCommand extends BaseCommand {
 		return {
 			status: VerifyStatus.OK
 		};
-		// else {
-		// 	context.logger.info("==== NOT FOUND: Message contains no blacklisted words ====");
-		// 	validation = {
-		// 		status: VerifyStatus.OK
-		// 	};
-		// }
-		// return validation;
 	}
 
 	public async execute(context: CommandExecuteContext<Params>): Promise<void> {
