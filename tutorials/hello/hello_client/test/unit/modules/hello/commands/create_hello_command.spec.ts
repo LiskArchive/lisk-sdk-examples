@@ -52,8 +52,8 @@ describe('CreateHelloCommand', () => {
 
 	describe('verify', () => {
 		it('Check for illegal message', async () => {
-			const IllegalParam = codec.encode(createHelloSchema, { 'message': "badWord2" })
-			const transaction = new Transaction(getSampleTransaction(IllegalParam));
+			const illegalParam = codec.encode(createHelloSchema, { 'message': "badWord2" })
+			const transaction = new Transaction(getSampleTransaction(illegalParam));
 
 			const context = testing
 				.createTransactionContext({
@@ -68,8 +68,8 @@ describe('CreateHelloCommand', () => {
 		});
 
 		it('Check for legal message', async () => {
-			const LegalParam = codec.encode(createHelloSchema, { 'message': "Hello Lisk v6 " })
-			const transaction = new Transaction(getSampleTransaction(LegalParam));
+			const legalParam = codec.encode(createHelloSchema, { 'message': "Hello Lisk v6 " })
+			const transaction = new Transaction(getSampleTransaction(legalParam));
 
 			const context = testing
 				.createTransactionContext({
