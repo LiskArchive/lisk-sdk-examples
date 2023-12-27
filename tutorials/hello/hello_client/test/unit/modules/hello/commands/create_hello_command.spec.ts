@@ -3,7 +3,7 @@ import { CreateHelloCommand } from '../../../../../src/app/modules/hello/command
 import { CreateHelloParams, createHelloSchema } from '../../../../../src/app/modules/hello/schema';
 import { ModuleConfig } from '../../../../../src/app/modules/hello/types';
 import { HelloModule } from '../../../../../src/app/modules/hello/module';
-import { CounterStore } from '../../../../../src/app/modules/hello/stores/counter';
+import { CounterStore, counterKey } from '../../../../../src/app/modules/hello/stores/counter';
 import { MessageStore } from '../../../../../src/app/modules/hello/stores/message';
 
 describe('CreateHelloCommand', () => {
@@ -11,7 +11,7 @@ describe('CreateHelloCommand', () => {
 	const getSampleTransaction = (params: Buffer) => ({
 		module: 'hello',
 		command: CreateHelloCommand.name,
-		senderPublicKey: cryptography.utils.getRandomBytes(32),
+		senderPublicKey: Buffer.from("3bb9a44b71c83b95045486683fc198fe52dcf27b55291003590fcebff0a45d9a", 'hex'),
 		nonce: BigInt(0),
 		fee: BigInt(100000000),
 		params,
@@ -22,7 +22,6 @@ describe('CreateHelloCommand', () => {
 	let stateStore: any;
 	let counterStore: CounterStore;
 	let messageStore: MessageStore;
-	// const hello = new HelloModule();
 
 	const config = {
 		"blacklist": [
@@ -38,7 +37,7 @@ describe('CreateHelloCommand', () => {
 		await command.init(config as ModuleConfig);
 		stateStore = new chain.StateStore(new db.InMemoryDatabase());
 		counterStore = hello.stores.get(CounterStore);
-		messageStore = hello.stores.get(MessageStore)
+		messageStore = hello.stores.get(MessageStore);
 	});
 
 	describe('constructor', () => {
@@ -52,7 +51,7 @@ describe('CreateHelloCommand', () => {
 	});
 
 	describe('verify', () => {
-		it('Illegal Message', async () => {
+		it('Check for illegal message', async () => {
 			const IllegalParam = codec.encode(createHelloSchema, { 'message': "badWord2" })
 			const transaction = new Transaction(getSampleTransaction(IllegalParam));
 
@@ -68,7 +67,7 @@ describe('CreateHelloCommand', () => {
 			expect(result.status).toBe(VerifyStatus.FAIL);
 		});
 
-		it('Legal Message', async () => {
+		it('Check for legal message', async () => {
 			const LegalParam = codec.encode(createHelloSchema, { 'message': "Hello Lisk v6 " })
 			const transaction = new Transaction(getSampleTransaction(LegalParam));
 
@@ -86,10 +85,10 @@ describe('CreateHelloCommand', () => {
 	});
 
 	describe('execute', () => {
-		it('Legal Message', async () => {
-			const illegalMessage = { 'message': "badd2" };
-			const illegalParam = codec.encode(createHelloSchema, illegalMessage)
-			const transaction = new Transaction(getSampleTransaction(illegalParam));
+		it('Execute legal message', async () => {
+			const message = { "message": "Hello from SDK!" };
+			const params = codec.encode(createHelloSchema, message)
+			const transaction = new Transaction(getSampleTransaction(params));
 
 			const context = testing
 				.createTransactionContext({
@@ -100,28 +99,30 @@ describe('CreateHelloCommand', () => {
 				.createCommandExecuteContext<CreateHelloParams>(createHelloSchema);
 
 			await command.execute(context);
-			// "senderAddress": "lsk75zmxzxe73s5sp45a8ggtcq8aeqg2k4rbkwuof",
-			const helloMessage = await messageStore.get(context, Buffer.from(cryptography.address.getAddressFromLisk32Address("lsk75zmxzxe73s5sp45a8ggtcq8aeqg2k4rbkwuof")));
-			const helloCounter = await counterStore.get(context, Buffer.alloc(0));
-			expect(helloCounter).toBe(0);
-			expect(helloMessage).toBe("badd2");
+			const helloMessage = await messageStore.get(context, transaction.senderAddress);
+			const helloCounter = await counterStore.get(context, counterKey);
+			expect(helloCounter.counter).toBe(1);
+			expect(helloMessage.message).toBe("Hello from SDK!");
 		});
 
-		// it('Legal Message', async () => {
-		// 	const LegalParam = codec.encode(createHelloSchema, { 'message': "Hello Lisk v6 " })
-		// 	const transaction = new Transaction(getSampleTransaction(LegalParam));
+		it('Test counter value check', async () => {
+			const message = { "message": "Hello from SDK!" };
+			const params = codec.encode(createHelloSchema, message)
+			const transaction = new Transaction(getSampleTransaction(params));
 
-		// 	const context = testing
-		// 		.createTransactionContext({
-		// 			stateStore,
-		// 			transaction,
-		// 			header: testing.createFakeBlockHeader({}),
-		// 		})
-		// 		.createCommandExecuteContext<CreateHelloParams>(createHelloSchema);
-
-		// 	await command.execute(context);
-		// 	const helloCounter = await counterStore.get(context);
-		// 	expect(helloCounter).toBe(1);
-		// });
+			const context = testing
+				.createTransactionContext({
+					stateStore,
+					transaction,
+					header: testing.createFakeBlockHeader({}),
+				})
+				.createCommandExecuteContext<CreateHelloParams>(createHelloSchema);
+			await counterStore.set(context, counterKey, { "counter": 10 })
+			await command.execute(context);
+			const helloMessage = await messageStore.get(context, transaction.senderAddress);
+			const helloCounter = await counterStore.get(context, counterKey);
+			expect(helloCounter.counter).toBe(11);
+			expect(helloMessage.message).toBe("Hello from SDK!");
+		});
 	});
 });
