@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable class-methods-use-this */
 
 import {
@@ -13,7 +12,6 @@ import { MessageStore } from '../stores/message';
 import { counterKey, CounterStore, CounterStoreData } from '../stores/counter';
 import { ModuleConfig } from '../types';
 import { NewHelloEvent } from '../events/new_hello';
-// import { Logger } from '@oclif/core/lib/errors';
 
 interface Params {
 	message: string;

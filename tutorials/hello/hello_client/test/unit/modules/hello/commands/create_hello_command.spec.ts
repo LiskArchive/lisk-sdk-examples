@@ -51,7 +51,7 @@ describe('CreateHelloCommand', () => {
 	});
 
 	describe('verify', () => {
-		it('should have an illegal message', async () => {
+		it('should return error and status VerifyStatus.FAIL', async () => {
 			const illegalParam = codec.encode(createHelloSchema, { 'message': "badWord2" })
 			const transaction = new Transaction(getSampleTransaction(illegalParam));
 
@@ -67,7 +67,7 @@ describe('CreateHelloCommand', () => {
 			expect(result.status).toBe(VerifyStatus.FAIL);
 		});
 
-		it('should have a legal message', async () => {
+		it('should pass verify successfully and return status VerifyStatus.OK', async () => {
 			const legalParam = codec.encode(createHelloSchema, { 'message': "Hello Lisk v6 " })
 			const transaction = new Transaction(getSampleTransaction(legalParam));
 
@@ -85,7 +85,7 @@ describe('CreateHelloCommand', () => {
 	});
 
 	describe('execute', () => {
-		it('should execute legal message', async () => {
+		it('should execute successfully for a valid message and initialize and increment the counter to 1 when a counter doesn't exist', async () => {
 			const message = { "message": "Hello from SDK!" };
 			const params = codec.encode(createHelloSchema, message)
 			const transaction = new Transaction(getSampleTransaction(params));
@@ -105,7 +105,7 @@ describe('CreateHelloCommand', () => {
 			expect(helloMessage.message).toBe("Hello from SDK!");
 		});
 
-		it('should test counter value', async () => {
+		it('should execute successfully for a valid message and increment the existing counter value', async () => {
 			const message = { "message": "Hello from SDK!" };
 			const params = codec.encode(createHelloSchema, message)
 			const transaction = new Transaction(getSampleTransaction(params));

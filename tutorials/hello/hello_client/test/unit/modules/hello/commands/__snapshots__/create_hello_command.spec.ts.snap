@@ -7,8 +7,8 @@ exports[`CreateHelloCommand constructor should have valid schema 1`] = `
     "message": {
       "dataType": "string",
       "fieldNumber": 1,
-      "maxLength": undefined,
-      "minLength": undefined,
+      "maxLength": 1,
+      "minLength": 256,
     },
   },
   "required": [
