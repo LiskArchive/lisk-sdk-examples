@@ -51,7 +51,7 @@ describe('CreateHelloCommand', () => {
 	});
 
 	describe('verify', () => {
-		it('Should have an illegal message', async () => {
+		it('should have an illegal message', async () => {
 			const illegalParam = codec.encode(createHelloSchema, { 'message': "badWord2" })
 			const transaction = new Transaction(getSampleTransaction(illegalParam));
 
@@ -67,7 +67,7 @@ describe('CreateHelloCommand', () => {
 			expect(result.status).toBe(VerifyStatus.FAIL);
 		});
 
-		it('Should have a legal message', async () => {
+		it('should have a legal message', async () => {
 			const legalParam = codec.encode(createHelloSchema, { 'message': "Hello Lisk v6 " })
 			const transaction = new Transaction(getSampleTransaction(legalParam));
 
@@ -85,7 +85,7 @@ describe('CreateHelloCommand', () => {
 	});
 
 	describe('execute', () => {
-		it('Should execute legal message', async () => {
+		it('should execute legal message', async () => {
 			const message = { "message": "Hello from SDK!" };
 			const params = codec.encode(createHelloSchema, message)
 			const transaction = new Transaction(getSampleTransaction(params));
@@ -105,7 +105,7 @@ describe('CreateHelloCommand', () => {
 			expect(helloMessage.message).toBe("Hello from SDK!");
 		});
 
-		it('Should test counter value', async () => {
+		it('should test counter value', async () => {
 			const message = { "message": "Hello from SDK!" };
 			const params = codec.encode(createHelloSchema, message)
 			const transaction = new Transaction(getSampleTransaction(params));
