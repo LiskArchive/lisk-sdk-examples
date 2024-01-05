@@ -9,7 +9,7 @@ module.exports = {
 			},
 		],
 	},
-	verbose: false,
+	verbose: true,
 	collectCoverage: false,
 	coverageReporters: ['json'],
 	coverageDirectory: '.coverage',

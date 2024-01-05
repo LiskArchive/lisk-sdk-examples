@@ -1,6 +1,6 @@
 {
 	"system": {
-		"dataPath": "/Users/iamtalha/.lisk/beta-sdk-app",
+		"dataPath": "/Users/iamtalha/.lisk/hello_client",
 		"keepEventsForHeights": 300,
 		"logLevel": "info"
 	},
@@ -9,7 +9,8 @@
 			"ipc"
 		],
 		"port": 7887,
-		"host": "127.0.0.1"
+		"host": "127.0.0.1",
+		"allowedMethods": ["*"]
 	},
 	"network": {
 		"version": "1.0",
